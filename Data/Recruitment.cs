@@ -7,28 +7,28 @@ namespace HeRoBackEnd.Models
     public class Recruitment
     {
         [Key]
-        [Display(Name ="Id")]
+        [Display(Name = "Id")]
         public int id { get; set; }
 
-        [Display(Name ="Beginning date")]
-        [Required(ErrorMessage ="This filed is required")]
+        [Display(Name = "Beginning date")]
+        [Required(ErrorMessage = "This filed is required")]
         public DateTime BeginningDate { get; set; }
 
-        [Display(Name ="Ending date")]
-        [Required(ErrorMessage ="This field is required")]
+        [Display(Name = "Ending date")]
+        [Required(ErrorMessage = "This field is required")]
         public DateTime EndingDate { get; set; }
 
-        [Display(Name ="Name")]
-        [Required(ErrorMessage ="This field is required")]
+        [Display(Name = "Name")]
+        [Required(ErrorMessage = "This field is required")]
         public string name { get; set; }
 
-        [Display(Name ="Description")]
-        [Required(ErrorMessage ="This field is required")]
+        [Display(Name = "Description")]
+        [Required(ErrorMessage = "This field is required")]
         public string description { get; set; }
 
-        [Display(Name ="Tech id")]
+        [Display(Name = "Tech id")]
         [ForeignKey("User")]
-        [Required(ErrorMessage ="This field is required")]
+        [Required(ErrorMessage = "This field is required")]
         public int TechId { get; set; }
 
         [Display(Name = "Recruiter id")]
@@ -40,3 +40,4 @@ namespace HeRoBackEnd.Models
         public string status { get; set; }
     }
 }
+
