@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HeRoBackEnd.Models
 {
-    [Table("")]
-    public class RecruitmentModel
+    [Table("Recruitment")]
+    public class Recruitment
     {
         [Key]
         [Display(Name ="Id")]
@@ -30,5 +30,13 @@ namespace HeRoBackEnd.Models
         [ForeignKey("User")]
         [Required(ErrorMessage ="This field is required")]
         public int TechId { get; set; }
+
+        [Display(Name = "Recruiter id")]
+        [ForeignKey("User")]
+        [Required(ErrorMessage = "This field is required")]
+        public int RecruiterId { get; set; }
+
+        [Display(Name = "Status")]
+        public string status { get; set; }
     }
 }
