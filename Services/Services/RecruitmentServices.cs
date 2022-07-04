@@ -1,22 +1,31 @@
-﻿using HeRoBackEnd.
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Data.Entities;
+using Services.DTOs;
 
 namespace Services.Services
 {
     internal class RecruitmentServices
     {
-        private readonly DataContext context;
-        public RecruitmentServices(DataContext context)
+        //void bo zakładam, że dane będą poddawane walidacji zanim zostaną przesłane
+        //nie mam powodu zwrócić kodu błędu, ale też async void nie jest zalecane także
+        //nie mogę użyć metod asynchronicznych
+        public void AddRecruitment(RecruitmentDTO DTO)
         {
-            this.context = context;
+            
         }
+        public void UpdateRecruitment(int id, RecruitmentDTO DTO)
+        {
 
-        public List<Recruitment> GetRecruitments()
+        }
+        public void EndRecruitment(int id)
+        {
+
+        }
+        public async Task<List<Recruitment>> GetRecruitments()
         {
             return null;
         }
