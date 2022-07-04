@@ -4,12 +4,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace HeRoBackEnd.Models
 {
     [Table("CampaignRequirement")]
-    public class CampaignRequirement
+    public class RecruitmentRequirement
     {
         [Key]
         [ForeignKey("Campaign")]
         [Required(ErrorMessage = "Field is required!")]
-        public int CampaignId { get; set; }
+        public int RecruitmentId { get; set; }
 
         [Key]
         [ForeignKey("Skill")]
@@ -22,6 +22,6 @@ namespace HeRoBackEnd.Models
         public string Name { get; set; }
 
         //public virtual Skill Skill {get;set;}
-        //public virtual Campaign Campaign {get;set;}
+        //public virtual Recruitment Recruitment {get;set;}
     }
 }
