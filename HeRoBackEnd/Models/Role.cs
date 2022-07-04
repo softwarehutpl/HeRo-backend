@@ -3,8 +3,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace HeRoBackEnd.Models
 {
-    [Table("Skill")]
-    public class Skill
+    [Table("Role")]
+    public class Role
     {
         [Key]
         [Required(ErrorMessage = "Field is required!")]
@@ -14,6 +14,6 @@ namespace HeRoBackEnd.Models
         [MaxLength(75, ErrorMessage = "Name of field is to long (max. 75 characters!")]
         public string Name { get; set; }
 
-        //public virtual ICollection<CampaignRequirement> CampaignRequirements {get;set;}
+        //public virtual ICollection<User> Users {get;set;}
     }
 }
