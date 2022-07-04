@@ -1,8 +1,8 @@
-﻿using HeRo.Models;
+﻿using HeRoBackEnd.Models;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
-namespace HeRo.Controllers
+namespace HeRoBackEnd.Controllers
 {
     public class HomeController : Controller
     {

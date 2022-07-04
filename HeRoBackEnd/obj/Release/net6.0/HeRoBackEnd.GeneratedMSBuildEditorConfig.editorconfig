@@ -6,39 +6,39 @@ build_property.ProjectTypeGuids =
 build_property.InvariantGlobalization = 
 build_property.PlatformNeutralAssembly = 
 build_property._SupportedPlatformList = Linux,macOS,Windows
-build_property.RootNamespace = HeRo
-build_property.RootNamespace = HeRo
-build_property.ProjectDir = C:\Users\erykh\Source\Repos\HeRo-backend\HeRo\
+build_property.RootNamespace = HeRoBackEnd
+build_property.RootNamespace = HeRoBackEnd
+build_property.ProjectDir = E:\Programowianie\Visual Studio\C#\HeRoBackEnd\HeRoBackEnd\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\erykh\Source\Repos\HeRo-backend\HeRo
+build_property.MSBuildProjectDirectory = E:\Programowianie\Visual Studio\C#\HeRoBackEnd\HeRoBackEnd
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/erykh/Source/Repos/HeRo-backend/HeRo/Views/Home/Index.cshtml]
+[E:/Programowianie/Visual Studio/C\#/HeRoBackEnd/HeRoBackEnd/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/erykh/Source/Repos/HeRo-backend/HeRo/Views/Home/Privacy.cshtml]
+[E:/Programowianie/Visual Studio/C\#/HeRoBackEnd/HeRoBackEnd/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/erykh/Source/Repos/HeRo-backend/HeRo/Views/Shared/Error.cshtml]
+[E:/Programowianie/Visual Studio/C\#/HeRoBackEnd/HeRoBackEnd/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/erykh/Source/Repos/HeRo-backend/HeRo/Views/Shared/_ValidationScriptsPartial.cshtml]
+[E:/Programowianie/Visual Studio/C\#/HeRoBackEnd/HeRoBackEnd/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/erykh/Source/Repos/HeRo-backend/HeRo/Views/_ViewImports.cshtml]
+[E:/Programowianie/Visual Studio/C\#/HeRoBackEnd/HeRoBackEnd/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/erykh/Source/Repos/HeRo-backend/HeRo/Views/_ViewStart.cshtml]
+[E:/Programowianie/Visual Studio/C\#/HeRoBackEnd/HeRoBackEnd/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/erykh/Source/Repos/HeRo-backend/HeRo/Views/Shared/_Layout.cshtml]
+[E:/Programowianie/Visual Studio/C\#/HeRoBackEnd/HeRoBackEnd/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = b-r8otg6v5xp
+build_metadata.AdditionalFiles.CssScope = b-14xen8btly

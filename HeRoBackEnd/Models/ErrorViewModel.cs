@@ -1,4 +1,4 @@
-namespace HeRo.Models
+namespace HeRoBackEnd.Models
 {
     public class ErrorViewModel
     {
