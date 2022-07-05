@@ -1,11 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Common.Enums;
 
-namespace HeRoBackEnd.Models
+namespace Data.Entities
 {
-    [Table("Skill")]
-    public class Skill
+    [Table("Role")]
+    public class Role
     {
         [Key]
         [Required(ErrorMessage = "Field is required!")]
@@ -15,8 +14,6 @@ namespace HeRoBackEnd.Models
         [MaxLength(75, ErrorMessage = "Name of field is to long (max. 75 characters!")]
         public Enum Name { get; set; }
 
-        //public virtual ICollection<RecruitmentRequirement> RecruitmentRequirements {get;set;}
+        //public virtual ICollection<User> Users {get;set;}
     }
 }
-
-//dodać enumy statusów 
