@@ -13,11 +13,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj",
+      "projectUniqueName": "C:\\Users\\MateuszJeżewski\\source\\repos\\HeRo-backend — current\\Common\\Common.csproj",
       "projectName": "Common",
-      "projectPath": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj",
+      "projectPath": "C:\\Users\\MateuszJeżewski\\source\\repos\\HeRo-backend — current\\Common\\Common.csproj",
       "packagesPath": "C:\\Users\\MateuszJeżewski\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend\\Common\\obj\\",
+      "outputPath": "C:\\Users\\MateuszJeżewski\\source\\repos\\HeRo-backend — current\\Common\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\MateuszJeżewski\\AppData\\Roaming\\NuGet\\NuGet.Config",

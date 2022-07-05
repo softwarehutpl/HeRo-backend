@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj": {}
+    "C:\\Users\\MateuszJeżewski\\source\\repos\\HeRo-backend — current\\Data\\Data.csproj": {}
   },
   "projects": {
-    "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj": {
+    "C:\\Users\\MateuszJeżewski\\source\\repos\\HeRo-backend — current\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\MateuszJeżewski\\source\\repos\\HeRo-backend — current\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj",
+        "projectPath": "C:\\Users\\MateuszJeżewski\\source\\repos\\HeRo-backend — current\\Data\\Data.csproj",
         "packagesPath": "C:\\Users\\MateuszJeżewski\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend\\Data\\obj\\",
+        "outputPath": "C:\\Users\\MateuszJeżewski\\source\\repos\\HeRo-backend — current\\Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\MateuszJeżewski\\AppData\\Roaming\\NuGet\\NuGet.Config",
