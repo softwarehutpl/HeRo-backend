@@ -1,13 +1,13 @@
 ﻿using HeRoBackEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
-//using Data.Entities;
+using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
     public class UserController : Controller
     {
-        //private UserServices userService;
+        private UserService userService;
 
         public UserController()
         {

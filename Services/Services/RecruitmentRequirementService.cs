@@ -7,7 +7,7 @@ using Data.Entities;
 
 namespace Services.Services
 {
-    internal class RecruitmentRequirementService
+    public class RecruitmentRequirementService
     {
         //tabela przejściowa między kampanią rekrutacyjną a wymaganiami
         public async Task<List<RecruitmentRequirement>> GetRequirements()
