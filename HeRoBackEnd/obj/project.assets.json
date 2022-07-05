@@ -2,16 +2,6 @@
   "version": 3,
   "targets": {
     "net6.0": {
-      "Common/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "compile": {
-          "bin/placeholder/Common.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Common.dll": {}
-        }
-      },
       "Data/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
@@ -25,6 +15,9 @@
       "Services/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v6.0",
+        "dependencies": {
+          "Data": "1.0.0"
+        },
         "compile": {
           "bin/placeholder/Services.dll": {}
         },
@@ -35,11 +28,6 @@
     }
   },
   "libraries": {
-    "Common/1.0.0": {
-      "type": "project",
-      "path": "../Common/Common.csproj",
-      "msbuildProject": "../Common/Common.csproj"
-    },
     "Data/1.0.0": {
       "type": "project",
       "path": "../Data/Data.csproj",
@@ -53,7 +41,7 @@
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Common >= 1.0.0",
+      "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj",
       "Data >= 1.0.0",
       "Services >= 1.0.0"
     ]
@@ -127,5 +115,16 @@
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1105",
+      "level": "Error",
+      "message": "Unable to find project information for 'C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj'. If you are using Visual Studio, this may be because the project is unloaded or not part of the current solution so run a restore from the command-line. Otherwise, the project file may be invalid or missing targets required for restore.",
+      "libraryId": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj",
+      "targetGraphs": [
+        "net6.0"
+      ]
+    }
+  ]
 }
