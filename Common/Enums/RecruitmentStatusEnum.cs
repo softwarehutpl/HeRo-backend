@@ -9,7 +9,7 @@ namespace Common.Enums
 {
     public enum RecruitmentStatusEnum
     {
-        [Description("Open for submissions")] open = 1,
-        [Description("Closed for submissions")] closed = 2
+        [Description("Open for submissions")] Open = 1,
+        [Description("Closed for submissions")] Closed = 2
     }
 }

@@ -9,11 +9,11 @@ namespace Common.Enums
 {
     public enum  CandidateStatusEnum
     {
-        [Description("New Application Submitted")] applying = 1,
-        [Description("Application Reviewed")] application_reviewed = 2,
-        [Description("Invited for the Recruitment Interview")] recruitment_interview = 3,
-        [Description("Invited for the Technical Interview")] technical_interview = 4,
-        [Description("Application Accepted")] accepted = 5,
-        [Description("Application Rejected")] rejected = 6
+        [Description("New Application Submitted")] Applying = 1,
+        [Description("Application Reviewed")] ApplicationReviewed = 2,
+        [Description("Invited for the Recruitment Interview")] RecruitmentInterview = 3,
+        [Description("Invited for the Technical Interview")] TechnicalInterview = 4,
+        [Description("Application Accepted")] Accepted = 5,
+        [Description("Application Rejected")] Rejected = 6
     }
 }

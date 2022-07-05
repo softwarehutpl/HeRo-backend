@@ -9,9 +9,9 @@ namespace Common.Enums
 {
     public enum UserStatusEnum
     {
-        [Description("Not Verified")] not_verified = 1,
-        [Description("Active")] active = 2,
-        [Description("Archived")] archived = 3,
-        [Description("Deleted")] deleted = 4
+        [Description("Not Verified")] Not_verified = 1,
+        [Description("Active")] Active = 2,
+        [Description("Archived")] Archived = 3,
+        [Description("Deleted")] Deleted = 4
     }
 }

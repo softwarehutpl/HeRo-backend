@@ -10,10 +10,10 @@ namespace Common.Enums
     public enum RoleNameEnum
     {
         [Description("Anonymous")] Anonymous = 1,
-        [Description("HR Manager")] HR_manager = 2,
-        [Description("Recruiter")] recruiter = 3,
-        [Description("Interviewer")] interviewer = 4,
-        [Description("Admin")] admin = 5,
+        [Description("HR Manager")] HRmanager = 2,
+        [Description("Recruiter")] Recruiter = 3,
+        [Description("Interviewer")] Interviewer = 4,
+        [Description("Admin")] Admin = 5,
     }
 }
 
