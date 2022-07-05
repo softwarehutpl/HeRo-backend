@@ -16,27 +16,33 @@ namespace HeRoBackEnd.Controllers
         {
           //  CandidateService candidateService = new CandidateService();
         }
-        
-        /*
+
+        /// <summary>
+        /// Returns a Json string of the list of candidates
+        /// </summary>
+        /// <returns>Json string representing a list of Candidates</returns>
+        [HttpPost]
+        [Route("Candidate/Index")]
         public IActionResult Index()
         {
             //List<Candidate> candidates = candidateService.GetAllActive();
 
-           // return new JsonResult(candidates);
+            // return new JsonResult(candidates);
 
             return View();
         }
-        */
+        
         /// <summary>
         /// Returns a candidate specified by the id
         /// </summary>
-        /// <param name="id">Takes the id of a client</param>
-        /// <returns>Candidate specified by the id</returns>
-
+        /// <param name="candidateId">Takes the id of a candidate</param>
+        /// <returns>Json string representing a Candidate</returns>
+        
         [HttpPost]
-        public async Task<IActionResult> Get(int? id)
+        [Route("Candidate/Get/{candidateId}")]
+        public async Task<IActionResult> Get(int? candidateId)
         {
-            if (id == null)
+            if (candidateId == null)
             {
                 return RedirectToAction("Index");
             }
@@ -51,13 +57,20 @@ namespace HeRoBackEnd.Controllers
             //return new JsonResult(tempCandidate);
             return View();
         }
-        /*
+
         //public async Task<IActionResult> Create()
         //{
         //    return new JsonResult(new Candidate());
         //}
 
+        /// <summary>
+        /// Creates a candidate
+        /// </summary>
+        /// <param name="newCandidate">object of the NewCandidateViewModel class
+        /// containing information about the new candidate</param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
+        [Route("Candidate/Create/{newCandidate.id}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewCandidateViewModel newCandidate)
         {
@@ -66,40 +79,67 @@ namespace HeRoBackEnd.Controllers
             return RedirectToAction("Index");
         }
         
+        /// <summary>
+        /// Updates information about a candidate
+        /// </summary>
+        /// <param name="candidateId">Id of the candidate</param>
+        /// <param name="newCandidate">Updated information about the candidate</param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
+        [Route("Candidate/Edit/{candidateId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, NewCandidateViewModel newCandidate)
+        public async Task<IActionResult> Edit(int candidateId, NewCandidateViewModel newCandidate)
         {
             //candidateService.Update(id, newCandidate);
 
             return RedirectToAction("Index");
         }
         
+        /// <summary>
+        /// Deletes a candidate
+        /// </summary>
+        /// <param name="candidateId">Id of the candidate</param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
+        [Route("Candidate/Delete/{candidateId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int candidateId)
         {
             //candidateService.Delete(id);
 
             return RedirectToAction("Index");
         }
         
+        /// <summary>
+        /// Adds a candidate to the recruitment
+        /// </summary>
+        /// <param name="candidateId">Id of the candidate</param>
+        /// <param name="recruitmentId">Id of the recruitment</param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
+        [Route("Candidate/AddRecruitment/{candidateId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddRecruitment(int id, int recruitmentId)
+        public async Task<IActionResult> AddRecruitment(int candidateId, int recruitmentId)
         {
-            //candidateService.AddCandidate(id, recruitmentId);
+            //RecruitmentService.AddCandidate(id, recruitmentId);
 
             return RedirectToAction("Index");
         }
         
+        /// <summary>
+        /// Adds a note concerning the candidate
+        /// </summary>
+        /// <param name="candidateId">Id of the candidate</param>
+        /// <param name="notes">The content of the note</param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
+        [Route("Candidate/AddNotes/{candidateId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddNotes(int id, string notes)
+        public async Task<IActionResult> AddNotes(int candidateId, string notes)
         {
             //candidateService.AddNotes(id, notes);
 
             return RedirectToAction("Index");
-        }*/
+        }
     }
 }
