@@ -1,25 +1,47 @@
 ﻿using HeRoBackEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
-//using Data.Entities;
+using Data.Entities;
+using PagedList;
 
 namespace HeRoBackEnd.Controllers
 {
     public class UserController : Controller
     {
-        //private UserServices userService;
+        public IUserService userService;
 
-        public UserController()
+        public UserController(IUserService _userService)
         {
-            //UserServices userService = new UserServices();
+            userService = _userService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string sortOrder, string searchString, int? page)
         {
-            //List<User> users = usersService.GetAllActive();
-            
-            //return new JsonResult(users);
-            return View();
+            if (searchString != null)
+            {
+                page = 1;
+            }
+
+            IEnumerable<User> users = userService.GetUsers();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                users = users.Where(u => u.Email.Contains(searchString));
+            }
+
+            if(sortOrder == "email_desc")
+            {
+                users = users.OrderByDescending(u => u.Email);
+            }
+            else
+            {
+                users = users.OrderBy(s => s.Email);
+            }
+
+            int pageSize = 10;
+            int pageNumber = (page ?? 1);
+
+            return new JsonResult(users.ToPagedList(pageNumber, pageSize));
         }
 
         public async Task<IActionResult> Get(int? id)
@@ -54,7 +76,7 @@ namespace HeRoBackEnd.Controllers
 
             return RedirectToAction("Index");
         }
-        
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, NewUserViewModel newUser)

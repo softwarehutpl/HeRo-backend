@@ -1,21 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data.Entities;
 
 namespace Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        private DataContext dataContext;
+
+        public UserRepository(DataContext _dataContext)
+        {
+            dataContext = _dataContext;
+        }
 
         public void GetUserById(int id) { }
 
-        public void GetAllUsers() { }
+        public IEnumerable<User> GetAllUsers()
+        {
+            return dataContext.Users;
+        }
 
         public void AddUser(int id) { }
 
         public void RemoveUser(int id) { }
-
     }
 }

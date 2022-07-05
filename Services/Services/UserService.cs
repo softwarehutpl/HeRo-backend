@@ -3,23 +3,34 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Entities;
+using Data.Repositories;
 using Services.DTOs;
 
 namespace Services.Services
 {
-    internal class UserService
+    public class UserService : IUserService
     {
-        public async Task<int> AddUser(UserDTO dto)
+        private IUserRepository userRepository;
+
+        public UserService(IUserRepository _userRepository)
+        {
+            userRepository = _userRepository;
+        }
+
+        public int AddUser(UserDTO dto)
         {
             return 0;
         }
+
         public void UpdateUser(int id, UserDTO dto)
         {
 
         }
-        public async Task<List<User>> GetUsers()
+
+        public IEnumerable<User> GetUsers()
         {
-            return null;
+            return userRepository.GetAllUsers();
         }
     }
 }
