@@ -8,7 +8,7 @@ using Services.DTOs;
 
 namespace Services.Services
 {
-    internal class RecruitmentService
+    public class RecruitmentService
     {
         public async Task<int> AddRecruitment(RecruitmentDTO dto)
         {

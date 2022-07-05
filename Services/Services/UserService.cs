@@ -7,7 +7,7 @@ using Services.DTOs;
 
 namespace Services.Services
 {
-    internal class UserService
+    public class UserService
     {
         public async Task<int> AddUser(UserDTO dto)
         {

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Data.Entities;
 using Services.DTOs;
 
 namespace Services.Services
 {
-    internal class CandidateService
+    public class CandidateService
     {
         public async Task<int> AddCandidate(CandidateDTO dto)
         {
