@@ -17,6 +17,8 @@ builder.Services.AddSwaggerGen(options =>
         Title = "API documentation",
         Description = "API documentation for the HeRo app"
     });
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
 });
 
 var app = builder.Build();
@@ -26,7 +28,7 @@ var app = builder.Build();
 
     app.UseSwaggerUI(options =>
     {
-        options.SwaggerEndpoint("/swagger/v1/swagger.json", "Sth");
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
         options.RoutePrefix = string.Empty;
     });
 app.UseExceptionHandler("/Home/Error");

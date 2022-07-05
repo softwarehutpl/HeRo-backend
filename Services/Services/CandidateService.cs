@@ -5,15 +5,12 @@ using System.Text;
 using System.Threading.Tasks;
 using Data.Entities;
 using Services.DTOs;
+using System.ComponentModel.DataAnnotations;
 
 namespace Services.Services
 {
     public class CandidateService
     {
-        public async Task<int> AddCandidate(CandidateDTO dto)
-        {
-            return 0;
-        }
         public void ChangeStatus(int id, string status)
         {
 
@@ -36,6 +33,7 @@ namespace Services.Services
         }
         //nie ma tabeli oraz klasy dla rozmowy także stworzyłem jak narazie DTO dla
         //potrzebnych danych
+        
         public async Task<List<InterviewDTO>> GetInterviews()
         {
             return null;

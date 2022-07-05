@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "yq0SAvkgiSrSBz4+n0zTjP7RbKY4/QyuJYV4RX0W7P7gjVgY8JPlcxXNhNIhAul+lD2NG9EJsoU/lzcRo2hK7Q==",
+  "dgSpecHash": "7bmSGiVW1w/Iq89yQMlX4kuGyKAKy7a1whBNMEeFi0+lSafAYEibIjWrgZx/NwrCYW6VJ+XUBVUg7W4sgLME/A==",
   "success": true,
   "projectFilePath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\HeRoBackEnd.csproj",
   "expectedPackageFiles": [
@@ -36,6 +36,7 @@
     "C:\\Users\\Kprzy\\.nuget\\packages\\microsoft.win32.registry\\4.7.0\\microsoft.win32.registry.4.7.0.nupkg.sha512",
     "C:\\Users\\Kprzy\\.nuget\\packages\\microsoft.win32.systemevents\\4.7.0\\microsoft.win32.systemevents.4.7.0.nupkg.sha512",
     "C:\\Users\\Kprzy\\.nuget\\packages\\swashbuckle.aspnetcore\\6.3.1\\swashbuckle.aspnetcore.6.3.1.nupkg.sha512",
+    "C:\\Users\\Kprzy\\.nuget\\packages\\swashbuckle.aspnetcore.annotations\\6.3.1\\swashbuckle.aspnetcore.annotations.6.3.1.nupkg.sha512",
     "C:\\Users\\Kprzy\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.3.1\\swashbuckle.aspnetcore.swagger.6.3.1.nupkg.sha512",
     "C:\\Users\\Kprzy\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.3.1\\swashbuckle.aspnetcore.swaggergen.6.3.1.nupkg.sha512",
     "C:\\Users\\Kprzy\\.nuget\\packages\\swashbuckle.aspnetcore.swaggerui\\6.3.1\\swashbuckle.aspnetcore.swaggerui.6.3.1.nupkg.sha512",

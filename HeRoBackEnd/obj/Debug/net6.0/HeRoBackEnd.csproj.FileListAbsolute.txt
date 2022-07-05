@@ -92,3 +92,6 @@ C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\Common.pdb
 C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\Data.pdb
 C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\Services.pdb
 C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.csproj.CopyComplete
+C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\Swashbuckle.AspNetCore.Annotations.dll
+C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.xml
+C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.xml
