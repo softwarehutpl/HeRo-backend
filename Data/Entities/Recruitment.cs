@@ -8,7 +8,7 @@ namespace HeRoBackEnd.Models
     {
         [Key]
         [Display(Name = "Id")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [Display(Name = "Beginning date")]
         [Required(ErrorMessage = "This filed is required")]
@@ -20,11 +20,11 @@ namespace HeRoBackEnd.Models
 
         [Display(Name = "Name")]
         [Required(ErrorMessage = "This field is required")]
-        public string name { get; set; }
+        public string Name { get; set; }
 
         [Display(Name = "Description")]
         [Required(ErrorMessage = "This field is required")]
-        public string description { get; set; }
+        public string Description { get; set; }
 
         [Display(Name = "Tech id")]
         [ForeignKey("User")]
@@ -37,7 +37,7 @@ namespace HeRoBackEnd.Models
         public int RecruiterId { get; set; }
 
         [Display(Name = "Status")]
-        public string status { get; set; }
+        public string Status { get; set; }
     }
 }
 
