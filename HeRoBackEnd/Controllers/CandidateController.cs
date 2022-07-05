@@ -41,78 +41,27 @@ namespace HeRoBackEnd.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Candidate newCandidate)
+        public async Task<IActionResult> Create(NewCandidateView newCandidate)
         {
             candidateService.Add(newCandidate);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            Candidate tempCandidate = candidateService.Get(id);
-
-            if (tempCandidate == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return View(tempCandidate);
-        }
-
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            Candidate tempCandidate = candidateService.Get(id);
-
-            if (tempCandidate == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return View(tempCandidate);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Candidate newCandidate)
+        public async Task<IActionResult> Edit(int id, NewCandidateView newCandidate)
         {
             candidateService.Update(id, newCandidate);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            Candidate tempCandidate = candidateService.Get(id);
-
-            if (tempCandidate == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return View(tempCandidate);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, Candidate user)
+        public async Task<IActionResult> Delete(int id)
         {
-            candidateService.Delete(id, user);
+            candidateService.Delete(id);
 
             return RedirectToAction("Index");
         }

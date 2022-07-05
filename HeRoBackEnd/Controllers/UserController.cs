@@ -41,78 +41,27 @@ namespace HeRoBackEnd.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(User newUser)
+        public async Task<IActionResult> Create(NewUserView newUser)
         {
             userService.Add(newUser);
 
             return RedirectToAction("Index");
         }
-
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            User tempUser = userService.Get(id);
-
-            if (tempUser == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return View(tempUser);
-        }
-
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            User tempUser = userService.Get(id);
-
-            if (tempUser == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return View(tempUser);
-        }
-
+        
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, User newUser)
+        public async Task<IActionResult> Edit(int id, NewUserView newUser)
         {
             userService.Update(id, newUser);
 
             return RedirectToAction("Index");
         }
 
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            User tempUser = userService.Get(id);
-
-            if (tempUser == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return View(tempUser);
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id, User user)
+        public async Task<IActionResult> Delete(int id)
         {
-            userService.Delete(id, user);
+            userService.Delete(id);
 
             return RedirectToAction("Index");
         }
