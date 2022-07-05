@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    internal class RecruitmentRequirementServices
+    internal class RecruitmentRequirementService
     {
         //tabela przejściowa między kampanią rekrutacyjną a wymaganiami
         public async Task<List<RecruitmentRequirement>> GetRequirements()

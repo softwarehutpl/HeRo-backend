@@ -7,9 +7,9 @@ using Services.DTOs;
 
 namespace Services.Services
 {
-    internal class CandidateServices
+    internal class CandidateService
     {
-        public void AddCandidate(CandidateDTO DTO)
+        public async Task<int> AddCandidate(CandidateDTO DTO)
         {
 
         }
@@ -39,11 +39,11 @@ namespace Services.Services
         {
             return null;
         }
-        public void AllocateTech(int id)
+        public void AllocateTech(int id, int TechId)
         {
 
         }
-        public void AllocateRecruiter(int id)
+        public void AllocateRecruiter(int id, int RecruiterId)
         {
 
         }

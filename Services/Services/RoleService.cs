@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Services.Services
 {
-    internal class RoleServices
+    internal class RoleService
     {
         public async Task<List<Role>> GetRoles()
         {

@@ -8,14 +8,11 @@ using Services.DTOs;
 
 namespace Services.Services
 {
-    internal class RecruitmentServices
+    internal class RecruitmentService
     {
-        //void bo zakładam, że dane będą poddawane walidacji zanim zostaną przesłane
-        //nie mam powodu zwrócić kodu błędu, ale też async void nie jest zalecane także
-        //nie mogę użyć metod asynchronicznych
-        public void AddRecruitment(RecruitmentDTO DTO)
+        public async Task<int> AddRecruitment(RecruitmentDTO DTO)
         {
-            
+            return 0;
         }
         public void UpdateRecruitment(int id, RecruitmentDTO DTO)
         {
