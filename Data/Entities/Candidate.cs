@@ -19,8 +19,9 @@ namespace Data.Entities
         [ForeignKey("Recruitment")]
         public int RecruitmentId { get; set; }
         [Required]
-        public User RecrouterId { get; set; }
-        [Required]
+        [ForeignKey("User")]
+        public int? RecruiterId { get; set; }
+        
         [ForeignKey("User")]
         public int TechId  { get; set; }
 
