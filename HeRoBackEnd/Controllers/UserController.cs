@@ -1,24 +1,25 @@
 ﻿using HeRoBackEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
-using Data.Entities;
+//using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
     public class UserController : Controller
     {
-        private UserServices userService;
+        //private UserServices userService;
 
         public UserController()
         {
-            UserServices userService = new UserServices();
+            //UserServices userService = new UserServices();
         }
 
         public IActionResult Index()
         {
-            List<User> users = usersService.GetAllActive();
+            //List<User> users = usersService.GetAllActive();
             
-            return new JsonResult(users);
+            //return new JsonResult(users);
+            return View();
         }
 
         public async Task<IActionResult> Get(int? id)
@@ -28,26 +29,28 @@ namespace HeRoBackEnd.Controllers
                 return RedirectToAction("Index");
             }
 
-            User tempUser = userService.Get(id);
+            //User tempUser = userService.Get(id);
 
-            if (tempUser == null)
-            {
-                return RedirectToAction("Index");
-            }
+            //if (tempUser == null)
+            //{
+            //    return RedirectToAction("Index");
+            //}
 
-            return new JsonResult(tempUser);
+            //return new JsonResult(tempUser);
+            return View();
         }
 
         public async Task<IActionResult> Create()
         {
-            return new JsonResult(new User());
+            //return new JsonResult(new User());
+            return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewUserViewModel newUser)
         {
-            userService.Add(newUser);
+            //userService.Add(newUser);
 
             return RedirectToAction("Index");
         }
@@ -56,7 +59,7 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, NewUserViewModel newUser)
         {
-            userService.Update(id, newUser);
+            //userService.Update(id, newUser);
 
             return RedirectToAction("Index");
         }
@@ -65,7 +68,7 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            userService.Delete(id);
+            //userService.Delete(id);
 
             return RedirectToAction("Index");
         }
@@ -74,7 +77,7 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(string email, string password)
         {
-            userService.SignIn(email, password);
+            //userService.SignIn(email, password);
 
             return RedirectToAction("Index");
         }

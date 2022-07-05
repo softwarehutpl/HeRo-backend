@@ -1,24 +1,26 @@
 ﻿using HeRoBackEnd.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
-using Data.Entities;
+//using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
     public class CandidateController : Controller
     {
-        private CandidateService candidateService;
+        //private CandidateService candidateService;
 
         public CandidateController()
         {
-            CandidateService candidateService = new CandidateService();
+          //  CandidateService candidateService = new CandidateService();
         }
 
         public IActionResult Index()
         {
-            List<Candidate> candidates = candidateService.GetAllActive();
+            //List<Candidate> candidates = candidateService.GetAllActive();
 
-            return new JsonResult(candidates);
+           // return new JsonResult(candidates);
+
+            return View();
         }
 
         public async Task<IActionResult> Get(int? id)
@@ -28,26 +30,27 @@ namespace HeRoBackEnd.Controllers
                 return RedirectToAction("Index");
             }
 
-            Candidate tempCandidate = candidateService.Get(id);
+            //Candidate tempCandidate = candidateService.Get(id);
 
-            if (tempCandidate == null)
-            {
-                return RedirectToAction("Index");
-            }
+            //if (tempCandidate == null)
+            //{
+            //    return RedirectToAction("Index");
+            //}
 
-            return new JsonResult(tempCandidate);
+            //return new JsonResult(tempCandidate);
+            return View();
         }
 
-        public async Task<IActionResult> Create()
-        {
-            return new JsonResult(new Candidate());
-        }
+        //public async Task<IActionResult> Create()
+        //{
+        //    return new JsonResult(new Candidate());
+        //}
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewCandidateViewModel newCandidate)
         {
-            candidateService.Add(newCandidate);
+            //candidateService.Add(newCandidate);
 
             return RedirectToAction("Index");
         }
@@ -56,7 +59,7 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, NewCandidateViewModel newCandidate)
         {
-            candidateService.Update(id, newCandidate);
+            //candidateService.Update(id, newCandidate);
 
             return RedirectToAction("Index");
         }
@@ -65,7 +68,7 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int id)
         {
-            candidateService.Delete(id);
+            //candidateService.Delete(id);
 
             return RedirectToAction("Index");
         }
@@ -74,7 +77,7 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRecruitment(int id, int recruitmentId)
         {
-            candidateService.AddCandidate(id, recruitmentId);
+            //candidateService.AddCandidate(id, recruitmentId);
 
             return RedirectToAction("Index");
         }
@@ -83,7 +86,7 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddNotes(int id, string notes)
         {
-            candidateService.AddNotes(id, notes);
+            //candidateService.AddNotes(id, notes);
 
             return RedirectToAction("Index");
         }
