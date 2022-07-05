@@ -10,11 +10,11 @@ namespace Services.Services
 {
     internal class RecruitmentService
     {
-        public async Task<int> AddRecruitment(RecruitmentDTO DTO)
+        public async Task<int> AddRecruitment(RecruitmentDTO dto)
         {
             return 0;
         }
-        public void UpdateRecruitment(int id, RecruitmentDTO DTO)
+        public void UpdateRecruitment(int id, RecruitmentDTO dto)
         {
 
         }

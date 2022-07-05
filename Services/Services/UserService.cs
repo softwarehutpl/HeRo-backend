@@ -9,11 +9,11 @@ namespace Services.Services
 {
     internal class UserService
     {
-        public async Task<int> AddUser(UserDTO DTO)
+        public async Task<int> AddUser(UserDTO dto)
         {
             return 0;
         }
-        public void UpdateUser(int id, UserDTO DTO)
+        public void UpdateUser(int id, UserDTO dto)
         {
 
         }

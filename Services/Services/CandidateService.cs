@@ -9,7 +9,7 @@ namespace Services.Services
 {
     internal class CandidateService
     {
-        public async Task<int> AddCandidate(CandidateDTO DTO)
+        public async Task<int> AddCandidate(CandidateDTO dto)
         {
             return 0;
         }
@@ -17,7 +17,7 @@ namespace Services.Services
         {
 
         }
-        public void UpdateCandidate(int id, CandidateDTO DTO)
+        public void UpdateCandidate(int id, CandidateDTO dto)
         {
 
         }
@@ -39,11 +39,11 @@ namespace Services.Services
         {
             return null;
         }
-        public void AllocateTech(int id, int TechId)
+        public void AllocateTech(int id, int techId)
         {
 
         }
-        public void AllocateRecruiter(int id, int RecruiterId)
+        public void AllocateRecruiter(int id, int recruiterId)
         {
 
         }
