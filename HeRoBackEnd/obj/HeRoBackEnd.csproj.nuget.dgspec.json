@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\HeRoBackEnd.csproj": {}
+    "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\HeRoBackEnd.csproj": {}
   },
   "projects": {
-    "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj": {
+    "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj",
+        "projectUniqueName": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj",
         "projectName": "Common",
-        "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj",
-        "packagesPath": "C:\\Users\\erykh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\obj\\",
+        "projectPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj",
+        "packagesPath": "C:\\Users\\Kprzy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Common\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\erykh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Kprzy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -72,21 +76,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj": {
+    "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj",
+        "projectUniqueName": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj",
         "projectName": "Data",
-        "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj",
-        "packagesPath": "C:\\Users\\erykh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\obj\\",
+        "projectPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj",
+        "packagesPath": "C:\\Users\\Kprzy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Data\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\erykh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Kprzy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -144,21 +152,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\HeRoBackEnd.csproj": {
+    "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\HeRoBackEnd.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\HeRoBackEnd.csproj",
+        "projectUniqueName": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\HeRoBackEnd.csproj",
         "projectName": "HeRoBackEnd",
-        "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\HeRoBackEnd.csproj",
-        "packagesPath": "C:\\Users\\erykh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\obj\\",
+        "projectPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\HeRoBackEnd.csproj",
+        "packagesPath": "C:\\Users\\Kprzy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\HeRoBackEnd\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\erykh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Kprzy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -172,14 +184,14 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj": {
-                "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj"
+              "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj": {
+                "projectPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj"
               },
-              "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj": {
-                "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj"
+              "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj": {
+                "projectPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj"
               },
-              "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj": {
-                "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj"
+              "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj": {
+                "projectPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj"
               }
             }
           }
@@ -209,6 +221,10 @@
               "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.6, )"
+            },
+            "Swashbuckle.AspNetCore": {
+              "target": "Package",
+              "version": "[6.3.1, )"
             }
           },
           "imports": [
@@ -229,21 +245,25 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj": {
+    "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj",
+        "projectUniqueName": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj",
         "projectName": "Services",
-        "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj",
-        "packagesPath": "C:\\Users\\erykh\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Services\\obj\\",
+        "projectPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj",
+        "packagesPath": "C:\\Users\\Kprzy\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Services\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "C:\\Users\\erykh\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\Kprzy\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -257,8 +277,8 @@
           "net6.0": {
             "targetAlias": "net6.0",
             "projectReferences": {
-              "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj": {
-                "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj"
+              "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj": {
+                "projectPath": "C:\\Users\\Kprzy\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj"
               }
             }
           }
@@ -305,7 +325,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.200\\RuntimeIdentifierGraph.json"
         }
       }
     }

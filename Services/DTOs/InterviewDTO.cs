@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Services.DTOs
 {
-    internal class InterviewDTO
+    public class InterviewDTO
     {
     }
 }

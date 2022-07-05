@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Services.DTOs;
+using Data.Entities;
 
 namespace Services.Services
 {
