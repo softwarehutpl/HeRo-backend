@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace HeRoBackEnd.Models
+namespace Data.Entities
 {
     [Table("Recruitment")]
     public class Recruitment
