@@ -24,147 +24,29 @@ C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\refint\HeR
 C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.pdb
 C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.genruntimeconfig.cache
 C:\Users\Kprzy\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\ref\HeRoBackEnd.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\appsettings.Development.json
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\appsettings.json
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.staticwebassets.runtime.json
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.exe
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.deps.json
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.runtimeconfig.json
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.pdb
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Humanizer.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.UI.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Embedded.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Identity.Client.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\System.Drawing.Common.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\System.Runtime.Caching.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\System.Security.Permissions.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\System.Windows.Extensions.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Common.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\bin\Debug\net6.0\Common.pdb
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.csproj.AssemblyReference.cache
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.AssemblyInfoInputs.cache
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.AssemblyInfo.cs
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.csproj.CoreCompileInputs.cache
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.RazorAssemblyInfo.cache
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.RazorAssemblyInfo.cs
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\staticwebassets.build.json
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\staticwebassets.development.json
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\scopedcss\bundle\HeRoBackEnd.styles.css
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\scopedcss\projectbundle\HeRoBackEnd.bundle.scp.css
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.csproj.CopyComplete
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\refint\HeRoBackEnd.dll
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.pdb
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.genruntimeconfig.cache
-C:\Users\MateuszJeżewski\source\repos\HeRo-backend — current\HeRoBackEnd\obj\Debug\net6.0\ref\HeRoBackEnd.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\appsettings.Development.json
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\appsettings.json
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.staticwebassets.runtime.json
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.exe
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.deps.json
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.runtimeconfig.json
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.pdb
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Humanizer.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.Internal.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Cryptography.KeyDerivation.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.AspNetCore.Identity.UI.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Data.SqlClient.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Abstractions.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Design.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.Relational.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.EntityFrameworkCore.SqlServer.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Extensions.Caching.Memory.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Extensions.FileProviders.Embedded.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Identity.Client.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.IdentityModel.Tokens.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\System.Configuration.ConfigurationManager.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\System.Drawing.Common.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\System.IdentityModel.Tokens.Jwt.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\System.Runtime.Caching.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\System.Security.Permissions.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\System.Windows.Extensions.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.1\Microsoft.Data.SqlClient.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win-arm\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win-arm64\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win-x64\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win-x86\native\Microsoft.Data.SqlClient.SNI.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\Microsoft.Win32.SystemEvents.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\unix\lib\netcoreapp3.0\System.Drawing.Common.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Drawing.Common.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Runtime.Caching.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\runtimes\win\lib\netcoreapp3.0\System.Windows.Extensions.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Common.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\bin\Debug\net6.0\Common.pdb
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.csproj.AssemblyReference.cache
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.AssemblyInfoInputs.cache
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.AssemblyInfo.cs
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.csproj.CoreCompileInputs.cache
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.RazorAssemblyInfo.cache
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.RazorAssemblyInfo.cs
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\staticwebassets.build.json
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\staticwebassets.development.json
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\scopedcss\bundle\HeRoBackEnd.styles.css
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\scopedcss\projectbundle\HeRoBackEnd.bundle.scp.css
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.csproj.CopyComplete
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\refint\HeRoBackEnd.dll
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.pdb
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.genruntimeconfig.cache
-C:\Users\MateuszJeżewski\Source\Repos\HeRo-backend2\HeRoBackEnd\obj\Debug\net6.0\ref\HeRoBackEnd.dll
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\appsettings.Development.json
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\appsettings.json
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.staticwebassets.runtime.json
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.exe
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.deps.json
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.runtimeconfig.json
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.dll
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\ref\HeRoBackEnd.dll
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\bin\Debug\net6.0\HeRoBackEnd.pdb
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.csproj.AssemblyReference.cache
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.AssemblyInfoInputs.cache
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.AssemblyInfo.cs
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.csproj.CoreCompileInputs.cache
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.RazorAssemblyInfo.cache
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.RazorAssemblyInfo.cs
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\staticwebassets.build.json
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\staticwebassets.development.json
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\scopedcss\bundle\HeRoBackEnd.styles.css
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\scopedcss\projectbundle\HeRoBackEnd.bundle.scp.css
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.dll
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\ref\HeRoBackEnd.dll
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.pdb
+C:\Users\mrmas\Source\Repos\HeRo-backend\HeRoBackEnd\obj\Debug\net6.0\HeRoBackEnd.genruntimeconfig.cache

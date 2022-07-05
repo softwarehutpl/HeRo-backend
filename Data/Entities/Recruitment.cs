@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
-    [Table("Recruitment")]
     public class Recruitment
     {
+
         [Key]
         [Display(Name = "Id")]
         public int Id { get; set; }

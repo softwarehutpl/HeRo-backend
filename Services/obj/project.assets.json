@@ -634,19 +634,6 @@
             "rid": "win"
           }
         }
-      },
-      "Data/1.0.0": {
-        "type": "project",
-        "framework": ".NETCoreApp,Version=v6.0",
-        "dependencies": {
-          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.6"
-        },
-        "compile": {
-          "bin/placeholder/Data.dll": {}
-        },
-        "runtime": {
-          "bin/placeholder/Data.dll": {}
-        }
       }
     }
   },
@@ -1867,35 +1854,34 @@
         "useSharedDesignerContext.txt",
         "version.txt"
       ]
-    },
-    "Data/1.0.0": {
-      "type": "project",
-      "path": "../Data/Data.csproj",
-      "msbuildProject": "../Data/Data.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net6.0": [
-      "Data >= 1.0.0",
       "Microsoft.EntityFrameworkCore.Design >= 6.0.6",
       "Microsoft.EntityFrameworkCore.SqlServer >= 6.0.6",
       "Microsoft.EntityFrameworkCore.Tools >= 6.0.6"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\MateuszJeżewski\\.nuget\\packages\\": {}
+    "C:\\Users\\mrmas\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend2\\Services\\Services.csproj",
+      "projectUniqueName": "C:\\Users\\mrmas\\source\\repos\\HeRo-backend\\Services\\Services.csproj",
       "projectName": "Services",
-      "projectPath": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend2\\Services\\Services.csproj",
-      "packagesPath": "C:\\Users\\MateuszJeżewski\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend2\\Services\\obj\\",
+      "projectPath": "C:\\Users\\mrmas\\source\\repos\\HeRo-backend\\Services\\Services.csproj",
+      "packagesPath": "C:\\Users\\mrmas\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\mrmas\\source\\repos\\HeRo-backend\\Services\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\MateuszJeżewski\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\mrmas\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1908,11 +1894,7 @@
       "frameworks": {
         "net6.0": {
           "targetAlias": "net6.0",
-          "projectReferences": {
-            "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend2\\Data\\Data.csproj": {
-              "projectPath": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend2\\Data\\Data.csproj"
-            }
-          }
+          "projectReferences": {}
         }
       },
       "warningProperties": {
@@ -1957,7 +1939,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
       }
     }
   }
