@@ -7,7 +7,7 @@ namespace HeRoBackEnd.Controllers
 {
     public class RecruitmentController : Controller
     {
-        private recruitmentService;
+        private RecruitmentService recruitmentService;
 
         public RecruitmentController()
         {

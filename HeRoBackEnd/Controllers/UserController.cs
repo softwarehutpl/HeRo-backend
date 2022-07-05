@@ -7,7 +7,7 @@ namespace HeRoBackEnd.Controllers
 {
     public class UserController : Controller
     {
-        private userService; 
+        private UserServices userService;
 
         public UserController()
         {
