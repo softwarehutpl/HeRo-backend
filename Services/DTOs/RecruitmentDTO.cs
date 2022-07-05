@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.Services
+namespace Services.DTOs
 {
-    internal class Class1
+    internal class RecruitmentDTO
     {
     }
 }
