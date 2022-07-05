@@ -15,7 +15,7 @@ namespace Data
         public DbSet<Role>  Roles { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<CampainRequirement> CampainRequirements { get; set; }
+        public DbSet<RecruitmentRequirement> CampainRequirements { get; set; }
         public DbSet<Recruitment> Recruitments { get; set; }
     }
 }

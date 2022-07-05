@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Data.Entities
 {
-    public class CampainRequirement
+    public class RecruitmentRequirement
     {
 
         [Required]
