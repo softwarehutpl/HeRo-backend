@@ -11,7 +11,7 @@ namespace Services.Services
     {
         public async Task<int> AddCandidate(CandidateDTO DTO)
         {
-
+            return 0;
         }
         public void ChangeStatus(int id, string status)
         {
