@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HeRoBackEnd.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Services.Services;
+using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
     public class CandidateController : Controller
     {
-        private candidateService; 
+        private candidateService;
 
         public CandidateController()
         {
@@ -14,7 +17,8 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Index()
         {
             List<Candidate> candidates = candidateService.GetAllActive();
-            return View(candidates);
+
+            return new JsonResult(candidates);
         }
 
         public async Task<IActionResult> Get(int? id)
@@ -31,17 +35,17 @@ namespace HeRoBackEnd.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(tempCandidate);
+            return new JsonResult(tempCandidate);
         }
 
         public async Task<IActionResult> Create()
         {
-            return View(new Candidate());
+            return new JsonResult(new Candidate());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NewCandidateView newCandidate)
+        public async Task<IActionResult> Create(NewCandidateViewModel newCandidate)
         {
             candidateService.Add(newCandidate);
 
@@ -50,7 +54,7 @@ namespace HeRoBackEnd.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, NewCandidateView newCandidate)
+        public async Task<IActionResult> Edit(int id, NewCandidateViewModel newCandidate)
         {
             candidateService.Update(id, newCandidate);
 
@@ -68,9 +72,9 @@ namespace HeRoBackEnd.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddRecruitment(int id, int idRecruitment)
+        public async Task<IActionResult> AddRecruitment(int id, int recruitmentId)
         {
-            candidateService.AddCandidate(id, idRecruitment);
+            candidateService.AddCandidate(id, recruitmentId);
 
             return RedirectToAction("Index");
         }

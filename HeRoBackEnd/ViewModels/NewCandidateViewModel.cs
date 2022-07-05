@@ -1,6 +1,6 @@
 ﻿namespace HeRoBackEnd.ViewModels
 {
-    public class NewRecruitmentView
+    public class NewCandidateViewModel
     {
     }
 }

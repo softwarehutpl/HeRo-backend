@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HeRoBackEnd.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Services.Services;
+using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -13,7 +16,8 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Index()
         {
             List<Recruitment> recruitments = recruitmentService.GetAllActive();
-            return View(recruitments);
+
+            return new JsonResult(recruitments);
         }
 
         public async Task<IActionResult> Get(int? id)
@@ -30,17 +34,17 @@ namespace HeRoBackEnd.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(tempRecruitment);
+            return new JsonResult(tempRecruitment);
         }
 
         public async Task<IActionResult> Create()
         {
-            return View(new Recruitment());
+            return new JsonResult(new Recruitment());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NewRecruitmentView newRecruitment)
+        public async Task<IActionResult> Create(NewRecruitmentViewModel newRecruitment)
         {
             recruitmentService.Add(newRecruitment);
 
@@ -49,7 +53,7 @@ namespace HeRoBackEnd.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, NewRecruitmentView newRecruitment)
+        public async Task<IActionResult> Edit(int id, NewRecruitmentViewModel newRecruitment)
         {
             recruitmentService.Update(id, newRecruitment);
 

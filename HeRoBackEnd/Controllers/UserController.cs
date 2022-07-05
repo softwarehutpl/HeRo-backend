@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using HeRoBackEnd.ViewModels;
+using Microsoft.AspNetCore.Mvc;
+using Services.Services;
+using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -14,7 +17,8 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Index()
         {
             List<User> users = usersService.GetAllActive();
-            return View(users);
+            
+            return new JsonResult(users);
         }
 
         public async Task<IActionResult> Get(int? id)
@@ -31,17 +35,17 @@ namespace HeRoBackEnd.Controllers
                 return RedirectToAction("Index");
             }
 
-            return View(tempUser);
+            return new JsonResult(tempUser);
         }
 
         public async Task<IActionResult> Create()
         {
-            return View(new User());
+            return new JsonResult(new User());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NewUserView newUser)
+        public async Task<IActionResult> Create(NewUserViewModel newUser)
         {
             userService.Add(newUser);
 
@@ -50,7 +54,7 @@ namespace HeRoBackEnd.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, NewUserView newUser)
+        public async Task<IActionResult> Edit(int id, NewUserViewModel newUser)
         {
             userService.Update(id, newUser);
 
