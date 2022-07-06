@@ -1,4 +1,4 @@
-namespace Data.Entities
+namespace heroback.Models
 {
     public class ErrorViewModel
     {

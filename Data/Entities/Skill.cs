@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Common.Enums;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
-    [Table("Skill")]
+    [Table("Skills")]
     public class Skill
     {
         [Key]
@@ -12,10 +13,8 @@ namespace Data.Entities
 
         [Required(ErrorMessage = "Field is required!")]
         [MaxLength(75, ErrorMessage = "Name of field is to long (max. 75 characters!")]
-        public Enum Name { get; set; }
+        public string Name { get; set; }
 
-        //public virtual ICollection<RecruitmentRequirement> RecruitmentRequirements {get;set;}
+        public virtual ICollection<RecruitmentRequirement> RecruitmentRequirements {get;set;}
     }
 }
-
-//dodać enumy statusów 

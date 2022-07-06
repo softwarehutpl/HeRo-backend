@@ -5,6 +5,7 @@ using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
+    
     public class UserController : Controller
     {
         public IUserService userService;
@@ -14,6 +15,7 @@ namespace HeRoBackEnd.Controllers
             //UserServices userService = new UserServices();
         }
 
+        [HttpGet]
         public IActionResult Index()
         {
             //List<User> users = usersService.GetAllActive();
@@ -22,9 +24,10 @@ namespace HeRoBackEnd.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Get(int? id)
+        [HttpGet]
+        public async Task<IActionResult> Get(int? userId)
         {
-            if (id == null)
+            if (userId == null)
             {
                 return RedirectToAction("Index");
             }
@@ -40,12 +43,6 @@ namespace HeRoBackEnd.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Create()
-        {
-            //return new JsonResult(new User());
-            return View();
-        }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewUserViewModel newUser)
@@ -57,22 +54,23 @@ namespace HeRoBackEnd.Controllers
         
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, NewUserViewModel newUser)
+        public async Task<IActionResult> Edit(int userId, NewUserViewModel newUser)
         {
-            //userService.Update(id, newUser);
+            //userService.Update(userId, newUser);
 
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        [HttpDelete]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<IActionResult> Delete(int userId)
         {
-            //userService.Delete(id);
+            //userService.Delete(userId);
 
             return RedirectToAction("Index");
         }
 
+        //do zrobienia
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(string email, string password)
