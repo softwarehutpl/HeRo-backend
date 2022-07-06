@@ -6,7 +6,7 @@ namespace Data.Entities
 {
     public class Candidate
     {
-
+        
         [Key]
         public int Id { get; set; }
         [Required]
