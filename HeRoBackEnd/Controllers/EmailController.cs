@@ -5,6 +5,7 @@ using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
+    [ApiController]
     public class EmailController : Controller
     {
 
