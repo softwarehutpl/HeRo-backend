@@ -9,7 +9,9 @@ namespace Services.Services
 {
     public class UserService
     {
-        public async Task<int> AddUser(UserDTO dto)
+        private IUserRepository userRepository;
+
+        public UserService(IUserRepository _userRepository)
         {
             return 0;
         }
