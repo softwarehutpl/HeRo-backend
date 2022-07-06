@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Common.Listing;
+using Data.Entities;
+using Data.Repositories;
 using Services.DTOs;
+using Services.DTOs.User;
+using PagedList;
 
 namespace Services.Services
 {
@@ -13,13 +13,15 @@ namespace Services.Services
 
         public UserService(UserRepository _userRepository)
         {
-            return 0;
+            userRepository = _userRepository;
         }
+
         public void UpdateUser(int id, UserDTO dto)
         {
 
         }
-        public async Task<List<User>> GetUsers()
+
+        public IEnumerable<User> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
         {
             IEnumerable<User> users = userRepository.GetAllUsers();
 
@@ -33,7 +35,7 @@ namespace Services.Services
             }
             if (!String.IsNullOrEmpty(userFiltringDTO.RoleName))
             {
-                users = users.Where(s => s.Role.RoleName.Equals(userFiltringDTO.RoleName));
+                users = users.Where(s => s.Role.Name.Equals(userFiltringDTO.RoleName));
             }
 
             foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
@@ -64,11 +66,11 @@ namespace Services.Services
                 {
                     if (sort.Value == "DESC")
                     {
-                        users = users.OrderByDescending(u => u.Role.RoleName);
+                        users = users.OrderByDescending(u => u.Role.Name);
                     }
                     else
                     {
-                        users = users.OrderBy(s => s.Role.RoleName);
+                        users = users.OrderBy(s => s.Role.Name);
                     }
                 }
             }

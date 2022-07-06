@@ -175,9 +175,6 @@
               "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj": {
                 "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Common\\Common.csproj"
               },
-              "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj": {
-                "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Data\\Data.csproj"
-              },
               "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj": {
                 "projectPath": "C:\\Users\\erykh\\Source\\Repos\\HeRo-backend\\Services\\Services.csproj"
               }
@@ -194,9 +191,15 @@
         "net6.0": {
           "targetAlias": "net6.0",
           "dependencies": {
-            "Microsoft.EntityFrameworkCore.Design": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
+            "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.6, )"
+            },
+            "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[6.0.6, )"
+            },
+            "Microsoft.AspNetCore.Identity.UI": {
               "target": "Package",
               "version": "[6.0.6, )"
             },
@@ -205,8 +208,6 @@
               "version": "[6.0.6, )"
             },
             "Microsoft.EntityFrameworkCore.Tools": {
-              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
-              "suppressParent": "All",
               "target": "Package",
               "version": "[6.0.6, )"
             }
