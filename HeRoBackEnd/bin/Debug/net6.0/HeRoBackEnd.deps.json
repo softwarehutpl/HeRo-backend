@@ -9,11 +9,13 @@
       "HeRoBackEnd/1.0.0": {
         "dependencies": {
           "Common": "1.0.0",
+          "Data": "1.0.0",
           "Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore": "6.0.6",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.6",
           "Microsoft.AspNetCore.Identity.UI": "6.0.6",
           "Microsoft.EntityFrameworkCore.SqlServer": "6.0.6",
-          "Microsoft.EntityFrameworkCore.Tools": "6.0.6"
+          "Microsoft.EntityFrameworkCore.Tools": "6.0.6",
+          "Services": "1.0.0"
         },
         "runtime": {
           "HeRoBackEnd.dll": {}
@@ -533,8 +535,30 @@
         }
       },
       "Common/1.0.0": {
+        "dependencies": {
+          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.6"
+        },
         "runtime": {
           "Common.dll": {}
+        }
+      },
+      "Data/1.0.0": {
+        "dependencies": {
+          "Common": "1.0.0",
+          "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "6.0.6",
+          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.6"
+        },
+        "runtime": {
+          "Data.dll": {}
+        }
+      },
+      "Services/1.0.0": {
+        "dependencies": {
+          "Data": "1.0.0",
+          "Microsoft.EntityFrameworkCore.SqlServer": "6.0.6"
+        },
+        "runtime": {
+          "Services.dll": {}
         }
       }
     }
@@ -910,6 +934,16 @@
       "hashPath": "system.windows.extensions.4.7.0.nupkg.sha512"
     },
     "Common/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Data/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Services/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

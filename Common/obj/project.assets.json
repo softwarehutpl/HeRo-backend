@@ -1864,24 +1864,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\mrmas\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\MateuszJeżewski\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\mrmas\\source\\repos\\HeRo-backend\\Common\\Common.csproj",
+      "projectUniqueName": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend2\\Common\\Common.csproj",
       "projectName": "Common",
-      "projectPath": "C:\\Users\\mrmas\\source\\repos\\HeRo-backend\\Common\\Common.csproj",
-      "packagesPath": "C:\\Users\\mrmas\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\mrmas\\source\\repos\\HeRo-backend\\Common\\obj\\",
+      "projectPath": "C:\\Users\\MateuszJeżewski\\Source\\Repos\\HeRo-backend2\\Common\\Common.csproj",
+      "packagesPath": "C:\\Users\\MateuszJeżewski\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\MateuszJeżewski\\source\\repos\\HeRo-backend2\\Common\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\mrmas\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\MateuszJeżewski\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1939,7 +1934,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.301\\RuntimeIdentifierGraph.json"
       }
     }
   }
