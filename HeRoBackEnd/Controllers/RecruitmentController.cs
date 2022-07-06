@@ -5,6 +5,7 @@ using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
+    [ApiController]
     public class RecruitmentController : Controller
     {
         //private RecruitmentService recruitmentService;
@@ -13,6 +14,13 @@ namespace HeRoBackEnd.Controllers
         {
             //RecruitmentService recruitmentService = new RecruitmentService();
         }
+
+        /// <summary>
+        /// Returns a list of recruitments
+        /// </summary>
+        /// <returns>Json string representing the list of Recruitments</returns>
+        [HttpGet]
+        [Route("Recruitment/Index")]
         public IActionResult Index()
         {
            // List<Recruitment> recruitments = recruitmentService.GetAllActive();
@@ -21,9 +29,16 @@ namespace HeRoBackEnd.Controllers
            return View();
         }
 
-        public async Task<IActionResult> Get(int? id)
+        /// <summary>
+        /// Returns a recruitment specified by an id
+        /// </summary>
+        /// <param name="recruitmentId">Id of an recruitment</param>
+        /// <returns>Json string representing a Recruitment</returns>
+        [HttpGet]
+        [Route("Recruitment/Get/{recruitmentId}")]
+        public async Task<IActionResult> Get(int? recruitmentId)
         {
-            if (id == null)
+            if (recruitmentId == null)
             {
                 return RedirectToAction("Index");
             }
@@ -38,13 +53,13 @@ namespace HeRoBackEnd.Controllers
             //return new JsonResult(tempRecruitment);
         }
 
-        public async Task<IActionResult> Create()
-        {
-            //return new JsonResult(new Recruitment());
-            return View();
-        }
-
+        /// <summary>
+        /// Creates a new Recruitment
+        /// </summary>
+        /// <param name="newRecruitment">Contains information about a new recruitment</param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
+        [Route("Recruitment/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewRecruitmentViewModel newRecruitment)
         {
@@ -53,20 +68,33 @@ namespace HeRoBackEnd.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Updates information about a recruitment represented by an id
+        /// </summary>
+        /// <param name="recruitmentId">Id representing a recruitment</param>
+        /// <param name="newRecruitment">Contains current information about a recriutment</param>
+        /// <returns></returns>
         [HttpPost]
+        [Route("Recruitment/Edit/{recruitmentId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, NewRecruitmentViewModel newRecruitment)
+        public async Task<IActionResult> Edit(int recruitmentId, NewRecruitmentViewModel newRecruitment)
         {
-            //recruitmentService.Update(id, newRecruitment);
+            //recruitmentService.Update(recruitmentId, newRecruitment);
 
             return RedirectToAction("Index");
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Ends a recruitment represented by an id
+        /// </summary>
+        /// <param name="recruitmentId">Id representing a recruitment</param>
+        /// <returns>IActionResult</returns>
+        [HttpDelete]
+        [Route("Recruitment/Finish/{recruitmentId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Finish(int id)
+        public async Task<IActionResult> Finish(int recruitmentId)
         {
-            //recruitmentService.Finish(id);
+            //RecruitmentService.EndRecruitment(recruitmentId);
 
             return RedirectToAction("Index");
         }

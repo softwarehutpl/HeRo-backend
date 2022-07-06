@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Services.DTOs;
+using Data.Entities;
 
 namespace Services.Services
 {
