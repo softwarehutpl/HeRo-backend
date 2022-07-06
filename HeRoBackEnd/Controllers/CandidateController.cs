@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations;
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
     public class CandidateController : Controller
     {
         //private CandidateService candidateService;
@@ -21,7 +20,7 @@ namespace HeRoBackEnd.Controllers
         /// Returns a Json string of the list of candidates
         /// </summary>
         /// <returns>Json string representing a list of Candidates</returns>
-        [HttpPost]
+        [HttpGet]
         [Route("Candidate/Index")]
         public IActionResult Index()
         {
@@ -38,7 +37,7 @@ namespace HeRoBackEnd.Controllers
         /// <param name="candidateId">Takes the id of a candidate</param>
         /// <returns>Json string representing a Candidate</returns>
         
-        [HttpPost]
+        [HttpGet]
         [Route("Candidate/Get/{candidateId}")]
         public async Task<IActionResult> Get(int? candidateId)
         {
@@ -70,7 +69,7 @@ namespace HeRoBackEnd.Controllers
         /// containing information about the new candidate</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
-        [Route("Candidate/Create/{newCandidate.id}")]
+        [Route("Candidate/Create")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewCandidateViewModel newCandidate)
         {
@@ -100,7 +99,7 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="candidateId">Id of the candidate</param>
         /// <returns>IActionResult</returns>
-        [HttpPost]
+        [HttpDelete]
         [Route("Candidate/Delete/{candidateId}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int candidateId)
@@ -117,11 +116,11 @@ namespace HeRoBackEnd.Controllers
         /// <param name="recruitmentId">Id of the recruitment</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
-        [Route("Candidate/AddRecruitment/{candidateId}")]
+        [Route("Candidate/AddRecruitment")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRecruitment(int candidateId, int recruitmentId)
         {
-            //RecruitmentService.AddCandidate(id, recruitmentId);
+            //CandidateService.AddCandidate(id, recruitmentId);
 
             return RedirectToAction("Index");
         }
@@ -133,7 +132,7 @@ namespace HeRoBackEnd.Controllers
         /// <param name="notes">The content of the note</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
-        [Route("Candidate/AddNotes/{candidateId}")]
+        [Route("Candidate/AddNotes")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AddNotes(int candidateId, string notes)
         {
