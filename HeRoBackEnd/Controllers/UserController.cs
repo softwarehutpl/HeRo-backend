@@ -1,8 +1,8 @@
-﻿using HeRoBackEnd.ViewModels;
+﻿using Data.Entities;
+using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
-using Services.Services;
-using Data.Entities;
 using PagedList;
+using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -15,33 +15,48 @@ namespace HeRoBackEnd.Controllers
             userService = _userService;
         }
 
-        public async Task<IActionResult> Index(string sortOrder, string searchString, int? page)
+        public IActionResult GetList(PagingViewModel pagingViewModel)
         {
-            if (searchString != null)
-            {
-                page = 1;
-            }
-
             IEnumerable<User> users = userService.GetUsers();
 
-            if (!String.IsNullOrEmpty(searchString))
+            foreach (KeyValuePair<string, string> sort in pagingViewModel.SortOrder.Sort)
             {
-                users = users.Where(u => u.Email.Contains(searchString));
+                if (sort.Key == "Email")
+                {
+                    if (sort.Value == "DESC")
+                    {
+                        users = users.OrderByDescending(u => u.Email);
+                    }
+                    else
+                    {
+                        users = users.OrderBy(s => s.Email);
+                    }
+                }
+                else if (sort.Key == "UserStatus")
+                {
+                    if (sort.Value == "DESC")
+                    {
+                        users = users.OrderByDescending(u => u.UserStatus);
+                    }
+                    else
+                    {
+                        users = users.OrderBy(s => s.UserStatus);
+                    }
+                }
+                else if (sort.Key == "Role")
+                {
+                    if (sort.Value == "DESC")
+                    {
+                        users = users.OrderByDescending(u => u.Role.RoleName);
+                    }
+                    else
+                    {
+                        users = users.OrderBy(s => s.Role.RoleName);
+                    }
+                }
             }
 
-            if(sortOrder == "email_desc")
-            {
-                users = users.OrderByDescending(u => u.Email);
-            }
-            else
-            {
-                users = users.OrderBy(s => s.Email);
-            }
-
-            int pageSize = 10;
-            int pageNumber = (page ?? 1);
-
-            return new JsonResult(users.ToPagedList(pageNumber, pageSize));
+            return new JsonResult(users.ToPagedList(pagingViewModel.Paging.PageNumber, pagingViewModel.Paging.PageSize));
         }
 
         public async Task<IActionResult> Get(int? id)

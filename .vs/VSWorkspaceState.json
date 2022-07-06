@@ -1,9 +1,7 @@
 {
   "ExpandedNodes": [
-    "",
-    "\\HeRoBackEnd",
-    "\\HeRoBackEnd\\Models"
+    ""
   ],
-  "SelectedNode": "\\HeRoBackEnd\\Models\\ErrorViewModel.cs",
+  "SelectedNode": "\\HeRoBackEnd.sln",
   "PreviewInSolutionExplorer": false
 }

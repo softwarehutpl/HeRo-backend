@@ -1,4 +1,4 @@
-﻿namespace HeRoBackEnd.ViewModels
+﻿namespace HeRoBackEnd.ViewModels.Recruitment
 {
     public class NewRecruitmentViewModel
     {

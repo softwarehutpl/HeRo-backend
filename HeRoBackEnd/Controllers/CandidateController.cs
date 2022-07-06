@@ -1,4 +1,4 @@
-﻿using HeRoBackEnd.ViewModels;
+﻿using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 //using Data.Entities;

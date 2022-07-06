@@ -5,6 +5,8 @@ namespace Data.Entities
 {
     public class RecruitmentRequirement
     {
+        [Key]
+        public int Id { get; set; }
 
         [Required]
         public Recruitment Recruitment { get; set; }

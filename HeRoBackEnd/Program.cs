@@ -1,4 +1,5 @@
 using Data;
+using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Services.Services;
 
@@ -9,7 +10,8 @@ builder.Services.AddControllersWithViews();
 string connectionString = builder.Configuration.GetConnectionString("SQLServer");
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddSingleton<IUserService,UserService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 var app = builder.Build();
 
