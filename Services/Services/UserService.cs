@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Services.DTOs;
 
 namespace Services.Services
@@ -19,7 +20,7 @@ namespace Services.Services
         {
 
         }
-        public async Task<List<User>> GetUsers()
+        public async Task<List<IdentityUser>> GetUsers()
         {
             return null;
         }

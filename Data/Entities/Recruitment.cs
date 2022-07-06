@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
@@ -26,18 +27,17 @@ namespace Data.Entities
         [Required(ErrorMessage = "This field is required")]
         public string Description { get; set; }
 
-        [Display(Name = "Tech id")]
-        [ForeignKey("User")]
-        [Required(ErrorMessage = "This field is required")]
-        public int TechId { get; set; }
+        
 
         [Display(Name = "Recruiter id")]
-        [ForeignKey("User")]
         [Required(ErrorMessage = "This field is required")]
-        public int RecruiterId { get; set; }
+        public string RecruiterId { get; set; }
 
         [Display(Name = "Status")]
         public string Status { get; set; }
+
+        [ForeignKey("RecruiterId")]
+        public virtual IdentityUser Recruiter { get; set; }
     }
 }
 
