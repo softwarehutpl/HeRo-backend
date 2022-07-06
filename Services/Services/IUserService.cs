@@ -1,5 +1,6 @@
 ﻿using Data.Entities;
 using Services.DTOs;
+using Services.DTOs.User;
 
 namespace Services.Services
 {
@@ -9,6 +10,6 @@ namespace Services.Services
 
         public void UpdateUser(int id, UserDTO dto);
 
-        public IEnumerable<User> GetUsers();
+        public IEnumerable<User> GetUsers(UserPagingDTO userPagingDTO, UserSortOrderDTO userSortOrderDTO, UserFiltringDTO userFiltringDTO);
     }
 }
