@@ -13,12 +13,7 @@ namespace Data.Repositories
 
         public User GetUserById(int id) 
         {
-            User user = new();
-            user = _dataContext.Users.SingleOrDefault(c => c.Id == id);
-
-            if(user != null) return user;
-
-            return null;
+            return _dataContext.Users.SingleOrDefault(c => c.Id == id);
         }
 
         public void GetAllUsers() { }
