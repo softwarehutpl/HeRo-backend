@@ -1,5 +1,4 @@
 ﻿using Common.Listing;
-using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.User;

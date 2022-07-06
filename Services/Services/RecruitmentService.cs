@@ -3,13 +3,24 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Common.Listing;
 using Data.Entities;
+using Data.Repositories;
+using PagedList;
 using Services.DTOs;
+using Services.DTOs.Recruitment;
 
 namespace Services.Services
 {
     public class RecruitmentService
     {
+        private RecruitmentRepository recruitmentRepository;
+
+        public RecruitmentService(RecruitmentRepository _recruitmentRepository)
+        {
+            recruitmentRepository = _recruitmentRepository;
+        }
+
         public async Task<int> AddRecruitment(RecruitmentDTO dto)
         {
             return 0;
@@ -22,9 +33,61 @@ namespace Services.Services
         {
 
         }
-        public async Task<List<Recruitment>> GetRecruitments()
+
+        public IEnumerable<Recruitment> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
-            return null;
+            IEnumerable<Recruitment> recruitments = recruitmentRepository.GetAllRecruitments();
+
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
+            {
+                recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
+            }
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Status))
+            {
+                recruitments = recruitments.Where(s => s.Status.Equals(recruitmentFiltringDTO.Status));
+            }
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
+            {
+                recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
+            }
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.BeginningDate.ToString()))
+            {
+                recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
+            }
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.EndingDate.ToString()))
+            {
+                recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
+            }
+
+            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
+            {
+                if (sort.Key == "Name")
+                {
+                    if (sort.Value == "DESC")
+                    {
+                        recruitments = recruitments.OrderByDescending(u => u.Name);
+                    }
+                    else
+                    {
+                        recruitments = recruitments.OrderBy(s => s.Name);
+                    }
+                }
+                else if (sort.Key == "Status")
+                {
+                    if (sort.Value == "DESC")
+                    {
+                        recruitments = recruitments.OrderByDescending(u => u.Status);
+                    }
+                    else
+                    {
+                        recruitments = recruitments.OrderBy(s => s.Status);
+                    }
+                }
+            }
+
+            var result = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
+
+            return result;
         }
     }
 }
