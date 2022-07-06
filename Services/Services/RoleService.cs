@@ -7,7 +7,7 @@ using Data.Entities;
 
 namespace Services.Services
 {
-    internal class RoleService
+    public class RoleService
     {
         public async Task<List<Role>> GetRoles()
         {

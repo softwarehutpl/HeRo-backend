@@ -1,15 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data.Entities;
 
 namespace Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
+        private DataContext _dataContext;
 
-        public void GetUserById(int id) { }
+        public UserRepository(DataContext context)
+        {
+            _dataContext = context;
+        }
+
+        public User GetUserById(int id) 
+        {
+            User user = new();
+            user = _dataContext.Users.SingleOrDefault(c => c.Id == id);
+
+            if(user != null) return user;
+
+            return null;
+        }
 
         public void GetAllUsers() { }
 

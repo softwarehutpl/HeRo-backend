@@ -7,7 +7,7 @@ using Data.Entities;
 
 namespace Services.Services
 {
-    internal class SkillService
+    public class SkillService
     {
         public async Task<List<Skill>> GetSkills()
         {

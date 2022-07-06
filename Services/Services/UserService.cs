@@ -1,25 +1,20 @@
 ﻿using Services.DTOs;
 using Data.Entities;
-using Data;
+using Data.Repositories;
 
 namespace Services.Services
 {
-    internal class UserService
+    public class UserService
     {
-        private DataContext _dataContext;
 
-        public UserService(DataContext context)
-        {
-            _dataContext = context;
-        }
-        
-        public string GetEmail(int id)
-        {
-            User user = new();
-            user = _dataContext.Users.SingleOrDefault(c => c.Id == id);
+        private IUserRepository _userRepository;
 
-            string email = user.Email;
-            return email;
+        public UserService(IUserRepository userRepository) { _userRepository = userRepository; }
+        public string GetEmailOfUser(int id)
+        {
+            User user = _userRepository.GetUserById(id);
+
+            return user.Email;
         }
 
         public async Task<int> AddUser(UserDTO dto)

@@ -1,6 +1,8 @@
 using Common.Helpers;
 using Data;
+using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +12,8 @@ string connectionString = builder.Configuration.GetConnectionString("SQLServer")
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IEmailHelper, EmailHelper>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
 

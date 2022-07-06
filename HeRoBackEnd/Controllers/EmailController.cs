@@ -1,5 +1,6 @@
 ﻿using Common.Helpers;
 using Microsoft.AspNetCore.Mvc;
+using Services.Services;
 
 
 namespace HeRoBackEnd.Controllers
@@ -19,6 +20,7 @@ namespace HeRoBackEnd.Controllers
         {            
             try
             {
+
                 _emailHelper.SendEmail();
                 return Ok("Mail Wysłany");
             }
