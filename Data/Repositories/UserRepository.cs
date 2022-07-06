@@ -4,14 +4,18 @@ namespace Data.Repositories
 {
     public class UserRepository
     {
-        private DataContext dataContext;
 
-        public UserRepository(DataContext _dataContext)
+        private DataContext _dataContext;
+
+        public UserRepository(DataContext context)
         {
-            dataContext = _dataContext;
+            _dataContext = context;
         }
 
-        public void GetUserById(int id) { }
+        public User GetUserById(int id) 
+        {
+            return _dataContext.Users.SingleOrDefault(c => c.Id == id);
+        }
 
         public IEnumerable<User> GetAllUsers()
         {

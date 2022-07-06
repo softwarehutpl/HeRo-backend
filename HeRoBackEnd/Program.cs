@@ -1,5 +1,8 @@
+using Common.Helpers;
 using Data;
+using Data.Repositories;
 using Microsoft.EntityFrameworkCore;
+using Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -9,14 +12,19 @@ string connectionString = builder.Configuration.GetConnectionString("SQLServer")
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
+
+builder.Services.AddScoped<IEmailHelper, EmailHelper>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<UserService>();
+
+var app = builder.Build();
+
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>();
 builder.Services.AddControllersWithViews();
 string connectionString = builder.Configuration.GetConnectionString("SQLServer");
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 
-builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<IUserRepository, UserRepository>();
 
 builder.Services.AddSwaggerGen(options =>
 {

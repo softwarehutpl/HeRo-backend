@@ -1,4 +1,6 @@
-﻿using System;
+using Data.Entities;
+using Data.Repositories;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,9 +13,18 @@ namespace Services.Services
 {
     public class UserService
     {
-        private IUserRepository userRepository;
+        private IUserRepository _userRepository;
 
-        public UserService(IUserRepository _userRepository)
+        public UserService(IUserRepository userRepository) { _userRepository = userRepository; }
+        public string GetEmailOfUser(int id)
+        {
+            User user = _userRepository.GetUserById(id);
+
+            return user.Email;
+        }
+
+        public async Task<int> AddUser(UserDTO dto)
+
         {
             return 0;
         }

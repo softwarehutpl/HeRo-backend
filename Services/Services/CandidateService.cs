@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Data;
 using Data.Entities;
 using Services.DTOs;
 using System.ComponentModel.DataAnnotations;
@@ -11,6 +7,7 @@ namespace Services.Services
 {
     public class CandidateService
     {
+        
         public async Task<int> AddCandidate(CandidateDTO dto)
         {
             return 0;
@@ -31,6 +28,8 @@ namespace Services.Services
         {
 
         }
+
+       
         public async Task<List<Candidate>> GetCandidates()
         {
             return null;
