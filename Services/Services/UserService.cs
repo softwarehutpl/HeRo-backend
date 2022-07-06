@@ -1,12 +1,18 @@
-﻿using Services.DTOs;
 using Data.Entities;
 using Data.Repositories;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Services.DTOs;
+using Data.Entities;
 
 namespace Services.Services
 {
     public class UserService
     {
-
         private IUserRepository _userRepository;
 
         public UserService(IUserRepository userRepository) { _userRepository = userRepository; }
@@ -18,6 +24,7 @@ namespace Services.Services
         }
 
         public async Task<int> AddUser(UserDTO dto)
+
         {
             return 0;
         }
@@ -25,7 +32,7 @@ namespace Services.Services
         {
 
         }
-        public async Task<List<User>> GetUsers()
+        public async Task<List<IdentityUser>> GetUsers()
         {
             return null;
         }

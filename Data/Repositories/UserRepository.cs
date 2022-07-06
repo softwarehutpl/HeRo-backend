@@ -2,8 +2,9 @@
 
 namespace Data.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository
     {
+
         private DataContext _dataContext;
 
         public UserRepository(DataContext context)
@@ -16,11 +17,13 @@ namespace Data.Repositories
             return _dataContext.Users.SingleOrDefault(c => c.Id == id);
         }
 
-        public void GetAllUsers() { }
+        public IEnumerable<User> GetAllUsers()
+        {
+            return dataContext.Users;
+        }
 
         public void AddUser(int id) { }
 
         public void RemoveUser(int id) { }
-
     }
 }

@@ -5,8 +5,8 @@ namespace Data.Repositories
     public interface IUserRepository
     {
         void AddUser(int id);
-        void GetAllUsers();
         User GetUserById(int id);
+        IEnumerable<User> GetAllUsers();
         void RemoveUser(int id);
     }
 }

@@ -10,6 +10,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 string connectionString = builder.Configuration.GetConnectionString("SQLServer");
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 
 builder.Services.AddScoped<IEmailHelper, EmailHelper>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -17,13 +19,41 @@ builder.Services.AddScoped<UserService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-if (!app.Environment.IsDevelopment())
+builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
+    .AddEntityFrameworkStores<ApplicationDbContext>();
+builder.Services.AddControllersWithViews();
+string connectionString = builder.Configuration.GetConnectionString("SQLServer");
+builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+
+
+builder.Services.AddSwaggerGen(options =>
 {
-    app.UseExceptionHandler("/Home/Error");
+    options.SwaggerDoc("v1",
+    new Microsoft.OpenApi.Models.OpenApiInfo
+    {
+        Version = "v1",
+        Title = "API documentation",
+        Description = "API documentation for the HeRo app"
+    });
+    var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
+    options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
+});
+
+var app = builder.Build();
+app.UseMigrationsEndPoint();
+// Configure the HTTP request pipeline.
+app.UseSwagger();
+    app.UseDeveloperExceptionPage();
+
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+        options.RoutePrefix = string.Empty;
+    });
+app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
-}
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

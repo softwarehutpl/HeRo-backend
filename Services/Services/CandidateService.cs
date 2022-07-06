@@ -1,6 +1,7 @@
 ﻿using Data;
 using Data.Entities;
 using Services.DTOs;
+using System.ComponentModel.DataAnnotations;
 
 namespace Services.Services
 {
@@ -35,6 +36,7 @@ namespace Services.Services
         }
         //nie ma tabeli oraz klasy dla rozmowy także stworzyłem jak narazie DTO dla
         //potrzebnych danych
+        
         public async Task<List<InterviewDTO>> GetInterviews()
         {
             return null;

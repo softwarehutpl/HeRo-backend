@@ -1,11 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.AspNetCore.Identity;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
     public class Candidate
     {
-
+        
         [Key]
         public int Id { get; set; }
         [Required]
@@ -22,11 +23,11 @@ namespace Data.Entities
         [ForeignKey("Recruitment")]
         public int RecruitmentId { get; set; }
         [Required]
-        [ForeignKey("User")]
-        public int? RecruiterId { get; set; }
         
-        [ForeignKey("User")]
-        public int TechId  { get; set; }
+        public string RecruiterId { get; set; }
+
+        [Required]
+        public string TechId  { get; set; }
 
         public DateTime InterviewDate { get; set; }
         
@@ -34,7 +35,10 @@ namespace Data.Entities
         public string Notes { get; set; }
         [Required]
         public string CvPath { get; set; }
-
+        [ForeignKey("TechId")]
+        public virtual IdentityUser Tech { get; set; }
+        [ForeignKey("RecruiterId")]
+        public virtual IdentityUser Recruiter{ get; set; }
 
 
     }
