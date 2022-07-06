@@ -9,9 +9,9 @@ namespace HeRoBackEnd.Controllers
 {
     public class UserController : Controller
     {
-        public IUserService userService;
+        public UserService userService;
 
-        public UserController(IUserService _userService)
+        public UserController(UserService _userService)
         {
             userService = _userService;
         }
@@ -22,7 +22,9 @@ namespace HeRoBackEnd.Controllers
             SortOrder sortOrder = userListFilterViewModel.SortOrder;
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
-            return new JsonResult(userService.GetUsers(paging, sortOrder, userFiltringDTO));
+            var resutl = userService.GetUsers(paging, sortOrder, userFiltringDTO);
+
+            return new JsonResult(resutl);
         }
 
         public async Task<IActionResult> Get(int? id)

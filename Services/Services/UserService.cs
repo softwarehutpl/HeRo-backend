@@ -7,11 +7,11 @@ using Services.DTOs.User;
 
 namespace Services.Services
 {
-    public class UserService : IUserService
+    public class UserService
     {
-        private IUserRepository userRepository;
+        private UserRepository userRepository;
 
-        public UserService(IUserRepository _userRepository)
+        public UserService(UserRepository _userRepository)
         {
             userRepository = _userRepository;
         }
@@ -80,7 +80,9 @@ namespace Services.Services
                 }
             }
 
-            return users.ToPagedList(paging.PageNumber, paging.PageSize);
+            var result = users.ToPagedList(paging.PageNumber, paging.PageSize);
+
+            return result;
         }
     }
 }
