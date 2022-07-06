@@ -1,8 +1,9 @@
 ﻿using Data.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Data.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
 
         private DataContext _dataContext;
@@ -12,14 +13,21 @@ namespace Data.Repositories
             _dataContext = context;
         }
 
-        public User GetUserById(int id) 
+        public IdentityUser GetUserById(string id) 
         {
-            return _dataContext.Users.SingleOrDefault(c => c.Id == id);
+            var result = _dataContext.AspNetUsers.Find(id);
+            return result; 
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public IdentityUser GetUserByEmail(string mail)
         {
-            return dataContext.Users;
+            var result = _dataContext.AspNetUsers.Find(mail);
+            return result;
+        }
+
+        public IEnumerable<IdentityUser> GetAllUsers()
+        {
+            return _dataContext.AspNetUsers.ToList();
         }
 
         public void AddUser(int id) { }

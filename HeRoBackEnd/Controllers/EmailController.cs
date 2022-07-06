@@ -20,7 +20,6 @@ namespace HeRoBackEnd.Controllers
         {            
             try
             {
-
                 _emailHelper.SendEmail();
                 return Ok("Mail Wysłany");
             }
