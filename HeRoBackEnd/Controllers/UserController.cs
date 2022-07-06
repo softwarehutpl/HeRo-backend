@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using Data.Entities;
+using HeRoBackEnd.ViewModels.User;
 
 namespace HeRoBackEnd.Controllers
 {

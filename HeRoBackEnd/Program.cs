@@ -1,5 +1,9 @@
+using Common.Helpers;
 using Data;
+using Data.Repositories;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Services.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,17 +11,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 string connectionString = builder.Configuration.GetConnectionString("SQLServer");
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<ApplicationDbContext>();
-builder.Services.AddControllersWithViews();
-string connectionString = builder.Configuration.GetConnectionString("SQLServer");
-builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
-
-builder.Services.AddScoped<IUserService, UserService>();
+    .AddEntityFrameworkStores<
+        DataContext>();
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddScoped<IEmailHelper, EmailHelper>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
-
+builder.Services.AddScoped<UserService>();
+builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1",
@@ -33,6 +34,7 @@ builder.Services.AddSwaggerGen(options =>
 });
 
 var app = builder.Build();
+
 app.UseMigrationsEndPoint();
 // Configure the HTTP request pipeline.
 app.UseSwagger();

@@ -1,21 +1,33 @@
 ﻿using Data.Entities;
+using Microsoft.AspNetCore.Identity;
 
 namespace Data.Repositories
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
-        private DataContext dataContext;
 
-        public UserRepository(DataContext _dataContext)
+        private DataContext _dataContext;
+
+        public UserRepository(DataContext context)
         {
-            dataContext = _dataContext;
+            _dataContext = context;
         }
 
-        public void GetUserById(int id) { }
-
-        public IEnumerable<User> GetAllUsers()
+        public IdentityUser GetUserById(string id) 
         {
-            return dataContext.Users;
+            var result = _dataContext.AspNetUsers.Find(id);
+            return result; 
+        }
+
+        public IdentityUser GetUserByEmail(string mail)
+        {
+            var result = _dataContext.AspNetUsers.Find(mail);
+            return result;
+        }
+
+        public IEnumerable<IdentityUser> GetAllUsers()
+        {
+            return _dataContext.AspNetUsers.ToList();
         }
 
         public void AddUser(int id) { }
