@@ -3,6 +3,7 @@ using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.User;
 using Services.Services;
+using Common.Listing;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -17,11 +18,11 @@ namespace HeRoBackEnd.Controllers
 
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
-            UserPagingDTO userPagingDTO = new UserPagingDTO(userListFilterViewModel.Paging.PageSize, userListFilterViewModel.Paging.PageNumber);
-            UserSortOrderDTO userSortOrderDTO = new UserSortOrderDTO(userListFilterViewModel.SortOrder.Sort);
+            Paging paging = userListFilterViewModel.Paging;
+            SortOrder sortOrder = userListFilterViewModel.SortOrder;
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
-            return new JsonResult(userService.GetUsers(userPagingDTO, userSortOrderDTO, userFiltringDTO));
+            return new JsonResult(userService.GetUsers(paging, sortOrder, userFiltringDTO));
         }
 
         public async Task<IActionResult> Get(int? id)

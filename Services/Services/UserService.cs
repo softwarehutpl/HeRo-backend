@@ -1,8 +1,9 @@
-﻿using Data.Entities;
+﻿using Common.Listing;
+using Data.Entities;
 using Data.Repositories;
+using PagedList;
 using Services.DTOs;
 using Services.DTOs.User;
-using PagedList;
 
 namespace Services.Services
 {
@@ -25,7 +26,7 @@ namespace Services.Services
 
         }
 
-        public IEnumerable<User> GetUsers(UserPagingDTO userPagingDTO, UserSortOrderDTO userSortOrderDTO, UserFiltringDTO userFiltringDTO)
+        public IEnumerable<User> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
         {
             IEnumerable<User> users = userRepository.GetAllUsers();
 
@@ -42,7 +43,7 @@ namespace Services.Services
                 users = users.Where(s => s.Role.RoleName.Contains(userFiltringDTO.RoleName));
             }
 
-            foreach (KeyValuePair<string, string> sort in userSortOrderDTO.Sort)
+            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
             {
                 if (sort.Key == "Email")
                 {
@@ -79,7 +80,7 @@ namespace Services.Services
                 }
             }
 
-            return users.ToPagedList(userPagingDTO.PageNumber, userPagingDTO.PageSize);
+            return users.ToPagedList(paging.PageNumber, paging.PageSize);
         }
     }
 }

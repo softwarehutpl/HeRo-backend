@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿using Common.Listing;
+using Data.Entities;
 using Services.DTOs;
 using Services.DTOs.User;
 
@@ -10,6 +11,6 @@ namespace Services.Services
 
         public void UpdateUser(int id, UserDTO dto);
 
-        public IEnumerable<User> GetUsers(UserPagingDTO userPagingDTO, UserSortOrderDTO userSortOrderDTO, UserFiltringDTO userFiltringDTO);
+        public IEnumerable<User> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO);
     }
 }
