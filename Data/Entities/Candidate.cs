@@ -15,6 +15,9 @@ namespace Data.Entities
         [Required]
         public string Status { get; set; }
         [Required]
+        [EmailAddress]
+        public string Email { get; set; }
+        [Required]
         public DateTime AplicationDate  { get; set; }
         [ForeignKey("Recruitment")]
         public int RecruitmentId { get; set; }
