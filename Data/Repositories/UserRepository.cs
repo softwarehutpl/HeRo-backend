@@ -3,9 +3,8 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Data.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository
     {
-
         private DataContext _dataContext;
 
         public UserRepository(DataContext context)
@@ -27,7 +26,9 @@ namespace Data.Repositories
 
         public IEnumerable<IdentityUser> GetAllUsers()
         {
-            return _dataContext.AspNetUsers.ToList();
+            var result = _dataContext.AspNetUsers;
+
+            return result;
         }
 
         public void AddUser(int id) { }

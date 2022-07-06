@@ -1,28 +1,32 @@
-﻿using HeRoBackEnd.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using Services.Services;
-using Data.Entities;
+﻿using Common.Listing;
+using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
+using Microsoft.AspNetCore.Mvc;
+using Services.DTOs.User;
+using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
-    
+
     public class UserController : Controller
     {
-        public IUserService userService;
+        public UserService userService;
 
-        public UserController(IUserService _userService)
+        public UserController(UserService _userService)
         {
-            //UserServices userService = new UserServices();
+            userService = _userService;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
-            //List<User> users = usersService.GetAllActive();
-            
-            //return new JsonResult(users);
-            return View();
+            Paging paging = userListFilterViewModel.Paging;
+            SortOrder sortOrder = userListFilterViewModel.SortOrder;
+            UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
+
+            var resutl = userService.GetUsers(paging, sortOrder, userFiltringDTO);
+
+            return new JsonResult(resutl);
         }
 
         [HttpGet]
