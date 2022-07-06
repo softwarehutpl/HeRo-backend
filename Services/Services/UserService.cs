@@ -1,9 +1,9 @@
-﻿using Common.Listing;
-using Data.Entities;
-using Data.Repositories;
-using PagedList;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using Services.DTOs;
-using Services.DTOs.User;
 
 namespace Services.Services
 {
@@ -13,20 +13,13 @@ namespace Services.Services
 
         public UserService(UserRepository _userRepository)
         {
-            userRepository = _userRepository;
-        }
-
-        public int AddUser(UserDTO dto)
-        {
             return 0;
         }
-
         public void UpdateUser(int id, UserDTO dto)
         {
 
         }
-
-        public IEnumerable<User> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
+        public async Task<List<User>> GetUsers()
         {
             IEnumerable<User> users = userRepository.GetAllUsers();
 

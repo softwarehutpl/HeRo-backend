@@ -2,7 +2,7 @@
 
 namespace Data.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository
     {
         private DataContext dataContext;
 
