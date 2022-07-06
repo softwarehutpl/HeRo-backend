@@ -36,11 +36,11 @@ namespace Services.Services
             }
             if (!String.IsNullOrEmpty(userFiltringDTO.UserStatus))
             {
-                users = users.Where(s => s.UserStatus.Contains(userFiltringDTO.UserStatus));
+                users = users.Where(s => s.UserStatus.Equals(userFiltringDTO.UserStatus));
             }
             if (!String.IsNullOrEmpty(userFiltringDTO.RoleName))
             {
-                users = users.Where(s => s.Role.RoleName.Contains(userFiltringDTO.RoleName));
+                users = users.Where(s => s.Role.RoleName.Equals(userFiltringDTO.RoleName));
             }
 
             foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
