@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public class UserRepository : IUserRepository
+    public class UserRepository
     {
 
         public void GetUserById(int id) { }
