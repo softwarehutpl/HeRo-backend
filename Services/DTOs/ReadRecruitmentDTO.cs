@@ -1,16 +1,16 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Data.Entities
+namespace Services.DTOs
 {
-    public class Recruitment
+    public class ReadRecruitmentDTO
     {
-
-        [Key]
         [Display(Name = "Id")]
         public int Id { get; set; }
-
         [Display(Name = "Beginning date")]
         [Required(ErrorMessage = "This filed is required")]
         public DateTime BeginningDate { get; set; }
@@ -25,17 +25,10 @@ namespace Data.Entities
 
         [Display(Name = "Description")]
         [Required(ErrorMessage = "This field is required")]
-        public string Description { get; set; }     
+        public string Description { get; set; }
 
         [Display(Name = "Recruiter id")]
         [Required(ErrorMessage = "This field is required")]
         public string RecruiterId { get; set; }
-
-        [Display(Name = "Status")]
-        public string Status { get; set; }
-
-        [ForeignKey("RecruiterId")]
-        public virtual IdentityUser Recruiter { get; set; }
     }
 }
-

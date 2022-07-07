@@ -10,19 +10,27 @@ namespace Services.Services
 {
     public class RecruitmentService
     {
-        public async Task<int> AddRecruitment(RecruitmentDTO dto)
+        public int AddRecruitment(CAndURecruitmentDTO dto)
         {
             return 0;
         }
-        public void UpdateRecruitment(int id, RecruitmentDTO dto)
+        public void UpdateRecruitment(int recruitmentId, CAndURecruitmentDTO dto)
         {
 
         }
-        public void EndRecruitment(int id)
+        public void ChangeStatus(int recruitmentId, string status)
         {
 
         }
-        public async Task<List<Recruitment>> GetRecruitments()
+        public void EndRecruitment(int recruitmentId)
+        {
+
+        }
+        public ReadRecruitmentDTO GetRecruitment(int recruitmentId)
+        {
+            return null;
+        }
+        public List<ReadRecruitmentDTO> GetRecruitments()
         {
             return null;
         }
