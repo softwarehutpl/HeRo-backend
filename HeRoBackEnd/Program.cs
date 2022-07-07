@@ -15,9 +15,13 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<
         DataContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 builder.Services.AddScoped<IEmailHelper, EmailHelper>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<RecruitmentRepository>();
+builder.Services.AddScoped<RecruitmentService>();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen(options =>
 {
