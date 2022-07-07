@@ -21,6 +21,7 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         [HttpPost]
+        [Route("Email/SendConfirmation")]
         public IActionResult SendConfirmation(string id)
         {            
             try
