@@ -36,9 +36,9 @@ namespace Data.Repositories
 
         public void RemoveUser(int id) { }
 
-        public IQueryable<string> GetUserEmail(string id)
+        public string GetUserEmail(string id)
         {
-            var result = _dataContext.AspNetUsers.Where(x => x.Id == id).Select(x => x.Email);
+            var result = _dataContext.AspNetUsers.FirstOrDefault(x => x.Id == id).Email;
             return result;
         }
     }
