@@ -5,6 +5,7 @@ using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
+    [ApiController]
     public class EmailController : Controller
     {
 
@@ -15,6 +16,10 @@ namespace HeRoBackEnd.Controllers
             _emailService = emailService;
         }
 
+        /// <summary>
+        /// Sends an email with the activation link to the newly registered user
+        /// </summary>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         public IActionResult SendConfirmation(string id)
         {            
