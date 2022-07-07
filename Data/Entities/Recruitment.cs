@@ -2,10 +2,11 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Common.Enums;
+using Data.Repositories;
 
 namespace Data.Entities
 {
-    public class Recruitment
+    public class Recruitment : IEntity
     {
 
         [Key]

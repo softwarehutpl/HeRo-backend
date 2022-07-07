@@ -19,6 +19,7 @@ builder.Services.AddScoped<IEmailHelper, EmailHelper>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<RecruitmentRepository>();
+builder.Services.AddScoped<RecruitmentService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen(options =>
 {

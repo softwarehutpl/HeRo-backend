@@ -2,16 +2,17 @@
 
 namespace Data.Repositories
 {
-    public class RecruitmentRepository 
+    public class RecruitmentRepository : BaseRepository<Recruitment>
     {
         private readonly DataContext context;
-        public RecruitmentRepository(DataContext context)
+        public RecruitmentRepository(DataContext context) : base(context)
         {
             this.context = context;
         }
         public Recruitment GetRecruitmentById(int id)
         {
-            Recruitment result = context.Recruitments.Find(id);
+            Recruitment result = GetById(id);
+
             if (result == default) return null;
 
             return result;
@@ -19,7 +20,7 @@ namespace Data.Repositories
 
         public List<Recruitment> GetAllRecruitments()
         {
-            List<Recruitment> result = context.Recruitments.ToList();
+            List<Recruitment> result = GetAll().ToList();
 
             return result;
         }
@@ -28,8 +29,7 @@ namespace Data.Repositories
         {
             try
             {
-                context.Recruitments.Add(recruitment);
-                context.SaveChanges();
+                AddAndSaveChanges(recruitment);
             }catch(Exception ex)
             {
                 return -1;
@@ -40,8 +40,7 @@ namespace Data.Repositories
         {
             try
             {
-                context.Recruitments.Update(recruitment);
-                context.SaveChanges();
+                UpdateAndSaveChanges(recruitment);
             }catch(Exception ex)
             {
                 return -1;
@@ -51,14 +50,9 @@ namespace Data.Repositories
 
         public int RemoveRecruitment(int id)
         {
-            Recruitment recruitment = context.Recruitments.Find(id);
-
-            if (recruitment == default) return -1;
-
             try
             {
-                context.Recruitments.Remove(recruitment);
-                context.SaveChanges();
+                RemoveByIdAndSaveChanges(id);
             }catch(Exception ex)
             {
                 return -1;

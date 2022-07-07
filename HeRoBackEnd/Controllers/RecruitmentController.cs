@@ -1,56 +1,51 @@
 ﻿using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
-//using Data.Entities;
+using Services.DTOs.Recruitment;
+using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
     public class RecruitmentController : Controller
     {
-        //private RecruitmentService recruitmentService;
+        private readonly RecruitmentService service;
 
-        public RecruitmentController()
+        public RecruitmentController(RecruitmentService service)
         {
-            //RecruitmentService recruitmentService = new RecruitmentService();
+            this.service = service;
         }
 
         /// <summary>
         /// Returns a list of recruitments
         /// </summary>
-        /// <returns>Json string representing the list of Recruitments</returns>
+        /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
         [HttpGet]
         [Route("Recruitment/Index")]
         public IActionResult Index()
         {
-           // List<Recruitment> recruitments = recruitmentService.GetAllActive();
+           List<ReadRecruitmentDTO> recruitments = service.GetRecruitments();
 
-           // return new JsonResult(recruitments);
-           return View();
+           return new JsonResult(recruitments);
         }
 
         /// <summary>
         /// Returns a recruitment specified by an id
         /// </summary>
         /// <param name="recruitmentId">Id of an recruitment</param>
-        /// <returns>Json string representing a Recruitment</returns>
+        /// <returns>Onject of the JsonResult class representing a Recruitment in JSON format</returns>
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
-        public async Task<IActionResult> Get(int? recruitmentId)
+        public IActionResult Get(int recruitmentId)
         {
-            if (recruitmentId == null)
+            ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
+
+            if (recruitment == null)
             {
                 return RedirectToAction("Index");
             }
-            return View();
-            //Recruitment tempRecruitment = recruitmentService.Get(id);
 
-            //if (tempRecruitment == null)
-            //{
-            //    return RedirectToAction("Index");
-            //}
-
-            //return new JsonResult(tempRecruitment);
+            return new JsonResult(recruitment);
         }
 
         /// <summary>
@@ -61,9 +56,9 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Recruitment/Create")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NewRecruitmentViewModel newRecruitment)
+        public IActionResult Create(NewRecruitmentViewModel newRecruitment)
         {
-            //recruitmentService.Add(newRecruitment);
+            //service.Add(newRecruitment);
 
             return RedirectToAction("Index");
         }
@@ -94,7 +89,7 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Finish(int recruitmentId)
         {
-            //RecruitmentService.EndRecruitment(recruitmentId);
+            int result=service.EndRecruitment(recruitmentId);
 
             return RedirectToAction("Index");
         }
