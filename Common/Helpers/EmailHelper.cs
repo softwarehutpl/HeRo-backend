@@ -1,50 +1,49 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace Common.Helpers
 {
     public class EmailHelper : IEmailHelper
     {
-        private static Dictionary<string, string> _ReadEmailJson()
+
+        private  IConfiguration _config;
+
+        public EmailHelper(IConfiguration config)
         {
-            string path = Path.GetFullPath("..\\HeRoBackEnd\\Email.json");
-
-            string file = File.ReadAllText(path);
-
-            Dictionary<string, string> jsonEmailDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(file);
-
-            return jsonEmailDict;
+            _config = config;
         }
 
-        private MailMessage CreateEmail()
+        private MailMessage CreateEmail(string email)
         {
-            Dictionary<string, string> jsonEmailDict = _ReadEmailJson();
-
-            //Tu będzie metoda pobierająca E-mail z bazy danych. i wrzucimy go do mailMessage.To.Add()
+            Dictionary<string,string> companyEmailData = _config.GetSection("CompanyEmailData")
+                .GetChildren()
+                .ToDictionary(x => x.Key, x => x.Value);
 
             MailMessage mailMessage = new();
-
-            mailMessage.From = new MailAddress(jsonEmailDict["CompanyEmail"]);
-            mailMessage.To.Add("");
-            mailMessage.Subject = jsonEmailDict["Subject"];
-            mailMessage.Body = jsonEmailDict["Body"];
+            mailMessage.From = new MailAddress(companyEmailData["CompanyEmail"]);
+            mailMessage.To.Add(email);
+            mailMessage.Subject = companyEmailData["Subject"];
+            mailMessage.Body = companyEmailData["Body"];
 
             return mailMessage;
         }
-        public void SendEmail()
+        public void SendEmail(string email)
         {
-            Dictionary<string, string> jsonDict = _ReadEmailJson();
+            Dictionary<string, string> companyEmailData = _config.GetSection("CompanyEmailData")
+                .GetChildren()
+                .ToDictionary(x => x.Key, x => x.Value);
 
-            string port = jsonDict["Port"];
+            string port = companyEmailData["Port"];
             int portStringParsed = int.Parse(port);
 
-            MailMessage mailMessage = CreateEmail();
+            MailMessage mailMessage = CreateEmail(email);
 
-            using ( SmtpClient smtp = new(jsonDict["Smpt"], portStringParsed))
+            using ( SmtpClient smtp = new(companyEmailData["Smpt"], portStringParsed))
             {
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential(jsonDict["CompanyEmail"], jsonDict["CompanyEmailPassword"]);
+                smtp.Credentials = new NetworkCredential(companyEmailData["CompanyEmail"], companyEmailData["CompanyEmailPassword"]);
                 smtp.EnableSsl = true;
 
                 smtp.Send(mailMessage);

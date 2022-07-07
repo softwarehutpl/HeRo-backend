@@ -8,19 +8,19 @@ namespace HeRoBackEnd.Controllers
     public class EmailController : Controller
     {
 
-        private IEmailHelper _emailHelper;
+        private EmailService _emailService;
 
-        public EmailController(IEmailHelper emailHelper)
+        public EmailController(EmailService emailService)
         {
-            _emailHelper = emailHelper;
+            _emailService = emailService;
         }
 
         [HttpPost]
-        public IActionResult SendConfirmation()
+        public IActionResult SendConfirmation(string id)
         {            
             try
             {
-                _emailHelper.SendEmail();
+                _emailService.SendConfirmationEmail(id);
                 return Ok("Mail Wysłany");
             }
             catch (Exception ex)

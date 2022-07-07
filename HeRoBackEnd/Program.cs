@@ -9,7 +9,9 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
+
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<
@@ -17,6 +19,7 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddScoped<IEmailHelper, EmailHelper>();
 builder.Services.AddScoped<UserRepository>();
+builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen(options =>
