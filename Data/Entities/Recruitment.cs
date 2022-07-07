@@ -57,7 +57,7 @@ namespace Data.Entities
         [ForeignKey("DeletedById")]
         public virtual User DeletedBy { get; set; }
 
-        public int EndedById { get; set; }
+        public int? EndedById { get; set; }
 
         [ForeignKey("EndedById")]
         public virtual User EndedBy { get; set; }
