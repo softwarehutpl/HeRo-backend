@@ -21,5 +21,6 @@ namespace Data.Entities
         [Required]
         public string UserStatus { get; set; }
         public Role Role { get; set; }
+        public int RoleId { get; set; }
     }
 }

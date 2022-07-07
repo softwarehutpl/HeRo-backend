@@ -1,6 +1,6 @@
 ﻿namespace Data.Repositories
 {
-    public class RecruitmentRepository : IRecruitmentRepository
+    public class RecruitmentRepository 
     {
         public void GetRecruitmentById(int id) { }
 

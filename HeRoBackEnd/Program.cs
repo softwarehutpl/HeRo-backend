@@ -1,7 +1,7 @@
 using Common.Helpers;
 using Data;
 using Data.Repositories;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Services.Services;
 
@@ -13,11 +13,22 @@ builder.Services.AddControllersWithViews();
 string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
 builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
-builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-    .AddEntityFrameworkStores<
-        DataContext>();
+
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+{
+    options.Cookie.Name = "UserLoginCookie";
+    options.SlidingExpiration = true;
+    options.ExpireTimeSpan = new TimeSpan(0, 20, 0); // Expires in 20 minutes
+    options.Events.OnRedirectToLogin = (context) =>
+    {
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+    options.Cookie.HttpOnly = true;
+});
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-builder.Services.AddScoped<IEmailHelper, EmailHelper>();
+builder.Services.AddScoped<EmailHelper>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<UserService>();
@@ -52,12 +63,20 @@ app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 
+app.UseCookiePolicy(
+    new CookiePolicyOptions
+    {
+        Secure = CookieSecurePolicy.Always
+    });
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
+
 
 app.MapControllerRoute(
     name: "default",

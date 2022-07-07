@@ -14,12 +14,9 @@ namespace Data
         }
 
         public DbSet<Candidate> Candidates { get; set; }
-        //public DbSet<Role>  Roles { get; set; }
+        public DbSet<Role>  Roles { get; set; }
         public DbSet<Skill> Skills { get; set; }
-        public DbSet<IdentityUser> AspNetUsers { get; set; }
-
-        public DbSet<IdentityUserClaim<string>> AspNetUserClaims { get; set; }
-        public DbSet<IdentityUserLogin<string>> AspNetUserLogins { get; set; }
+        public DbSet<User> Users { get; set; }
         public DbSet<RecruitmentRequirement> RecruitmentRequirements { get; set; }
         public DbSet<Recruitment> Recruitments { get; set; }
 

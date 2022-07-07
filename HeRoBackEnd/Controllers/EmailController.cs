@@ -16,7 +16,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         [HttpPost]
-        public IActionResult SendConfirmation(string id)
+        public IActionResult SendConfirmation(int id)
         {            
             try
             {

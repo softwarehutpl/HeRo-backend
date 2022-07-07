@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 
 namespace Common.Helpers
 {
-    public class EmailHelper : IEmailHelper
+    public class EmailHelper 
     {
 
         private  IConfiguration _config;

@@ -13,21 +13,21 @@ namespace Data.Repositories
             _dataContext = context;
         }
 
-        public IdentityUser GetUserById(string id) 
+        public User GetUserById(string id) 
         {
-            var result = _dataContext.AspNetUsers.Find(id);
+            var result = _dataContext.Users.Find(id);
             return result; 
         }
 
-        public IdentityUser GetUserByEmail(string mail)
+        public User GetUserByEmail(string mail)
         {
-            var result = _dataContext.AspNetUsers.Find(mail);
+            var result = _dataContext.Users.Find(mail);
             return result;
         }
 
-        public IEnumerable<IdentityUser> GetAllUsers()
+        public IEnumerable<User> GetAllUsers()
         {
-            var result = _dataContext.AspNetUsers;
+            var result = _dataContext.Users.ToList();
 
             return result;
         }
@@ -36,10 +36,26 @@ namespace Data.Repositories
 
         public void RemoveUser(int id) { }
 
-        public IQueryable<string> GetUserEmail(string id)
+        public string GetUserEmail(int id)
         {
-            var result = _dataContext.AspNetUsers.Where(x => x.Id == id).Select(x => x.Email);
+            var result = _dataContext.Users.FirstOrDefault(x => x.Id == id).Email;
             return result;
+        }
+
+        public string GetUserPassword(string email)
+        {
+            var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.Password);
+            return result.ToString();
+        }
+
+        public string GetUserRoleByEmail(string email)
+        {
+            var result1 = from user in _dataContext.Users
+                          join role in _dataContext.Roles
+                          on user.Id equals role.Id
+                          select new Role { Name = role.Name };
+
+            return result1.ToString();
         }
     }
 }
