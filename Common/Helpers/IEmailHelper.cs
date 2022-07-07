@@ -2,6 +2,6 @@
 {
     public interface IEmailHelper
     {
-        void SendEmail();
+        void SendEmail(string email);
     }
 }

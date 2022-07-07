@@ -1,8 +1,0 @@
-﻿{
-  "CompanyEmail": "praktykish2022@gmail.com",
-  "CompanyEmailPassword": "ggzacklvfnakwpmh",
-  "Smpt": "smtp.gmail.com",
-  "Port": 587,
-  "Subject": "Rejestracja",
-  "Body": "Twoja rejestracja w serwisie się powiodła."
-}
