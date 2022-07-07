@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220707133310_AddForeignKeys2")]
-    partial class AddForeignKeys2
+    [Migration("20220707190629_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -136,7 +136,8 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("EndedById")
+                    b.Property<int?>("EndedById")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime>("EndingDate")
@@ -197,24 +198,6 @@ namespace Data.Migrations
                     b.ToTable("RecruitmentRequirement");
                 });
 
-            modelBuilder.Entity("Data.Entities.Role", b =>
-                {
-                    b.Property<int>("RoleId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RoleId"), 1L, 1);
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(75)
-                        .HasColumnType("nvarchar(75)");
-
-                    b.HasKey("RoleId");
-
-                    b.ToTable("Role");
-                });
-
             modelBuilder.Entity("Data.Entities.Skill", b =>
                 {
                     b.Property<int>("Id")
@@ -269,8 +252,9 @@ namespace Data.Migrations
                         .HasMaxLength(20)
                         .HasColumnType("nvarchar(20)");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<string>("RoleName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("UserStatus")
                         .IsRequired()
@@ -283,8 +267,6 @@ namespace Data.Migrations
                     b.HasIndex("DeletedById");
 
                     b.HasIndex("LastUpdatedById");
-
-                    b.HasIndex("RoleId");
 
                     b.ToTable("User");
                 });
@@ -422,19 +404,11 @@ namespace Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Data.Entities.Role", "Role")
-                        .WithMany()
-                        .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.Navigation("CreatedBy");
 
                     b.Navigation("DeletedBy");
 
                     b.Navigation("LastUpdatedBy");
-
-                    b.Navigation("Role");
                 });
 #pragma warning restore 612, 618
         }

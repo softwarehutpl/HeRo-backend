@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace Data.Entities
 {
     [Table("User")]
@@ -24,10 +23,7 @@ namespace Data.Entities
         [Required]
         public string UserStatus { get; set; }
 
-        public int RoleId { get; set; }
-
-        [ForeignKey("RoleId")]
-        public virtual Role Role { get; set; }
+        public string RoleName { get; set; }
 
         public int CreatedById { get; set; }
 

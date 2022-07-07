@@ -15,12 +15,14 @@ namespace Data.Repositories
         public User GetUserById(string id) 
         {
             var result = _dataContext.Users.Find(id);
+
             return result; 
         }
 
         public User GetUserByEmail(string mail)
         {
             var result = _dataContext.Users.Find(mail);
+
             return result;
         }
 
