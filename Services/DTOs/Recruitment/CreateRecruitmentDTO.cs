@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 
-namespace Services.DTOs
+namespace Services.DTOs.Recruitment
 {
-    public class CAndURecruitmentDTO
+    public class CreateRecruitmentDTO
     {
         [Display(Name = "Beginning date")]
         [Required(ErrorMessage = "This filed is required")]

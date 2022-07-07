@@ -3,36 +3,63 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Data.Entities;
-using Services.DTOs;
+using Services.DTOs.Recruitment;
+using Data.Repositories;
+using Common.Enums;
 
 namespace Services.Services
 {
     public class RecruitmentService
     {
-        public int AddRecruitment(CAndURecruitmentDTO dto)
+        private readonly IMapper mapper;
+        private readonly RecruitmentRepository repo;
+        public RecruitmentService(IMapper map, RecruitmentRepository repo)
         {
-            return 0;
+            mapper = map;
+            this.repo = repo;
         }
-        public void UpdateRecruitment(int recruitmentId, CAndURecruitmentDTO dto)
+        public int AddRecruitment(CreateRecruitmentDTO dto)
         {
+            Recruitment recruitment = mapper.Map<Recruitment>(dto);
+            recruitment.Status = RecruitmentStatusEnum.Open;
 
+            int result=repo.AddRecruitment(recruitment);
+
+            return result;
         }
-        public void ChangeStatus(int recruitmentId, string status)
+        public int UpdateRecruitment(int recruitmentId, UpdateRecruitmentDTO dto)
         {
+            Recruitment recruitment = mapper.Map<Recruitment>(dto);
+            recruitment.Id = recruitmentId;
 
+            int result=repo.UpdateRecruitment(recruitment);
+
+            return result;
         }
-        public void EndRecruitment(int recruitmentId)
+        public int EndRecruitment(int recruitmentId)
         {
+            int result=repo.RemoveRecruitment(recruitmentId);
 
+            return result;
         }
         public ReadRecruitmentDTO GetRecruitment(int recruitmentId)
         {
-            return null;
+            Recruitment recruitment=repo.GetRecruitmentById(recruitmentId);
+            ReadRecruitmentDTO result = null;
+
+            if(recruitment!=null) result = mapper.Map<ReadRecruitmentDTO>(recruitment);
+
+            return result;
         }
         public List<ReadRecruitmentDTO> GetRecruitments()
         {
-            return null;
+            List<Recruitment> recruitmentList = repo.GetAllRecruitments();
+
+            List<ReadRecruitmentDTO> result = mapper.Map <List<ReadRecruitmentDTO>>(recruitmentList);
+
+            return result;
         }
     }
 }

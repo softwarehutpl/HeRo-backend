@@ -8,10 +8,8 @@ using Common.Enums;
 
 namespace Services.DTOs.Recruitment
 {
-    public class ReadRecruitmentDTO
+    public class UpdateRecruitmentDTO
     {
-        [Display(Name = "Id")]
-        public int Id { get; set; }
         [Display(Name = "Beginning date")]
         [Required(ErrorMessage = "This filed is required")]
         public DateTime BeginningDate { get; set; }
@@ -31,7 +29,6 @@ namespace Services.DTOs.Recruitment
         [Display(Name = "Recruiter id")]
         [Required(ErrorMessage = "This field is required")]
         public string RecruiterId { get; set; }
-
         [Display(Name = "Status")]
         public RecruitmentStatusEnum Status { get; set; }
     }

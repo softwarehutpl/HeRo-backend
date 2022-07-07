@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Services.DTOs.Recruitment;
+using Data.Entities;
 
 namespace HeRoBackEnd.Profiles
 {
@@ -7,7 +8,9 @@ namespace HeRoBackEnd.Profiles
     {
         public RecruitmentProfile()
         {
-            CreateMap()
+            CreateMap<CreateRecruitmentDTO, Recruitment>();
+            CreateMap<UpdateRecruitmentDTO, Recruitment>();
+            CreateMap<Recruitment, ReadRecruitmentDTO>();
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Common.Enums;
 
 namespace Data.Entities
 {
@@ -32,10 +33,7 @@ namespace Data.Entities
         public string RecruiterId { get; set; }
 
         [Display(Name = "Status")]
-        public string Status { get; set; }
-
-        [ForeignKey("RecruiterId")]
-        public virtual IdentityUser Recruiter { get; set; }
+        public RecruitmentStatusEnum Status { get; set; }
     }
 }
 
