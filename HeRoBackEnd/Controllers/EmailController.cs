@@ -16,7 +16,12 @@ namespace HeRoBackEnd.Controllers
             _emailHelper = emailHelper;
         }
 
+        /// <summary>
+        /// Sends an email with the activation link to the newly registered user
+        /// </summary>
+        /// <returns>IActionResult</returns>
         [HttpPost]
+        [Route("Email/SendConfirmation")]
         public IActionResult SendConfirmation()
         {            
             try
