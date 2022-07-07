@@ -1,33 +1,38 @@
-﻿using HeRoBackEnd.ViewModels;
-using Microsoft.AspNetCore.Mvc;
-using Services.Services;
-using Data.Entities;
+﻿using Common.Listing;
+using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
+using Microsoft.AspNetCore.Mvc;
+using Services.DTOs.User;
+using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
     public class UserController : Controller
     {
-        public IUserService userService;
+        public UserService userService;
 
-        public UserController(IUserService _userService)
+        public UserController(UserService _userService)
         {
-            //UserServices userService = new UserServices();
+            userService = _userService;
         }
 
         /// <summary>
-        /// Gets all users from the database
+        /// Gets all users that abide by the filter from the database
         /// </summary>
-        /// <returns>Json string representing a list of Users</returns>
+        ///<param name="userListFilterViewModel">An object containing information about the filter</param>
+        /// <returns>Object of the JsonResult class representing a list of Users in the JSON format</returns>
         [HttpGet]
-        [Route("User/Index")]
-        public IActionResult Index()
+        [Route("User/GetList")]
+        public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
-            //List<User> users = usersService.GetAllActive();
-            
-            //return new JsonResult(users);
-            return View();
+            Paging paging = userListFilterViewModel.Paging;
+            SortOrder sortOrder = userListFilterViewModel.SortOrder;
+            UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
+
+            var resutl = userService.GetUsers(paging, sortOrder, userFiltringDTO);
+
+            return new JsonResult(resutl);
         }
 
         /// <summary>
