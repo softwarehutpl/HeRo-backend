@@ -21,8 +21,8 @@ namespace HeRoBackEnd.Controllers
         /// Returns a list of recruitments
         /// </summary>
         /// <returns>Json string representing the list of Recruitments</returns>
-        [HttpGet]
-        [Route("Recruitment/Index")]
+        [HttpPost]
+        [Route("Recruitment/GetList")]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
             Paging paging = recruitmentListFilterViewModel.Paging;

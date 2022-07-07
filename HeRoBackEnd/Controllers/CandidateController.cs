@@ -57,11 +57,6 @@ namespace HeRoBackEnd.Controllers
             return View();
         }
 
-        //public async Task<IActionResult> Create()
-        //{
-        //    return new JsonResult(new Candidate());
-        //}
-
         /// <summary>
         /// Creates a candidate
         /// </summary>
@@ -74,8 +69,8 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> Create(NewCandidateViewModel newCandidate)
         {
             //candidateService.Add(newCandidate);
-
-            return RedirectToAction("Index");
+            return Ok();
+            //return RedirectToAction("Index");
         }
         
         /// <summary>

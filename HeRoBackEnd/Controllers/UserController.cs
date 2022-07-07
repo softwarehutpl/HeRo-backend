@@ -19,9 +19,9 @@ namespace HeRoBackEnd.Controllers
         /// <summary>
         /// Gets all users that abide by the filter from the database
         /// </summary>
-        ///<param name="userListFilterViewModel">An object containing information about the filter</param>
+        /// <param name="userListFilterViewModel">An object containing information about the filter</param>
         /// <returns>Object of the JsonResult class representing a list of Users in the JSON format</returns>
-        [HttpGet]
+        [HttpPost]
         [Route("User/GetList")]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
