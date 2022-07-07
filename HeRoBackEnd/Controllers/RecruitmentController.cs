@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using Services.DTOs.Recruitment;
 using Data.Entities;
+using Services.DTOs.Recruitment;
+using AutoMapper;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -10,10 +12,12 @@ namespace HeRoBackEnd.Controllers
     public class RecruitmentController : Controller
     {
         private readonly RecruitmentService service;
+        private readonly IMapper mapper;
 
-        public RecruitmentController(RecruitmentService service)
+        public RecruitmentController(RecruitmentService service, IMapper map)
         {
             this.service = service;
+            mapper = map;
         }
 
         /// <summary>
@@ -58,8 +62,12 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(NewRecruitmentViewModel newRecruitment)
         {
-            //service.Add(newRecruitment);
+            /*
+            CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
+            int result=service.AddRecruitment(dto);
 
+            if (result == -1) return BadRequest();
+            */
             return RedirectToAction("Index");
         }
 
@@ -67,15 +75,19 @@ namespace HeRoBackEnd.Controllers
         /// Updates information about a recruitment represented by an id
         /// </summary>
         /// <param name="recruitmentId">Id representing a recruitment</param>
-        /// <param name="newRecruitment">Contains current information about a recriutment</param>
-        /// <returns></returns>
+        /// <param name="newRecruitment">Contains current information about a recruitment</param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int recruitmentId, NewRecruitmentViewModel newRecruitment)
         {
-            //recruitmentService.Update(recruitmentId, newRecruitment);
+            /*
+            UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(newRecruitment);
+            int result=service.UpdateRecruitment(recruitmentId, dto);
 
+            if (result == -1) return BadRequest();
+            */
             return RedirectToAction("Index");
         }
 
@@ -90,6 +102,8 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> Finish(int recruitmentId)
         {
             int result=service.EndRecruitment(recruitmentId);
+
+            if (result == -1) return BadRequest();
 
             return RedirectToAction("Index");
         }
