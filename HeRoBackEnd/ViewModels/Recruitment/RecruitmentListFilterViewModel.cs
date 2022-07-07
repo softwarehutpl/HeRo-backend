@@ -7,8 +7,8 @@ namespace HeRoBackEnd.ViewModels.Recruitment
         public string Name { get; set; }
         public string Status { get; set; }
         public string Description { get; set; }
-        public DateTime BeginningDate { get; set; }
-        public DateTime EndingDate { get; set; }
+        public DateTime? BeginningDate { get; set; }
+        public DateTime? EndingDate { get; set; }
         public Paging Paging { get; set; }
         public SortOrder SortOrder { get; set; }
     }

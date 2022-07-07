@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Common.Listing;
+﻿using Common.Listing;
 using Data.Entities;
 using Data.Repositories;
 using PagedList;
@@ -50,11 +45,11 @@ namespace Services.Services
             {
                 recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
             }
-            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.BeginningDate.ToString()))
+            if (recruitmentFiltringDTO.BeginningDate.HasValue)
             {
                 recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
             }
-            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.EndingDate.ToString()))
+            if (recruitmentFiltringDTO.EndingDate.HasValue)
             {
                 recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
             }
