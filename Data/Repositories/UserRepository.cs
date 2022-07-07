@@ -12,21 +12,21 @@ namespace Data.Repositories
             _dataContext = context;
         }
 
-        public IdentityUser GetUserById(string id) 
+        public User GetUserById(string id) 
         {
-            var result = _dataContext.AspNetUsers.Find(id);
+            var result = _dataContext.Users.Find(id);
             return result; 
         }
 
-        public IdentityUser GetUserByEmail(string mail)
+        public User GetUserByEmail(string mail)
         {
-            var result = _dataContext.AspNetUsers.Find(mail);
+            var result = _dataContext.Users.Find(mail);
             return result;
         }
 
-        public IEnumerable<IdentityUser> GetAllUsers()
+        public IEnumerable<User> GetAllUsers()
         {
-            var result = _dataContext.AspNetUsers;
+            var result = _dataContext.Users;
 
             return result;
         }

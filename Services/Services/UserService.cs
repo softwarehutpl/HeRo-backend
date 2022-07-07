@@ -1,4 +1,5 @@
 using Common.Listing;
+using Data.Entities;
 using Data.Repositories;
 using Microsoft.AspNetCore.Identity;
 using PagedList;
@@ -18,7 +19,7 @@ namespace Services.Services
 
         public string GetEmailOfUser(string id)
         {
-            IdentityUser user = userRepository.GetUserById(id);
+            User user = userRepository.GetUserById(id);
 
             return user.Email;
         }
@@ -33,18 +34,18 @@ namespace Services.Services
 
         }
 
-        public IEnumerable<IdentityUser> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
+        public IEnumerable<User> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
         {
-            IEnumerable<IdentityUser> users = userRepository.GetAllUsers();
+            IEnumerable<User> users = userRepository.GetAllUsers();
 
             if (!String.IsNullOrEmpty(userFiltringDTO.Email))
             {
                 users = users.Where(s => s.Email.Contains(userFiltringDTO.Email));
             }
-            //if (!String.IsNullOrEmpty(userFiltringDTO.UserStatus))
-            //{
-            //    users = users.Where(s => s.UserStatus.Equals(userFiltringDTO.UserStatus));
-            //}
+            if (!String.IsNullOrEmpty(userFiltringDTO.UserStatus))
+            {
+                users = users.Where(s => s.UserStatus.Equals(userFiltringDTO.UserStatus));
+            }
             //if (!String.IsNullOrEmpty(userFiltringDTO.RoleName))
             //{
             //    users = users.Where(s => s.Role.Name.Equals(userFiltringDTO.RoleName));

@@ -8,12 +8,10 @@ namespace Data.Entities
     {
         [Key]
         [Required(ErrorMessage = "Field is required!")]
-        public int Id { get; set; }
+        public int RoleId { get; set; }
 
         [Required(ErrorMessage = "Field is required!")]
         [MaxLength(75, ErrorMessage = "Name of field is to long (max. 75 characters!")]
-        public Enum Name { get; set; }
-
-        //public virtual ICollection<User> Users {get;set;}
+        public string Name { get; set; }
     }
 }

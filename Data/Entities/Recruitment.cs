@@ -4,9 +4,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
+    [Table("Recruitment")]
     public class Recruitment
     {
-
         [Key]
         [Display(Name = "Id")]
         public int Id { get; set; }
@@ -27,17 +27,40 @@ namespace Data.Entities
         [Required(ErrorMessage = "This field is required")]
         public string Description { get; set; }
 
-        
-
-        [Display(Name = "Recruiter id")]
         [Required(ErrorMessage = "This field is required")]
-        public string RecruiterId { get; set; }
+        public int RecruiterId { get; set; }
 
         [Display(Name = "Status")]
         public string Status { get; set; }
 
         [ForeignKey("RecruiterId")]
-        public virtual IdentityUser Recruiter { get; set; }
+        public virtual User Recruiter { get; set; }
+
+        public int CreatedById { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        [ForeignKey("CreatedById")]
+        public virtual User CreatedBy { get; set; }
+
+        public int LastUpdatedById { get; set; }
+
+        public DateTime LastUpdatedDate { get; set; }
+
+        [ForeignKey("LastUpdatedById")]
+        public virtual User LastUpdatedBy { get; set; }
+
+        public int DeletedById { get; set; }
+
+        public DateTime DeletedDate { get; set; }
+
+        [ForeignKey("DeletedById")]
+        public virtual User DeletedBy { get; set; }
+
+        public int EndedById { get; set; }
+
+        [ForeignKey("EndedById")]
+        public virtual User EndedBy { get; set; }
     }
 }
 
