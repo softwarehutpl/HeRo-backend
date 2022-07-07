@@ -38,7 +38,9 @@ namespace Data.Repositories
 
         public string GetUserEmail(string id)
         {
-            var result = _dataContext.AspNetUsers.FirstOrDefault(x => x.Id == id).Email;
+
+            var result = _dataContext.AspNetUsers.Where(x => x.Id == id).Select(x => x.Email).FirstOrDefault();
+
             return result;
         }
     }
