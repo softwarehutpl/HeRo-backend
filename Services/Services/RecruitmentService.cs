@@ -25,8 +25,17 @@ namespace Services.Services
         }
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
+            List<Claim> claims = ClaimsPrincipal.Current.Claims.ToList();
+            Claim emailClaim = claims.FirstOrDefault(e => e.Type == ClaimTypes.Email);
+            User user = userRepo.GetUserByEmail(emailClaim.Value);
+
             Recruitment recruitment = mapper.Map<Recruitment>(dto);
             recruitment.Status = RecruitmentStatusEnum.Open.ToString();
+            recruitment.CreatedById = user.Id;
+            recruitment.LastUpdatedById = user.Id;
+            recruitment.CreatedDate = DateTime.Now;
+            recruitment.LastUpdatedDate = DateTime.Now;
+
 
             int result=repo.AddRecruitment(recruitment);
 
