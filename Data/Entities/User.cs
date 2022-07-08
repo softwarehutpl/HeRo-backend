@@ -1,26 +1,43 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-
 namespace Data.Entities
 {
+    [Table("User")]
     public class User
     {
-
         [Key]
         public int Id { get; set; }
-        [EmailAddress]
+
         [Required]
+        [EmailAddress]
         [MaxLength(40)]
         public string Email { get; set; }
-        [DataType(DataType.Password)]
+
         [Required]
-        [MinLength(8)]
-        [MaxLength(20)]
+        [DataType(DataType.Password)]
+        [MinLength(8)] [MaxLength(20)]
         public string Password { get; set; }
+
         [Required]
         public string UserStatus { get; set; }
+<<<<<<< HEAD
         public Role Role { get; set; }
         public int RoleId { get; set; }
+=======
+
+        public string RoleName { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime? LastUpdatedDate { get; set; }
+
+        public int? DeletedById { get; set; }
+
+        public DateTime? DeletedDate { get; set; }
+
+        [ForeignKey("DeletedById")]
+        public virtual User DeletedBy { get; set; }
+>>>>>>> 68a34c719ccdfc66b5fddd9cd28b6a7058bd9de6
     }
 }

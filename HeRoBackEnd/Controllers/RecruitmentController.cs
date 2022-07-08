@@ -1,32 +1,43 @@
-﻿using HeRoBackEnd.ViewModels.Recruitment;
+﻿using Common.Listing;
+using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
-//using Data.Entities;
+using Data.Entities;
+using Services.DTOs.Recruitment;
 
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
     public class RecruitmentController : Controller
     {
-        //private RecruitmentService recruitmentService;
+        private RecruitmentService recruitmentService;
 
-        public RecruitmentController()
+        public RecruitmentController(RecruitmentService _recruitmentService)
         {
-            //RecruitmentService recruitmentService = new RecruitmentService();
+            recruitmentService = _recruitmentService;
         }
 
         /// <summary>
         /// Returns a list of recruitments
         /// </summary>
         /// <returns>Json string representing the list of Recruitments</returns>
-        [HttpGet]
-        [Route("Recruitment/Index")]
-        public IActionResult Index()
+        [HttpPost]
+        [Route("Recruitment/GetList")]
+        public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
-           // List<Recruitment> recruitments = recruitmentService.GetAllActive();
+            Paging paging = recruitmentListFilterViewModel.Paging;
+            SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
+            RecruitmentFiltringDTO recruitmentFiltringDTO 
+                = new RecruitmentFiltringDTO(
+                    recruitmentListFilterViewModel.Name, 
+                    recruitmentListFilterViewModel.Status, 
+                    recruitmentListFilterViewModel.Description,
+                    recruitmentListFilterViewModel.BeginningDate,
+                    recruitmentListFilterViewModel.EndingDate);
 
-           // return new JsonResult(recruitments);
-           return View();
+            var resutl = recruitmentService.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+
+            return new JsonResult(resutl);
         }
 
         /// <summary>

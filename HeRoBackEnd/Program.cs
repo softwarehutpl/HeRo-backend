@@ -30,14 +30,22 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+<<<<<<< HEAD
 
 var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
 
 builder.Services.AddSingleton(config);
 builder.Services.AddScoped<EmailHelper>();
+=======
+builder.Services.AddScoped<EmailHelper>();
+
+>>>>>>> 68a34c719ccdfc66b5fddd9cd28b6a7058bd9de6
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<RecruitmentRepository>();
+builder.Services.AddScoped<RecruitmentService>();
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen(options =>
 {
