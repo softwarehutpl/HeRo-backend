@@ -23,7 +23,7 @@ namespace Data.Entities
         public string Email { get; set; }
 
         [Required]
-        public DateTime AplicationDate { get; set; }
+        public DateTime ApplicationDate { get; set; }
 
         [Required]
         public int RecruitmentId { get; set; }
@@ -31,12 +31,11 @@ namespace Data.Entities
         [Required]
         public int RecruiterId { get; set; }
 
-        [Required]
-        public int TechId { get; set; }
+        public int? TechId { get; set; }
 
-        public DateTime InterviewDate { get; set; }
+        public DateTime? InterviewDate { get; set; }
 
-        public DateTime TechInterviewDate { get; set; }
+        public DateTime? TechInterviewDate { get; set; }
 
         public string Notes { get; set; }
 

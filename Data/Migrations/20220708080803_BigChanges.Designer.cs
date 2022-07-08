@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20220708071836_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20220708080803_BigChanges")]
+    partial class BigChanges
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -32,7 +32,7 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<DateTime>("AplicationDate")
+                    b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("CreatedById")
@@ -56,7 +56,7 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("InterviewDate")
+                    b.Property<DateTime?>("InterviewDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
@@ -88,10 +88,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("TechId")
+                    b.Property<int?>("TechId")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("TechInterviewDate")
+                    b.Property<DateTime?>("TechInterviewDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
