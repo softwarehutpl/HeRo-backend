@@ -16,13 +16,14 @@ namespace Data.Entities
 
         [Required]
         [DataType(DataType.Password)]
-        [MinLength(8)] [MaxLength(20)]
+        [MinLength(8)] 
+        [MaxLength(20)]
         public string Password { get; set; }
 
         [Required]
         public string UserStatus { get; set; }
+
         public string RoleName { get; set; }
-        public int RoleId { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
