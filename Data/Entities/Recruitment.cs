@@ -31,9 +31,6 @@ namespace Data.Entities
         [Required(ErrorMessage = "This field is required")]
         public int RecruiterId { get; set; }
 
-        [Required(ErrorMessage = "This field is required")]
-        public int RecruiterId { get; set; }
-
         [ForeignKey("RecruiterId")]
         public virtual User Recruiter { get; set; }
 

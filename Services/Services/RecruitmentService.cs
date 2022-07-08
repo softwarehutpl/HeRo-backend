@@ -95,7 +95,7 @@ namespace Services.Services
 
         public IEnumerable<ReadRecruitmentDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
-            IEnumerable<Recruitment> recruitments = recruitmentRepository.GetAllRecruitments();
+            IEnumerable<Recruitment> recruitments = repo.GetAllRecruitments();
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
