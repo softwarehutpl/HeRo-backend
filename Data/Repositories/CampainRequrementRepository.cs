@@ -1,7 +1,7 @@
 ﻿
 namespace Data.Repositories
 {
-    public class CampainRequrementRepository : ICampainRequrementRepository
+    public class CampainRequrementRepository 
     {
         public void GetCampainRequrementId(int id) { }
 

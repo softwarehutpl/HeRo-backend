@@ -1,29 +1,37 @@
 using Common.Listing;
 using Data.Entities;
 using Data.Repositories;
+<<<<<<< HEAD
+using Microsoft.AspNetCore.Identity;
+using Services.DTOs;
+=======
 using PagedList;
+>>>>>>> 68a34c719ccdfc66b5fddd9cd28b6a7058bd9de6
 using Services.DTOs.User;
 
 namespace Services.Services
 {
     public class UserService
     {
-        private UserRepository userRepository;
+        private UserRepository _userRepository;
 
-        public UserService(UserRepository _userRepository)
-        {
-            userRepository = _userRepository;
-        }
+        public UserService(UserRepository userRepository) { _userRepository = userRepository; }
+
 
         public async Task<int> AddUser(UserDTO dto)
+
         {
             return 0;
         }
-
         public void UpdateUser(int id, UserDTO dto)
         {
 
         }
+<<<<<<< HEAD
+        public async Task<List<IdentityUser>> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
+        {
+            return null;
+=======
 
         public IEnumerable<User> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
         {
@@ -87,6 +95,7 @@ namespace Services.Services
             //    .ToPagedList(paging.PageNumber, paging.PageSize);
             var result = users.ToPagedList(paging.PageNumber, paging.PageSize);
             return result;
+>>>>>>> 68a34c719ccdfc66b5fddd9cd28b6a7058bd9de6
         }
     }
 }

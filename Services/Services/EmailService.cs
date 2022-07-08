@@ -16,8 +16,13 @@ namespace Services.Services
 
         public void SendConfirmationEmail(int id)
         {
+<<<<<<< HEAD
+            string email = "";
+            //string email = _userRepository.GetUserEmail(id);
+=======
             string email = _userRepository.GetUserEmail(id).ToString();
 
+>>>>>>> 68a34c719ccdfc66b5fddd9cd28b6a7058bd9de6
             _emailHelper.SendEmail(email);
         }
     }

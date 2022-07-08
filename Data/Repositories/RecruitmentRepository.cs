@@ -2,7 +2,11 @@
 
 namespace Data.Repositories
 {
+<<<<<<< HEAD
+    public class RecruitmentRepository 
+=======
     public class RecruitmentRepository
+>>>>>>> 68a34c719ccdfc66b5fddd9cd28b6a7058bd9de6
     {
         private DataContext _dataContext;
 
