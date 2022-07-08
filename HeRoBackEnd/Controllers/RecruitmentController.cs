@@ -83,12 +83,12 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel newRecruitment)
         {
-            /*
+            
             UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(newRecruitment);
             int result=service.UpdateRecruitment(recruitmentId, dto);
 
             if (result == -1) return BadRequest();
-            */
+            
             return RedirectToAction("Index");
         }
 

@@ -23,11 +23,17 @@ namespace Services.Services
             this.repo = repo;
             this.userRepo = userRepo;
         }
-        public int AddRecruitment(CreateRecruitmentDTO dto)
+        private User GetUser()
         {
             List<Claim> claims = ClaimsPrincipal.Current.Claims.ToList();
             Claim emailClaim = claims.FirstOrDefault(e => e.Type == ClaimTypes.Email);
             User user = userRepo.GetUserByEmail(emailClaim.Value);
+
+            return user;
+        }
+        public int AddRecruitment(CreateRecruitmentDTO dto)
+        {
+            User user = GetUser();
 
             Recruitment recruitment = mapper.Map<Recruitment>(dto);
             recruitment.Status = RecruitmentStatusEnum.Open.ToString();
@@ -43,8 +49,12 @@ namespace Services.Services
         }
         public int UpdateRecruitment(int recruitmentId, UpdateRecruitmentDTO dto)
         {
+            User user = GetUser();
+
             Recruitment recruitment = mapper.Map<Recruitment>(dto);
             recruitment.Id = recruitmentId;
+            recruitment.LastUpdatedById = user.Id;
+            recruitment.LastUpdatedDate = DateTime.Now;
 
             int result=repo.UpdateRecruitment(recruitment);
 
@@ -52,9 +62,7 @@ namespace Services.Services
         }
         public int ChangeStatus(ChangeRecruitmentStatusDTO dto)
         {
-            List<Claim> claims = ClaimsPrincipal.Current.Claims.ToList();
-            Claim emailClaim = claims.FirstOrDefault(e => e.Type == ClaimTypes.Email);
-            User user = userRepo.GetUserByEmail(emailClaim.Value);
+            User user = GetUser();
 
             Recruitment recruitment = repo.GetById(dto.Id);
             recruitment.Status = dto.Status;
