@@ -53,8 +53,6 @@ namespace Data
             Set<TEntity>().Attach(entity);
         }
 
-
-
         public void AddEntity<TEntity>(TEntity entity) where TEntity : class, new()
         {
             Set<TEntity>().Add(entity);

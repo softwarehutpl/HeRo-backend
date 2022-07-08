@@ -6,10 +6,9 @@ namespace Data.Repositories
 {
     public class RecruitmentRepository : BaseRepository<Recruitment>
     {
-        private readonly DataContext context;
         public RecruitmentRepository(DataContext context) : base(context)
         {
-            this.context = context;
+            
         }
         public Recruitment GetRecruitmentById(int id)
         {

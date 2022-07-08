@@ -65,6 +65,9 @@ namespace HeRoBackEnd.Controllers
         {
             
             CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
+            dto.Status = RecruitmentStatusEnum.Open.ToString();
+            dto.CreatedDate = DateTime.Now;
+            dto.LastUpdatedDate = DateTime.Now;
             int result=service.AddRecruitment(dto);
 
             if (result == -1) return BadRequest();
@@ -85,6 +88,8 @@ namespace HeRoBackEnd.Controllers
         {
             
             UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(newRecruitment);
+            dto.LastUpdatedDate = DateTime.Now;
+
             int result=service.UpdateRecruitment(recruitmentId, dto);
 
             if (result == -1) return BadRequest();
@@ -117,11 +122,27 @@ namespace HeRoBackEnd.Controllers
         /// <param name="recruitmentId">Id representing a recruitment</param>
         /// <returns>IActionResult</returns>
         [HttpDelete]
-        [Route("Recruitment/Finish/{recruitmentId}")]
+        [Route("Recruitment/End/{recruitmentId}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Finish(int recruitmentId)
+        public IActionResult End(int recruitmentId)
         {
             int result=service.EndRecruitment(recruitmentId);
+
+            if (result == -1) return BadRequest();
+
+            return RedirectToAction("Index");
+        }
+        /// <summary>
+        /// Deletes a recruitment represented by an id
+        /// </summary>
+        /// <param name="recruitmentId">Id representing a recruitment</param>
+        /// <returns>IActionResult</returns>
+        [HttpDelete]
+        [Route("Recruitment/Delete/{recruitmentId}")]
+        [ValidateAntiForgeryToken]
+        public IActionResult Delete(int recruitmentId)
+        {
+            int result = service.EndRecruitment(recruitmentId);
 
             if (result == -1) return BadRequest();
 

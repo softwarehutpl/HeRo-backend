@@ -7,12 +7,12 @@ namespace Services.Services
 {
     public class UserService
     {
-        private IUserRepository _userRepository;
+        private UserRepository _userRepository;
 
-        public UserService(IUserRepository userRepository) { _userRepository = userRepository; }
+        public UserService(UserRepository userRepository) { _userRepository = userRepository; }
         public string GetEmailOfUser(string id)
         {
-            IdentityUser user = _userRepository.GetUserById(id);
+            User user = _userRepository.GetUserById(id);
 
             return user.Email;
         }

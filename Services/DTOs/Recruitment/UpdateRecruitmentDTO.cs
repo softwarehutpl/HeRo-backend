@@ -21,5 +21,7 @@ namespace Services.DTOs.Recruitment
         public string Status { get; set; }
 
         public string RecruiterId { get; set; }
+
+        public DateTime? LastUpdatedDate { get; set; }
     }
 }
