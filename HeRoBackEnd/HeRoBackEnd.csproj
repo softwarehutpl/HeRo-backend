@@ -10,12 +10,17 @@
 
   <ItemGroup>
 
+    <PackageReference Include="Microsoft.Data.SqlClient" Version="4.1.0" />
+
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.6" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="NLog.Database" Version="5.0.1" />
+    <PackageReference Include="NLog.Extensions.Logging" Version="5.0.1" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="5.0.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
@@ -24,6 +29,7 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
+    <Folder Include="Logs\" />
   </ItemGroup>
 
   <ItemGroup>

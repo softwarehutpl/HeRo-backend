@@ -14,7 +14,7 @@ namespace Services.Services
             _userRepository = userRepository;
         }
 
-        public void SendConfirmationEmail(string id)
+        public void SendConfirmationEmail(int id)
         {
 
             string email = _userRepository.GetUserEmail(id).ToString();
