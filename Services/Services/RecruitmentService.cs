@@ -48,50 +48,44 @@ namespace Services.Services
             User user = GetUser();
 
             Recruitment recruitment = repo.GetById(recruitmentId);
-            recruitment = mapper.Map<Recruitment>(dto);
             recruitment.LastUpdatedById = user.Id;
-
-            if (recruitment.Status == RecruitmentStatusEnum.Ended.ToString())
-            {
-                recruitment.EndedById = user.Id;
-                recruitment.EndedDate = DateTime.Now;
-            }
-            if (recruitment.Status == RecruitmentStatusEnum.Deleted.ToString())
-            {
-                recruitment.DeletedById = user.Id;
-                recruitment.DeletedDate = DateTime.Now;
-            }
+            recruitment.BeginningDate = dto.BeginningDate;
+            recruitment.EndingDate = dto.EndingDate;
+            recruitment.Name = dto.Name;
+            recruitment.Description = dto.Description;
+            recruitment.RecruiterId = dto.RecruiterId;
+            recruitment.LastUpdatedDate = dto.LastUpdatedDate;
 
             int result=repo.UpdateRecruitment(recruitment);
 
             return result;
         }
-        public int ChangeStatus(ChangeRecruitmentStatusDTO dto)
+
+        public int EndRecruitment(int recruitmentId)
         {
             User user = GetUser();
 
-            Recruitment recruitment = repo.GetById(dto.Id);
-            recruitment = mapper.Map<Recruitment>(dto);
+            Recruitment recruitment = repo.GetById(recruitmentId);
+            recruitment.LastUpdatedDate = DateTime.Now;
             recruitment.LastUpdatedById = user.Id;
+            recruitment.EndedDate = DateTime.Now;
+            recruitment.EndedById = user.Id;
 
-            if (recruitment.Status == RecruitmentStatusEnum.Ended.ToString())
-            {
-                recruitment.EndedById = user.Id;
-                recruitment.EndedDate = DateTime.Now;
-            }
-            if (recruitment.Status == RecruitmentStatusEnum.Deleted.ToString())
-            {
-                recruitment.DeletedById = user.Id;
-                recruitment.DeletedDate = DateTime.Now;
-            }
-
-            int result = repo.ChangeStatus(recruitment);
+            int result = repo.UpdateRecruitment(recruitment);
 
             return result;
         }
-        public int EndRecruitment(int recruitmentId)
+        public int DeleteRecruitment(int recruitmentId)
         {
-            int result=repo.RemoveRecruitment(recruitmentId);
+            User user = GetUser();
+
+            Recruitment recruitment = repo.GetById(recruitmentId);
+            recruitment.LastUpdatedDate = DateTime.Now;
+            recruitment.LastUpdatedById = user.Id;
+            recruitment.DeletedDate = DateTime.Now;
+            recruitment.DeletedById = user.Id;
+
+            int result = repo.UpdateRecruitment(recruitment);
 
             return result;
         }

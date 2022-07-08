@@ -30,9 +30,6 @@ namespace Data.Entities
         [Required(ErrorMessage = "This field is required")]
         public string Description { get; set; }
 
-        [Display(Name = "Status")]
-        public string Status { get; set; }
-
         [Required(ErrorMessage = "This field is required")]
         public int RecruiterId { get; set; }
 

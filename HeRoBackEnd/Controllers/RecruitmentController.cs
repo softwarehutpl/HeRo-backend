@@ -65,9 +65,9 @@ namespace HeRoBackEnd.Controllers
         {
             
             CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
-            dto.Status = RecruitmentStatusEnum.Open.ToString();
             dto.CreatedDate = DateTime.Now;
             dto.LastUpdatedDate = DateTime.Now;
+
             int result=service.AddRecruitment(dto);
 
             if (result == -1) return BadRequest();
@@ -79,15 +79,14 @@ namespace HeRoBackEnd.Controllers
         /// Updates information about a recruitment represented by an id
         /// </summary>
         /// <param name="recruitmentId">Id representing a recruitment</param>
-        /// <param name="newRecruitment">Contains new information about a recruitment</param>
+        /// <param name="recruitment">Contains new information about a recruitment</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel newRecruitment)
+        public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
         {
-            
-            UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(newRecruitment);
+            UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(recruitment);
             dto.LastUpdatedDate = DateTime.Now;
 
             int result=service.UpdateRecruitment(recruitmentId, dto);
@@ -98,30 +97,11 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Changes the status of the recruitment
-        /// </summary>
-        /// <param name="newStatus">Contains inormation about a new status of the Recruitment</param>
-        /// <returns>IActionResult</returns>
-        [HttpPut]
-        [Route("Recruitment/ChangeSatus/{recruitmentId}")]
-        public IActionResult ChangeStaus(RecruitmentChangeStatusViewModel newStatus)
-        {
-            ChangeRecruitmentStatusDTO dto = mapper.Map<ChangeRecruitmentStatusDTO>(newStatus);
-            dto.LastUpdatedDate = DateTime.Now;
-
-            int result = service.ChangeStatus(dto);
-
-            if (result == -1) return BadRequest();
-
-            return RedirectToAction("Index");
-        }
-
-        /// <summary>
         /// Ends a recruitment represented by an id
         /// </summary>
         /// <param name="recruitmentId">Id representing a recruitment</param>
         /// <returns>IActionResult</returns>
-        [HttpDelete]
+        [HttpGet]
         [Route("Recruitment/End/{recruitmentId}")]
         [ValidateAntiForgeryToken]
         public IActionResult End(int recruitmentId)
@@ -137,12 +117,12 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="recruitmentId">Id representing a recruitment</param>
         /// <returns>IActionResult</returns>
-        [HttpDelete]
+        [HttpGet]
         [Route("Recruitment/Delete/{recruitmentId}")]
         [ValidateAntiForgeryToken]
         public IActionResult Delete(int recruitmentId)
         {
-            int result = service.EndRecruitment(recruitmentId);
+            int result = service.DeleteRecruitment(recruitmentId);
 
             if (result == -1) return BadRequest();
 

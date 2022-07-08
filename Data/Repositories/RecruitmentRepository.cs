@@ -26,19 +26,6 @@ namespace Data.Repositories
             return result;
         }
 
-        public int ChangeStatus(Recruitment recruitment)
-        {
-            
-            try
-            {
-                UpdateAndSaveChanges(recruitment);
-            }catch(Exception ex)
-            {
-                return - 1;
-            }
-            return 1;
-        }
-
         public int AddRecruitment(Recruitment recruitment)
         {
             try
@@ -59,19 +46,6 @@ namespace Data.Repositories
             {
                 return -1;
             }
-            return 1;
-        }
-
-        public int RemoveRecruitment(int id)
-        {
-            try
-            {
-                RemoveByIdAndSaveChanges(id);
-            }catch(Exception ex)
-            {
-                return -1;
-            }
-                
             return 1;
         }
     }

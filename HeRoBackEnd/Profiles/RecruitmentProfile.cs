@@ -10,10 +10,8 @@ namespace HeRoBackEnd.Profiles
         public RecruitmentProfile()
         {
             CreateMap<CreateRecruitmentDTO, Recruitment>();
-            CreateMap<UpdateRecruitmentDTO, Recruitment>();
             CreateMap<RecruitmentCreateViewModel, CreateRecruitmentDTO>();
             CreateMap<RecruitmentEditViewModel, UpdateRecruitmentDTO>();
-            CreateMap<RecruitmentChangeStatusViewModel, ChangeRecruitmentStatusDTO>();
             CreateMap<Recruitment, ReadRecruitmentDTO>();
         }
     }
