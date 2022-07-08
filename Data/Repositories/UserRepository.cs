@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿using System.Linq;
+using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Data.Repositories
@@ -36,5 +37,13 @@ namespace Data.Repositories
         public void AddUser(int id) { }
 
         public void RemoveUser(int id) { }
+
+        public string GetUserEmail(string id)
+        {
+
+            var result = _dataContext.AspNetUsers.Where(x => x.Id == id).Select(x => x.Email).FirstOrDefault();
+
+            return result;
+        }
     }
 }

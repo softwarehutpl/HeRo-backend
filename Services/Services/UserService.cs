@@ -17,13 +17,6 @@ namespace Services.Services
             userRepository = _userRepository;
         }
 
-        public string GetEmailOfUser(string id)
-        {
-            User user = userRepository.GetUserById(id);
-
-            return user.Email;
-        }
-
         public async Task<int> AddUser(UserDTO dto)
         {
             return 0;
