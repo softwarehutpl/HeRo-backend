@@ -38,6 +38,15 @@ namespace Services.Services
 
             return result;
         }
+        public int ChangeStatus(int recruitmentId, RecruitmentStatusEnum status)
+        {
+            Recruitment recruitment = repo.GetById(recruitmentId);
+            recruitment.Status = status;
+
+            int result = repo.ChangeStatus(recruitment);
+
+            return result;
+        }
         public int EndRecruitment(int recruitmentId)
         {
             int result=repo.RemoveRecruitment(recruitmentId);

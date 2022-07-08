@@ -5,6 +5,7 @@ using Services.DTOs.Recruitment;
 using Data.Entities;
 using Services.DTOs.Recruitment;
 using AutoMapper;
+using Common.Enums;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -80,7 +81,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int recruitmentId, NewRecruitmentViewModel newRecruitment)
+        public IActionResult Edit(int recruitmentId, NewRecruitmentViewModel newRecruitment)
         {
             /*
             UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(newRecruitment);
@@ -92,6 +93,23 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
+        /// Changes the status of the recruitment specified by an id
+        /// </summary>
+        /// <param name="recruitmentId">Id of the recruitment</param>
+        /// <param name="status">New status of the recruitment</param>
+        /// <returns>IActionResult</returns>
+        [HttpGet]
+        [Route("Recruitment/ChangeSatus/{recruitmentId}")]
+        public IActionResult ChangeStaus(int recruitmentId, RecruitmentStatusEnum status)
+        {
+            int result = service.ChangeStatus(recruitmentId, status);
+
+            if (result == -1) return BadRequest();
+
+            return RedirectToAction("Index");
+        }
+
+        /// <summary>
         /// Ends a recruitment represented by an id
         /// </summary>
         /// <param name="recruitmentId">Id representing a recruitment</param>
@@ -99,7 +117,7 @@ namespace HeRoBackEnd.Controllers
         [HttpDelete]
         [Route("Recruitment/Finish/{recruitmentId}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Finish(int recruitmentId)
+        public IActionResult Finish(int recruitmentId)
         {
             int result=service.EndRecruitment(recruitmentId);
 

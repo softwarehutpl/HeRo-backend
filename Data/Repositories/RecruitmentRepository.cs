@@ -25,6 +25,18 @@ namespace Data.Repositories
             return result;
         }
 
+        public int ChangeStatus(Recruitment recruitment)
+        {
+            try
+            {
+                UpdateAndSaveChanges(recruitment);
+            }catch(Exception ex)
+            {
+                return - 1;
+            }
+            return 1;
+        }
+
         public int AddRecruitment(Recruitment recruitment)
         {
             try
