@@ -25,9 +25,9 @@ namespace Services.Services
 
         }
 
-        public IEnumerable<User> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
+        public IEnumerable<UserFiltringDTO> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
         {
-            IEnumerable<User> users = userRepository.GetAllUsers();
+            IQueryable<User> users = userRepository.GetAllUsers();
 
             if (!String.IsNullOrEmpty(userFiltringDTO.Email))
             {
@@ -37,16 +37,16 @@ namespace Services.Services
             {
                 users = users.Where(s => s.UserStatus.Equals(userFiltringDTO.UserStatus));
             }
-            //if (!String.IsNullOrEmpty(userFiltringDTO.RoleName))
-            //{
-            //    users = users.Where(s => s.Role.Name.Equals(userFiltringDTO.RoleName));
-            //}
+            if (!String.IsNullOrEmpty(userFiltringDTO.RoleName))
+            {
+                users = users.Where(s => s.RoleName.Equals(userFiltringDTO.RoleName));
+            }
 
             foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
             {
-                if (sort.Key == "Email")
+                if (sort.Key.ToLower() == "email")
                 {
-                    if (sort.Value == "DESC")
+                    if (sort.Value.ToUpper() == "DESC")
                     {
                         users = users.OrderByDescending(u => u.Email);
                     }
@@ -55,37 +55,34 @@ namespace Services.Services
                         users = users.OrderBy(s => s.Email);
                     }
                 }
-                //else if (sort.Key == "UserStatus")
-                //{
-                //    if (sort.Value == "DESC")
-                //    {
-                //        users = users.OrderByDescending(u => u.UserStatus);
-                //    }
-                //    else
-                //    {
-                //        users = users.OrderBy(s => s.UserStatus);
-                //    }
-                //}
-                //else if (sort.Key == "Role")
-                //{
-                //    if (sort.Value == "DESC")
-                //    {
-                //        users = users.OrderByDescending(u => u.Role.Name);
-                //    }
-                //    else
-                //    {
-                //        users = users.OrderBy(s => s.Role.Name);
-                //    }
-                //}
+                else if (sort.Key.ToLower() == "userstatus")
+                {
+                    if (sort.Value.ToUpper() == "DESC")
+                    {
+                        users = users.OrderByDescending(u => u.UserStatus);
+                    }
+                    else
+                    {
+                        users = users.OrderBy(s => s.UserStatus);
+                    }
+                }
+                else if (sort.Key.ToLower() == "role")
+                {
+                    if (sort.Value.ToUpper() == "DESC")
+                    {
+                        users = users.OrderByDescending(u => u.RoleName);
+                    }
+                    else
+                    {
+                        users = users.OrderBy(s => s.RoleName);
+                    }
+                }
             }
 
-            //var result = users
-            //    .Select(x => new UserDTO()
-            //    { 
-            //    Name = x.Name
-            //    })
-            //    .ToPagedList(paging.PageNumber, paging.PageSize);
-            var result = users.ToPagedList(paging.PageNumber, paging.PageSize);
+            var result = users
+                .Select(x => new UserFiltringDTO(x.Email, x.UserStatus, x.RoleName))
+                .ToPagedList(paging.PageNumber, paging.PageSize);
+
             return result;
         }
     }
