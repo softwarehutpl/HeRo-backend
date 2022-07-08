@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Authentication;
 
 namespace HeRoBackEnd.Controllers
 {
-    [ApiController]
     public class AuthController : Controller
     {
         private readonly UserRepository _userRepository;
@@ -54,8 +53,8 @@ namespace HeRoBackEnd.Controllers
                 {
                     new Claim(ClaimTypes.Email, email),
                     new Claim(ClaimTypes.Role, role)
+                    
                 };
-
                 var claimsIdentity = new ClaimsIdentity(claims, "CookieAuthentication");
                 await HttpContext.SignInAsync("CookieAuthentication", new
                 ClaimsPrincipal(claimsIdentity));

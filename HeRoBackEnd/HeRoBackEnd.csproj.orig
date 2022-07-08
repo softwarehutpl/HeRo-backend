@@ -7,7 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-<<<<<<< .merge_file_a01176
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.6">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -21,11 +20,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Data\Data.csproj" />
-=======
     <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\Services\Services.csproj" />
->>>>>>> .merge_file_a13172
   </ItemGroup>
 
 </Project>

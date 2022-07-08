@@ -4,6 +4,8 @@ using Data.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Services.Services;
+using Microsoft.Extensions.Configuration;
+using Common.ConfigClasses;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -28,6 +30,10 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 });
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
+
+builder.Services.AddSingleton(config);
 builder.Services.AddScoped<EmailHelper>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<EmailService>();

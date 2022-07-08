@@ -38,24 +38,21 @@ namespace Data.Repositories
 
         public string GetUserEmail(int id)
         {
-            var result = _dataContext.Users.FirstOrDefault(x => x.Id == id).Email;
+            var result = _dataContext.Users.Where(x => x.Id == id).Select(x => x.Email).FirstOrDefault();
             return result;
         }
 
         public string GetUserPassword(string email)
         {
-            var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.Password);
-            return result.ToString();
+            var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.Password).FirstOrDefault();
+            return result;
         }
 
         public string GetUserRoleByEmail(string email)
         {
-            var result1 = from user in _dataContext.Users
-                          join role in _dataContext.Roles
-                          on user.Id equals role.Id
-                          select new Role { Name = role.Name };
+            var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.Role).FirstOrDefault();
 
-            return result1.ToString();
+            return result;
         }
     }
 }
