@@ -21,12 +21,8 @@ namespace Data.Entities
 
         [Required]
         public string UserStatus { get; set; }
-<<<<<<< HEAD
-        public Role Role { get; set; }
-        public int RoleId { get; set; }
-=======
-
         public string RoleName { get; set; }
+        public int RoleId { get; set; }
 
         public DateTime CreatedDate { get; set; }
 
@@ -38,6 +34,5 @@ namespace Data.Entities
 
         [ForeignKey("DeletedById")]
         public virtual User DeletedBy { get; set; }
->>>>>>> 68a34c719ccdfc66b5fddd9cd28b6a7058bd9de6
     }
 }
