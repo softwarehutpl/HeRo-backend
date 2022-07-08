@@ -1,50 +1,40 @@
 ﻿using System.Net.Mail;
 using System.Net;
 using Newtonsoft.Json;
+using Microsoft.Extensions.Configuration;
+using Common.ConfigClasses;
 
 namespace Common.Helpers
 {
-    public class EmailHelper : IEmailHelper
+    public class EmailHelper 
     {
-        private static Dictionary<string, string> _ReadEmailJson()
+         
+        private EmailConfiguration _config;
+
+        public EmailHelper(EmailConfiguration config)
         {
-            string path = Path.GetFullPath("..\\HeRoBackEnd\\Email.json");
-
-            string file = File.ReadAllText(path);
-
-            Dictionary<string, string> jsonEmailDict = JsonConvert.DeserializeObject<Dictionary<string, string>>(file);
-
-            return jsonEmailDict;
+            _config = config;
         }
 
-        private MailMessage CreateEmail()
+        private MailMessage CreateEmail(string email)
         {
-            Dictionary<string, string> jsonEmailDict = _ReadEmailJson();
-
-            //Tu będzie metoda pobierająca E-mail z bazy danych. i wrzucimy go do mailMessage.To.Add()
 
             MailMessage mailMessage = new();
-
-            mailMessage.From = new MailAddress(jsonEmailDict["CompanyEmail"]);
-            mailMessage.To.Add("");
-            mailMessage.Subject = jsonEmailDict["Subject"];
-            mailMessage.Body = jsonEmailDict["Body"];
+            mailMessage.From = new MailAddress(_config.CompanyEmail);
+            mailMessage.To.Add("mrmaselko83@gmail.com");
+            mailMessage.Subject = _config.Subject;
+            mailMessage.Body = _config.Body;
 
             return mailMessage;
         }
-        public void SendEmail()
+        public void SendEmail(string email)
         {
-            Dictionary<string, string> jsonDict = _ReadEmailJson();
+            MailMessage mailMessage = CreateEmail(email);
 
-            string port = jsonDict["Port"];
-            int portStringParsed = int.Parse(port);
-
-            MailMessage mailMessage = CreateEmail();
-
-            using ( SmtpClient smtp = new(jsonDict["Smpt"], portStringParsed))
+            using ( SmtpClient smtp = new(_config.Smpt, _config.Port))
             {
                 smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential(jsonDict["CompanyEmail"], jsonDict["CompanyEmailPassword"]);
+                smtp.Credentials = new NetworkCredential(_config.CompanyEmail, _config.CompanyEmailPassword);
                 smtp.EnableSsl = true;
 
                 smtp.Send(mailMessage);

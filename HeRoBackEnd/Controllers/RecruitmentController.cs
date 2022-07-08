@@ -1,4 +1,5 @@
-﻿using HeRoBackEnd.ViewModels.Recruitment;
+using Common.Listing;
+using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using Services.DTOs.Recruitment;
@@ -24,14 +25,25 @@ namespace HeRoBackEnd.Controllers
         /// <summary>
         /// Returns a list of recruitments
         /// </summary>
+        /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
         /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
-        [HttpGet]
-        [Route("Recruitment/Index")]
-        public IActionResult Index()
+        [HttpPost]
+        [Route("Recruitment/GetList")]
+        public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
-           List<ReadRecruitmentDTO> recruitments = service.GetRecruitments();
+            Paging paging = recruitmentListFilterViewModel.Paging;
+            SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
+            RecruitmentFiltringDTO recruitmentFiltringDTO 
+                = new RecruitmentFiltringDTO(
+                    recruitmentListFilterViewModel.Name, 
+                    recruitmentListFilterViewModel.Status, 
+                    recruitmentListFilterViewModel.Description,
+                    recruitmentListFilterViewModel.BeginningDate,
+                    recruitmentListFilterViewModel.EndingDate);
 
-           return new JsonResult(recruitments);
+            IEnumerable<ReadRecruitmentDTO> result = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+
+            return new JsonResult(result);
         }
 
         /// <summary>

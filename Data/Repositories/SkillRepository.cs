@@ -1,6 +1,6 @@
 ﻿namespace Data.Repositories
 {
-    public class SkillRepository : ISkillRepository
+    public class SkillRepository 
     {
         public void GetSkillById(int id) { }
 

@@ -1,10 +1,13 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Common.Listing;
+using PagedList;
 using Data.Entities;
+using Services.DTOs;
 using Services.DTOs.Recruitment;
 using Data.Repositories;
 using Common.Enums;
@@ -89,20 +92,52 @@ namespace Services.Services
 
             return result;
         }
+
+        public IEnumerable<ReadRecruitmentDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
+        {
+            IEnumerable<Recruitment> recruitments = recruitmentRepository.GetAllRecruitments();
+
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
+            {
+                recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
+            }
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
+            {
+                recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
+            }
+            if (recruitmentFiltringDTO.BeginningDate.HasValue)
+            {
+                recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
+            }
+            if (recruitmentFiltringDTO.EndingDate.HasValue)
+            {
+                recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
+            }
+
+            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
+            {
+                    if (sort.Value == "DESC")
+                    {
+                        recruitments = recruitments.OrderByDescending(u => u.Name);
+                    }
+                    else
+                    {
+                        recruitments = recruitments.OrderBy(s => s.Name);
+                    }
+            }
+
+            IEnumerable<Recruitment> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
+            IEnumerable<ReadRecruitmentDTO> result = mapper.Map <IEnumerable<ReadRecruitmentDTO>>(pagedRecruitments);
+            
+            return result;
+         }
+         
         public ReadRecruitmentDTO GetRecruitment(int recruitmentId)
         {
             Recruitment recruitment=repo.GetRecruitmentById(recruitmentId);
             ReadRecruitmentDTO result = null;
 
             if(recruitment!=null) result = mapper.Map<ReadRecruitmentDTO>(recruitment);
-
-            return result;
-        }
-        public List<ReadRecruitmentDTO> GetRecruitments()
-        {
-            List<Recruitment> recruitmentList = repo.GetAllRecruitments();
-
-            List<ReadRecruitmentDTO> result = mapper.Map <List<ReadRecruitmentDTO>>(recruitmentList);
 
             return result;
         }

@@ -5,22 +5,28 @@ using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
+    [ApiController]
     public class EmailController : Controller
     {
 
-        private IEmailHelper _emailHelper;
+        private EmailService _emailService;
 
-        public EmailController(IEmailHelper emailHelper)
+        public EmailController(EmailService emailService)
         {
-            _emailHelper = emailHelper;
+            _emailService = emailService;
         }
 
+        /// <summary>
+        /// Sends an email with the activation link to the newly registered user
+        /// </summary>
+        /// <returns>IActionResult</returns>
         [HttpPost]
-        public IActionResult SendConfirmation()
+        [Route("Email/SendConfirmation")]
+        public IActionResult SendConfirmation(int id)
         {            
             try
             {
-                _emailHelper.SendEmail();
+                _emailService.SendConfirmationEmail(id);
                 return Ok("Mail Wysłany");
             }
             catch (Exception ex)

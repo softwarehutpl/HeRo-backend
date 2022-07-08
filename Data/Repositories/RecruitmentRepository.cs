@@ -1,4 +1,4 @@
-﻿using Common.Enums;
+using Common.Enums;
 using Data.Entities;
 using System.Security.Claims;
 
