@@ -43,10 +43,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("DeletedById")
+                    b.Property<int?>("DeletedById")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DeletedDate")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -60,10 +61,11 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("LastUpdatedById")
+                    b.Property<int?>("LastUpdatedById")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LastUpdatedDate")
+                    b.Property<DateTime?>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -124,10 +126,11 @@ namespace Data.Migrations
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeletedById")
+                    b.Property<int?>("DeletedById")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DeletedDate")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Description")
@@ -141,10 +144,11 @@ namespace Data.Migrations
                     b.Property<DateTime>("EndingDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("LastUpdatedById")
+                    b.Property<int?>("LastUpdatedById")
+                        .IsRequired()
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LastUpdatedDate")
+                    b.Property<DateTime?>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Name")
@@ -222,16 +226,13 @@ namespace Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DeletedById")
+                    b.Property<int?>("DeletedById")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("DeletedDate")
+                    b.Property<DateTime?>("DeletedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
@@ -239,10 +240,7 @@ namespace Data.Migrations
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.Property<int>("LastUpdatedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastUpdatedDate")
+                    b.Property<DateTime?>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Password")
@@ -260,11 +258,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("CreatedById");
-
                     b.HasIndex("DeletedById");
-
-                    b.HasIndex("LastUpdatedById");
 
                     b.ToTable("User");
                 });
@@ -384,29 +378,11 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.User", b =>
                 {
-                    b.HasOne("Data.Entities.User", "CreatedBy")
-                        .WithMany()
-                        .HasForeignKey("CreatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Data.Entities.User", "DeletedBy")
                         .WithMany()
-                        .HasForeignKey("DeletedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Entities.User", "LastUpdatedBy")
-                        .WithMany()
-                        .HasForeignKey("LastUpdatedById")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("CreatedBy");
+                        .HasForeignKey("DeletedById");
 
                     b.Navigation("DeletedBy");
-
-                    b.Navigation("LastUpdatedBy");
                 });
 #pragma warning restore 612, 618
         }

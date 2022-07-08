@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
@@ -51,16 +50,16 @@ namespace Data.Entities
         [ForeignKey("CreatedById")]
         public virtual User CreatedBy { get; set; }
 
-        public int LastUpdatedById { get; set; }
+        public int? LastUpdatedById { get; set; }
 
-        public DateTime LastUpdatedDate { get; set; }
+        public DateTime? LastUpdatedDate { get; set; }
 
         [ForeignKey("LastUpdatedById")]
         public virtual User LastUpdatedBy { get; set; }
 
-        public int DeletedById { get; set; }
+        public int? DeletedById { get; set; }
 
-        public DateTime DeletedDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
 
         [ForeignKey("DeletedById")]
         public virtual User DeletedBy { get; set; }

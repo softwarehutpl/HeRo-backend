@@ -88,8 +88,13 @@ namespace Services.Services
                 //}
             }
 
+            //var result = users
+            //    .Select(x => new UserDTO()
+            //    { 
+            //    Name = x.Name
+            //    })
+            //    .ToPagedList(paging.PageNumber, paging.PageSize);
             var result = users.ToPagedList(paging.PageNumber, paging.PageSize);
-            
             return result;
         }
     }

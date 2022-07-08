@@ -16,8 +16,7 @@ namespace Data.Entities
 
         [Required]
         [DataType(DataType.Password)]
-        [MinLength(8)]
-        [MaxLength(20)]
+        [MinLength(8)] [MaxLength(20)]
         public string Password { get; set; }
 
         [Required]
@@ -25,23 +24,13 @@ namespace Data.Entities
 
         public string RoleName { get; set; }
 
-        public int CreatedById { get; set; }
-
         public DateTime CreatedDate { get; set; }
 
-        [ForeignKey("CreatedById")]
-        public virtual User CreatedBy { get; set; }
+        public DateTime? LastUpdatedDate { get; set; }
 
-        public int LastUpdatedById { get; set; }
+        public int? DeletedById { get; set; }
 
-        public DateTime LastUpdatedDate { get; set; }
-
-        [ForeignKey("LastUpdatedById")]
-        public virtual User LastUpdatedBy { get; set; }
-
-        public int DeletedById { get; set; }
-
-        public DateTime DeletedDate { get; set; }
+        public DateTime? DeletedDate { get; set; }
 
         [ForeignKey("DeletedById")]
         public virtual User DeletedBy { get; set; }

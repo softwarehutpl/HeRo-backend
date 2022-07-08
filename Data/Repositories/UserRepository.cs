@@ -26,7 +26,7 @@ namespace Data.Repositories
             return result;
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public IQueryable<User> GetAllUsers()
         {
             var result = _dataContext.Users;
 

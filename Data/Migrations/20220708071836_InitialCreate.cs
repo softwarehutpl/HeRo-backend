@@ -32,34 +32,19 @@ namespace Data.Migrations
                     Password = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     UserStatus = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     RoleName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    CreatedById = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedById = table.Column<int>(type: "int", nullable: false),
-                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedById = table.Column<int>(type: "int", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedById = table.Column<int>(type: "int", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_User", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_User_User_CreatedById",
-                        column: x => x.CreatedById,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
                         name: "FK_User_User_DeletedById",
                         column: x => x.DeletedById,
                         principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
-                    table.ForeignKey(
-                        name: "FK_User_User_LastUpdatedById",
-                        column: x => x.LastUpdatedById,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -72,15 +57,15 @@ namespace Data.Migrations
                     EndingDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RecruiterId = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    RecruiterId = table.Column<int>(type: "int", nullable: false),
                     CreatedById = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedById = table.Column<int>(type: "int", nullable: false),
-                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedById = table.Column<int>(type: "int", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndedById = table.Column<int>(type: "int", nullable: false)
+                    LastUpdatedById = table.Column<int>(type: "int", nullable: true),
+                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedById = table.Column<int>(type: "int", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EndedById = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -90,7 +75,7 @@ namespace Data.Migrations
                         column: x => x.CreatedById,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.NoAction);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Recruitment_User_DeletedById",
                         column: x => x.DeletedById,
@@ -137,10 +122,10 @@ namespace Data.Migrations
                     CvPath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedById = table.Column<int>(type: "int", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LastUpdatedById = table.Column<int>(type: "int", nullable: false),
-                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DeletedById = table.Column<int>(type: "int", nullable: false),
-                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    LastUpdatedById = table.Column<int>(type: "int", nullable: true),
+                    LastUpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DeletedById = table.Column<int>(type: "int", nullable: true),
+                    DeletedDate = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -156,7 +141,7 @@ namespace Data.Migrations
                         column: x => x.CreatedById,
                         principalTable: "User",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        onDelete: ReferentialAction.NoAction);
                     table.ForeignKey(
                         name: "FK_Candidate_User_DeletedById",
                         column: x => x.DeletedById,
@@ -270,19 +255,9 @@ namespace Data.Migrations
                 column: "SkillId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_User_CreatedById",
-                table: "User",
-                column: "CreatedById");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_User_DeletedById",
                 table: "User",
                 column: "DeletedById");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_User_LastUpdatedById",
-                table: "User",
-                column: "LastUpdatedById");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
