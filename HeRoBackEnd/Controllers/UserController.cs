@@ -43,7 +43,7 @@ namespace HeRoBackEnd.Controllers
         [Route("User/Get/{userId}")]
         public IActionResult Get(int userId)
         {
-            UserFiltringDTO user = userService.Get(userId);
+            UserDTO user = userService.Get(userId);
 
             if (user == null)
             {

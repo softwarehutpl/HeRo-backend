@@ -25,14 +25,15 @@ namespace Services.Services
 
         }
 
-        public UserFiltringDTO Get(int userId)
+        public UserDTO Get(int userId)
         {
             User user = userRepository.GetUserById(userId);
             if(user == null)
             {
                 return null;
             }
-            UserFiltringDTO userFiltring = new UserFiltringDTO(user.Email, user.UserStatus, user.RoleName); 
+
+            UserDTO userFiltring = new UserDTO(user.Email, user.UserStatus, user.RoleName); 
 
             return userFiltring;
         }
