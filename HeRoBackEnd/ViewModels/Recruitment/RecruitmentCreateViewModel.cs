@@ -19,6 +19,7 @@ namespace HeRoBackEnd.ViewModels.Recruitment
         [Display(Name = "Description")]
         [Required(ErrorMessage = "This field is required")]
         public string Description { get; set; }
+
         [Required(ErrorMessage = "This field is required")]
         public int RecruiterId { get; set; }
     }

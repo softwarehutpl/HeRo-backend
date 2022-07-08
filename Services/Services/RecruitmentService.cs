@@ -8,6 +8,7 @@ using Data.Entities;
 using Services.DTOs.Recruitment;
 using Data.Repositories;
 using Common.Enums;
+using System.Security.Claims;
 
 namespace Services.Services
 {
@@ -15,10 +16,12 @@ namespace Services.Services
     {
         private readonly IMapper mapper;
         private readonly RecruitmentRepository repo;
-        public RecruitmentService(IMapper map, RecruitmentRepository repo)
+        private readonly UserRepository userRepo;
+        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo)
         {
             mapper = map;
             this.repo = repo;
+            this.userRepo = userRepo;
         }
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
@@ -40,8 +43,14 @@ namespace Services.Services
         }
         public int ChangeStatus(ChangeRecruitmentStatusDTO dto)
         {
+            List<Claim> claims = ClaimsPrincipal.Current.Claims.ToList();
+            Claim emailClaim = claims.FirstOrDefault(e => e.Type == ClaimTypes.Email);
+            User user = userRepo.GetUserByEmail(emailClaim.Value);
+
             Recruitment recruitment = repo.GetById(dto.Id);
             recruitment.Status = dto.Status;
+            recruitment.LastUpdatedById = user.Id;
+            if (recruitment.Status == RecruitmentStatusEnum.Closed.ToString()) recruitment.EndedById = user.Id;
             recruitment.LastUpdatedDate = dto.LastUpdatedDate;
 
             int result = repo.ChangeStatus(recruitment);

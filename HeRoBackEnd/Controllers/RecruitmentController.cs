@@ -63,12 +63,12 @@ namespace HeRoBackEnd.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
         {
-            /*
+            
             CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
             int result=service.AddRecruitment(dto);
 
             if (result == -1) return BadRequest();
-            */
+            
             return RedirectToAction("Index");
         }
 
@@ -76,7 +76,7 @@ namespace HeRoBackEnd.Controllers
         /// Updates information about a recruitment represented by an id
         /// </summary>
         /// <param name="recruitmentId">Id representing a recruitment</param>
-        /// <param name="newRecruitment">Contains current information about a recruitment</param>
+        /// <param name="newRecruitment">Contains new information about a recruitment</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
@@ -93,10 +93,9 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Changes the status of the recruitment specified by an id
+        /// Changes the status of the recruitment
         /// </summary>
-        /// <param name="recruitmentId">Id of the recruitment</param>
-        /// <param name="status">New status of the recruitment</param>
+        /// <param name="newStatus">Contains inormation about a new status of the Recruitment</param>
         /// <returns>IActionResult</returns>
         [HttpPut]
         [Route("Recruitment/ChangeSatus/{recruitmentId}")]
