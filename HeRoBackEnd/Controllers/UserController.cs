@@ -41,22 +41,16 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Json string representing an object of the User class</returns>
         [HttpGet]
         [Route("User/Get/{userId}")]
-        public async Task<IActionResult> Get(int? userId)
+        public IActionResult Get(int userId)
         {
-            if (userId == null)
+            UserFiltringDTO user = userService.Get(userId);
+
+            if (user == null)
             {
-                return RedirectToAction("Index");
+                return NotFound();
             }
 
-            //User tempUser = userService.Get(id);
-
-            //if (tempUser == null)
-            //{
-            //    return RedirectToAction("Index");
-            //}
-
-            //return new JsonResult(tempUser);
-            return View();
+            return new JsonResult(user);
         }
 
         /// <summary>
