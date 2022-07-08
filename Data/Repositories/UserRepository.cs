@@ -38,10 +38,10 @@ namespace Data.Repositories
 
         public void RemoveUser(int id) { }
 
-        public string GetUserEmail(string id)
+        public string GetUserEmail(int id)
         {
 
-            var result = _dataContext.AspNetUsers.Where(x => x.Id == id).Select(x => x.Email).FirstOrDefault();
+            var result = _dataContext.Users.Where(x => x.Id == id).Select(x => x.Email).FirstOrDefault();
 
             return result;
         }

@@ -1,9 +1,7 @@
 using Common.Listing;
 using Data.Entities;
 using Data.Repositories;
-using Microsoft.AspNetCore.Identity;
 using PagedList;
-using Services.DTOs;
 using Services.DTOs.User;
 
 namespace Services.Services
