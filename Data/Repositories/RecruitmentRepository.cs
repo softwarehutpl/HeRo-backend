@@ -2,6 +2,8 @@
 
 namespace Data.Repositories
 {
+
+
     public class RecruitmentRepository
     {
         private DataContext _dataContext;
