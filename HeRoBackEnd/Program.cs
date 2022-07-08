@@ -1,7 +1,9 @@
+using Common.ConfigClasses;
 using Common.Helpers;
 using Data;
 using Data.Repositories;
 using HeRoBackEnd.Controllers;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using NLog;
@@ -22,19 +24,34 @@ try
 
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
-    builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
-    builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<
-            DataContext>();
-    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-    builder.Services.AddScoped<EmailHelper>();
 
+
+    builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
+    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+    builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {
+        options.Cookie.Name = "UserLoginCookie";
+        options.SlidingExpiration = true;
+        options.ExpireTimeSpan = new TimeSpan(0, 20, 0); // Expires in 20 minutes
+        options.Events.OnRedirectToLogin = (context) =>
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
+        options.Cookie.HttpOnly = true;
+    });
+
+
+    var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
+    builder.Services.AddSingleton(config);
+    builder.Services.AddScoped<EmailHelper>();
+    builder.Services.AddScoped<EmailHelper>();
     builder.Services.AddScoped<UserRepository>();
     builder.Services.AddScoped<EmailService>();
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
-
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {
@@ -78,7 +95,7 @@ try
     app.UseStaticFiles();
 
     app.UseRouting();
-
+    app.UseAuthentication();
     app.UseAuthorization();
 
     app.MapControllerRoute(

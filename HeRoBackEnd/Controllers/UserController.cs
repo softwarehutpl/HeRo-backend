@@ -9,11 +9,11 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        public UserService _userService;
+        public UserService userService;
 
-        public UserController(UserService userService)
+        public UserController(UserService _userService)
         {
-            _userService = userService;
+            userService = _userService;
         }
 
         /// <summary>
@@ -29,7 +29,7 @@ namespace HeRoBackEnd.Controllers
             SortOrder sortOrder = userListFilterViewModel.SortOrder;
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
-            var resutl = _userService.GetUsers(paging, sortOrder, userFiltringDTO);
+            var resutl = userService.GetUsers(paging, sortOrder, userFiltringDTO);
 
             return new JsonResult(resutl);
         }
