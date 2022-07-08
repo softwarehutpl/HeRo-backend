@@ -11,8 +11,9 @@ namespace HeRoBackEnd.Profiles
         {
             CreateMap<CreateRecruitmentDTO, Recruitment>();
             CreateMap<UpdateRecruitmentDTO, Recruitment>();
-            CreateMap<NewRecruitmentViewModel, CreateRecruitmentDTO>();
-            CreateMap<UpdateRecruitmentViewModel, UpdateRecruitmentDTO>();
+            CreateMap<RecruitmentCreateViewModel, CreateRecruitmentDTO>();
+            CreateMap<RecruitmentEditViewModel, UpdateRecruitmentDTO>();
+            CreateMap<RecruitmentChangeStatusViewModel, ChangeRecruitmentStatusDTO>();
             CreateMap<Recruitment, ReadRecruitmentDTO>();
         }
     }

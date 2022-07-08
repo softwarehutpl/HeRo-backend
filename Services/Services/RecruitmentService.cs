@@ -23,7 +23,7 @@ namespace Services.Services
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
             Recruitment recruitment = mapper.Map<Recruitment>(dto);
-            recruitment.Status = RecruitmentStatusEnum.Open;
+            recruitment.Status = RecruitmentStatusEnum.Open.ToString();
 
             int result=repo.AddRecruitment(recruitment);
 
@@ -38,10 +38,11 @@ namespace Services.Services
 
             return result;
         }
-        public int ChangeStatus(int recruitmentId, RecruitmentStatusEnum status)
+        public int ChangeStatus(ChangeRecruitmentStatusDTO dto)
         {
-            Recruitment recruitment = repo.GetById(recruitmentId);
-            recruitment.Status = status;
+            Recruitment recruitment = repo.GetById(dto.Id);
+            recruitment.Status = dto.Status;
+            recruitment.LastUpdatedDate = dto.LastUpdatedDate;
 
             int result = repo.ChangeStatus(recruitment);
 

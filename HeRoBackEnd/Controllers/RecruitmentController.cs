@@ -61,7 +61,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Recruitment/Create")]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(NewRecruitmentViewModel newRecruitment)
+        public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
         {
             /*
             CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
@@ -81,7 +81,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int recruitmentId, NewRecruitmentViewModel newRecruitment)
+        public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel newRecruitment)
         {
             /*
             UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(newRecruitment);
@@ -98,11 +98,14 @@ namespace HeRoBackEnd.Controllers
         /// <param name="recruitmentId">Id of the recruitment</param>
         /// <param name="status">New status of the recruitment</param>
         /// <returns>IActionResult</returns>
-        [HttpGet]
+        [HttpPut]
         [Route("Recruitment/ChangeSatus/{recruitmentId}")]
-        public IActionResult ChangeStaus(int recruitmentId, RecruitmentStatusEnum status)
+        public IActionResult ChangeStaus(RecruitmentChangeStatusViewModel newStatus)
         {
-            int result = service.ChangeStatus(recruitmentId, status);
+            ChangeRecruitmentStatusDTO dto = mapper.Map<ChangeRecruitmentStatusDTO>(newStatus);
+            dto.LastUpdatedDate = DateTime.Now;
+
+            int result = service.ChangeStatus(dto);
 
             if (result == -1) return BadRequest();
 
