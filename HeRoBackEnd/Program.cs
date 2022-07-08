@@ -35,7 +35,6 @@ var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfi
 
 builder.Services.AddSingleton(config);
 builder.Services.AddScoped<EmailHelper>();
-builder.Services.AddScoped<EmailHelper>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<UserService>();
@@ -55,6 +54,8 @@ builder.Services.AddSwaggerGen(options =>
     options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
     options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());
 });
+
+builder.Services.AddAutoMapper(typeof(Program));
 
 var app = builder.Build();
 

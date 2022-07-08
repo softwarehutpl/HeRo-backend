@@ -1,10 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Common.Enums;
+using Data.Repositories;
 
 namespace Data.Entities
 {
     [Table("Recruitment")]
-    public class Recruitment
+    public class Recruitment : IEntity
     {
         [Key]
         [Display(Name = "Id")]
@@ -26,8 +28,8 @@ namespace Data.Entities
         [Required(ErrorMessage = "This field is required")]
         public string Description { get; set; }
 
-        [Display(Name = "Status")]
-        public string Status { get; set; }
+        [Required(ErrorMessage = "This field is required")]
+        public int RecruiterId { get; set; }
 
         [Required(ErrorMessage = "This field is required")]
         public int RecruiterId { get; set; }
@@ -57,6 +59,8 @@ namespace Data.Entities
         public virtual User DeletedBy { get; set; }
 
         public int? EndedById { get; set; }
+
+        public DateTime? EndedDate { get; set; }
 
         [ForeignKey("EndedById")]
         public virtual User EndedBy { get; set; }

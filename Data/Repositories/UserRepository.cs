@@ -12,6 +12,7 @@ namespace Data.Repositories
         {
             _dataContext = context;
         }
+
         public User GetUserByEmail(string mail)
         {
             var result = _dataContext.Users.Find(mail);
