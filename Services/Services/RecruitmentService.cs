@@ -1,16 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using AutoMapper;
 using Common.Listing;
-using PagedList;
 using Data.Entities;
-using Services.DTOs;
-using Services.DTOs.Recruitment;
 using Data.Repositories;
-using Common.Enums;
+using PagedList;
+using Services.DTOs.Recruitment;
 using System.Security.Claims;
 
 namespace Services.Services
@@ -42,7 +35,7 @@ namespace Services.Services
             recruitment.CreatedById = user.Id;
             recruitment.LastUpdatedById = user.Id;
 
-            int result=repo.AddRecruitment(recruitment);
+            int result = repo.AddRecruitment(recruitment);
 
             return result;
         }
@@ -59,7 +52,7 @@ namespace Services.Services
             recruitment.RecruiterId = dto.RecruiterId;
             recruitment.LastUpdatedDate = dto.LastUpdatedDate;
 
-            int result=repo.UpdateRecruitment(recruitment);
+            int result = repo.UpdateRecruitment(recruitment);
 
             return result;
         }
@@ -71,13 +64,14 @@ namespace Services.Services
             Recruitment recruitment = repo.GetById(recruitmentId);
             recruitment.LastUpdatedDate = DateTime.Now;
             recruitment.LastUpdatedById = user.Id;
-            recruitment.EndedDate = DateTime.Now;
+            recruitment.EndingDate = DateTime.Now;
             recruitment.EndedById = user.Id;
 
             int result = repo.UpdateRecruitment(recruitment);
 
             return result;
         }
+
         public int DeleteRecruitment(int recruitmentId)
         {
             User user = GetUser();
@@ -95,7 +89,7 @@ namespace Services.Services
 
         public IEnumerable<ReadRecruitmentDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
-            IEnumerable<Recruitment> recruitments = recruitmentRepository.GetAllRecruitments();
+            IEnumerable<Recruitment> recruitments = repo.GetAllRecruitments();
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
@@ -116,28 +110,28 @@ namespace Services.Services
 
             foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
             {
-                    if (sort.Value == "DESC")
-                    {
-                        recruitments = recruitments.OrderByDescending(u => u.Name);
-                    }
-                    else
-                    {
-                        recruitments = recruitments.OrderBy(s => s.Name);
-                    }
+                if (sort.Value == "DESC")
+                {
+                    recruitments = recruitments.OrderByDescending(u => u.Name);
+                }
+                else
+                {
+                    recruitments = recruitments.OrderBy(s => s.Name);
+                }
             }
 
             IEnumerable<Recruitment> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
-            IEnumerable<ReadRecruitmentDTO> result = mapper.Map <IEnumerable<ReadRecruitmentDTO>>(pagedRecruitments);
-            
+            IEnumerable<ReadRecruitmentDTO> result = mapper.Map<IEnumerable<ReadRecruitmentDTO>>(pagedRecruitments);
+
             return result;
-         }
-         
+        }
+
         public ReadRecruitmentDTO GetRecruitment(int recruitmentId)
         {
-            Recruitment recruitment=repo.GetRecruitmentById(recruitmentId);
+            Recruitment recruitment = repo.GetRecruitmentById(recruitmentId);
             ReadRecruitmentDTO result = null;
 
-            if(recruitment!=null) result = mapper.Map<ReadRecruitmentDTO>(recruitment);
+            if (recruitment != null) result = mapper.Map<ReadRecruitmentDTO>(recruitment);
 
             return result;
         }

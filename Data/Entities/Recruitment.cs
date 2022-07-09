@@ -31,9 +31,6 @@ namespace Data.Entities
         [Required(ErrorMessage = "This field is required")]
         public int RecruiterId { get; set; }
 
-        [Required(ErrorMessage = "This field is required")]
-        public int RecruiterId { get; set; }
-
         [ForeignKey("RecruiterId")]
         public virtual User Recruiter { get; set; }
 
@@ -59,8 +56,6 @@ namespace Data.Entities
         public virtual User DeletedBy { get; set; }
 
         public int? EndedById { get; set; }
-
-        public DateTime? EndedDate { get; set; }
 
         [ForeignKey("EndedById")]
         public virtual User EndedBy { get; set; }

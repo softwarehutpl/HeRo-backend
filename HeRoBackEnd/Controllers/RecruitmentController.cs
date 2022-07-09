@@ -35,8 +35,7 @@ namespace HeRoBackEnd.Controllers
             SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
             RecruitmentFiltringDTO recruitmentFiltringDTO 
                 = new RecruitmentFiltringDTO(
-                    recruitmentListFilterViewModel.Name, 
-                    recruitmentListFilterViewModel.Status, 
+                    recruitmentListFilterViewModel.Name,  
                     recruitmentListFilterViewModel.Description,
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);

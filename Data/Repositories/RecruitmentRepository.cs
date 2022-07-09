@@ -19,9 +19,9 @@ namespace Data.Repositories
             return result;
         }
 
-        public List<Recruitment> GetAllRecruitments()
+        public IQueryable<Recruitment> GetAllRecruitments()
         {
-            List<Recruitment> result = GetAll().ToList();
+            IQueryable<Recruitment> result = GetAll();
 
             return result;
         }
