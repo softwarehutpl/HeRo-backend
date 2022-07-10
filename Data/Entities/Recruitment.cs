@@ -46,19 +46,19 @@ namespace Data.Entities
         public DateTime? LastUpdatedDate { get; set; }
 
         [ForeignKey("LastUpdatedById")]
-        public virtual User LastUpdatedBy { get; set; }
+        public virtual User? LastUpdatedBy { get; set; }
 
         public int? DeletedById { get; set; }
 
         public DateTime? DeletedDate { get; set; }
 
         [ForeignKey("DeletedById")]
-        public virtual User DeletedBy { get; set; }
+        public virtual User? DeletedBy { get; set; }
 
         public int? EndedById { get; set; }
 
         [ForeignKey("EndedById")]
-        public virtual User EndedBy { get; set; }
+        public virtual User? EndedBy { get; set; }
     }
 }
 
