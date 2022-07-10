@@ -34,6 +34,6 @@ namespace Data.Entities
         public DateTime? DeletedDate { get; set; }
 
         [ForeignKey("DeletedById")]
-        public virtual User DeletedBy { get; set; }
+        public virtual User? DeletedBy { get; set; }
     }
 }
