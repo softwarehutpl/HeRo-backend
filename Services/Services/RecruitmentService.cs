@@ -64,7 +64,7 @@ namespace Services.Services
             Recruitment recruitment = repo.GetById(recruitmentId);
             recruitment.LastUpdatedDate = DateTime.Now;
             recruitment.LastUpdatedById = user.Id;
-            recruitment.EndingDate = DateTime.Now;
+            recruitment.EndedDate = DateTime.Now;
             recruitment.EndedById = user.Id;
 
             int result = repo.UpdateRecruitment(recruitment);

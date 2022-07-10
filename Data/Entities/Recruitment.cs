@@ -57,6 +57,8 @@ namespace Data.Entities
 
         public int? EndedById { get; set; }
 
+        public DateTime? EndedDate { get; set; }
+
         [ForeignKey("EndedById")]
         public virtual User? EndedBy { get; set; }
     }

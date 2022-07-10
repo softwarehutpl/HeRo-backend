@@ -71,7 +71,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Recruitment/Create")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
         {
             
@@ -94,7 +94,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
         {
             UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(recruitment);
@@ -114,7 +114,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpGet]
         [Route("Recruitment/End/{recruitmentId}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult End(int recruitmentId)
         {
             int result=service.EndRecruitment(recruitmentId);
@@ -130,7 +130,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpGet]
         [Route("Recruitment/Delete/{recruitmentId}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public IActionResult Delete(int recruitmentId)
         {
             int result = service.DeleteRecruitment(recruitmentId);

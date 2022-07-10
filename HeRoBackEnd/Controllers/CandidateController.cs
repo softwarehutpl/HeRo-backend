@@ -65,7 +65,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Candidate/Create")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewCandidateViewModel newCandidate)
         {
             //candidateService.Add(newCandidate);
@@ -81,7 +81,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Candidate/Edit/{candidateId}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int candidateId, NewCandidateViewModel newCandidate)
         {
             //candidateService.Update(id, newCandidate);
@@ -96,7 +96,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpDelete]
         [Route("Candidate/Delete/{candidateId}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int candidateId)
         {
             //candidateService.Delete(id);
@@ -112,7 +112,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Candidate/AddRecruitment")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> AddRecruitment(int candidateId, int recruitmentId)
         {
             //CandidateService.AddCandidate(id, recruitmentId);
@@ -128,7 +128,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Candidate/AddNotes")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> AddNotes(int candidateId, string notes)
         {
             //candidateService.AddNotes(id, notes);
