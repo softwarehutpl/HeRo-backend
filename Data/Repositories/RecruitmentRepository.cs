@@ -13,17 +13,6 @@ namespace Data.Repositories
         }
         public Recruitment GetRecruitmentById(int id)
         {
-            /*using (SqlConnection connection = new SqlConnection("Data Source = (localdb)\\MSSQLLocalDB; Database = Testowa; Integrated Security = True"))
-            {
-                connection.Open();
-
-                SqlCommand cmd = new SqlCommand("Select * from Recruitment", connection);
-                using (SqlDataReader rd = cmd.ExecuteReader())
-                {
-                    rd.Read();
-                    var coœ = rd[0];
-                }
-            }*/
             Recruitment result = GetById(id);
 
             if (result == default) return null;
