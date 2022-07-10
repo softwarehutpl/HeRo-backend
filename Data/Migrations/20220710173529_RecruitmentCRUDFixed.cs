@@ -62,7 +62,7 @@ namespace Data.Migrations
                 table: "Recruitment",
                 type: "int",
                 nullable: false,
-                defaultValue: 0,
+                defaultValue: null,
                 oldClrType: typeof(int),
                 oldType: "int",
                 oldNullable: true);
@@ -72,7 +72,7 @@ namespace Data.Migrations
                 table: "Recruitment",
                 type: "int",
                 nullable: false,
-                defaultValue: 0,
+                defaultValue: null,
                 oldClrType: typeof(int),
                 oldType: "int",
                 oldNullable: true);
