@@ -53,14 +53,14 @@ namespace Data.Entities
         public DateTime? DeletedDate { get; set; }
 
         [ForeignKey("DeletedById")]
-        public virtual User DeletedBy { get; set; }
+        public virtual User? DeletedBy { get; set; }
 
         public int? EndedById { get; set; }
 
         public DateTime? EndedDate { get; set; }
 
         [ForeignKey("EndedById")]
-        public virtual User EndedBy { get; set; }
+        public virtual User? EndedBy { get; set; }
     }
 }
 
