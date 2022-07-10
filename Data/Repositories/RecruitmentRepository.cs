@@ -1,5 +1,6 @@
 using Common.Enums;
 using Data.Entities;
+using Microsoft.Data.SqlClient;
 using System.Security.Claims;
 
 namespace Data.Repositories
