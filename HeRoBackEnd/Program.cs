@@ -26,12 +26,18 @@ try
 
     builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
+        options.Cookie.Name = "UserLoginCookie";
+        options.SlidingExpiration = true;
+        options.ExpireTimeSpan = new TimeSpan(0, 20, 0);
+        options.Events.OnRedirectToLogin = (context) =>
+        {
+            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+            return Task.CompletedTask;
+        };
+        options.Cookie.HttpOnly = true;
+    });
+    
 
-        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-        return Task.CompletedTask;
-    };
-    options.Cookie.HttpOnly = true;
-});
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
