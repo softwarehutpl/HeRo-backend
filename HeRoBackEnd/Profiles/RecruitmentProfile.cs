@@ -2,6 +2,7 @@
 using Services.DTOs.Recruitment;
 using Data.Entities;
 using HeRoBackEnd.ViewModels.Recruitment;
+using Services.DTOs.Skill;
 
 namespace HeRoBackEnd.Profiles
 {
@@ -13,6 +14,7 @@ namespace HeRoBackEnd.Profiles
             CreateMap<RecruitmentCreateViewModel, CreateRecruitmentDTO>();
             CreateMap<RecruitmentEditViewModel, UpdateRecruitmentDTO>();
             CreateMap<Recruitment, ReadRecruitmentDTO>();
+            CreateMap<SkillDTO, Skill>().ReverseMap();
         }
     }
 }

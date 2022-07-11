@@ -51,6 +51,8 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
+    builder.Services.AddScoped<SkillRepository>();
+    builder.Services.AddScoped<SkillService>();
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {

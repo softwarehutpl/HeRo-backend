@@ -1,14 +1,43 @@
-﻿namespace Data.Repositories
+﻿using Data.Entities;
+
+namespace Data.Repositories
 {
-    public class SkillRepository 
+    public class SkillRepository : BaseRepository<Skill>
     {
-        public void GetSkillById(int id) { }
+        public SkillRepository(DataContext context) : base(context)
+        {
 
-        public void GetAllSkills() { }
+        }
+        public Skill GetSkillById(int id)
+        {
+            Skill result = GetById(id);
 
-        public void AddSkill(int id) { }
+            if (result == default) return null;
 
-        public void RemoveSkill(int id) { }
+            return result;
+        }
+
+        public IQueryable<Skill> GetAllSkills()
+        {
+            IQueryable<Skill> result = GetAll();
+
+            return result;
+        }
+
+        public void AddSkill(Skill skill)
+        {
+            AddAndSaveChanges(skill);
+        }
+
+        public void UpdateSkill(Skill skill)
+        {
+            UpdateAndSaveChanges(skill);
+        }
+
+        public void DeleteSkill(int id)
+        {
+            RemoveByIdAndSaveChanges(id);
+        }
 
     }
 

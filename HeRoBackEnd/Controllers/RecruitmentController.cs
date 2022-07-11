@@ -40,9 +40,10 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);
 
-            IEnumerable<ReadRecruitmentDTO> result = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            IEnumerable<ReadRecruitmentDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            JsonResult result = new JsonResult(recruitments);
 
-            return new JsonResult(result);
+            return result;
         }
 
         /// <summary>
@@ -58,10 +59,12 @@ namespace HeRoBackEnd.Controllers
 
             if (recruitment == null)
             {
-                return RedirectToAction("Index");
+                return BadRequest();
             }
 
-            return new JsonResult(recruitment);
+            JsonResult result = new JsonResult(recruitment);
+
+            return result;
         }
 
         /// <summary>
