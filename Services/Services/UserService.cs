@@ -1,9 +1,6 @@
 using Common.Listing;
 using Data.Entities;
 using Data.Repositories;
-using Microsoft.AspNetCore.Identity;
-using PagedList;
-using Services.DTOs;
 using PagedList;
 using Services.DTOs.User;
 
@@ -11,18 +8,24 @@ namespace Services.Services
 {
     public class UserService
     {
-        private UserRepository _userRepository;
+        private UserRepository userRepository;
 
-        public UserService(UserRepository userRepository) { _userRepository = userRepository; }
-
-        public async Task<int> AddUser(UserDTO dto)
-
+        public UserService(UserRepository _userRepository)
         {
-            return 0;
+            userRepository = _userRepository;
         }
-        public void UpdateUser(int id, UserDTO dto)
-        {
 
+        public UserDTO Get(int? userId)
+        {
+            User user = userRepository.GetUserById(userId);
+            if (user == null)
+            {
+                return null;
+            }
+
+            UserDTO userFiltring = new UserDTO(user.Email, user.UserStatus, user.RoleName);
+
+            return userFiltring;
         }
 
         public IEnumerable<UserFiltringDTO> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
@@ -66,7 +69,7 @@ namespace Services.Services
                         users = users.OrderBy(s => s.UserStatus);
                     }
                 }
-                else if (sort.Key.ToLower() == "role")
+                else if (sort.Key.ToLower() == "rolename")
                 {
                     if (sort.Value.ToUpper() == "DESC")
                     {
@@ -80,10 +83,28 @@ namespace Services.Services
             }
 
             var result = users
-                .Select(x => new UserFiltringDTO(x.Email, x.UserStatus, x.RoleName))
+                .Select(x => new UserFiltringDTO(x.Id, x.Email, x.UserStatus, x.RoleName))
                 .ToPagedList(paging.PageNumber, paging.PageSize);
 
             return result;
         }
-    } 
+
+        public int Update(UserEditDTO userEdit)
+        {
+            User user = userRepository.GetUserById(userEdit.Id);
+            if (user == null)
+            {
+                return 1;
+            }
+
+            user.Email = userEdit.Email;
+            user.UserStatus = userEdit.UserStatus;
+            user.RoleName = userEdit.RoleName;
+            user.LastUpdatedDate = DateTime.Now;
+
+            userRepository.Update(user);
+
+            return 0;
+        }
+    }
 }
