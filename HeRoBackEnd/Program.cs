@@ -4,7 +4,6 @@ using Data.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Services.Services;
-using Microsoft.Extensions.Configuration;
 using Common.ConfigClasses;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -32,15 +31,15 @@ builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationSc
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
-
 builder.Services.AddSingleton(config);
-builder.Services.AddScoped<EmailHelper>();
+
 builder.Services.AddScoped<EmailHelper>();
 builder.Services.AddScoped<UserRepository>();
 builder.Services.AddScoped<EmailService>();
 builder.Services.AddScoped<UserService>();
 builder.Services.AddScoped<RecruitmentRepository>();
 builder.Services.AddScoped<RecruitmentService>();
+builder.Services.AddScoped<AuthService>();
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen(options =>
 {
@@ -72,17 +71,15 @@ app.UseExceptionHandler("/Home/Error");
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 
+app.UseHttpsRedirection();
+app.UseStaticFiles();
+
+app.UseRouting();
 app.UseCookiePolicy(
     new CookiePolicyOptions
     {
         Secure = CookieSecurePolicy.Always
     });
-
-app.UseHttpsRedirection();
-app.UseStaticFiles();
-
-app.UseRouting();
-
 app.UseAuthentication();
 app.UseAuthorization();
 

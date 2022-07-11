@@ -12,9 +12,9 @@ namespace Data.Repositories
         {
             _dataContext = context;
         }
-        public User GetUserByEmail(string mail)
+        public User? GetUserByEmail(string mail)
         {
-            var result = _dataContext.Users.Find(mail);
+            var result = _dataContext.Users.Where(x => x.Email == mail).FirstOrDefault();
             return result;
         }
 
@@ -24,7 +24,7 @@ namespace Data.Repositories
             return result;
         }
 
-        public void AddUser(int id) { }
+        public void AddUser() { }
 
         public void RemoveUser(int id) { }
 
@@ -43,6 +43,12 @@ namespace Data.Repositories
         public string GetUserRoleByEmail(string email)
         {
             var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.RoleName).FirstOrDefault();
+            return result;
+        }
+
+        public bool CheckIfUserExist(string email)
+        {
+            var result = _dataContext.Users.Any(x => x.Email == email);
             return result;
         }
     }
