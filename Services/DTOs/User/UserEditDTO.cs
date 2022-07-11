@@ -1,14 +1,16 @@
 ﻿namespace Services.DTOs.User
 {
-    public class UserDTO
+    public class UserEditDTO
     {
-        public string Email { get; set; }
+        public int? Id { get; set; }
+
         public string UserStatus { get; set; }
+
         public string RoleName { get; set; }
 
-        public UserDTO(string email, string userStatus, string roleName)
+        public UserEditDTO(int? id, string userStatus, string roleName)
         {
-            Email = email;
+            Id = id;
             UserStatus = userStatus;
             RoleName = roleName;
         }
