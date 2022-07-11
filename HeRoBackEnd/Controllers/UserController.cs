@@ -98,27 +98,21 @@ namespace HeRoBackEnd.Controllers
         [HttpDelete]
         [Route("User/Delete/{userId}")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int userId)
+        public IActionResult Delete(int? userId)
         {
-            //userService.Delete(userId);
+            if (userId == null)
+            {
+                return NotFound();
+            }
 
-            return RedirectToAction("Index");
-        }
+            int result = userService.Delete(userId);
 
-        /// <summary>
-        /// Logs user in
-        /// </summary>
-        /// <param name="email">Users email</param>
-        /// <param name="password">Users password</param>
-        /// <returns>IActionResult</returns>
-        [HttpPost]
-        [Route("User/SignIn")]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignIn(string email, string password)
-        {
-            //userService.SignIn(email, password);
+            if (result != 0)
+            {
+                return NotFound();
+            }
 
-            return RedirectToAction("Index");
+            return Ok();
         }
     }
 }

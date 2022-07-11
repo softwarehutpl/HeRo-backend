@@ -106,5 +106,21 @@ namespace Services.Services
 
             return 0;
         }
+
+        public int Delete(int? userId)
+        {
+            User user = userRepository.GetUserById(userId);
+            if (user == null)
+            {
+                return 1;
+            }
+
+            //user.DeletedById = ?
+            user.DeletedDate = DateTime.Now;
+
+            userRepository.Update(user);
+
+            return 0;
+        }
     }
 }
