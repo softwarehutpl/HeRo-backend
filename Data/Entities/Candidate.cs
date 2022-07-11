@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data.Repositories;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
     [Table("Candidate")]
-    public class Candidate
+    public class Candidate : IEntity
     {
         [Key]
         public int Id { get; set; }
@@ -18,12 +19,33 @@ namespace Data.Entities
         [Required]
         public string Status { get; set; }
 
+        [Phone]
+        public string PhoneNumber { get; set; }
+
         [Required]
         [EmailAddress]
         public string Email { get; set; }
 
         [Required]
         public DateTime ApplicationDate { get; set; }
+
+        public DateTime? AvailableFrom{ get; set; }
+
+        public int? ExpectedMonthlySalary { get; set; }
+
+        public string? OtherExpectations { get; set; }
+
+        public int? InterviewOpinionScore { get; set; }
+        public string? InterviewOpinionText { get; set; }
+
+        public int? HROpinionScore { get; set; }
+        public string? HROpinionText{ get; set; }
+
+        
+        public string? Source { get; set; }
+
+        
+        public string? Stage { get; set; }
 
         [Required]
         public int RecruitmentId { get; set; }
@@ -37,17 +59,16 @@ namespace Data.Entities
 
         public DateTime? TechInterviewDate { get; set; }
 
-        public string Notes { get; set; }
 
         [Required]
         public string CvPath { get; set; }
 
-        public int CreatedById { get; set; }
+        
 
-        public DateTime CreatedDate { get; set; }
 
-        [ForeignKey("CreatedById")]
-        public virtual User CreatedBy { get; set; }
+
+
+
 
         public int? LastUpdatedById { get; set; }
 
@@ -56,9 +77,9 @@ namespace Data.Entities
         [ForeignKey("LastUpdatedById")]
         public virtual User? LastUpdatedBy { get; set; }
 
-        public int? DeletedById { get; set; }
-
         public DateTime? DeletedDate { get; set; }
+
+        public int? DeletedById { get; set; }
 
         [ForeignKey("DeletedById")]
         public virtual User? DeletedBy { get; set; }

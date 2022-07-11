@@ -1,14 +1,56 @@
-﻿
+﻿using Data.Entities;
+
 namespace Data.Repositories
 {
-    public class CandidateRepository 
+    public class CandidateRepository : BaseRepository<Candidate>
     {
-        public void GetCandidatetById(int id) { }
+        public CandidateRepository(DataContext context) : base(context)
+        {
 
-        public void GetAllCandidate() { }
+        }
 
-        public void AddCandidate(int id) { }
+        public Candidate GetCandidateById(int id) {
+            Candidate result = GetById(id);
 
-        public void RemoveCandidate(int id) { }
+            if (result == default) return null;
+
+            return result;
+        }
+
+        public IQueryable<Candidate> GetAllCandidates() 
+        {
+            IQueryable<Candidate> result = GetAll();
+
+            return result;
+        }
+
+        public int AddCandidate(Candidate candidate) {
+            try
+            {
+                AddAndSaveChanges(candidate);
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+            return 1;
+        }
+
+        public int UpdateCandidate(Candidate candidate)
+        {
+            try
+            {
+                UpdateAndSaveChanges(candidate);
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+            return 1;
+        }
+
+        public void RemoveCandidate(int id) { 
+            //tego chyba nawet nie będzie
+        }
     }
 }
