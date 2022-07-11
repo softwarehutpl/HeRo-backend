@@ -19,6 +19,7 @@ namespace Data
         public DbSet<RecruitmentRequirement> RecruitmentRequirements { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<Log> Logs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

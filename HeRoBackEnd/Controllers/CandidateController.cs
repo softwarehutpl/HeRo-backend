@@ -10,10 +10,11 @@ namespace HeRoBackEnd.Controllers
     public class CandidateController : Controller
     {
         //private CandidateService candidateService;
-
-        public CandidateController()
+        private ILogger<CandidateController> _logger;
+        public CandidateController(ILogger<CandidateController> logger)
         {
-          //  CandidateService candidateService = new CandidateService();
+            //  CandidateService candidateService = new CandidateService();
+            _logger = logger;
         }
 
         /// <summary>
@@ -28,7 +29,16 @@ namespace HeRoBackEnd.Controllers
 
             // return new JsonResult(candidates);
 
-            return View();
+            //return View();
+            try
+            {
+                throw new Exception("Testing logging errors to database with NLog - entering Candidate/Index");
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(exception.ToString());
+                return BadRequest(exception.ToString());
+            }
         }
         
         /// <summary>
