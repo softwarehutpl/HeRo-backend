@@ -26,7 +26,7 @@ namespace HeRoBackEnd.Controllers
         /// Returns a list of recruitments
         /// </summary>
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
-        /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
+        /// <returns>Object of the JsonResult class representing the IEnumerable collection of recruitments in JSON format</returns>
         [HttpPost]
         [Route("Recruitment/GetList")]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
@@ -50,7 +50,7 @@ namespace HeRoBackEnd.Controllers
         /// Returns a recruitment specified by an id
         /// </summary>
         /// <param name="recruitmentId">Id of an recruitment</param>
-        /// <returns>Onject of the JsonResult class representing a Recruitment in JSON format</returns>
+        /// <returns>Object of the JsonResult class representing a recruitment in JSON format</returns>
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
         public IActionResult Get(int recruitmentId)
@@ -68,7 +68,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Creates a new Recruitment
+        /// Creates a recruitment
         /// </summary>
         /// <param name="newRecruitment">Contains information about a new recruitment</param>
         /// <returns>IActionResult</returns>
@@ -90,9 +90,9 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Updates information about a recruitment represented by an id
+        /// Updates a recruitment specified by an id
         /// </summary>
-        /// <param name="recruitmentId">Id representing a recruitment</param>
+        /// <param name="recruitmentId">Id of a recruitment</param>
         /// <param name="recruitment">Contains new information about a recruitment</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
@@ -111,9 +111,9 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Ends a recruitment represented by an id
+        /// Ends a recruitment specified by an id
         /// </summary>
-        /// <param name="recruitmentId">Id representing a recruitment</param>
+        /// <param name="recruitmentId">Id of a recruitment</param>
         /// <returns>IActionResult</returns>
         [HttpGet]
         [Route("Recruitment/End/{recruitmentId}")]

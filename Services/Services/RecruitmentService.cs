@@ -21,12 +21,12 @@ namespace Services.Services
         }
         private User GetUser()
         {
-            //jak narazie nie ma zalogowanego u¿ytkownika, wiêc to nie dzia³a
             /*List<Claim> claims = ClaimsPrincipal.Current.Claims.ToList();
             Claim emailClaim = claims.FirstOrDefault(e => e.Type == ClaimTypes.Email);
             User user = userRepo.GetUserByEmail(emailClaim.Value);
 
             return user;*/
+
             User user = new User();
             user.Id = 1;
 

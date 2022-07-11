@@ -7,6 +7,7 @@ using Services.Services;
 using Common.ConfigClasses;
 using NLog;
 using NLog.Web;
+using AutoMapper;
 
 var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 logger.Debug("Initializing web application");
@@ -52,7 +53,11 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
     builder.Services.AddScoped<SkillRepository>();
-    builder.Services.AddScoped<SkillService>();
+    builder.Services.AddScoped<AuthService>();
+    builder.Services.AddScoped<SkillService>(options =>
+    {
+        return new SkillService(options.GetRequiredService<SkillRepository>(), options.GetRequiredService<ILogger<SkillService>>(), options.GetRequiredService<IMapper>());
+    });
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {

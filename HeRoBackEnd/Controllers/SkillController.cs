@@ -14,6 +14,11 @@ namespace HeRoBackEnd.Controllers
             this.service = service;
         }
 
+        /// <summary>
+        /// Adds a skill with the specified name
+        /// </summary>
+        /// <param name="skillName">Name of the skill</param>
+        /// <returns>IActionResult</returns>
         [HttpPut]
         [Route("Skill/Create")]
         public IActionResult Create(string skillName)
@@ -26,11 +31,17 @@ namespace HeRoBackEnd.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Updates a skill specified by an id
+        /// </summary>
+        /// <param name="skillId">Id of the skill</param>
+        /// <param name="newSkillName">New name of the skill</param>
+        /// <returns>IActionResult</returns>
         [HttpPut]
         [Route("Skill/Update/{skillId}")]
-        public IActionResult Update(int skillId, string skillName)
+        public IActionResult Update(int skillId, string newSkillName)
         {
-            SkillDTO dto = new SkillDTO(skillId, skillName);
+            SkillDTO dto = new SkillDTO(skillId, newSkillName);
             int result = service.UpdateSkill(dto);
 
             if (result == -1) return BadRequest();
@@ -38,6 +49,11 @@ namespace HeRoBackEnd.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Deletes a skill specified by an id
+        /// </summary>
+        /// <param name="skillId">Id of the skill</param>
+        /// <returns>IAcionResult</returns>
         [HttpDelete]
         [Route("Skill/Delete/{skillId}")]
         public IActionResult Delete(int skillId)
@@ -49,6 +65,10 @@ namespace HeRoBackEnd.Controllers
             return RedirectToAction("Index");
         }
 
+        /// <summary>
+        /// Returns all the skills
+        /// </summary>
+        /// <returns>Object of the JsonResult class representing the IEnumerable collection of skills in JSON format</returns>
         [HttpPost]
         [Route("Skill/GetList")]
         public IActionResult GetList()
@@ -60,6 +80,11 @@ namespace HeRoBackEnd.Controllers
             return result;
         }
 
+        /// <summary>
+        /// Returns a skill specified by an id
+        /// </summary>
+        /// <param name="skillId">Id of a skill</param>
+        /// <returns>Object of the JsonResult class representing the skill in JSON format</returns>
         [HttpGet]
         [Route("Skill/Get/{skillId}")]
         public IActionResult Get(int skillId)
