@@ -11,10 +11,14 @@ namespace HeRoBackEnd.Controllers
     public class AuthController : Controller
     {
         private readonly AuthService _authServices;
+        private readonly EmailService _emailService;
+        private readonly UserService _userService;
 
-        public AuthController(AuthService authServices)
+        public AuthController(AuthService authServices, EmailService emailService, UserService userService)
         {
             _authServices = authServices;
+            _emailService = emailService;
+            _userService = userService;
         }
 
 
@@ -48,7 +52,34 @@ namespace HeRoBackEnd.Controllers
             
             if(!created) return BadRequest("Invalid Email or Password or User already exist");
 
+            return Ok("User created");
+        }
+
+        [HttpPost]
+        [Route("Auth/PasswordRecovery")]
+        public async Task<IActionResult> PasswordRecoveryMail(string email)
+        {          
+            bool changedPassword = _authServices.CheckUserExist(email);
+            if (!changedPassword) return BadRequest("Account doesn't exist");
+
+            var recoveryGuid = Guid.NewGuid();
+            _userService.SetUserRecoveryGuid(email,recoveryGuid);
+            
+            var fullUrl = this.Url.Action("RecoverPassword", "Auth", new { guid = recoveryGuid }, protocol: "https");
+
+            _emailService.SendPasswordRecoveryEmail(email, fullUrl);
+            return Ok("Recovery E-Mail send"); 
+        }
+        [HttpPost]
+        [Route("Auth/RecoverPassword")]
+        public async Task<IActionResult> RecoverPassword(string email, Guid guid)
+        {
+            bool userGuid = await _authServices.CheckPasswordRecoveryGuid(guid, email);
+            if (!userGuid) return BadRequest();
+
+            _emailService.SendRecoveredPassword(email);
             return Ok();
         }
+
     }
 }

@@ -14,10 +14,11 @@ namespace Data.Entities
         [MaxLength(40)]
         public string Email { get; set; }
 
+        public Guid PasswordRecoveryGuid { get; set; }
         [Required]
         [DataType(DataType.Password)]
         [MinLength(8)] 
-        [MaxLength(20)]
+     
         public string Password { get; set; }
 
         [Required]
