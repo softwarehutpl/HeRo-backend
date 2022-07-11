@@ -4,7 +4,6 @@ using Data.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Services.Services;
-using Microsoft.Extensions.Configuration;
 using Common.ConfigClasses;
 using NLog;
 using NLog.Web;
@@ -27,18 +26,15 @@ try
 
     builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
     {
-        options.Cookie.Name = "UserLoginCookie";
-        options.SlidingExpiration = true;
-        options.ExpireTimeSpan = new TimeSpan(0, 20, 0); // Expires in 20 minutes
-        options.Events.OnRedirectToLogin = (context) =>
-        {
-            context.Response.StatusCode = StatusCodes.Status401Unauthorized;
-            return Task.CompletedTask;
-        };
-        options.Cookie.HttpOnly = true;
-    });
 
-    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+        context.Response.StatusCode = StatusCodes.Status401Unauthorized;
+        return Task.CompletedTask;
+    };
+    options.Cookie.HttpOnly = true;
+});
+
+builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
 
     var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
 
@@ -100,6 +96,7 @@ try
 
     app.UseAuthentication();
     app.UseAuthorization();
+
 
 
     app.MapControllerRoute(

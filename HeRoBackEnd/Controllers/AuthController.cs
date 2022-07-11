@@ -1,72 +1,53 @@
 ﻿using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using Data.Entities;
-using Data.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Services.Services;
+using HeRoBackEnd.ViewModels.User;
 
 namespace HeRoBackEnd.Controllers
 {
+    [ApiController]
     public class AuthController : Controller
     {
-        private readonly UserRepository _userRepository;
+        private readonly AuthService _authServices;
 
-
-        public AuthController(UserRepository userRepo)
+        public AuthController(AuthService authServices)
         {
-            _userRepository = userRepo;
+            _authServices = authServices;
         }
 
-        private static string GetHash(string input)
-        {
-            SHA256 hashAlgorithm = SHA256.Create();
-            byte[] data = hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(input));
 
-            var sBuilder = new StringBuilder();
-
-            for (int i = 0; i < data.Length; i++)
-            {
-                sBuilder.Append(data[i].ToString("x2"));
-            }
-
-            return sBuilder.ToString();
-        }
-
-        private bool ValidateUser(string password, string email)
-        {
-            string passwordInDb = _userRepository.GetUserPassword(email).ToString();
-            string passwordAfterHash = GetHash(password);
-
-            if (passwordAfterHash == passwordAfterHash) return true;
-
-            return false;
-        }
         [HttpGet]
-        public async Task<IActionResult> LogIn(string password, string email)
+        [Route("Auth/SignIn")]
+        public async Task<IActionResult> SignIn(string password, string email)
         {
-            if (ValidateUser(password, email))
-            {
-                string role = _userRepository.GetUserRoleByEmail(email);
 
-                var claims = new List<Claim>()
-                {
-                    new Claim(ClaimTypes.Email, email),
-                    new Claim(ClaimTypes.Role, role)
-                    
-                };
-                var claimsIdentity = new ClaimsIdentity(claims, "CookieAuthentication");
-                await HttpContext.SignInAsync("CookieAuthentication", new
-                ClaimsPrincipal(claimsIdentity));
+            ClaimsIdentity? claimsIdentity = await _authServices.ValidateAndCreateClaim(password, email);
+
+            if (claimsIdentity != null)
+            {
+                await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
                 return Ok();
             }
-            return BadRequest();
+            return BadRequest("Wrong Credentials");
         }
-
-        public async Task<IActionResult> Logout()
+        [HttpGet]
+        [Route("Auth/LogOut")]
+        public async Task<IActionResult> LogOut()
         {
-            await HttpContext.SignOutAsync("CookieAuthentication");
+            await HttpContext.SignOutAsync("Cookies");
+            return Ok();
+        }  
+        [HttpPost]
+        [Route("Auth/CreateNewUser")]
+        public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)
+        {
+            bool created = await _authServices.ValidateAndCreateUserAccount(newUser.Password, newUser.Email);
+            
+            if(!created) return BadRequest("Invalid Email or Password or User already exist");
+
             return Ok();
         }
     }
