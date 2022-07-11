@@ -52,10 +52,5 @@ namespace Data.Repositories
             var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.RoleName).FirstOrDefault();
             return result;
         }
-
-        public void Update(User user)
-        {
-            UpdateAndSaveChanges(user);
-        }
     }
 }

@@ -101,7 +101,7 @@ namespace Services.Services
             user.RoleName = userEdit.RoleName;
             user.LastUpdatedDate = DateTime.Now;
 
-            _userRepository.Update(user);
+            _userRepository.UpdateAndSaveChanges(user);
 
             return user.Id;
         }
