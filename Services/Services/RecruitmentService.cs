@@ -2,6 +2,7 @@ using AutoMapper;
 using Common.Listing;
 using Data.Entities;
 using Data.Repositories;
+using Microsoft.Extensions.Logging;
 using PagedList;
 using Services.DTOs.Recruitment;
 using System.Security.Claims;
@@ -13,11 +14,13 @@ namespace Services.Services
         private readonly IMapper mapper;
         private readonly RecruitmentRepository repo;
         private readonly UserRepository userRepo;
-        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo)
+        private readonly ILogger logger;
+        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger logger)
         {
             mapper = map;
             this.repo = repo;
             this.userRepo = userRepo;
+            this.logger = logger;
         }
         private User GetUser()
         {

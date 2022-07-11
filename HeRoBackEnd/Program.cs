@@ -7,6 +7,7 @@ using Services.Services;
 using Common.ConfigClasses;
 using NLog;
 using NLog.Web;
+using AutoMapper;
 
 var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 logger.Debug("Initializing web application");
@@ -50,7 +51,13 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
     builder.Services.AddScoped<EmailService>();
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<RecruitmentRepository>();
-    builder.Services.AddScoped<RecruitmentService>();
+    builder.Services.AddScoped<RecruitmentService>(options =>
+    {
+        return new RecruitmentService(options.GetRequiredService<IMapper>(),
+            options.GetRequiredService<RecruitmentRepository>(),
+            options.GetRequiredService<UserRepository>(),
+            options.GetRequiredService<ILogger<RecruitmentService>>());
+    });
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {
