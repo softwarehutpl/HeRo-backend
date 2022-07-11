@@ -62,15 +62,16 @@ namespace HeRoBackEnd.Controllers
             {
                 return RedirectToAction("Index");
             }
+            //ReadCandidateDTO jeszcze nie ma
+            //ReadCandidateDTO candDTO = candidateService.GetCandidateById((int)candidateId);
 
-            Candidate? tempCandidate = candidateService.GetCandidateById((int)candidateId);
+            //if (candDTO == null)
+            //{
+            //    return RedirectToAction("Index");
+            //}
 
-            if (tempCandidate == null)
-            {
-                return RedirectToAction("Index");
-            }
-
-            return new JsonResult(tempCandidate);
+            //return new JsonResult(candDTO);
+            return RedirectToAction("Index");
         }
 
 
@@ -82,21 +83,19 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="newCandidate">object of the NewCandidateViewModel class
         /// containing information about the new candidate</param>
-        /// <param name="RecruitmentId">object of the int class
-        /// containing ID of recruitment process</param>
         /// <param name="RecruiterId">object of the int class
         /// containing ID of assignee (HR)</param>
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Candidate/Create")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CandidateCreateViewModel newCandidate, int RecruitmentId, int RecruiterId)
+        public async Task<IActionResult> Create(CandidateCreateViewModel newCandidate, int RecruiterId)
         {
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
             dto.Status = "New";
-            
+            dto.RecruiterId = RecruiterId;
 
-            int result = candidateService.CreateCandidate(dto, RecruitmentId, RecruiterId);
+            int result = candidateService.CreateCandidate(dto);
 
             if (result == -1) return BadRequest();
 
@@ -149,25 +148,6 @@ namespace HeRoBackEnd.Controllers
         }
         
 
-
-
-
-        /// <summary>
-        /// Adds a candidate to the recruitment
-        /// </summary>
-        /// <param name="candidateId">Id of the candidate</param>
-        /// <param name="recruitmentId">Id of the recruitment</param>
-        /// <returns>IActionResult</returns>
-        [HttpPost]
-        [Route("Candidate/AddRecruitment")]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddRecruitment(int candidateId, int recruitmentId)
-        {
-            //CandidateService.AddCandidate(candidateId, recruitmentId);
-
-            return RedirectToAction("Index");
-        }
-        
 
 
 

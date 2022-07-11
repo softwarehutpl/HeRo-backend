@@ -31,13 +31,10 @@ namespace Services.Services
 
             return user.Id;
         }
-        public int CreateCandidate(CreateCandidateDTO dto, int RecruitmentId, int RecruiterId)
+        public int CreateCandidate(CreateCandidateDTO dto)
         {
             //przekazanie wartości z DTO do obiektu
             Candidate candidate = mapper.Map<Candidate>(dto);
-            //i teraz trzeba przekazać obowiązkowe które nie zostały przekazane z DTO
-            candidate.RecruiterId = RecruiterId;
-            candidate.RecruitmentId = RecruitmentId;
 
             int result = _candidateRepository.AddCandidate(candidate);
 
@@ -138,6 +135,20 @@ namespace Services.Services
         {
             return null;
         }
+
+        //public int AddRecruitmentToCandidate(int candId, int recrId)
+        //{
+        //    Candidate? candidate = GetCandidateById(candId);
+        //    Recruitment? recruitment = GetRecruitmentById(recrId);
+        //    if (candidate != null)
+        //    {
+        //        candidate.TechId = recrId;
+        //        int result = _candidateRepository.UpdateCandidate(candidate);
+        //        return result;
+        //    }
+        //    else return -1;
+        //}
+
         public int AllocateTech(int id, int techId)
         {
             Candidate? candidate = GetCandidateById(id);

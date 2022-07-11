@@ -20,6 +20,7 @@ namespace Data.Entities
         public string Status { get; set; }
 
         [Phone]
+        [Required]
         public string PhoneNumber { get; set; }
 
         [Required]
