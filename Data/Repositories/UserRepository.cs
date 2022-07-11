@@ -4,13 +4,19 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Data.Repositories
 {
-    public class UserRepository
+    public class UserRepository : BaseRepository<User>
     {
         private DataContext _dataContext;
 
-        public UserRepository(DataContext context)
+        public UserRepository(DataContext context) :base(context)
         {
             _dataContext = context;
+        }
+
+        public User GetUserById(int? id)
+        {
+            var result = _dataContext.Users.Find(id);
+            return result;
         }
 
         public User GetUserByEmail(string mail)
@@ -19,9 +25,9 @@ namespace Data.Repositories
             return result;
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public IQueryable<User> GetAllUsers()
         {
-            var result = _dataContext.Users.ToList();
+            var result = _dataContext.Users;
             return result;
         }
 
@@ -51,6 +57,11 @@ namespace Data.Repositories
         {
             var result = _dataContext.Users.Any(x => x.Email == email);
             return result;
+        }
+
+        public void Update(User user)
+        {
+            UpdateAndSaveChanges(user);
         }
     }
 }
