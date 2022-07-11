@@ -9,11 +9,11 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class UserController : Controller
     {
-        public UserService userService;
+        private UserService _userService;
 
-        public UserController(UserService _userService)
+        public UserController(UserService userService)
         {
-            userService = _userService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -27,14 +27,14 @@ namespace HeRoBackEnd.Controllers
         {
             if (userId == null)
             {
-                return NotFound();
+                return NotFound("UserId must be a value");
             }
 
-            UserDTO user = userService.Get(userId);
+            UserDTO user = _userService.Get(userId);
 
             if (user == null)
             {
-                return NotFound();
+                return NotFound("No user with this UserId");
             }
 
             return new JsonResult(user);
@@ -51,9 +51,9 @@ namespace HeRoBackEnd.Controllers
         {
             Paging paging = userListFilterViewModel.Paging;
             SortOrder sortOrder = userListFilterViewModel.SortOrder;
-            UserFiltringDTO userFiltringDTO = new UserFiltringDTO(null, userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
+            UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
-            var resutl = userService.GetUsers(paging, sortOrder, userFiltringDTO);
+            var resutl = _userService.GetUsers(paging, sortOrder, userFiltringDTO);
 
             return new JsonResult(resutl);
         }
@@ -70,24 +70,23 @@ namespace HeRoBackEnd.Controllers
         {
             if (userId == null)
             {
-                return NotFound();
+                return NotFound("UserId must be a value");
             }
 
             UserEditDTO editUserDTO =
                 new UserEditDTO(
                     userId,
-                    editUser.Email,
                     editUser.UserStatus,
                     editUser.RoleName);
 
-            int result = userService.Update(editUserDTO);
+            int result = _userService.Update(editUserDTO);
 
-            if (result != 0)
+            if (result == 0)
             {
-                return NotFound();
+                return NotFound("No user with this UserId");
             }
 
-            return Ok();
+            return Ok("Editing was successful");
         }
 
         /// <summary>

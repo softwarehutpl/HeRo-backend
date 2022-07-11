@@ -58,10 +58,5 @@ namespace Data.Repositories
             var result = _dataContext.Users.Any(x => x.Email == email);
             return result;
         }
-
-        public void Update(User user)
-        {
-            UpdateAndSaveChanges(user);
-        }
     }
 }

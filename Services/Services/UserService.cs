@@ -8,29 +8,29 @@ namespace Services.Services
 {
     public class UserService
     {
-        private UserRepository userRepository;
+        private UserRepository _userRepository;
 
-        public UserService(UserRepository _userRepository)
+        public UserService(UserRepository userRepository)
         {
-            userRepository = _userRepository;
+            _userRepository = userRepository;
         }
 
         public UserDTO Get(int? userId)
         {
-            User user = userRepository.GetUserById(userId);
+            User user = _userRepository.GetUserById(userId);
             if (user == null)
             {
                 return null;
             }
 
-            UserDTO userFiltring = new UserDTO(user.Email, user.UserStatus, user.RoleName);
+            UserDTO userDTO = new UserDTO(user.Email, user.UserStatus, user.RoleName);
 
-            return userFiltring;
+            return userDTO;
         }
 
         public IEnumerable<UserFiltringDTO> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
         {
-            IQueryable<User> users = userRepository.GetAllUsers();
+            IQueryable<User> users = _userRepository.GetAllUsers();
 
             if (!String.IsNullOrEmpty(userFiltringDTO.Email))
             {
@@ -83,7 +83,7 @@ namespace Services.Services
             }
 
             var result = users
-                .Select(x => new UserFiltringDTO(x.Id, x.Email, x.UserStatus, x.RoleName))
+                .Select(x => new UserFiltringDTO(x.Email, x.UserStatus, x.RoleName))
                 .ToPagedList(paging.PageNumber, paging.PageSize);
 
             return result;
@@ -91,20 +91,19 @@ namespace Services.Services
 
         public int Update(UserEditDTO userEdit)
         {
-            User user = userRepository.GetUserById(userEdit.Id);
+            User user = _userRepository.GetUserById(userEdit.Id);
             if (user == null)
             {
-                return 1;
+                return 0;
             }
 
-            user.Email = userEdit.Email;
             user.UserStatus = userEdit.UserStatus;
             user.RoleName = userEdit.RoleName;
             user.LastUpdatedDate = DateTime.Now;
 
-            userRepository.Update(user);
+            _userRepository.UpdateAndSaveChanges(user);
 
-            return 0;
+            return user.Id;
         }
 
         public int Delete(int? userId)
