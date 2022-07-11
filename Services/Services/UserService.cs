@@ -1,6 +1,9 @@
 using Common.Listing;
 using Data.Entities;
 using Data.Repositories;
+using Microsoft.AspNetCore.Identity;
+using PagedList;
+using Services.DTOs;
 using PagedList;
 using Services.DTOs.User;
 
@@ -8,18 +11,15 @@ namespace Services.Services
 {
     public class UserService
     {
-        private UserRepository userRepository;
+        private UserRepository _userRepository;
 
-        public UserService(UserRepository _userRepository)
-        {
-            userRepository = _userRepository;
-        }
+        public UserService(UserRepository userRepository) { _userRepository = userRepository; }
 
         public async Task<int> AddUser(UserDTO dto)
+
         {
             return 0;
         }
-
         public void UpdateUser(int id, UserDTO dto)
         {
 
@@ -85,5 +85,5 @@ namespace Services.Services
 
             return result;
         }
-    }
+    } 
 }

@@ -16,7 +16,8 @@ namespace Data.Entities
 
         [Required]
         [DataType(DataType.Password)]
-        [MinLength(8)] [MaxLength(20)]
+        [MinLength(8)] 
+        [MaxLength(20)]
         public string Password { get; set; }
 
         [Required]
@@ -33,6 +34,6 @@ namespace Data.Entities
         public DateTime? DeletedDate { get; set; }
 
         [ForeignKey("DeletedById")]
-        public virtual User DeletedBy { get; set; }
+        public virtual User? DeletedBy { get; set; }
     }
 }

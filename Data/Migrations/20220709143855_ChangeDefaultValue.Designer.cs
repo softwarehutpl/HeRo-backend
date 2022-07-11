@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220709143855_ChangeDefaultValue")]
+    partial class ChangeDefaultValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -44,6 +46,7 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("DeletedById")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedDate")
@@ -61,6 +64,7 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("LastUpdatedById")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastUpdatedDate")
@@ -85,6 +89,7 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("TechId")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("TechInterviewDate")
@@ -107,38 +112,6 @@ namespace Data.Migrations
                     b.ToTable("Candidate");
                 });
 
-            modelBuilder.Entity("Data.Entities.Log", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<DateTime>("Datetime")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Logger")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("MachineName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Message")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Log");
-                });
-
             modelBuilder.Entity("Data.Entities.Recruitment", b =>
                 {
                     b.Property<int>("Id")
@@ -157,6 +130,7 @@ namespace Data.Migrations
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("DeletedById")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DeletedDate")
@@ -167,15 +141,14 @@ namespace Data.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("EndedById")
+                        .IsRequired()
                         .HasColumnType("int");
-
-                    b.Property<DateTime?>("EndedDate")
-                        .HasColumnType("datetime2");
 
                     b.Property<DateTime>("EndingDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int?>("LastUpdatedById")
+                        .IsRequired()
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("LastUpdatedDate")
@@ -299,11 +272,15 @@ namespace Data.Migrations
 
                     b.HasOne("Data.Entities.User", "DeletedBy")
                         .WithMany()
-                        .HasForeignKey("DeletedById");
+                        .HasForeignKey("DeletedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Data.Entities.User", "LastUpdatedBy")
                         .WithMany()
-                        .HasForeignKey("LastUpdatedById");
+                        .HasForeignKey("LastUpdatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Data.Entities.User", "Recruiter")
                         .WithMany()
@@ -319,7 +296,9 @@ namespace Data.Migrations
 
                     b.HasOne("Data.Entities.User", "Tech")
                         .WithMany()
-                        .HasForeignKey("TechId");
+                        .HasForeignKey("TechId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("CreatedBy");
 
@@ -344,15 +323,21 @@ namespace Data.Migrations
 
                     b.HasOne("Data.Entities.User", "DeletedBy")
                         .WithMany()
-                        .HasForeignKey("DeletedById");
+                        .HasForeignKey("DeletedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Data.Entities.User", "EndedBy")
                         .WithMany()
-                        .HasForeignKey("EndedById");
+                        .HasForeignKey("EndedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Data.Entities.User", "LastUpdatedBy")
                         .WithMany()
-                        .HasForeignKey("LastUpdatedById");
+                        .HasForeignKey("LastUpdatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Data.Entities.User", "Recruiter")
                         .WithMany()

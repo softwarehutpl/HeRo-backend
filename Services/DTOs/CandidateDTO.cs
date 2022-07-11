@@ -8,5 +8,6 @@ namespace Services.DTOs
 {
     public class CandidateDTO
     {
+        public int Id { get; set; }
     }
 }
