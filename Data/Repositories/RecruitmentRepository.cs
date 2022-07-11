@@ -1,29 +1,53 @@
-﻿using Data.Entities;
+using Common.Enums;
+using Data.Entities;
+using Microsoft.Data.SqlClient;
+using System.Security.Claims;
 
 namespace Data.Repositories
 {
-
-
-    public class RecruitmentRepository
+    public class RecruitmentRepository : BaseRepository<Recruitment>
     {
-        private DataContext _dataContext;
-
-        public RecruitmentRepository(DataContext context)
+        public RecruitmentRepository(DataContext context) : base(context)
         {
-            _dataContext = context;
+            
         }
-
-        public void GetRecruitmentById(int id) { }
-
-        public IEnumerable<Recruitment> GetAllRecruitments()
+        public Recruitment GetRecruitmentById(int id)
         {
-            var result = _dataContext.Recruitments;
+            Recruitment result = GetById(id);
+
+            if (result == default) return null;
 
             return result;
         }
 
-        public void AddRecruitment(int id) { }
+        public IQueryable<Recruitment> GetAllRecruitments()
+        {
+            IQueryable<Recruitment> result = GetAll();
 
-        public void RemoveRecruitment(int id) { }
+            return result;
+        }
+
+        public int AddRecruitment(Recruitment recruitment)
+        {
+            try
+            {
+                AddAndSaveChanges(recruitment);
+            }catch(Exception ex)
+            {
+                return -1;
+            }
+            return 1;
+        }
+        public int UpdateRecruitment(Recruitment recruitment)
+        {
+            try
+            {
+                UpdateAndSaveChanges(recruitment);
+            }catch(Exception ex)
+            {
+                return -1;
+            }
+            return 1;
+        }
     }
 }

@@ -1,26 +1,32 @@
-﻿using Common.Listing;
+using Common.Listing;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
+using Services.DTOs.Recruitment;
 using Data.Entities;
 using Services.DTOs.Recruitment;
+using AutoMapper;
+using Common.Enums;
 
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
     public class RecruitmentController : Controller
     {
-        private RecruitmentService recruitmentService;
+        private readonly RecruitmentService service;
+        private readonly IMapper mapper;
 
-        public RecruitmentController(RecruitmentService _recruitmentService)
+        public RecruitmentController(RecruitmentService service, IMapper map)
         {
-            recruitmentService = _recruitmentService;
+            this.service = service;
+            mapper = map;
         }
 
         /// <summary>
         /// Returns a list of recruitments
         /// </summary>
-        /// <returns>Json string representing the list of Recruitments</returns>
+        /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
+        /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
         [HttpPost]
         [Route("Recruitment/GetList")]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
@@ -29,39 +35,33 @@ namespace HeRoBackEnd.Controllers
             SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
             RecruitmentFiltringDTO recruitmentFiltringDTO 
                 = new RecruitmentFiltringDTO(
-                    recruitmentListFilterViewModel.Name, 
-                    recruitmentListFilterViewModel.Status, 
+                    recruitmentListFilterViewModel.Name,  
                     recruitmentListFilterViewModel.Description,
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);
 
-            var resutl = recruitmentService.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            IEnumerable<ReadRecruitmentDTO> result = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
-            return new JsonResult(resutl);
+            return new JsonResult(result);
         }
 
         /// <summary>
         /// Returns a recruitment specified by an id
         /// </summary>
         /// <param name="recruitmentId">Id of an recruitment</param>
-        /// <returns>Json string representing a Recruitment</returns>
+        /// <returns>Onject of the JsonResult class representing a Recruitment in JSON format</returns>
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
-        public async Task<IActionResult> Get(int? recruitmentId)
+        public IActionResult Get(int recruitmentId)
         {
-            if (recruitmentId == null)
+            ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
+
+            if (recruitment == null)
             {
                 return RedirectToAction("Index");
             }
-            return View();
-            //Recruitment tempRecruitment = recruitmentService.Get(id);
 
-            //if (tempRecruitment == null)
-            //{
-            //    return RedirectToAction("Index");
-            //}
-
-            //return new JsonResult(tempRecruitment);
+            return new JsonResult(recruitment);
         }
 
         /// <summary>
@@ -71,11 +71,18 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Recruitment/Create")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(NewRecruitmentViewModel newRecruitment)
+        //[ValidateAntiForgeryToken]
+        public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
         {
-            //recruitmentService.Add(newRecruitment);
+            
+            CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
+            dto.CreatedDate = DateTime.Now;
+            dto.LastUpdatedDate = DateTime.Now;
 
+            int result=service.AddRecruitment(dto);
+
+            if (result == -1) return BadRequest();
+            
             return RedirectToAction("Index");
         }
 
@@ -83,15 +90,20 @@ namespace HeRoBackEnd.Controllers
         /// Updates information about a recruitment represented by an id
         /// </summary>
         /// <param name="recruitmentId">Id representing a recruitment</param>
-        /// <param name="newRecruitment">Contains current information about a recriutment</param>
-        /// <returns></returns>
+        /// <param name="recruitment">Contains new information about a recruitment</param>
+        /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int recruitmentId, NewRecruitmentViewModel newRecruitment)
+        //[ValidateAntiForgeryToken]
+        public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
         {
-            //recruitmentService.Update(recruitmentId, newRecruitment);
+            UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(recruitment);
+            dto.LastUpdatedDate = DateTime.Now;
 
+            int result=service.UpdateRecruitment(recruitmentId, dto);
+
+            if (result == -1) return BadRequest();
+            
             return RedirectToAction("Index");
         }
 
@@ -100,12 +112,30 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="recruitmentId">Id representing a recruitment</param>
         /// <returns>IActionResult</returns>
-        [HttpDelete]
-        [Route("Recruitment/Finish/{recruitmentId}")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Finish(int recruitmentId)
+        [HttpGet]
+        [Route("Recruitment/End/{recruitmentId}")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult End(int recruitmentId)
         {
-            //RecruitmentService.EndRecruitment(recruitmentId);
+            int result=service.EndRecruitment(recruitmentId);
+
+            if (result == -1) return BadRequest();
+
+            return RedirectToAction("Index");
+        }
+        /// <summary>
+        /// Deletes a recruitment represented by an id
+        /// </summary>
+        /// <param name="recruitmentId">Id representing a recruitment</param>
+        /// <returns>IActionResult</returns>
+        [HttpGet]
+        [Route("Recruitment/Delete/{recruitmentId}")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult Delete(int recruitmentId)
+        {
+            int result = service.DeleteRecruitment(recruitmentId);
+
+            if (result == -1) return BadRequest();
 
             return RedirectToAction("Index");
         }

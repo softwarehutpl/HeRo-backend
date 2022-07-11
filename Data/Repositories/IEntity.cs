@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.DTOs
+namespace Data.Repositories
 {
-    public class RecruitmentDTO
+    public interface IEntity
     {
+        public int Id { get; set; }
     }
 }

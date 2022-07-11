@@ -66,7 +66,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("User/Create")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(NewUserViewModel newUser)
         {
             //userService.Add(newUser);
@@ -82,7 +82,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("User/Edit/{userId}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int userId, NewUserViewModel newUser)
         {
             //userService.Update(userId, newUser);
@@ -97,7 +97,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpDelete]
         [Route("User/Delete/{userId}")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(int userId)
         {
             //userService.Delete(userId);
@@ -113,7 +113,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("User/SignIn")]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(string email, string password)
         {
             //userService.SignIn(email, password);

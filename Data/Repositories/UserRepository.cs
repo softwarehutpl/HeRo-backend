@@ -12,7 +12,8 @@ namespace Data.Repositories
         {
             _dataContext = context;
         }
-        public User? GetUserByEmail(string mail)
+
+        public User GetUserByEmail(string mail)
         {
             var result = _dataContext.Users.Where(x => x.Email == mail).FirstOrDefault();
             return result;
