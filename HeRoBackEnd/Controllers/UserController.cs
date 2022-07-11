@@ -27,14 +27,14 @@ namespace HeRoBackEnd.Controllers
         {
             if (userId == null)
             {
-                return NotFound();
+                return NotFound("UserId must be a value");
             }
 
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
             {
-                return NotFound();
+                return NotFound("No user with this UserId");
             }
 
             return new JsonResult(user);
@@ -70,7 +70,7 @@ namespace HeRoBackEnd.Controllers
         {
             if (userId == null)
             {
-                return NotFound();
+                return NotFound("UserId must be a value");
             }
 
             UserEditDTO editUserDTO =
@@ -81,12 +81,12 @@ namespace HeRoBackEnd.Controllers
 
             int result = _userService.Update(editUserDTO);
 
-            if (result != 0)
+            if (result == 0)
             {
-                return NotFound();
+                return NotFound("No user with this UserId");
             }
 
-            return Ok();
+            return Ok("Editing was successful");
         }
 
         /// <summary>
