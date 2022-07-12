@@ -3,6 +3,7 @@ using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.User;
 using Services.Services;
+using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -104,7 +105,14 @@ namespace HeRoBackEnd.Controllers
                 return NotFound("UserId must be a value");
             }
 
-            int result = _userService.Delete(userId);
+            var claims = HttpContext.User.Claims.ToList();
+
+            if (claims.Count == 0)
+            {
+                return NotFound("Only logged in users can delete");
+            }
+
+            int result = _userService.Delete(userId, 0);
 
             if (result == 0)
             {
