@@ -114,7 +114,7 @@ namespace Services.Services
                 return 0;
             }
 
-            //user.DeletedById = loginUserId;
+            user.DeletedById = loginUserId;
             user.DeletedDate = DateTime.Now;
 
             _userRepository.UpdateAndSaveChanges(user);

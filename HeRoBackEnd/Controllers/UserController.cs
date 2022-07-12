@@ -112,11 +112,15 @@ namespace HeRoBackEnd.Controllers
                 return NotFound("Only logged in users can delete");
             }
 
-            int result = _userService.Delete(userId, 0);
-
-            if (result == 0)
+            string stringLoginUserId = claims.Where(x => x.Type.Contains("nameidentifier")).First().Value;
+            if (int.TryParse(stringLoginUserId, out int loginUserId))
             {
-                return NotFound("No user with this UserId");
+                int result = _userService.Delete(userId, loginUserId);
+
+                if (result == 0)
+                {
+                    return NotFound("No user with this UserId");
+                }
             }
 
             return Ok("Deleting was successful");
