@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data.Repositories;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
     [Table("User")]
-    public class User
+    public class User : IEntity
     {
         [Key]
         public int Id { get; set; }
@@ -14,10 +15,11 @@ namespace Data.Entities
         [MaxLength(40)]
         public string Email { get; set; }
 
+        public Guid PasswordRecoveryGuid { get; set; }
         [Required]
         [DataType(DataType.Password)]
         [MinLength(8)] 
-        [MaxLength(20)]
+     
         public string Password { get; set; }
 
         [Required]
