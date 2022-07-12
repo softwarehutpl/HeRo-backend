@@ -16,6 +16,7 @@ namespace Data.Entities
         public string Email { get; set; }
 
         public Guid PasswordRecoveryGuid { get; set; }
+        public Guid ConfirmationGuid { get; set; }
         [Required]
         [DataType(DataType.Password)]
         [MinLength(8)] 

@@ -17,12 +17,10 @@ namespace Services.Services
             _authService = authService;
         }
 
-        public void SendConfirmationEmail(int id)
+        public void SendConfirmationEmail(string email, string url)
         {          
             string subject = "Registration";
-            string body = "Sucessfull registration. Click confiramtion link to complete the process";
-            //string email = "";
-            string email = _userRepository.GetUserEmail(id);
+            string body = $"Sucessfull registration. Click confiramtion link to complete the process. \n {url}";
             MailMessage mail = _emailHelper.CreateEmail(email, subject, body);
             _emailHelper.SendEmail(mail);
         }
