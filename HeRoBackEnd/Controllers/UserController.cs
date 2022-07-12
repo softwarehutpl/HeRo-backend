@@ -7,7 +7,7 @@ using Services.Services;
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private UserService _userService;
 

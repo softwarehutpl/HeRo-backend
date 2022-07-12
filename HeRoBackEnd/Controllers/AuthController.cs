@@ -8,7 +8,7 @@ using HeRoBackEnd.ViewModels.User;
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
-    public class AuthController : Controller
+    public class AuthController : BaseController
     {
         private readonly AuthService _authServices;
         private readonly EmailService _emailService;
@@ -79,7 +79,7 @@ namespace HeRoBackEnd.Controllers
 
             Guid confirmationGuid = Guid.NewGuid();
             _userService.SetUserConfirmationGuid(newUser.Email, confirmationGuid);
-            string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid, email = newUser.Email}, protocol: "https");
+            string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid }, protocol: "https");
             _emailService.SendConfirmationEmail(newUser.Email, url);
 
             return Ok("User created");
@@ -88,9 +88,10 @@ namespace HeRoBackEnd.Controllers
         [Route("Auth/ConfirmAccount")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ConfirmAccount(Guid confirmationGuid, string email)
+        public async Task<IActionResult> ConfirmAccount(Guid confirmationGuid)
         {
-            bool check = _authServices.ConfirmUser(confirmationGuid, email);
+            int userId = GetUserId();
+            bool check = _authServices.ConfirmUser(confirmationGuid, userId);
             return Ok();
         }
 
@@ -102,7 +103,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">Recovery E-Mail send</response>
         /// <response code="400">Account doesn't exist</response>
         [HttpPost]
-        [Route("Auth/PasswordRecovery")]
+        [Route("Auth/PasswordRecoveryMail")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PasswordRecoveryMail(string email)

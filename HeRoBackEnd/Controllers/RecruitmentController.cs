@@ -11,7 +11,7 @@ using Common.Enums;
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
-    public class RecruitmentController : Controller
+    public class RecruitmentController : BaseController
     {
         private readonly RecruitmentService service;
         private readonly IMapper mapper;
