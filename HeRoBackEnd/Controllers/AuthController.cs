@@ -21,9 +21,18 @@ namespace HeRoBackEnd.Controllers
             _userService = userService;
         }
 
-
+        /// <summary>
+        /// Sign in user method
+        /// </summary>
+        /// <param name="email">E-mail of the user</param>
+        /// <param name="password">User password</param>
+        /// <returns>Signs in user</returns>
+        /// <response code="200">User signs in properly</response>
+        /// <response code="400">Bad credentials</response>
         [HttpGet]
         [Route("Auth/SignIn")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SignIn(string password, string email)
         {
 
@@ -37,15 +46,32 @@ namespace HeRoBackEnd.Controllers
             }
             return BadRequest("Wrong Credentials");
         }
+
+
+        /// <summary>
+        /// Sign out user method
+        /// </summary>
+        /// <response code="200">User Logs out</response>
         [HttpGet]
         [Route("Auth/LogOut")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync("Cookies");
-            return Ok();
-        }  
+            return Ok("User logOut");
+        }
+
+        /// <summary>
+        /// User registration method
+        /// </summary>
+        /// <param name="newUser">Object containing information about a new user</param>
+        /// <returns>Signs in user</returns>
+        /// <response code="200">User created</response>
+        /// <response code="400">Invalid Email or Password or User already exist</response>
         [HttpPost]
         [Route("Auth/CreateNewUser")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)
         {
             bool created = await _authServices.ValidateAndCreateUserAccount(newUser.Password, newUser.Email);
@@ -55,8 +81,18 @@ namespace HeRoBackEnd.Controllers
             return Ok("User created");
         }
 
+
+        /// <summary>
+        /// If user exist, sends recovery to mail parameter adress.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>Signs in user</returns>
+        /// <response code="200">Recovery E-Mail send</response>
+        /// <response code="400">Account doesn't exist</response>
         [HttpPost]
         [Route("Auth/PasswordRecovery")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PasswordRecoveryMail(string email)
         {          
             bool changedPassword = _authServices.CheckUserExist(email);
@@ -70,8 +106,18 @@ namespace HeRoBackEnd.Controllers
             _emailService.SendPasswordRecoveryEmail(email, fullUrl);
             return Ok("Recovery E-Mail send"); 
         }
+
+        /// <summary>
+        /// If user exist, sends recovery to mail parameter adress.
+        /// </summary>
+        /// <param name="email"></param>
+        /// <returns>Signs in user</returns>
+        /// <response code="200">Recovery E-Mail send</response>
+        /// <response code="400">Account doesn't exist</response>
         [HttpPost]
         [Route("Auth/RecoverPassword")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RecoverPassword(string email, Guid guid)
         {
             bool userGuid = await _authServices.CheckPasswordRecoveryGuid(guid, email);

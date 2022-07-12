@@ -16,9 +16,7 @@ namespace Data.Repositories
         {
             User user = GetUserByEmail(email);
             user.Password = password;
-            _dataContext.Update(user);
-            _dataContext.SaveChanges();
-
+            UpdateUser(user);
         }
         public User GetUserByEmail(string mail)
         {
