@@ -13,7 +13,7 @@ namespace Data.Repositories
             _dataContext = context;
         }
 
-        public User GetUserById(int? id)
+        public User GetUserById(int id)
         {
             var result = _dataContext.Users.Find(id);
             return result;

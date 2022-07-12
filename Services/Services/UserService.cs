@@ -15,7 +15,7 @@ namespace Services.Services
             _userRepository = userRepository;
         }
 
-        public UserDTO Get(int? userId)
+        public UserDTO Get(int userId)
         {
             User user = _userRepository.GetUserById(userId);
             if (user == null)
@@ -99,7 +99,7 @@ namespace Services.Services
 
             user.UserStatus = userEdit.UserStatus;
             user.RoleName = userEdit.RoleName;
-            user.LastUpdatedDate = DateTime.Now;
+            user.LastUpdatedDate = DateTime.UtcNow;
 
             _userRepository.UpdateAndSaveChanges(user);
 

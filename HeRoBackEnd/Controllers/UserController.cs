@@ -25,13 +25,8 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Json string representing an object of the User class</returns>
         [HttpGet]
         [Route("User/Get/{userId}")]
-        public IActionResult Get(int? userId)
+        public IActionResult Get(int userId)
         {
-            if (userId == null)
-            {
-                return NotFound("UserId must be a value");
-            }
-
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
@@ -68,13 +63,8 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("User/Edit/{userId}")]
         //[ValidateAntiForgeryToken]
-        public IActionResult Edit(int? userId, EditUserViewModel editUser)
+        public IActionResult Edit(int userId, EditUserViewModel editUser)
         {
-            if (userId == null)
-            {
-                return NotFound("UserId must be a value");
-            }
-
             UserEditDTO editUserDTO =
                 new UserEditDTO(
                     userId,
@@ -101,9 +91,8 @@ namespace HeRoBackEnd.Controllers
         [Authorize(Policy = "AdminRequirment")]
         public IActionResult Delete(int userId)
         {
-            var claims = HttpContext.User.Claims.ToList();
+            string stringLoginUserId = HttpContext.User.Claims.ToList().Where(x => x.Type == "Id").First().Value;
 
-            string stringLoginUserId = claims.Where(x => x.Type == "Id").First().Value;
             if (int.TryParse(stringLoginUserId, out int loginUserId))
             {
                 int result = _userService.Delete(userId, loginUserId);
