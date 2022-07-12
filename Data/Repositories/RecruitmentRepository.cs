@@ -26,28 +26,5 @@ namespace Data.Repositories
 
             return result;
         }
-
-        public int AddRecruitment(Recruitment recruitment)
-        {
-            try
-            {
-                AddAndSaveChanges(recruitment);
-            }catch(Exception ex)
-            {
-                return -1;
-            }
-            return 1;
-        }
-        public int UpdateRecruitment(Recruitment recruitment)
-        {
-            try
-            {
-                UpdateAndSaveChanges(recruitment);
-            }catch(Exception ex)
-            {
-                return -1;
-            }
-            return 1;
-        }
     }
 }

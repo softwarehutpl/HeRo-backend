@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220711130648_addingPasswordRecoveryGuid")]
+    partial class addingPasswordRecoveryGuid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +35,10 @@ namespace Data.Migrations
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("AvailableFrom")
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CvPath")
@@ -50,23 +55,8 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ExpectedMonthlySalary")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("HROpinionScore")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HROpinionText")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("InterviewDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("InterviewOpinionScore")
-                        .HasColumnType("int");
-
-                    b.Property<string>("InterviewOpinionText")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -82,24 +72,15 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OtherExpectations")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecruiterId")
+                    b.Property<int>("RecruiterId")
                         .HasColumnType("int");
 
                     b.Property<int>("RecruitmentId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Source")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Stage")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -113,6 +94,8 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("DeletedById");
 
                     b.HasIndex("LastUpdatedById");
@@ -123,7 +106,7 @@ namespace Data.Migrations
 
                     b.HasIndex("TechId");
 
-                    b.ToTable("Candidate", (string)null);
+                    b.ToTable("Candidate");
                 });
 
             modelBuilder.Entity("Data.Entities.Log", b =>
@@ -155,7 +138,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Log", (string)null);
+                    b.ToTable("Log");
                 });
 
             modelBuilder.Entity("Data.Entities.Recruitment", b =>
@@ -219,10 +202,10 @@ namespace Data.Migrations
 
                     b.HasIndex("RecruiterId");
 
-                    b.ToTable("Recruitment", (string)null);
+                    b.ToTable("Recruitment");
                 });
 
-            modelBuilder.Entity("Data.Entities.RecruitmentSkill", b =>
+            modelBuilder.Entity("Data.Entities.RecruitmentRequirement", b =>
                 {
                     b.Property<int>("RecruitmentId")
                         .HasColumnType("int");
@@ -237,7 +220,7 @@ namespace Data.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("RecruitmentRequirement", (string)null);
+                    b.ToTable("RecruitmentRequirement");
                 });
 
             modelBuilder.Entity("Data.Entities.Skill", b =>
@@ -255,7 +238,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skill", (string)null);
+                    b.ToTable("Skill");
                 });
 
             modelBuilder.Entity("Data.Entities.User", b =>
@@ -265,9 +248,6 @@ namespace Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<Guid>("ConfirmationGuid")
-                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
@@ -305,11 +285,17 @@ namespace Data.Migrations
 
                     b.HasIndex("DeletedById");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Data.Entities.Candidate", b =>
                 {
+                    b.HasOne("Data.Entities.User", "CreatedBy")
+                        .WithMany()
+                        .HasForeignKey("CreatedById")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Data.Entities.User", "DeletedBy")
                         .WithMany()
                         .HasForeignKey("DeletedById");
@@ -320,7 +306,9 @@ namespace Data.Migrations
 
                     b.HasOne("Data.Entities.User", "Recruiter")
                         .WithMany()
-                        .HasForeignKey("RecruiterId");
+                        .HasForeignKey("RecruiterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Data.Entities.Recruitment", "Recruitment")
                         .WithMany()
@@ -331,6 +319,8 @@ namespace Data.Migrations
                     b.HasOne("Data.Entities.User", "Tech")
                         .WithMany()
                         .HasForeignKey("TechId");
+
+                    b.Navigation("CreatedBy");
 
                     b.Navigation("DeletedBy");
 
@@ -380,7 +370,7 @@ namespace Data.Migrations
                     b.Navigation("Recruiter");
                 });
 
-            modelBuilder.Entity("Data.Entities.RecruitmentSkill", b =>
+            modelBuilder.Entity("Data.Entities.RecruitmentRequirement", b =>
                 {
                     b.HasOne("Data.Entities.Recruitment", "Recruitment")
                         .WithMany()
