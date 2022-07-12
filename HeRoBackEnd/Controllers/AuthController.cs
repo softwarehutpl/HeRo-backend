@@ -8,7 +8,7 @@ using HeRoBackEnd.ViewModels.User;
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
-    public class AuthController : Controller
+    public class AuthController : BaseController
     {
         private readonly AuthService _authServices;
         private readonly EmailService _emailService;

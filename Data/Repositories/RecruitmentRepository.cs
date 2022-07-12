@@ -26,14 +26,5 @@ namespace Data.Repositories
 
             return result;
         }
-
-        public void AddRecruitment(Recruitment recruitment)
-        {
-                AddAndSaveChanges(recruitment);
-        }
-        public void UpdateRecruitment(Recruitment recruitment)
-        {
-                UpdateAndSaveChanges(recruitment);
-        }
     }
 }

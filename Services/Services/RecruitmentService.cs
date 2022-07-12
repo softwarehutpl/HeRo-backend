@@ -14,8 +14,8 @@ namespace Services.Services
         private readonly IMapper mapper;
         private readonly RecruitmentRepository repo;
         private readonly UserRepository userRepo;
-        private readonly ILogger logger;
-        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger logger)
+        private readonly ILogger<RecruitmentService> logger;
+        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger<RecruitmentService> logger)
         {
             mapper = map;
             this.repo = repo;
@@ -29,7 +29,7 @@ namespace Services.Services
             {
                 Recruitment recruitment = mapper.Map<Recruitment>(dto);
 
-                repo.AddRecruitment(recruitment);
+                repo.AddAndSaveChanges(recruitment);
             }catch(Exception ex)
             {
                 logger.LogError(ex.Message);
@@ -51,7 +51,7 @@ namespace Services.Services
                 recruitment.RecruiterId = dto.RecruiterId;
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
 
-                repo.UpdateRecruitment(recruitment);
+                repo.UpdateAndSaveChanges(recruitment);
             }catch(Exception ex)
             {
                 logger.LogError(ex.Message);
@@ -71,7 +71,7 @@ namespace Services.Services
                 recruitment.EndedDate = dto.EndedDate;
                 recruitment.EndedById = dto.EndedById;
 
-                repo.UpdateRecruitment(recruitment);
+                repo.UpdateAndSaveChanges(recruitment);
             }catch(Exception ex)
             {
                 logger.LogError(ex.Message);
@@ -91,7 +91,7 @@ namespace Services.Services
                 recruitment.DeletedDate = dto.DeletedDate;
                 recruitment.DeletedById = dto.LastUpdatedById;
 
-                repo.UpdateRecruitment(recruitment);
+                repo.UpdateAndSaveChanges(recruitment);
             }catch(Exception ex)
             {
                 logger.LogError(ex.Message);

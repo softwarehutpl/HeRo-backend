@@ -57,6 +57,13 @@ try
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
+    /*builder.Services.AddScoped<RecruitmentService>(options =>
+    {
+        return new RecruitmentService(options.GetRequiredService<IMapper>(),
+            options.GetRequiredService<RecruitmentRepository>(),
+            options.GetRequiredService<UserRepository>(),
+            options.GetRequiredService<ILogger<RecruitmentService>>());
+    });*/
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {
