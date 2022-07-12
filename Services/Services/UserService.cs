@@ -29,7 +29,7 @@ namespace Services.Services
         public async Task<int> AddUser(UserDTO dto)
 
         {
-            _userRepository = userRepository;
+            return 0;
         }
 
         public UserDTO Get(int? userId)
