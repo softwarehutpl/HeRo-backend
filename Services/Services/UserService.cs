@@ -32,7 +32,7 @@ namespace Services.Services
             return 0;
         }
 
-        public UserDTO Get(int? userId)
+        public UserDTO Get(int userId)
         {
             User user = _userRepository.GetUserById(userId);
             if (user == null)
@@ -116,7 +116,23 @@ namespace Services.Services
 
             user.UserStatus = userEdit.UserStatus;
             user.RoleName = userEdit.RoleName;
-            user.LastUpdatedDate = DateTime.Now;
+            user.LastUpdatedDate = DateTime.UtcNow;
+
+            _userRepository.UpdateAndSaveChanges(user);
+
+            return user.Id;
+        }
+
+        public int Delete(int userId, int loginUserId)
+        {
+            User user = _userRepository.GetUserById(userId);
+            if (user == null)
+            {
+                return 0;
+            }
+
+            user.DeletedById = loginUserId;
+            user.DeletedDate = DateTime.UtcNow;
 
             _userRepository.UpdateAndSaveChanges(user);
 
