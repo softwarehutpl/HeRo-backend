@@ -112,6 +112,7 @@ namespace Services.Services
                 return null;
             }
             IEnumerable<Recruitment> recruitments = repo.GetAllRecruitments();
+            recruitments = recruitments.Where(e => !(e.EndedDate.HasValue) && !(e.DeletedDate.HasValue));
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
