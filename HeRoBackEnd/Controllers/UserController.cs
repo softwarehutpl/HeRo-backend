@@ -9,7 +9,7 @@ using System.Security.Claims;
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
-    public class UserController : Controller
+    public class UserController : BaseController
     {
         private UserService _userService;
 
@@ -117,16 +117,13 @@ namespace HeRoBackEnd.Controllers
         [Authorize(Policy = "AdminRequirment")]
         public IActionResult Delete(int userId)
         {
-            string stringLoginUserId = HttpContext.User.Claims.ToList().Where(x => x.Type == "Id").First().Value;
+            int loginUserId = GetUserId();
 
-            if (int.TryParse(stringLoginUserId, out int loginUserId))
+            int result = _userService.Delete(userId, loginUserId);
+
+            if (result == 0)
             {
-                int result = _userService.Delete(userId, loginUserId);
-
-                if (result == 0)
-                {
-                    return NotFound("No user with this UserId");
-                }
+                return NotFound("No user with this UserId");
             }
 
             return Ok("Deleting was successful");
