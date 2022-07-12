@@ -203,18 +203,13 @@ namespace Data.Migrations
                     b.ToTable("Recruitment");
                 });
 
-            modelBuilder.Entity("Data.Entities.RecruitmentRequirement", b =>
+            modelBuilder.Entity("Data.Entities.RecruitmentSkill", b =>
                 {
                     b.Property<int>("RecruitmentId")
                         .HasColumnType("int");
 
                     b.Property<int>("SkillId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(75)
-                        .HasColumnType("nvarchar(75)");
 
                     b.Property<int>("SkillLevel")
                         .HasColumnType("int");
@@ -371,7 +366,7 @@ namespace Data.Migrations
                     b.Navigation("Recruiter");
                 });
 
-            modelBuilder.Entity("Data.Entities.RecruitmentRequirement", b =>
+            modelBuilder.Entity("Data.Entities.RecruitmentSkill", b =>
                 {
                     b.HasOne("Data.Entities.Recruitment", "Recruitment")
                         .WithMany()
