@@ -5,7 +5,7 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Common.Enums;
-
+using System;
 
 namespace Services.Services
 {
@@ -34,25 +34,26 @@ namespace Services.Services
         }
 
         private bool ValidateUser(string password, string email)
-        {           
+        {
             string passwordInDb = _userRepository.GetUserPassword(email);
             string passwordAfterHash = GetHash(password);
 
-            if (password == passwordInDb) return true;
+            if (passwordAfterHash == passwordInDb) return true;
 
             return false;
         }
+
         public async Task<ClaimsIdentity> ValidateAndCreateClaim(string password, string email)
         {
             if (ValidateUser(password, email))
             {
-                string role = _userRepository.GetUserRoleByEmail(email);
+                User user = _userRepository.GetUserByEmail(email);
 
                 var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.Email, email),
-                    new Claim(ClaimTypes.Role, role)
-
+                    new Claim("Id", user.Id.ToString()),
+                    new Claim("Email", email),
+                    new Claim("RoleName", user.RoleName)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -68,7 +69,7 @@ namespace Services.Services
             User newUser = new()
             {
                 Email = email,
-                Password = password,
+                Password = GetHash(password),
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 RoleName = RoleNameEnum.Anonymous.ToString(),
@@ -78,19 +79,41 @@ namespace Services.Services
             return newUser;
         }
 
-        public async Task<bool> ValidateAndCreateUserAccount(string password, string email)
+        public bool CheckUserExist(string email)
         {
             bool check = _userRepository.CheckIfUserExist(email);
+            if (!check) return false;
+            return true;
+        }
+
+        public async Task<bool> ValidateAndCreateUserAccount(string password, string email)
+        {
+            bool check = CheckUserExist(email);
 
             if (!check)
             {
                 var newUser = await CreateUser(password, email);
-                _userRepository.AddUser();
+                _userRepository.AddUser(newUser);
                 return true;
             }
             return false;
         }
 
+        public async Task<bool> ChangeUserPassword(string email, string password)
+        {
 
+            User myUser = _userRepository.GetUserByEmail(email);            
+            string passwordAfterHash = GetHash(password);
+            if (myUser.Password == passwordAfterHash) return false;
+
+            _userRepository.ChangeUserPasswordByEmail(email, passwordAfterHash);
+            return true;
+        }
+        public async Task<bool> CheckPasswordRecoveryGuid(Guid guid, string email)
+        {
+            Guid userGuid = _userRepository.GetUserGuidByEmail(email);
+            if (guid == userGuid) return true;
+            return false;
+        }
     }
 }

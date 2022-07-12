@@ -7,11 +7,12 @@ using Data.Entities;
 using Services.DTOs.Recruitment;
 using AutoMapper;
 using Common.Enums;
+using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
-    public class RecruitmentController : Controller
+    public class RecruitmentController : BaseController
     {
         private readonly RecruitmentService service;
         private readonly IMapper mapper;
@@ -33,9 +34,9 @@ namespace HeRoBackEnd.Controllers
         {
             Paging paging = recruitmentListFilterViewModel.Paging;
             SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
-            RecruitmentFiltringDTO recruitmentFiltringDTO 
+            RecruitmentFiltringDTO recruitmentFiltringDTO
                 = new RecruitmentFiltringDTO(
-                    recruitmentListFilterViewModel.Name,  
+                    recruitmentListFilterViewModel.Name,
                     recruitmentListFilterViewModel.Description,
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);
@@ -43,7 +44,9 @@ namespace HeRoBackEnd.Controllers
             IEnumerable<ReadRecruitmentDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
             JsonResult result = new JsonResult(recruitments);
 
-            return result;
+            if (result == null) return BadRequest("Something went wrong!");
+
+            return new JsonResult(result);
         }
 
         /// <summary>
@@ -59,7 +62,7 @@ namespace HeRoBackEnd.Controllers
 
             if (recruitment == null)
             {
-                return BadRequest();
+                return BadRequest("There is no such recruitment!");
             }
 
             JsonResult result = new JsonResult(recruitment);
@@ -77,16 +80,20 @@ namespace HeRoBackEnd.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
         {
-            
+
             CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
+            int id = GetUserId();
+
+            dto.CreatedById = id;
             dto.CreatedDate = DateTime.Now;
+            dto.LastUpdatedById = id;
             dto.LastUpdatedDate = DateTime.Now;
 
-            int result=service.AddRecruitment(dto);
+            int result = service.AddRecruitment(dto);
 
-            if (result == -1) return BadRequest();
-            
-            return RedirectToAction("Index");
+            if (result == -1) return BadRequest("Wrong data!");
+
+            return Ok("Recruitment created successfully");
         }
 
         /// <summary>
@@ -101,13 +108,16 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
         {
             UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(recruitment);
+            int id = GetUserId();
+
+            dto.LastUpdatedById = id;
             dto.LastUpdatedDate = DateTime.Now;
 
-            int result=service.UpdateRecruitment(recruitmentId, dto);
+            int result = service.UpdateRecruitment(recruitmentId, dto);
 
-            if (result == -1) return BadRequest();
-            
-            return RedirectToAction("Index");
+            if (result == -1) return BadRequest("Wrong data!");
+
+            return Ok("Recruitment updated successfully");
         }
 
         /// <summary>
@@ -120,11 +130,18 @@ namespace HeRoBackEnd.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult End(int recruitmentId)
         {
-            int result=service.EndRecruitment(recruitmentId);
+            EndRecruimentDTO dto = new EndRecruimentDTO(recruitmentId);
+            int id = GetUserId();
 
-            if (result == -1) return BadRequest();
+            dto.LastUpdatedById = id;
+            dto.LastUpdatedDate = DateTime.Now;
+            dto.EndedById = id;
+            dto.EndedDate = DateTime.Now;
+            int result = service.EndRecruitment(dto);
 
-            return RedirectToAction("Index");
+            if (result == -1) return BadRequest("There is no such recruitment!");
+
+            return Ok("Recruitment ended successfully");
         }
         /// <summary>
         /// Deletes a recruitment represented by an id
@@ -136,11 +153,19 @@ namespace HeRoBackEnd.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult Delete(int recruitmentId)
         {
-            int result = service.DeleteRecruitment(recruitmentId);
+            DeleteRecruitmentDTO dto = new DeleteRecruitmentDTO(recruitmentId);
+            int id = GetUserId();
 
-            if (result == -1) return BadRequest();
+            dto.LastUpdatedById = id;
+            dto.LastUpdatedDate = DateTime.Now;
+            dto.DeletedById = id;
+            dto.DeletedDate = DateTime.Now;
 
-            return RedirectToAction("Index");
+            int result = service.DeleteRecruitment(dto);
+
+            if (result == -1) return BadRequest("There is no such recruitment!");
+
+            return Ok("Recruitment deleted successfully");
         }
     }
 }

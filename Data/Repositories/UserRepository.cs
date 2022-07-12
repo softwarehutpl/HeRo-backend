@@ -4,28 +4,49 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Data.Repositories
 {
-    public class UserRepository
+    public class UserRepository : BaseRepository<User>
     {
         private DataContext _dataContext;
 
-        public UserRepository(DataContext context)
+        public UserRepository(DataContext context) :base(context)
         {
             _dataContext = context;
         }
+        
+        public void ChangeUserPassword(string email, string password)
+        {
+            User user = GetUserByEmail(email);
+            user.Password = password;
+            UpdateUser(user);
+        }
 
+        public User GetUserById(int id)
+        {
+            var result = _dataContext.Users.Find(id);
+            return result;
+        }
         public User GetUserByEmail(string mail)
         {
             var result = _dataContext.Users.Where(x => x.Email == mail).FirstOrDefault();
             return result;
         }
 
-        public IEnumerable<User> GetAllUsers()
+        public IQueryable<User> GetAllUsers()
         {
-            var result = _dataContext.Users.ToList();
+            var result = _dataContext.Users;
             return result;
         }
 
-        public void AddUser() { }
+        public void AddUser(User user) 
+        {
+            _dataContext.Add(user);
+            _dataContext.SaveChanges();
+        }
+        public void UpdateUser(User user)
+        {
+            _dataContext.Update(user);
+            _dataContext.SaveChanges();
+        }
 
         public void RemoveUser(int id) { }
 
@@ -47,10 +68,26 @@ namespace Data.Repositories
             return result;
         }
 
+        public Guid GetUserGuidByEmail(string email)
+        {
+            var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.PasswordRecoveryGuid).FirstOrDefault();
+            return result;
+        }
+
         public bool CheckIfUserExist(string email)
         {
             var result = _dataContext.Users.Any(x => x.Email == email);
             return result;
+        }
+
+        public void ChangeUserPasswordByEmail(string email,string password)
+        {
+            var user = GetUserByEmail(email);
+            user.Password = password;
+            
+            _dataContext.Users.Update(user);
+            _dataContext.SaveChanges();
+
         }
     }
 }

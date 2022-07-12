@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220711130648_addingPasswordRecoveryGuid")]
+    partial class addingPasswordRecoveryGuid
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -203,7 +205,7 @@ namespace Data.Migrations
                     b.ToTable("Recruitment");
                 });
 
-            modelBuilder.Entity("Data.Entities.RecruitmentSkill", b =>
+            modelBuilder.Entity("Data.Entities.RecruitmentRequirement", b =>
                 {
                     b.Property<int>("RecruitmentId")
                         .HasColumnType("int");
@@ -368,7 +370,7 @@ namespace Data.Migrations
                     b.Navigation("Recruiter");
                 });
 
-            modelBuilder.Entity("Data.Entities.RecruitmentSkill", b =>
+            modelBuilder.Entity("Data.Entities.RecruitmentRequirement", b =>
                 {
                     b.HasOne("Data.Entities.Recruitment", "Recruitment")
                         .WithMany()

@@ -20,6 +20,8 @@ namespace Services.DTOs.Recruitment
 
         public int RecruiterId { get; set; }
 
+        public int? LastUpdatedById { get; set; }
+
         public DateTime? LastUpdatedDate { get; set; }
     }
 }
