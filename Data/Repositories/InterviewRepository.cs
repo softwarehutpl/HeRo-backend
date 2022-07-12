@@ -16,5 +16,11 @@ namespace Data.Repositories
             var result = _dataContext.Interviews.Find(id);
             return result;
         }
+
+        public IQueryable<Interview> GetAllInterviews()
+        {
+            var result = _dataContext.Interviews;
+            return result;
+        }
     }
 }
