@@ -22,81 +22,95 @@ namespace Services.Services
             this.userRepo = userRepo;
             this.logger = logger;
         }
-        private User GetUser()
-        {
-            //jak narazie nie ma zalogowanego u¿ytkownika, wiêc to nie dzia³a
-            /*List<Claim> claims = ClaimsPrincipal.Current.Claims.ToList();
-            Claim emailClaim = claims.FirstOrDefault(e => e.Type == ClaimTypes.Email);
-            User user = userRepo.GetUserByEmail(emailClaim.Value);
 
-            return user;*/
-            User user = new User();
-            user.Id = 1;
-
-            return user;
-        }
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
-            User user = GetUser();
+            try
+            {
+                Recruitment recruitment = mapper.Map<Recruitment>(dto);
 
-            Recruitment recruitment = mapper.Map<Recruitment>(dto);
-            recruitment.CreatedById = user.Id;
-            recruitment.LastUpdatedById = user.Id;
+                repo.AddRecruitment(recruitment);
+            }catch(Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return -1;
+            }
 
-            int result = repo.AddRecruitment(recruitment);
-
-            return result;
+            return 1;
         }
         public int UpdateRecruitment(int recruitmentId, UpdateRecruitmentDTO dto)
         {
-            User user = GetUser();
+            try
+            {
+                Recruitment recruitment = repo.GetById(recruitmentId);
+                recruitment.LastUpdatedById = dto.LastUpdatedById;
+                recruitment.BeginningDate = dto.BeginningDate;
+                recruitment.EndingDate = dto.EndingDate;
+                recruitment.Name = dto.Name;
+                recruitment.Description = dto.Description;
+                recruitment.RecruiterId = dto.RecruiterId;
+                recruitment.LastUpdatedDate = dto.LastUpdatedDate;
 
-            Recruitment recruitment = repo.GetById(recruitmentId);
-            recruitment.LastUpdatedById = user.Id;
-            recruitment.BeginningDate = dto.BeginningDate;
-            recruitment.EndingDate = dto.EndingDate;
-            recruitment.Name = dto.Name;
-            recruitment.Description = dto.Description;
-            recruitment.RecruiterId = dto.RecruiterId;
-            recruitment.LastUpdatedDate = dto.LastUpdatedDate;
+                repo.UpdateRecruitment(recruitment);
+            }catch(Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return -1;
+            }
 
-            int result = repo.UpdateRecruitment(recruitment);
-
-            return result;
+            return 1;
         }
 
-        public int EndRecruitment(int recruitmentId)
+        public int EndRecruitment(EndRecruimentDTO dto)
         {
-            User user = GetUser();
+            try
+            {
+                Recruitment recruitment = repo.GetById(dto.Id);
+                recruitment.LastUpdatedDate = dto.LastUpdatedDate;
+                recruitment.LastUpdatedById = dto.LastUpdatedById;
+                recruitment.EndedDate = dto.EndedDate;
+                recruitment.EndedById = dto.EndedById;
 
-            Recruitment recruitment = repo.GetById(recruitmentId);
-            recruitment.LastUpdatedDate = DateTime.Now;
-            recruitment.LastUpdatedById = user.Id;
-            recruitment.EndedDate = DateTime.Now;
-            recruitment.EndedById = user.Id;
+                repo.UpdateRecruitment(recruitment);
+            }catch(Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return -1;
+            }
 
-            int result = repo.UpdateRecruitment(recruitment);
-
-            return result;
+            return 1;
         }
 
-        public int DeleteRecruitment(int recruitmentId)
+        public int DeleteRecruitment(DeleteRecruitmentDTO dto)
         {
-            User user = GetUser();
+            try
+            {
+                Recruitment recruitment = repo.GetById(dto.Id);
+                recruitment.LastUpdatedDate = dto.LastUpdatedDate;
+                recruitment.LastUpdatedById = dto.LastUpdatedById;
+                recruitment.DeletedDate = dto.DeletedDate;
+                recruitment.DeletedById = dto.LastUpdatedById;
 
-            Recruitment recruitment = repo.GetById(recruitmentId);
-            recruitment.LastUpdatedDate = DateTime.Now;
-            recruitment.LastUpdatedById = user.Id;
-            recruitment.DeletedDate = DateTime.Now;
-            recruitment.DeletedById = user.Id;
+                repo.UpdateRecruitment(recruitment);
+            }catch(Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return -1;
+            }
 
-            int result = repo.UpdateRecruitment(recruitment);
-
-            return result;
+            return 1;
         }
 
         public IEnumerable<ReadRecruitmentDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
+            try
+            {
+
+            }catch(Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return null;
+            }
             IEnumerable<Recruitment> recruitments = repo.GetAllRecruitments();
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
@@ -136,8 +150,16 @@ namespace Services.Services
 
         public ReadRecruitmentDTO GetRecruitment(int recruitmentId)
         {
-            Recruitment recruitment = repo.GetRecruitmentById(recruitmentId);
+            Recruitment recruitment;
             ReadRecruitmentDTO result = null;
+            try
+            {
+                recruitment = repo.GetRecruitmentById(recruitmentId);
+            }catch(Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return null;
+            }
 
             if (recruitment != null) result = mapper.Map<ReadRecruitmentDTO>(recruitment);
 

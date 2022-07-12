@@ -16,7 +16,7 @@ namespace Data
 
         public DbSet<Candidate> Candidates { get; set; }
         public DbSet<Recruitment> Recruitments { get; set; }
-        public DbSet<RecruitmentRequirement> RecruitmentRequirements { get; set; }
+        public DbSet<RecruitmentSkill> RecruitmentRequirements { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<Log> Logs { get; set; }
@@ -25,7 +25,7 @@ namespace Data
         {
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<RecruitmentRequirement>().HasKey(u => new
+            modelBuilder.Entity<RecruitmentSkill>().HasKey(u => new
             {
                 u.RecruitmentId,
                 u.SkillId
@@ -81,7 +81,7 @@ namespace Data
 
 
 
-        public void UpdateEntitiesRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, IEntity, new()
+        public void UpdateEntitiesRange<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, new()
         {
             foreach (var entity in entities)
             {
@@ -91,7 +91,7 @@ namespace Data
 
 
 
-        public void UpdateEntitiesRangeAndSaveChanges<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, IEntity, new()
+        public void UpdateEntitiesRangeAndSaveChanges<TEntity>(IEnumerable<TEntity> entities) where TEntity : class, new()
         {
             UpdateEntitiesRange(entities);
             SaveChanges();

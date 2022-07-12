@@ -27,27 +27,13 @@ namespace Data.Repositories
             return result;
         }
 
-        public int AddRecruitment(Recruitment recruitment)
+        public void AddRecruitment(Recruitment recruitment)
         {
-            try
-            {
                 AddAndSaveChanges(recruitment);
-            }catch(Exception ex)
-            {
-                return -1;
-            }
-            return 1;
         }
-        public int UpdateRecruitment(Recruitment recruitment)
+        public void UpdateRecruitment(Recruitment recruitment)
         {
-            try
-            {
                 UpdateAndSaveChanges(recruitment);
-            }catch(Exception ex)
-            {
-                return -1;
-            }
-            return 1;
         }
     }
 }

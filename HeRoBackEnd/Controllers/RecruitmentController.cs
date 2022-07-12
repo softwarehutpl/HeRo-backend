@@ -7,6 +7,7 @@ using Data.Entities;
 using Services.DTOs.Recruitment;
 using AutoMapper;
 using Common.Enums;
+using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -20,6 +21,15 @@ namespace HeRoBackEnd.Controllers
         {
             this.service = service;
             mapper = map;
+        }
+
+        private int GetUserId()
+        {
+            List<Claim> claims = HttpContext.User.Claims.ToList();
+            Claim idClaim = claims.FirstOrDefault(e => e.Type == ClaimTypes.NameIdentifier);
+            int id = int.Parse(idClaim.Value);
+
+            return id;
         }
 
         /// <summary>
@@ -42,6 +52,8 @@ namespace HeRoBackEnd.Controllers
 
             IEnumerable<ReadRecruitmentDTO> result = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
+            if (result == null) return BadRequest();
+
             return new JsonResult(result);
         }
 
@@ -58,7 +70,7 @@ namespace HeRoBackEnd.Controllers
 
             if (recruitment == null)
             {
-                return RedirectToAction("Index");
+                return BadRequest();
             }
 
             return new JsonResult(recruitment);
@@ -76,7 +88,11 @@ namespace HeRoBackEnd.Controllers
         {
             
             CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
+            int id = GetUserId();
+
+            dto.CreatedById = id;
             dto.CreatedDate = DateTime.Now;
+            dto.LastUpdatedById = id;
             dto.LastUpdatedDate = DateTime.Now;
 
             int result=service.AddRecruitment(dto);
@@ -98,6 +114,9 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
         {
             UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(recruitment);
+            int id = GetUserId();
+
+            dto.LastUpdatedById = id;
             dto.LastUpdatedDate = DateTime.Now;
 
             int result=service.UpdateRecruitment(recruitmentId, dto);
@@ -117,7 +136,14 @@ namespace HeRoBackEnd.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult End(int recruitmentId)
         {
-            int result=service.EndRecruitment(recruitmentId);
+            EndRecruimentDTO dto = new EndRecruimentDTO(recruitmentId);
+            int id = GetUserId();
+
+            dto.LastUpdatedById = id;
+            dto.LastUpdatedDate = DateTime.Now;
+            dto.EndedById = id;
+            dto.EndedDate = DateTime.Now;
+            int result=service.EndRecruitment(dto);
 
             if (result == -1) return BadRequest();
 
@@ -133,7 +159,15 @@ namespace HeRoBackEnd.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult Delete(int recruitmentId)
         {
-            int result = service.DeleteRecruitment(recruitmentId);
+            DeleteRecruitmentDTO dto = new DeleteRecruitmentDTO(recruitmentId);
+            int id = GetUserId();
+
+            dto.LastUpdatedById = id;
+            dto.LastUpdatedDate = DateTime.Now;
+            dto.DeletedById = id;
+            dto.DeletedDate = DateTime.Now;
+
+            int result = service.DeleteRecruitment(dto);
 
             if (result == -1) return BadRequest();
 
