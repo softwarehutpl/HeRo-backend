@@ -10,7 +10,7 @@ namespace Services.Services
     public class RecruitmentRequirementService
     {
         //tabela przejściowa między kampanią rekrutacyjną a wymaganiami
-        public async Task<List<RecruitmentRequirement>> GetRequirements()
+        public async Task<List<RecruitmentSkill>> GetRequirements()
         {
             return null;
         }

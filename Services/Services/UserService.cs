@@ -26,10 +26,11 @@ namespace Services.Services
             user.PasswordRecoveryGuid = guid;
             _userRepository.UpdateUser(user);
         }
-        public async Task<int> AddUser(UserDTO dto)
-
+        public void SetUserConfirmationGuid(string email, Guid guid)
         {
-            return 0;
+            var user = _userRepository.GetUserByEmail(email);
+            user.ConfirmationGuid = guid;
+            _userRepository.UpdateUser(user);
         }
 
         public UserDTO Get(int userId)

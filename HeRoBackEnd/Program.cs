@@ -5,6 +5,7 @@ using Data.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using NLog.Web;
+using AutoMapper;
 using Services.Services;
 
 var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
