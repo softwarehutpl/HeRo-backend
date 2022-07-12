@@ -45,17 +45,30 @@ namespace Services.Services
             UserRepository userRepo = new UserRepository(_dataContext);
             RecruitmentService rs = new RecruitmentService(_mapper, recRepo, userRepo);
             candidate.RecruiterId = rs.GetRecruiterIdFromRecruitmentId(recId);
-            int result = _candidateRepository.AddCandidate(candidate);
-
-            return result;
+            try
+            {
+                _candidateRepository.AddAndSaveChanges(candidate);
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+            return 1;
         }
         public int ChangeStatus(int id, string status)
         {
             Candidate candidate = _candidateRepository.GetCandidateById(id);
             candidate.Status = status;
-            int result = _candidateRepository.UpdateCandidate(candidate);
-
-            return result;
+            try
+            {
+                _candidateRepository.UpdateAndSaveChanges(candidate);
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+            return 1;
+            
         }
         public int UpdateCandidate(int id, UpdateCandidateDTO dto)
         {
@@ -72,10 +85,17 @@ namespace Services.Services
             candidate.LastUpdatedDate = DateTime.Now;
             candidate.LastUpdatedById = GetUserId();
 
-            int result = _candidateRepository.UpdateCandidate(candidate);
-
-            return result;
+            try
+            {
+                _candidateRepository.UpdateAndSaveChanges(candidate);
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+            return 1;
         }
+
         public int DeleteCandidate(int id)
         {
             int userId = GetUserId();
@@ -88,12 +108,19 @@ namespace Services.Services
                 candidate.DeletedDate = DateTime.Now;
                 candidate.DeletedById = userId;
 
-                int result = _candidateRepository.UpdateCandidate(candidate);
-
-                return result;
+                try
+                {
+                    _candidateRepository.UpdateAndSaveChanges(candidate);
+                }
+                catch (Exception ex)
+                {
+                    return -1;
+                }
+                return 1;
             }
             else return -1;
         }
+
         public int AddHRNote(int id, string note, int score)
         {
             int userId = GetUserId();
@@ -104,13 +131,19 @@ namespace Services.Services
                 candidate.LastUpdatedById = userId;
                 candidate.HROpinionText = note;
                 candidate.HROpinionScore = score;
-                int result = _candidateRepository.UpdateCandidate(candidate);
-
-                return result;
-
+                try
+                {
+                    _candidateRepository.UpdateAndSaveChanges(candidate);
+                }
+                catch (Exception ex)
+                {
+                    return -1;
+                }
+                return 1;
             }
             else return -1;
         }
+
         public int AddInterviewNote(int id, string note, int score)
         {
             int userId = GetUserId();
@@ -121,12 +154,19 @@ namespace Services.Services
                 candidate.LastUpdatedById = userId;
                 candidate.InterviewOpinionText = note;
                 candidate.InterviewOpinionScore = score;
-                int result = _candidateRepository.UpdateCandidate(candidate);
-
-                return result;
+                try
+                {
+                    _candidateRepository.UpdateAndSaveChanges(candidate);
+                }
+                catch (Exception ex)
+                {
+                    return -1;
+                }
+                return 1;
             }
             else return -1;
         }
+
         public CandidateProfileDTO? GetCandidateProfileById(int id)
         {
             Candidate candidate = _candidateRepository.GetCandidateById(id);
@@ -137,7 +177,7 @@ namespace Services.Services
        
         public IEnumerable<CandidateInfoForListDTO> GetCandidates(Paging paging, SortOrder sortOrder, CandidateFilteringDTO dto)
         {
-            IEnumerable<Candidate> candidates = _candidateRepository.GetAllCandidates();
+            IEnumerable<Candidate> candidates = _candidateRepository.GetAll();
 
            
             if (!String.IsNullOrEmpty(dto.Status))
@@ -210,8 +250,16 @@ namespace Services.Services
                 candidate.LastUpdatedById = userId;
                 if (dto.TechId!=null) candidate.TechId = dto.TechId;
                 if(dto.RecruiterId!=null) candidate.RecruiterId = dto.RecruiterId;
-                int result = _candidateRepository.UpdateCandidate(candidate);
-                return result;
+                try
+                {
+                    _candidateRepository.UpdateAndSaveChanges(candidate);
+                }
+                catch (Exception ex)
+                {
+                    return -1;
+                }
+                return 1;
+
             }
             else return -1;
         }
@@ -225,8 +273,16 @@ namespace Services.Services
                 candidate.LastUpdatedDate = DateTime.Now;
                 candidate.LastUpdatedById = userId;
                 candidate.InterviewDate = date;
-                int result = _candidateRepository.UpdateCandidate(candidate);
-                return result;
+                try
+                {
+                    _candidateRepository.UpdateAndSaveChanges(candidate);
+                }
+                catch (Exception ex)
+                {
+                    return -1;
+                }
+                return 1;
+
             }
             else return -1;
         }
@@ -239,8 +295,16 @@ namespace Services.Services
                 candidate.LastUpdatedDate = DateTime.Now;
                 candidate.LastUpdatedById = userId;
                 candidate.TechInterviewDate = date;
-                int result = _candidateRepository.UpdateCandidate(candidate);
-                return result;
+                try
+                {
+                    _candidateRepository.UpdateAndSaveChanges(candidate);
+                }
+                catch (Exception ex)
+                {
+                    return -1;
+                }
+                return 1;
+
             }
             else return -1;
             

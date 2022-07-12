@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Enums;
 using Common.Listing;
 using Data.Entities;
 using HeRoBackEnd.ViewModels.Candidate;
@@ -13,22 +14,16 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class CandidateController : Controller
     {
-        private CandidateService candidateService;
+        private CandidateService _candidateService;
         private ILogger<CandidateController> _logger;
         private readonly IMapper _mapper;
     
-
-
-
         public CandidateController(CandidateService candidateService, ILogger<CandidateController> logger, IMapper map)
         {
-            this.candidateService = candidateService;
+            this._candidateService = candidateService;
             _mapper = map;
             _logger = logger;
         }
-
-
-
 
 
         /// <summary>
@@ -49,16 +44,12 @@ namespace HeRoBackEnd.Controllers
                     candidateListFilterViewModel.TechId,
                     candidateListFilterViewModel.RecruitmentId);
 
-            IEnumerable<CandidateInfoForListDTO> result = candidateService.GetCandidates(paging, sortOrder, candidateFilteringDTO);
+            IEnumerable<CandidateInfoForListDTO> result = _candidateService.GetCandidates(paging, sortOrder, candidateFilteringDTO);
 
             return new JsonResult(result);
         }
 
 
-
-
-
-        //działa
         /// <summary>
         /// Returns a candidate specified by the id
         /// </summary>
@@ -67,26 +58,20 @@ namespace HeRoBackEnd.Controllers
 
         [HttpGet]
         [Route("Candidate/Get/{candidateId}")]
-        public IActionResult Get(int? candidateId)
+        public IActionResult Get(int candidateId)
         {
-            if (candidateId == null)
-            {
-                return RedirectToAction("Index");
-            }
-            CandidateProfileDTO candDTO = candidateService.GetCandidateProfileById((int)candidateId);
+            
+            CandidateProfileDTO? candDTO = _candidateService.GetCandidateProfileById(candidateId);
 
             if (candDTO == null)
             {
-                return RedirectToAction("Index");
+                return BadRequest();
             }
 
             return new JsonResult(candDTO);
         }
 
 
-
-
-        //działa
         /// <summary>
         /// Creates a candidate
         /// </summary>
@@ -101,10 +86,10 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Create(CandidateCreateViewModel newCandidate)
         {
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
-            dto.Status = "New";
+            dto.Status = CandidateStatusEnum.New.ToString();
             dto.ApplicationDate = DateTime.Now;
 
-            int result = candidateService.CreateCandidate(dto);
+            int result = _candidateService.CreateCandidate(dto);
 
             if (result == -1) return BadRequest();
 
@@ -112,9 +97,6 @@ namespace HeRoBackEnd.Controllers
         }
 
 
-
-
-        //działa
         /// <summary>
         /// Updates information about a candidate
         /// </summary>
@@ -128,14 +110,12 @@ namespace HeRoBackEnd.Controllers
         {
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
                        
-            int result = candidateService.UpdateCandidate(candidateId, dto);
+            int result = _candidateService.UpdateCandidate(candidateId, dto);
 
             if (result == -1) return BadRequest();
 
             return Ok();
         }
-
-
 
 
         /// <summary>
@@ -148,17 +128,13 @@ namespace HeRoBackEnd.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult Delete(int candidateId)
         {
-            int result = candidateService.DeleteCandidate(candidateId);
+            int result = _candidateService.DeleteCandidate(candidateId);
 
             if (result == -1) return BadRequest();
 
             return Ok();
         }
         
-
-
-
-
 
         /// <summary>
         /// Adds a note concerning the candidate (given by HR)
@@ -172,16 +148,11 @@ namespace HeRoBackEnd.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult AddHRNote(int candidateId, string notes, int score)
         {
-            int result = candidateService.AddHRNote(candidateId, notes, score);
+            int result = _candidateService.AddHRNote(candidateId, notes, score);
             if (result == -1) return BadRequest();
             else return Ok();
             
         }
-
-
-
-
-
 
         /// <summary>
         /// Adds a note concerning the candidate (given by tech)
@@ -195,15 +166,10 @@ namespace HeRoBackEnd.Controllers
         //[ValidateAntiForgeryToken]
         public IActionResult AddInterviewNote(int candidateId, string notes, int score)
         {
-            int result = candidateService.AddInterviewNote(candidateId, notes, score);
+            int result = _candidateService.AddInterviewNote(candidateId, notes, score);
             if (result == -1) return BadRequest();
             else return Ok();
         }
-
-
-
-
-
 
 
         /// <summary>
@@ -222,7 +188,7 @@ namespace HeRoBackEnd.Controllers
                 return BadRequest();
             }
             CandidateAssigneesDTO dto = _mapper.Map<CandidateAssigneesDTO>(assignees);
-            int result = candidateService.AllocateRecruiterAndTech((int)candidateId, dto);
+            int result = _candidateService.AllocateRecruiterAndTech((int)candidateId, dto);
 
             if (result == -1)
             {
@@ -231,9 +197,6 @@ namespace HeRoBackEnd.Controllers
 
             return Ok();
         }
-
-
-
 
 
         /// <summary>
@@ -251,15 +214,11 @@ namespace HeRoBackEnd.Controllers
                 return BadRequest();
             else
             {
-                int result = candidateService.AllocateRecruitmentInterview(candidateId, DateTime.Parse(date));
+                int result = _candidateService.AllocateRecruitmentInterview(candidateId, DateTime.Parse(date));
                 if (result == -1) return BadRequest();
                 else return Ok();
             }
         }
-
-
-
-
 
 
         /// <summary>
@@ -277,7 +236,7 @@ namespace HeRoBackEnd.Controllers
                 return BadRequest();
             else
             {
-                int result = candidateService.AllocateTechInterview(candidateId, DateTime.Parse(date));
+                int result = _candidateService.AllocateTechInterview(candidateId, DateTime.Parse(date));
                 if (result == -1) return BadRequest();
                 else return Ok();
             }
