@@ -44,6 +44,10 @@ namespace HeRoBackEnd.Controllers
             return new JsonResult(result);
         }
 
+        
+
+
+
         /// <summary>
         /// Returns a recruitment specified by an id
         /// </summary>

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Listing;
 using Data.Entities;
 using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Mvc;
@@ -15,7 +16,7 @@ namespace HeRoBackEnd.Controllers
         private CandidateService candidateService;
         private ILogger<CandidateController> _logger;
         private readonly IMapper _mapper;
-
+    
 
 
 
@@ -31,53 +32,61 @@ namespace HeRoBackEnd.Controllers
 
 
         /// <summary>
-        /// Returns a Json string of the list of candidates
+        /// Returns a Json result object representing a list of candidates
         /// </summary>
-        /// <returns>Json string representing a list of Candidates</returns>
-        [HttpGet]
+        /// <returns>Json result object representing a list of Candidates</returns>
+        [HttpPost]
         [Route("Candidate/Index")]
-        public IActionResult Index()
+        public IActionResult Index(CandidateListFilterViewModel candidateListFilterViewModel)
         {
-            List<Candidate> candidates = candidateService.GetCandidates();
+            Paging paging = candidateListFilterViewModel.Paging;
+            SortOrder sortOrder = candidateListFilterViewModel.SortOrder;
+            CandidateFilteringDTO candidateFilteringDTO
+                = new CandidateFilteringDTO(
+                    candidateListFilterViewModel.Status,
+                    candidateListFilterViewModel.Stage,
+                    candidateListFilterViewModel.RecruiterId,
+                    candidateListFilterViewModel.TechId,
+                    candidateListFilterViewModel.RecruitmentId);
 
-            return new JsonResult(candidates);
+            IEnumerable<CandidateInfoForListDTO> result = candidateService.GetCandidates(paging, sortOrder, candidateFilteringDTO);
+
+            return new JsonResult(result);
         }
-        
 
 
 
 
 
+        //działa
         /// <summary>
         /// Returns a candidate specified by the id
         /// </summary>
         /// <param name="candidateId">Takes the id of a candidate</param>
         /// <returns>Json string representing a Candidate</returns>
-        
+
         [HttpGet]
         [Route("Candidate/Get/{candidateId}")]
-        public async Task<IActionResult> Get(int? candidateId)
+        public IActionResult Get(int? candidateId)
         {
             if (candidateId == null)
             {
                 return RedirectToAction("Index");
             }
-            //ReadCandidateDTO jeszcze nie ma
-            //ReadCandidateDTO candDTO = candidateService.GetCandidateById((int)candidateId);
+            CandidateProfileDTO candDTO = candidateService.GetCandidateProfileById((int)candidateId);
 
-            //if (candDTO == null)
-            //{
-            //    return RedirectToAction("Index");
-            //}
+            if (candDTO == null)
+            {
+                return RedirectToAction("Index");
+            }
 
-            //return new JsonResult(candDTO);
-            return RedirectToAction("Index");
+            return new JsonResult(candDTO);
         }
 
 
 
 
-
+        //działa
         /// <summary>
         /// Creates a candidate
         /// </summary>
@@ -89,23 +98,23 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Candidate/Create")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(CandidateCreateViewModel newCandidate, int RecruiterId)
+        public IActionResult Create(CandidateCreateViewModel newCandidate)
         {
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
             dto.Status = "New";
-            dto.RecruiterId = RecruiterId;
+            dto.ApplicationDate = DateTime.Now;
 
             int result = candidateService.CreateCandidate(dto);
 
             if (result == -1) return BadRequest();
 
-            return RedirectToAction("Index");
+            return Ok();
         }
 
 
 
 
-        
+        //działa
         /// <summary>
         /// Updates information about a candidate
         /// </summary>
@@ -118,13 +127,12 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Edit(int candidateId, CandidateEditViewModel candidate)
         {
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
-            dto.LastUpdatedDate = DateTime.Now;
-
+                       
             int result = candidateService.UpdateCandidate(candidateId, dto);
 
             if (result == -1) return BadRequest();
 
-            return RedirectToAction("Index");
+            return Ok();
         }
 
 
@@ -138,13 +146,13 @@ namespace HeRoBackEnd.Controllers
         [HttpDelete]
         [Route("Candidate/Delete/{candidateId}")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int candidateId)
+        public IActionResult Delete(int candidateId)
         {
             int result = candidateService.DeleteCandidate(candidateId);
 
             if (result == -1) return BadRequest();
 
-            return RedirectToAction("Index");
+            return Ok();
         }
         
 
@@ -162,12 +170,15 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Candidate/AddHRNote/{candidateId}")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddHRNote(int candidateId, string notes, int score)
+        public IActionResult AddHRNote(int candidateId, string notes, int score)
         {
-            candidateService.AddHRNote(candidateId, notes, score);
-
-            return RedirectToAction("Index");
+            int result = candidateService.AddHRNote(candidateId, notes, score);
+            if (result == -1) return BadRequest();
+            else return Ok();
+            
         }
+
+
 
 
 
@@ -182,11 +193,94 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Candidate/AddInterviewNote/{candidateId}")]
         //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddInterviewNote(int candidateId, string notes, int score)
+        public IActionResult AddInterviewNote(int candidateId, string notes, int score)
         {
-            candidateService.AddInterviewNote(candidateId, notes, score);
-
-            return RedirectToAction("Index");
+            int result = candidateService.AddInterviewNote(candidateId, notes, score);
+            if (result == -1) return BadRequest();
+            else return Ok();
         }
+
+
+
+
+
+
+
+        /// <summary>
+        /// Assign tech and recruiter to candidate
+        /// </summary>
+        /// <param name="candidateId">Takes the id of a candidate</param>
+        /// <param name="assignees">Updated information about the candidates assignees</param>
+        /// <returns>IActionResult</returns>
+
+        [HttpPost]
+        [Route("Candidate/AssignTechAndRecruiter/{candidateId}")]
+        public IActionResult AssignTechAndRecruiter(int? candidateId, CandidateAssigneesViewModel assignees)
+        {
+            if (candidateId == null)
+            {
+                return BadRequest();
+            }
+            CandidateAssigneesDTO dto = _mapper.Map<CandidateAssigneesDTO>(assignees);
+            int result = candidateService.AllocateRecruiterAndTech((int)candidateId, dto);
+
+            if (result == -1)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
+
+
+
+
+        /// <summary>
+        /// Assigns dates of interviews for the candidate.
+        /// </summary>
+        /// <param name="candidateId">Id of the candidate</param>
+        /// <param name="date">The date of tech interview</param>
+        /// <returns>IActionResult</returns>
+        [HttpPost]
+        [Route("Candidate/SetInterviewDate/{candidateId}")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult SetInterviewDate(int candidateId, string? date)
+        {
+            if (date == null)
+                return BadRequest();
+            else
+            {
+                int result = candidateService.AllocateRecruitmentInterview(candidateId, DateTime.Parse(date));
+                if (result == -1) return BadRequest();
+                else return Ok();
+            }
+        }
+
+
+
+
+
+
+        /// <summary>
+        /// Assigns dates of tech interviews for the candidate.
+        /// </summary>
+        /// <param name="candidateId">Id of the candidate</param>
+        /// <param name="date">The date of tech interiew</param>
+        /// <returns>IActionResult</returns>
+        [HttpPost]
+        [Route("Candidate/SetTechInterviewDate/{candidateId}")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult SetTechInterviewDate(int candidateId, string? date)
+        {
+            if (date == null)
+                return BadRequest();
+            else
+            {
+                int result = candidateService.AllocateTechInterview(candidateId, DateTime.Parse(date));
+                if (result == -1) return BadRequest();
+                else return Ok();
+            }
+        }      
     }
 }

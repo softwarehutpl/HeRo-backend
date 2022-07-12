@@ -51,8 +51,8 @@ namespace Data.Entities
         [Required]
         public int RecruitmentId { get; set; }
 
-        [Required]
-        public int RecruiterId { get; set; }
+        
+        public int? RecruiterId { get; set; }
 
         public int? TechId { get; set; }
 
@@ -86,7 +86,7 @@ namespace Data.Entities
         public virtual User? DeletedBy { get; set; }
 
         [ForeignKey("RecruiterId")]
-        public virtual User Recruiter { get; set; }
+        public virtual User? Recruiter { get; set; }
 
         [ForeignKey("TechId")]
         public virtual User? Tech { get; set; }

@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
+using Common.Listing;
 using Data;
 using Data.Entities;
 using Data.Repositories;
+using PagedList;
 using Services.DTOs;
 using Services.DTOs.Candidate;
 using System.ComponentModel.DataAnnotations;
@@ -11,12 +13,14 @@ namespace Services.Services
     public class CandidateService
     {
         private readonly CandidateRepository _candidateRepository;
-        private readonly IMapper mapper;
+        private readonly IMapper _mapper;
+        private readonly DataContext _dataContext;
 
-        public CandidateService(IMapper map, CandidateRepository candidateRepository)
+        public CandidateService(IMapper map, CandidateRepository candidateRepository, DataContext dataContext)
         {
-            mapper = map;
+            _mapper = map;
             _candidateRepository = candidateRepository;
+            _dataContext = dataContext;
         }
         private int GetUserId()
         {
@@ -34,8 +38,13 @@ namespace Services.Services
         public int CreateCandidate(CreateCandidateDTO dto)
         {
             //przekazanie wartości z DTO do obiektu
-            Candidate candidate = mapper.Map<Candidate>(dto);
-
+            Candidate candidate = _mapper.Map<Candidate>(dto);
+            int recId = candidate.RecruitmentId;
+            
+            RecruitmentRepository recRepo  = new RecruitmentRepository(_dataContext);
+            UserRepository userRepo = new UserRepository(_dataContext);
+            RecruitmentService rs = new RecruitmentService(_mapper, recRepo, userRepo);
+            candidate.RecruiterId = rs.GetRecruiterIdFromRecruitmentId(recId);
             int result = _candidateRepository.AddCandidate(candidate);
 
             return result;
@@ -118,15 +127,57 @@ namespace Services.Services
             }
             else return -1;
         }
-        public Candidate? GetCandidateById(int id)
+        public CandidateProfileDTO? GetCandidateProfileById(int id)
         {
             Candidate candidate = _candidateRepository.GetCandidateById(id);
-            return candidate;
+            CandidateProfileDTO? result = null;
+            if (candidate != null) result = _mapper.Map<CandidateProfileDTO>(candidate);
+            return result;
         }
        
-        public List<Candidate> GetCandidates()
+        public IEnumerable<CandidateInfoForListDTO> GetCandidates(Paging paging, SortOrder sortOrder, CandidateFilteringDTO dto)
         {
-            return _candidateRepository.GetAllCandidates().ToList();
+            IEnumerable<Candidate> candidates = _candidateRepository.GetAllCandidates();
+
+           
+            if (!String.IsNullOrEmpty(dto.Status))
+            {
+                candidates = candidates.Where(s => s.Status.Contains(dto.Status));
+            }
+            if (!String.IsNullOrEmpty(dto.Stage))
+            {
+                candidates = candidates.Where(s => s.Stage.Contains(dto.Stage));
+            } 
+            if (dto.RecruiterId!=0)
+            {
+                candidates = candidates.Where(s => s.RecruiterId==dto.RecruiterId);
+            } 
+            if (dto.RecruitmentId!=0)
+            {
+                candidates = candidates.Where(s => s.RecruitmentId == dto.RecruitmentId);
+            } 
+            if (dto.TechId!=0)
+            {
+                candidates = candidates.Where(s => s.TechId == dto.TechId);
+            }
+            candidates = candidates.Where(s => s.DeletedById == null);
+            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
+            {
+                if (sort.Value == "DESC")
+                {
+                    candidates = candidates.OrderByDescending(u => u.Name);
+                }
+                else
+                {
+                    candidates = candidates.OrderBy(s => s.Name);
+                }
+            }
+
+            IEnumerable<Candidate> pagedCandidates = candidates.ToPagedList(paging.PageNumber, paging.PageSize);
+            //Missing type map configuration or unsupported mapping.
+
+            IEnumerable<CandidateInfoForListDTO> result = _mapper.Map<IEnumerable<CandidateInfoForListDTO>>(pagedCandidates);
+            return result;
         }
         //nie ma tabeli oraz klasy dla rozmowy także stworzyłem jak narazie DTO dla
         //potrzebnych danych
@@ -149,33 +200,30 @@ namespace Services.Services
         //    else return -1;
         //}
 
-        public int AllocateTech(int id, int techId)
+        public int AllocateRecruiterAndTech(int id, CandidateAssigneesDTO dto)
         {
-            Candidate? candidate = GetCandidateById(id);
+            int userId = GetUserId();
+            Candidate candidate = _candidateRepository.GetCandidateById(id);
             if (candidate != null)
             {
-                candidate.TechId = techId;
+                candidate.LastUpdatedDate = DateTime.Now;
+                candidate.LastUpdatedById = userId;
+                if (dto.TechId!=null) candidate.TechId = dto.TechId;
+                if(dto.RecruiterId!=null) candidate.RecruiterId = dto.RecruiterId;
                 int result = _candidateRepository.UpdateCandidate(candidate);
                 return result;
             }
             else return -1;
         }
-        public int AllocateRecruiter(int id, int recruiterId)
-        {
-            Candidate? candidate = GetCandidateById(id);
-            if (candidate != null)
-            {
-                candidate.RecruiterId = recruiterId;
-                int result = _candidateRepository.UpdateCandidate(candidate);
-                return result;
-            }
-            else return -1;
-        }
+       
         public int AllocateRecruitmentInterview(int id, DateTime date)
         {
-            Candidate? candidate = GetCandidateById(id);
+            int userId = GetUserId();
+            Candidate? candidate = _candidateRepository.GetCandidateById(id);
             if (candidate != null)
             {
+                candidate.LastUpdatedDate = DateTime.Now;
+                candidate.LastUpdatedById = userId;
                 candidate.InterviewDate = date;
                 int result = _candidateRepository.UpdateCandidate(candidate);
                 return result;
@@ -184,9 +232,12 @@ namespace Services.Services
         }
         public int AllocateTechInterview(int id, DateTime date)
         {
-            Candidate? candidate = GetCandidateById(id);
+            int userId = GetUserId();
+            Candidate? candidate = _candidateRepository.GetCandidateById(id);
             if (candidate != null)
             {
+                candidate.LastUpdatedDate = DateTime.Now;
+                candidate.LastUpdatedById = userId;
                 candidate.TechInterviewDate = date;
                 int result = _candidateRepository.UpdateCandidate(candidate);
                 return result;

@@ -32,6 +32,13 @@ namespace Services.Services
 
             return user;
         }
+
+        public int GetRecruiterIdFromRecruitmentId(int recruitmentId)
+        {
+            int result = GetRecruitment(recruitmentId).Id;
+            return result;
+        }
+
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
             User user = GetUser();

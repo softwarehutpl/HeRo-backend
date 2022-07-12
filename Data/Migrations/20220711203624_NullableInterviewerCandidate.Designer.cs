@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220711203624_NullableInterviewerCandidate")]
+    partial class NullableInterviewerCandidate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -123,7 +125,7 @@ namespace Data.Migrations
 
                     b.HasIndex("TechId");
 
-                    b.ToTable("Candidate", (string)null);
+                    b.ToTable("Candidate");
                 });
 
             modelBuilder.Entity("Data.Entities.Log", b =>
@@ -155,7 +157,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Log", (string)null);
+                    b.ToTable("Log");
                 });
 
             modelBuilder.Entity("Data.Entities.Recruitment", b =>
@@ -219,7 +221,7 @@ namespace Data.Migrations
 
                     b.HasIndex("RecruiterId");
 
-                    b.ToTable("Recruitment", (string)null);
+                    b.ToTable("Recruitment");
                 });
 
             modelBuilder.Entity("Data.Entities.RecruitmentRequirement", b =>
@@ -237,7 +239,7 @@ namespace Data.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("RecruitmentRequirement", (string)null);
+                    b.ToTable("RecruitmentRequirement");
                 });
 
             modelBuilder.Entity("Data.Entities.Skill", b =>
@@ -255,7 +257,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skill", (string)null);
+                    b.ToTable("Skill");
                 });
 
             modelBuilder.Entity("Data.Entities.User", b =>
@@ -300,7 +302,7 @@ namespace Data.Migrations
 
                     b.HasIndex("DeletedById");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Data.Entities.Candidate", b =>

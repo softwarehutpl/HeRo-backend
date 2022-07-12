@@ -17,9 +17,9 @@ namespace Data.Repositories
             return result;
         }
 
-        public IQueryable<Candidate> GetAllCandidates() 
+        public IEnumerable<Candidate> GetAllCandidates() 
         {
-            IQueryable<Candidate> result = GetAll();
+            IEnumerable<Candidate> result = GetAll();
 
             return result;
         }
