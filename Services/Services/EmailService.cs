@@ -39,12 +39,12 @@ namespace Services.Services
         public void SendRecoveredPassword(string email)
         {
 
-            string newPassword = _authService.GenerateNewPassword(email);
-            string subject = "Password";
-            string body = $"Your new password is {newPassword}";
+            //string newPassword = _authService.GenerateNewPassword(email);
+            //string subject = "Password";
+            //string body = $"Your new password is {newPassword}";
 
-            MailMessage mail = _emailHelper.CreateEmail(email, subject, body);
-            _emailHelper.SendEmail(mail);
+            // MailMessage mail = _emailHelper.CreateEmail(email, subject, body);
+            //_emailHelper.SendEmail(mail);
         }
     }
 }

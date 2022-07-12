@@ -42,13 +42,7 @@ namespace Services.Services
 
             return false;
         }
-        public string GenerateNewPassword(string email)
-        {                      
-            var password = Guid.NewGuid().ToString("N").Substring(0, 8);
-            var passwordAfterHash = GetHash(password);
-            _userRepository.ChangeUserPassword(email, passwordAfterHash);
-            return password;
-        }
+
         public async Task<ClaimsIdentity> ValidateAndCreateClaim(string password, string email)
         {
             if (ValidateUser(password, email))

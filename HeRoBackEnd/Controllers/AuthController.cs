@@ -27,7 +27,7 @@ namespace HeRoBackEnd.Controllers
         /// <param name="email">E-mail of the user</param>
         /// <param name="password">User password</param>
         /// <returns>Signs in user</returns>
-        /// <response code="200">User signs in properly</response>
+        /// <response code="200">User signs in</response>
         /// <response code="400">Bad credentials</response>
         [HttpGet]
         [Route("Auth/SignIn")]
@@ -65,7 +65,6 @@ namespace HeRoBackEnd.Controllers
         /// User registration method
         /// </summary>
         /// <param name="newUser">Object containing information about a new user</param>
-        /// <returns>Signs in user</returns>
         /// <response code="200">User created</response>
         /// <response code="400">Invalid Email or Password or User already exist</response>
         [HttpPost]
@@ -86,7 +85,6 @@ namespace HeRoBackEnd.Controllers
         /// If user exist, sends recovery to mail parameter adress.
         /// </summary>
         /// <param name="email"></param>
-        /// <returns>Signs in user</returns>
         /// <response code="200">Recovery E-Mail send</response>
         /// <response code="400">Account doesn't exist</response>
         [HttpPost]
@@ -108,24 +106,22 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// If user exist, sends recovery to mail parameter adress.
+        /// If Guid and user email are assign to same entity, change user password
         /// </summary>
-        /// <param name="email"></param>
-        /// <returns>Signs in user</returns>
-        /// <response code="200">Recovery E-Mail send</response>
-        /// <response code="400">Account doesn't exist</response>
+        /// <param name="user">object of the UserPasswordRecoveryViewModel class</param>
+        /// <response code="200">Password changed</response>
+        /// <response code="400">Email and Guid values are assign to different users, try again</response>
         [HttpPost]
-        [Route("Auth/RecoverPassword")]
+        [Route("Auth/ChangePassword")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> RecoverPassword(string email, Guid guid)
+        public async Task<IActionResult> ChangePassword(UserPasswordRecoveryViewModel user)
         {
-            bool userGuid = await _authServices.CheckPasswordRecoveryGuid(guid, email);
+            bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.guid, user.email);
             if (!userGuid) return BadRequest();
 
-            _emailService.SendRecoveredPassword(email);
+            await _authServices.ChangeUserPassword(user.email, user.password);
             return Ok();
         }
-
     }
 }
