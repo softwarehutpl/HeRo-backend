@@ -47,12 +47,6 @@ namespace Data.Repositories
             return result;
         }
 
-        public string GetUserRoleByEmail(string email)
-        {
-            var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.RoleName).FirstOrDefault();
-            return result;
-        }
-
         public bool CheckIfUserExist(string email)
         {
             var result = _dataContext.Users.Any(x => x.Email == email);
