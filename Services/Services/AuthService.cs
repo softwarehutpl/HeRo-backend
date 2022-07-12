@@ -47,13 +47,13 @@ namespace Services.Services
         {
             if (ValidateUser(password, email))
             {
-                string role = _userRepository.GetUserRoleByEmail(email);
+                User user = _userRepository.GetUserByEmail(email);
 
                 var claims = new List<Claim>()
                 {
+                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                     new Claim(ClaimTypes.Email, email),
-                    new Claim(ClaimTypes.Role, role)
-
+                    new Claim(ClaimTypes.Role, user.RoleName)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
