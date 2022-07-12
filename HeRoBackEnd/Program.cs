@@ -36,11 +36,15 @@ try
         };
         options.Cookie.HttpOnly = true;
     });
-    
+
+    builder.Services.AddAuthorization(options =>
+    {
+        options.AddPolicy("AdminRequirment",
+            policy => policy.RequireClaim("RoleName", "Admin"));
+    });
 
 
-builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
+    builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
 
@@ -52,6 +56,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
+
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {
@@ -103,8 +108,6 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     app.UseAuthentication();
     app.UseAuthorization();
-
-
 
     app.MapControllerRoute(
         name: "default",

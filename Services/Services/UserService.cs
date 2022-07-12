@@ -106,7 +106,7 @@ namespace Services.Services
             return user.Id;
         }
 
-        public int Delete(int? userId, int loginUserId)
+        public int Delete(int userId, int loginUserId)
         {
             User user = _userRepository.GetUserById(userId);
             if (user == null)
@@ -115,7 +115,7 @@ namespace Services.Services
             }
 
             user.DeletedById = loginUserId;
-            user.DeletedDate = DateTime.Now;
+            user.DeletedDate = DateTime.UtcNow;
 
             _userRepository.UpdateAndSaveChanges(user);
 

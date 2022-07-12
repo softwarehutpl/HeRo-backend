@@ -1,5 +1,6 @@
 ﻿using Common.Listing;
 using HeRoBackEnd.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.User;
 using Services.Services;
@@ -97,22 +98,12 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpDelete]
         [Route("User/Delete/{userId}")]
-        //[ValidateAntiForgeryToken]
-        public IActionResult Delete(int? userId)
+        [Authorize(Policy = "AdminRequirment")]
+        public IActionResult Delete(int userId)
         {
-            if (userId == null)
-            {
-                return NotFound("UserId must be a value");
-            }
-
             var claims = HttpContext.User.Claims.ToList();
 
-            if (claims.Count == 0)
-            {
-                return NotFound("Only logged in users can delete");
-            }
-
-            string stringLoginUserId = claims.Where(x => x.Type.Contains("nameidentifier")).First().Value;
+            string stringLoginUserId = claims.Where(x => x.Type == "Id").First().Value;
             if (int.TryParse(stringLoginUserId, out int loginUserId))
             {
                 int result = _userService.Delete(userId, loginUserId);

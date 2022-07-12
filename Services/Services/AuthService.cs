@@ -34,7 +34,7 @@ namespace Services.Services
         }
 
         private bool ValidateUser(string password, string email)
-        {           
+        {
             string passwordInDb = _userRepository.GetUserPassword(email);
             string passwordAfterHash = GetHash(password);
 
@@ -51,9 +51,9 @@ namespace Services.Services
 
                 var claims = new List<Claim>()
                 {
-                    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                    new Claim(ClaimTypes.Email, email),
-                    new Claim(ClaimTypes.Role, user.RoleName)
+                    new Claim("Id", user.Id.ToString()),
+                    new Claim("Email", email),
+                    new Claim("RoleName", user.RoleName)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
