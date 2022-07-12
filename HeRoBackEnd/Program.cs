@@ -46,9 +46,10 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     builder.Services.AddSingleton(config);
     builder.Services.AddScoped<EmailHelper>();
-    builder.Services.AddScoped<UserRepository>();
     builder.Services.AddScoped<EmailService>();
+    builder.Services.AddScoped<UserRepository>();
     builder.Services.AddScoped<UserService>();
+    builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
     builder.Services.AddControllersWithViews();
