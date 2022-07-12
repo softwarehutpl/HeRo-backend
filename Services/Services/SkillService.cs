@@ -37,6 +37,24 @@ namespace Services.Services
             
             return result;
         }
+        public IEnumerable<SkillDTO> GetSkillsFilteredByName(string name)
+        {
+            IEnumerable<SkillDTO> result;
+            try
+            {
+                IEnumerable<Skill> skills = repo.GetAllSkills();
+                skills = skills.Where(e => e.Name.Contains(name));
+                skills = skills.Take(5);
+
+                result= mapper.Map<IEnumerable<SkillDTO>>(skills);
+            }catch(Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return null;
+            }
+
+            return result;
+        }
         public SkillDTO GetSkill(int id)
         {
             SkillDTO result;

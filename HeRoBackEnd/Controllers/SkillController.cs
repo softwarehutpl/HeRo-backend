@@ -68,7 +68,7 @@ namespace HeRoBackEnd.Controllers
         /// <summary>
         /// Returns all the skills
         /// </summary>
-        /// <returns>Object of the JsonResult class representing the IEnumerable collection of skills in JSON format</returns>
+        /// <returns>Object of the JsonResult class representing the IEnumerable collection of skills in the JSON format</returns>
         [HttpPost]
         [Route("Skill/GetList")]
         public IActionResult GetList()
@@ -81,10 +81,26 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
+        /// Returns 5 skills which names contain a string passed as an argument
+        /// </summary>
+        /// <param name="name">String used to find skills which names contain it</param>
+        /// <returns>Object of the JsonResult class representing the IEnumerable collection of skills in the JSON format</returns>
+        [HttpGet]
+        [Route("Skill/GetListFilteredByName{name}")]
+        public IActionResult GetListFilteredByName(string name)
+        {
+            IEnumerable<SkillDTO> skills = service.GetSkillsFilteredByName(name);
+
+            JsonResult result = new JsonResult(skills);
+
+            return result;
+        }
+
+        /// <summary>
         /// Returns a skill specified by an id
         /// </summary>
         /// <param name="skillId">Id of a skill</param>
-        /// <returns>Object of the JsonResult class representing the skill in JSON format</returns>
+        /// <returns>Object of the JsonResult class representing the skill in the JSON format</returns>
         [HttpGet]
         [Route("Skill/Get/{skillId}")]
         public IActionResult Get(int skillId)

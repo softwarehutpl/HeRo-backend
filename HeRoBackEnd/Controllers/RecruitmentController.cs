@@ -26,7 +26,7 @@ namespace HeRoBackEnd.Controllers
         /// Returns a list of recruitments
         /// </summary>
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
-        /// <returns>Object of the JsonResult class representing the IEnumerable collection of recruitments in JSON format</returns>
+        /// <returns>Object of the JsonResult class representing the IEnumerable collection of recruitments in he JSON format</returns>
         [HttpPost]
         [Route("Recruitment/GetList")]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
@@ -50,7 +50,7 @@ namespace HeRoBackEnd.Controllers
         /// Returns a recruitment specified by an id
         /// </summary>
         /// <param name="recruitmentId">Id of an recruitment</param>
-        /// <returns>Object of the JsonResult class representing a recruitment in JSON format</returns>
+        /// <returns>Object of the JsonResult class representing a recruitment in the JSON format</returns>
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
         public IActionResult Get(int recruitmentId)
