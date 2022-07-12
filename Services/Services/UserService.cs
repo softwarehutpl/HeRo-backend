@@ -108,18 +108,18 @@ namespace Services.Services
 
         public int Delete(int? userId)
         {
-            User user = userRepository.GetUserById(userId);
+            User user = _userRepository.GetUserById(userId);
             if (user == null)
             {
-                return 1;
+                return 0;
             }
 
             //user.DeletedById = ?
             user.DeletedDate = DateTime.Now;
 
-            userRepository.Update(user);
+            _userRepository.UpdateAndSaveChanges(user);
 
-            return 0;
+            return user.Id;
         }
     }
 }

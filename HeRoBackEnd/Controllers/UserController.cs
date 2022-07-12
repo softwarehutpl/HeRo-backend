@@ -101,17 +101,17 @@ namespace HeRoBackEnd.Controllers
         {
             if (userId == null)
             {
-                return NotFound();
+                return NotFound("UserId must be a value");
             }
 
-            int result = userService.Delete(userId);
+            int result = _userService.Delete(userId);
 
-            if (result != 0)
+            if (result == 0)
             {
-                return NotFound();
+                return NotFound("No user with this UserId");
             }
 
-            return Ok();
+            return Ok("Deleting was successful");
         }
     }
 }
