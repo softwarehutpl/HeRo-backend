@@ -2,8 +2,8 @@
 {
     public class UserPasswordRecoveryViewModel
     {
-        public string email { get; set; }
-        public Guid guid { get; set; }
-        public string password { get; set; }
+        public string Email { get; set; }
+        public Guid Guid { get; set; }
+        public string Password { get; set; }
     }
 }

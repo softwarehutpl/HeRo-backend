@@ -112,15 +112,15 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">Password changed</response>
         /// <response code="400">Email and Guid values are assign to different users, try again</response>
         [HttpPost]
-        [Route("Auth/ChangePassword")]
+        [Route("Auth/RecoverPassword")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> ChangePassword(UserPasswordRecoveryViewModel user)
+        public async Task<IActionResult> RecoverPassword(UserPasswordRecoveryViewModel user)
         {
-            bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.guid, user.email);
+            bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.Guid, user.Email);
             if (!userGuid) return BadRequest();
 
-            await _authServices.ChangeUserPassword(user.email, user.password);
+            await _authServices.ChangeUserPassword(user.Email, user.Password);
             return Ok();
         }
     }

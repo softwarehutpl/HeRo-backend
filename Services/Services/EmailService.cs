@@ -35,16 +35,5 @@ namespace Services.Services
             MailMessage mail = _emailHelper.CreateEmail(email, subject, body);
             _emailHelper.SendEmail(mail);
         }
-
-        public void SendRecoveredPassword(string email)
-        {
-
-            //string newPassword = _authService.GenerateNewPassword(email);
-            //string subject = "Password";
-            //string body = $"Your new password is {newPassword}";
-
-            // MailMessage mail = _emailHelper.CreateEmail(email, subject, body);
-            //_emailHelper.SendEmail(mail);
-        }
     }
 }
