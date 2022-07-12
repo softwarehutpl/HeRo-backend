@@ -1,13 +1,12 @@
+using Common.ConfigClasses;
 using Common.Helpers;
 using Data;
 using Data.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
-using Services.Services;
-using Common.ConfigClasses;
-using NLog;
 using NLog.Web;
 using AutoMapper;
+using Services.Services;
 
 var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 logger.Debug("Initializing web application");
@@ -17,6 +16,18 @@ NLog.GlobalDiagnosticsContext.Set("LogDirectory", logPath);
 try
 {
     var builder = WebApplication.CreateBuilder(args);
+
+    // Add configurations
+    builder.Host.ConfigureAppConfiguration((hostingContext, config) =>
+    {
+        var env = hostingContext.HostingEnvironment;
+
+        config.SetBasePath(env.ContentRootPath)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) //load base settings
+                .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true) //load local settings
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true) //load environment settings                                                                             
+                .AddEnvironmentVariables();
+    });
 
     // Add services to the container.
     builder.Services.AddControllersWithViews();
@@ -57,13 +68,7 @@ try
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
-    /*builder.Services.AddScoped<RecruitmentService>(options =>
-    {
-        return new RecruitmentService(options.GetRequiredService<IMapper>(),
-            options.GetRequiredService<RecruitmentRepository>(),
-            options.GetRequiredService<UserRepository>(),
-            options.GetRequiredService<ILogger<RecruitmentService>>());
-    });*/
+
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {

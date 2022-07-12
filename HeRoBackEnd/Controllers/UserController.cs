@@ -23,6 +23,16 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="userId">Id of the user</param>
         /// <returns>Json string representing an object of the User class</returns>
+        /// <remarks>
+        /// Sample Responses:
+        ///
+        ///     {
+        ///        "email": "test@da.com",
+        ///        "userStatus": "Active",
+        ///        "roleName": "Admin"
+        ///     }
+        ///
+        /// </remarks>
         [HttpGet]
         [Route("User/Get/{userId}")]
         public IActionResult Get(int userId)
@@ -42,6 +52,22 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="userListFilterViewModel">An object containing information about the filter</param>
         /// <returns>Object of the JsonResult class representing a list of Users in the JSON format</returns>
+        /// <remarks>
+        /// Sample Responses:
+        ///
+        ///     [
+        ///          {
+        ///              "email": "test@da.com",
+        ///              "userStatus": "Active",
+        ///              "roleName": "Admin"
+        ///          },
+        ///          {
+        ///              "email": "test2@da.com",
+        ///              "userStatus": "Active",
+        ///              "roleName": "Recruiter"
+        ///         },
+        ///     ]
+        /// </remarks>
         [HttpPost]
         [Route("User/GetList")]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
