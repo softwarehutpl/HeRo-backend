@@ -1,8 +1,10 @@
 ﻿using Common.Listing;
 using HeRoBackEnd.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.User;
 using Services.Services;
+using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -23,13 +25,8 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Json string representing an object of the User class</returns>
         [HttpGet]
         [Route("User/Get/{userId}")]
-        public IActionResult Get(int? userId)
+        public IActionResult Get(int userId)
         {
-            if (userId == null)
-            {
-                return NotFound("UserId must be a value");
-            }
-
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
@@ -66,13 +63,8 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("User/Edit/{userId}")]
         //[ValidateAntiForgeryToken]
-        public IActionResult Edit(int? userId, EditUserViewModel editUser)
+        public IActionResult Edit(int userId, EditUserViewModel editUser)
         {
-            if (userId == null)
-            {
-                return NotFound("UserId must be a value");
-            }
-
             UserEditDTO editUserDTO =
                 new UserEditDTO(
                     userId,
@@ -96,28 +88,22 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpDelete]
         [Route("User/Delete/{userId}")]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(int userId)
+        [Authorize(Policy = "AdminRequirment")]
+        public IActionResult Delete(int userId)
         {
-            //userService.Delete(userId);
+            string stringLoginUserId = HttpContext.User.Claims.ToList().Where(x => x.Type == "Id").First().Value;
 
-            return RedirectToAction("Index");
-        }
+            if (int.TryParse(stringLoginUserId, out int loginUserId))
+            {
+                int result = _userService.Delete(userId, loginUserId);
 
-        /// <summary>
-        /// Logs user in
-        /// </summary>
-        /// <param name="email">Users email</param>
-        /// <param name="password">Users password</param>
-        /// <returns>IActionResult</returns>
-        [HttpPost]
-        [Route("User/SignIn")]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> SignIn(string email, string password)
-        {
-            //userService.SignIn(email, password);
+                if (result == 0)
+                {
+                    return NotFound("No user with this UserId");
+                }
+            }
 
-            return RedirectToAction("Index");
+            return Ok("Deleting was successful");
         }
     }
 }

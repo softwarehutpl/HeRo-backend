@@ -11,11 +11,28 @@ namespace Services.Services
         private UserRepository _userRepository;
 
         public UserService(UserRepository userRepository)
-        {
-            _userRepository = userRepository;
+        { 
+            _userRepository = userRepository; 
         }
 
-        public UserDTO Get(int? userId)
+        public Guid GetUserGuid(string email)
+        {
+            var result = _userRepository.GetUserGuidByEmail(email);
+            return result;
+        }
+        public void SetUserRecoveryGuid(string email, Guid guid)
+        {
+            var user = _userRepository.GetUserByEmail(email);
+            user.PasswordRecoveryGuid = guid;
+            _userRepository.UpdateUser(user);
+        }
+        public async Task<int> AddUser(UserDTO dto)
+
+        {
+            return 0;
+        }
+
+        public UserDTO Get(int userId)
         {
             User user = _userRepository.GetUserById(userId);
             if (user == null)
@@ -99,7 +116,23 @@ namespace Services.Services
 
             user.UserStatus = userEdit.UserStatus;
             user.RoleName = userEdit.RoleName;
-            user.LastUpdatedDate = DateTime.Now;
+            user.LastUpdatedDate = DateTime.UtcNow;
+
+            _userRepository.UpdateAndSaveChanges(user);
+
+            return user.Id;
+        }
+
+        public int Delete(int userId, int loginUserId)
+        {
+            User user = _userRepository.GetUserById(userId);
+            if (user == null)
+            {
+                return 0;
+            }
+
+            user.DeletedById = loginUserId;
+            user.DeletedDate = DateTime.UtcNow;
 
             _userRepository.UpdateAndSaveChanges(user);
 
