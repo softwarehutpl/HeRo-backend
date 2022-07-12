@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace Data.Entities
 {
     [Table("RecruitmentRequirement")]
-    public class RecruitmentRequirement
+    public class RecruitmentSkill
     {
         [Key]
         [Required(ErrorMessage = "Field is required!")]
