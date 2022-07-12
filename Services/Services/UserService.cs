@@ -11,8 +11,25 @@ namespace Services.Services
         private UserRepository _userRepository;
 
         public UserService(UserRepository userRepository)
+        { 
+            _userRepository = userRepository; 
+        }
+
+        public Guid GetUserGuid(string email)
         {
-            _userRepository = userRepository;
+            var result = _userRepository.GetUserGuidByEmail(email);
+            return result;
+        }
+        public void SetUserRecoveryGuid(string email, Guid guid)
+        {
+            var user = _userRepository.GetUserByEmail(email);
+            user.PasswordRecoveryGuid = guid;
+            _userRepository.UpdateUser(user);
+        }
+        public async Task<int> AddUser(UserDTO dto)
+
+        {
+            return 0;
         }
 
         public UserDTO Get(int userId)
