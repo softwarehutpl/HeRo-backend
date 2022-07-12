@@ -64,6 +64,8 @@ try
     builder.Services.AddScoped<EmailService>();
     builder.Services.AddScoped<UserRepository>();
     builder.Services.AddScoped<UserService>();
+    builder.Services.AddScoped<InterviewService>();
+    builder.Services.AddScoped<InterviewRepository>();
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
