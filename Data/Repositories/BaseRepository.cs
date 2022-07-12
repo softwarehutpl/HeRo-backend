@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Data.Repositories
 {
-    public abstract class BaseRepository<TEntity> where TEntity : class, IEntity, new()
+    public abstract class BaseRepository<TEntity> where TEntity : class, new()
     {
         #region Private Members
 
@@ -143,19 +143,9 @@ namespace Data.Repositories
 
         #region Public Methods
 
-        public bool Exist(int id)
-        {
-            return DataContext.Set<TEntity>().Any(x => x.Id == id);
-        }
-
         public virtual TEntity GetById(int id)
         {
             return DataContext.Set<TEntity>().Find(id);
-        }
-
-        public bool Exists(int id)
-        {
-            return DataContext.Set<TEntity>().Any(x => x.Id == id);
         }
 
         #endregion Public Methods
