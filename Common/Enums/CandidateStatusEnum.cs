@@ -9,9 +9,9 @@ namespace Common.Enums
 {
     public enum  CandidateStatusEnum
     {
-        [Description("New")] New = 1,
-        [Description("Recruitment Interview")] RecruitmentInterview = 2,
-        [Description("Tech Interview")] TechInterview = 3,
-        [Description("Hired")] Hired = 4
+        [Description("New")] New,
+        [Description("Interview")] Interview,
+        [Description("Technical Interview")] TechnicalInterview,
+        [Description("Hired")] Hired
     }
 }
