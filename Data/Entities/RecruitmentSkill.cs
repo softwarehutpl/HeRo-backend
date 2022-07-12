@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data.Repositories;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
     [Table("RecruitmentRequirement")]
-    public class RecruitmentRequirement
+    public class RecruitmentSkill
     {
         [Key]
         [Required(ErrorMessage = "Field is required!")]
