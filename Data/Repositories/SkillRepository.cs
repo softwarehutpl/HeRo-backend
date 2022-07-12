@@ -23,22 +23,6 @@ namespace Data.Repositories
 
             return result;
         }
-
-        public void AddSkill(Skill skill)
-        {
-            AddAndSaveChanges(skill);
-        }
-
-        public void UpdateSkill(Skill skill)
-        {
-            UpdateAndSaveChanges(skill);
-        }
-
-        public void DeleteSkill(int id)
-        {
-            RemoveByIdAndSaveChanges(id);
-        }
-
     }
 
 }

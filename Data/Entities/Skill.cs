@@ -14,5 +14,7 @@ namespace Data.Entities
         [Required(ErrorMessage = "Field is required!")]
         [MaxLength(75, ErrorMessage = "Name of field is to long (max. 75 characters!")]
         public string Name { get; set; }
+
+        public bool isUsed { get; set; }
     }
 }

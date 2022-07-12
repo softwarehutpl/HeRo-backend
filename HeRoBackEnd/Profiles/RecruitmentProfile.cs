@@ -14,7 +14,7 @@ namespace HeRoBackEnd.Profiles
             CreateMap<RecruitmentCreateViewModel, CreateRecruitmentDTO>();
             CreateMap<RecruitmentEditViewModel, UpdateRecruitmentDTO>();
             CreateMap<Recruitment, ReadRecruitmentDTO>();
-            CreateMap<SkillDTO, Skill>().ReverseMap();
+            CreateMap<CreateSkillDTO, Skill>().ReverseMap();
         }
     }
 }

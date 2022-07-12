@@ -23,12 +23,12 @@ namespace HeRoBackEnd.Controllers
         [Route("Skill/Create")]
         public IActionResult Create(string skillName)
         {
-            SkillDTO dto = new SkillDTO(skillName);
+            CreateSkillDTO dto = new CreateSkillDTO(skillName, false);
             int result=service.AddSkill(dto);
 
-            if (result == -1) return BadRequest();
+            if (result == -1) return BadRequest("Wrong data!");
 
-            return RedirectToAction("Index");
+            return Ok("Skill added successfully");
         }
 
         /// <summary>
@@ -41,12 +41,12 @@ namespace HeRoBackEnd.Controllers
         [Route("Skill/Update/{skillId}")]
         public IActionResult Update(int skillId, string newSkillName)
         {
-            SkillDTO dto = new SkillDTO(skillId, newSkillName);
+            UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
             int result = service.UpdateSkill(dto);
 
-            if (result == -1) return BadRequest();
+            if (result == -1) return BadRequest("Wrong data!");
 
-            return RedirectToAction("Index");
+            return Ok("Skill updated successfully");
         }
 
         /// <summary>
@@ -60,9 +60,11 @@ namespace HeRoBackEnd.Controllers
         {
             int result = service.DeleteSkill(skillId);
 
-            if (result == -1) return BadRequest();
+            if (result == -1) return BadRequest("There is no such skill!");
+            if (result == 0) return BadRequest("This skill is currently used in one of the recruitments." +
+                " You can't delete it.");
 
-            return RedirectToAction("Index");
+            return Ok("Skill deleted successfully");
         }
 
         /// <summary>
@@ -73,7 +75,7 @@ namespace HeRoBackEnd.Controllers
         [Route("Skill/GetList")]
         public IActionResult GetList()
         {
-            IEnumerable<SkillDTO> skills = service.GetSkills();
+            IEnumerable<ReadSkillDTO> skills = service.GetSkills();
 
             JsonResult result = new JsonResult(skills);
 
@@ -89,7 +91,7 @@ namespace HeRoBackEnd.Controllers
         [Route("Skill/GetListFilteredByName{name}")]
         public IActionResult GetListFilteredByName(string name)
         {
-            IEnumerable<SkillDTO> skills = service.GetSkillsFilteredByName(name);
+            IEnumerable<ReadSkillDTO> skills = service.GetSkillsFilteredByName(name);
 
             JsonResult result = new JsonResult(skills);
 
@@ -105,9 +107,9 @@ namespace HeRoBackEnd.Controllers
         [Route("Skill/Get/{skillId}")]
         public IActionResult Get(int skillId)
         {
-            SkillDTO skill = service.GetSkill(skillId);
+            ReadSkillDTO skill = service.GetSkill(skillId);
 
-            if (skill == null) return BadRequest();
+            if (skill == null) return BadRequest("There is no such skill!");
 
             JsonResult result = new JsonResult(skill);
 

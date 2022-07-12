@@ -6,20 +6,12 @@ using System.Threading.Tasks;
 
 namespace Services.DTOs.Skill
 {
-    public class SkillDTO
+    public class UpdateSkillDTO
     {
-        public SkillDTO()
+        public UpdateSkillDTO(int id, string name)
         {
-
-        }
-        public SkillDTO(string name)
-        {
+            Id = id;
             Name = name;
-        }
-        public SkillDTO(int id, string name)
-        {
-            this.Id = id;
-            this.Name = name;
         }
         public int Id { get; set; }
 
