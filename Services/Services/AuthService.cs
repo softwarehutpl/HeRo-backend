@@ -115,5 +115,16 @@ namespace Services.Services
             if (guid == userGuid) return true;
             return false;
         }
+        public bool ConfirmUser(Guid guid, string email)
+        {
+            User user = _userRepository.GetUserByEmail(email);
+            if(user.ConfirmationGuid == guid)
+            {
+                user.UserStatus = UserStatusEnum.Active.ToString();
+                _userRepository.UpdateUser(user);
+                return true;
+            }
+            return false;
+        }
     }
 }

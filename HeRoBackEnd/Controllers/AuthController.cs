@@ -77,7 +77,21 @@ namespace HeRoBackEnd.Controllers
             
             if(!created) return BadRequest("Invalid Email or Password or User already exist");
 
+            Guid confirmationGuid = Guid.NewGuid();
+            _userService.SetUserConfirmationGuid(newUser.Email, confirmationGuid);
+            string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid, email = newUser.Email}, protocol: "https");
+            _emailService.SendConfirmationEmail(newUser.Email, url);
+
             return Ok("User created");
+        }
+        [HttpGet]
+        [Route("Auth/ConfirmAccount")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> ConfirmAccount(Guid confirmationGuid, string email)
+        {
+            bool check = _authServices.ConfirmUser(confirmationGuid, email);
+            return Ok();
         }
 
 
