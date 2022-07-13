@@ -17,6 +17,7 @@ namespace Services.DTOs.Candidate
 
         public DateTime? AvailableFrom { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
+        public int LastUpdatedBy { get; set; }
         public int? ExpectedMonthlySalary { get; set; }
         public string? OtherExpectations { get; set; }
 

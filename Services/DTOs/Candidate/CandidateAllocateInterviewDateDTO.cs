@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace Services.DTOs.Candidate
 {
-    public class CandidateAssigneesDTO
+    public class CandidateAllocateInterviewDateDTO
     {
-        public int Id { get; set; }
-        public int TechId { get; set; }
+        public DateTime? Date { get; set; }
         public int RecruiterId { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
         public int LastUpdatedBy { get; set; }

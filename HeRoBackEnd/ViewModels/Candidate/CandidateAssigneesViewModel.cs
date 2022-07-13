@@ -1,5 +1,6 @@
 ﻿namespace HeRoBackEnd.ViewModels.Candidate
 {
+
     public class CandidateAssigneesViewModel
     {
         public int? TechId { get; set; }

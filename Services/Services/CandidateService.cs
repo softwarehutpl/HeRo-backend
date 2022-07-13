@@ -3,6 +3,7 @@ using Common.Listing;
 using Data;
 using Data.Entities;
 using Data.Repositories;
+using Microsoft.Extensions.Logging;
 using PagedList;
 using Services.DTOs;
 using Services.DTOs.Candidate;
@@ -15,26 +16,16 @@ namespace Services.Services
         private readonly CandidateRepository _candidateRepository;
         private readonly IMapper _mapper;
         private readonly DataContext _dataContext;
+        private readonly ILogger<RecruitmentService> _logger;
 
-        public CandidateService(IMapper map, CandidateRepository candidateRepository, DataContext dataContext)
+        public CandidateService(IMapper map, CandidateRepository candidateRepository, DataContext dataContext,  ILogger<RecruitmentService>logger)
         {
             _mapper = map;
             _candidateRepository = candidateRepository;
             _dataContext = dataContext;
+            _logger = logger;
         }
-        private int GetUserId()
-        {
-            //jak narazie nie ma zalogowanego użytkownika, więc to nie działa
-            /*List<Claim> claims = ClaimsPrincipal.Current.Claims.ToList();
-            Claim emailClaim = claims.FirstOrDefault(e => e.Type == ClaimTypes.Email);
-            User user = userRepo.GetUserByEmail(emailClaim.Value);
-
-            return user;*/
-            User user = new User();
-            user.Id = 1;
-
-            return user.Id;
-        }
+       
         public int CreateCandidate(CreateCandidateDTO dto)
         {
             //przekazanie wartości z DTO do obiektu
@@ -43,8 +34,8 @@ namespace Services.Services
             
             RecruitmentRepository recRepo  = new RecruitmentRepository(_dataContext);
             UserRepository userRepo = new UserRepository(_dataContext);
-            RecruitmentService rs = new RecruitmentService(_mapper, recRepo, userRepo);
-            candidate.RecruiterId = rs.GetRecruiterIdFromRecruitmentId(recId);
+            RecruitmentService rs = new RecruitmentService(_mapper, recRepo, userRepo, _logger);
+            candidate.RecruiterId = rs.GetRecruitment(recId).RecruiterId;
             try
             {
                 _candidateRepository.AddAndSaveChanges(candidate);
@@ -85,8 +76,6 @@ namespace Services.Services
             candidate.ExpectedMonthlySalary = dto.ExpectedMonthlySalary;
             candidate.OtherExpectations = dto.OtherExpectations;
             candidate.CvPath = dto.CvPath;
-            candidate.LastUpdatedDate = DateTime.Now;
-            candidate.LastUpdatedById = GetUserId();
 
             try
             {
@@ -98,18 +87,30 @@ namespace Services.Services
             }
             return 1;
         }
-        public int DeleteCandidate(int id)
+        public int DeleteCandidate(DeleteCandidateDTO dto)
         {
-            int userId = GetUserId();
-
-            Candidate? candidate = _candidateRepository.GetById(id);
+            Candidate candidate = _candidateRepository.GetById(dto.Id);
+            candidate.DeletedDate = dto.DeletedDate;
+            candidate.DeletedById = dto.DeletedById;
+            try
+            {
+                _candidateRepository.UpdateAndSaveChanges(candidate);
+            }
+            catch (Exception ex)
+            {
+                return -1;
+            }
+            return 1;
+        }
+        public int AddHRNote(int candidateId, CandidateAddHRNoteDTO dto)
+        {
+            Candidate? candidate = _candidateRepository.GetById(candidateId);
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
-                candidate.LastUpdatedById = userId;
-                candidate.DeletedDate = DateTime.Now;
-                candidate.DeletedById = userId;
-
+                candidate.LastUpdatedById = dto.RecruiterId;
+                candidate.HROpinionText = dto.Note;
+                candidate.HROpinionScore = dto.Score;
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -122,38 +123,15 @@ namespace Services.Services
             }
             else return -1;
         }
-        public int AddHRNote(int id, string note, int score)
+        public int AddTechNote(int candidateId, CandidateAddTechNoteDTO dto)
         {
-            int userId = GetUserId();
-            Candidate? candidate = _candidateRepository.GetById(id);
+            Candidate? candidate = _candidateRepository.GetById(candidateId);
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
-                candidate.LastUpdatedById = userId;
-                candidate.HROpinionText = note;
-                candidate.HROpinionScore = score;
-                try
-                {
-                    _candidateRepository.UpdateAndSaveChanges(candidate);
-                }
-                catch (Exception ex)
-                {
-                    return -1;
-                }
-                return 1;
-            }
-            else return -1;
-        }
-        public int AddInterviewNote(int id, string note, int score)
-        {
-            int userId = GetUserId();
-            Candidate? candidate = _candidateRepository.GetById(id);
-            if (candidate != null)
-            {
-                candidate.LastUpdatedDate = DateTime.Now;
-                candidate.LastUpdatedById = userId;
-                candidate.InterviewOpinionText = note;
-                candidate.InterviewOpinionScore = score;
+                candidate.LastUpdatedById = dto.TechId;
+                candidate.InterviewOpinionText = dto.Note;
+                candidate.InterviewOpinionScore = dto.Score;
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -241,13 +219,10 @@ namespace Services.Services
 
         public int AllocateRecruiterAndTech(int id, CandidateAssigneesDTO dto)
         {
-            int userId = GetUserId();
             Candidate candidate = _candidateRepository.GetById(id);
             if (candidate != null)
             {
-                candidate.LastUpdatedDate = DateTime.Now;
-                candidate.LastUpdatedById = userId;
-                if (dto.TechId!=null) candidate.TechId = dto.TechId;
+                if(dto.TechId!=null) candidate.TechId = dto.TechId;
                 if(dto.RecruiterId!=null) candidate.RecruiterId = dto.RecruiterId;
                 try
                 {
@@ -262,15 +237,14 @@ namespace Services.Services
             else return -1;
         }
        
-        public int AllocateRecruitmentInterview(int id, DateTime date)
+        public int AllocateRecruitmentInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
         {
-            int userId = GetUserId();
-            Candidate? candidate = _candidateRepository.GetById(id);
+            Candidate? candidate = _candidateRepository.GetById(candidateId);
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
-                candidate.LastUpdatedById = userId;
-                candidate.InterviewDate = date;
+                candidate.LastUpdatedById = dto.LastUpdatedBy;
+                candidate.InterviewDate = dto.Date;
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -283,15 +257,15 @@ namespace Services.Services
             }
             else return -1;
         }
-        public int AllocateTechInterview(int id, DateTime date)
+        public int AllocateTechInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
         {
-            int userId = GetUserId();
-            Candidate? candidate = _candidateRepository.GetById(id);
+            
+            Candidate? candidate = _candidateRepository.GetById(candidateId);
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
-                candidate.LastUpdatedById = userId;
-                candidate.TechInterviewDate = date;
+                candidate.LastUpdatedById = dto.LastUpdatedBy;
+                candidate.TechInterviewDate = dto.Date;
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
