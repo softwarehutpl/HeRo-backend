@@ -43,7 +43,8 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);
 
-            IEnumerable<ReadRecruitmentDTO> result = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            IEnumerable<ReadRecruitmentDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            JsonResult result = new JsonResult(recruitments);
 
             if (result == null) return BadRequest();
 
@@ -69,12 +70,11 @@ namespace HeRoBackEnd.Controllers
             {
                 return BadRequest();
             }
-
             return Ok(recruitment);
         }
 
         /// <summary>
-        /// Creates a new Recruitment
+        /// Creates a recruitment
         /// </summary>
         /// <param name="newRecruitment">Contains information about a new recruitment</param>
         /// <returns>IActionResult</returns>
@@ -103,7 +103,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Updates information about a recruitment represented by an id
+        /// Updates a recruitment specified by an id
         /// </summary>
         /// <param name="recruitmentId" example="1">Id representing a recruitment</param>
         /// <param name="recruitment">Contains new information about a recruitment</param>
@@ -130,7 +130,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Ends a recruitment represented by an id
+        /// Ends a recruitment specified by an id
         /// </summary>
         /// <param name="recruitmentId" example="1">Id representing a recruitment</param>
         /// <returns>IActionResult</returns>
