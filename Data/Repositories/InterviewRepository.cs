@@ -2,11 +2,11 @@
 
 namespace Data.Repositories
 {
-    public class CandidateRepository : BaseRepository<Candidate>
+    public class InterviewRepository : BaseRepository<Interview>
     {
         private DataContext _dataContext;
 
-        public CandidateRepository(DataContext context) : base(context)
+        public InterviewRepository(DataContext context) : base(context)
         {
             _dataContext = context;
         }
