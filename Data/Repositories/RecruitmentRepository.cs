@@ -19,6 +19,8 @@ namespace Data.Repositories
         {
             Recruitment recruitment = GetById(id);
 
+            if (recruitment.DeletedDate.HasValue) return null;
+
             RecruitmentDetailsDTO result = _mapper.Map<RecruitmentDetailsDTO>(recruitment);
 
             return result;
@@ -27,7 +29,7 @@ namespace Data.Repositories
         public IQueryable<RecruitmentDetailsDTO> GetAllRecruitments()
         {
             IQueryable<Recruitment> recruitments = GetAll().
-                Where(e => !(e.EndedDate.HasValue) && !(e.DeletedDate.HasValue));
+                Where(e =>!(e.DeletedDate.HasValue));
 
             IQueryable<RecruitmentDetailsDTO> result=recruitments
                 .Select(x =>_mapper.Map<RecruitmentDetailsDTO>(recruitments));

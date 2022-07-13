@@ -87,6 +87,10 @@ try
     });
 
     builder.Services.AddAutoMapper(typeof(Program));
+    builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
     // NLog: Setup NLog for Dependency injection
     builder.Logging.ClearProviders();
