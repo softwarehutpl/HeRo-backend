@@ -8,18 +8,10 @@ namespace Data.Repositories
         {
 
         }
-        public Skill GetSkillById(int id)
+        public bool Exists(string name)
         {
-            Skill result = GetById(id);
-
-            if (result == default) return null;
-
-            return result;
-        }
-
-        public IQueryable<Skill> GetAllSkills()
-        {
-            IQueryable<Skill> result = GetAll();
+            IQueryable<Skill> skills = GetAll();
+            bool result = skills.Any(x => x.Name == name);
 
             return result;
         }

@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using Services.Services;
 using Services.DTOs.Skill;
+using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -15,7 +16,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Adds a skill with the specified name
+        /// Adds a skill with the specified name, you can't create a skill which name already exists in the database
         /// </summary>
         /// <param name="skillName">Name of the skill</param>
         /// <returns>IActionResult</returns>
@@ -23,16 +24,16 @@ namespace HeRoBackEnd.Controllers
         [Route("Skill/Create")]
         public IActionResult Create(string skillName)
         {
-            CreateSkillDTO dto = new CreateSkillDTO(skillName, false);
-            int result = _service.AddSkill(dto);
+            int result = _service.AddSkill(skillName);
 
+            if (result == 0) return BadRequest("Skill with that name already exists!");
             if (result == -1) return BadRequest("Wrong data!");
 
             return Ok("Skill added successfully");
         }
 
         /// <summary>
-        /// Updates a skill specified by an id
+        /// Updates a skill specified by an id, you can't update a skill with a name that already exists in the database
         /// </summary>
         /// <param name="skillId">Id of the skill</param>
         /// <param name="newSkillName">New name of the skill</param>
@@ -44,13 +45,14 @@ namespace HeRoBackEnd.Controllers
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
             int result = _service.UpdateSkill(dto);
 
+            if (result == 0) return BadRequest("Skill with that name already exists!");
             if (result == -1) return BadRequest("Wrong data!");
 
             return Ok("Skill updated successfully");
         }
 
         /// <summary>
-        /// Deletes a skill specified by an id
+        /// Deletes a skill specified by an id, you can't delete a skill that is used in one of the recruitments
         /// </summary>
         /// <param name="skillId">Id of the skill</param>
         /// <returns>IAcionResult</returns>
@@ -89,7 +91,7 @@ namespace HeRoBackEnd.Controllers
         [Route("Skill/GetList")]
         public IActionResult GetList()
         {
-            IEnumerable<ReadSkillDTO> skills = _service.GetSkills();
+            IEnumerable<Skill> skills = _service.GetSkills();
 
             JsonResult result = new JsonResult(skills);
 
@@ -131,7 +133,7 @@ namespace HeRoBackEnd.Controllers
         [Route("Skill/GetListFilteredByName{name}")]
         public IActionResult GetListFilteredByName(string name)
         {
-            IEnumerable<ReadSkillDTO> skills = _service.GetSkillsFilteredByName(name);
+            IEnumerable<Skill> skills = _service.GetSkillsFilteredByName(name);
 
             JsonResult result = new JsonResult(skills);
 
@@ -155,7 +157,7 @@ namespace HeRoBackEnd.Controllers
         [Route("Skill/Get/{skillId}")]
         public IActionResult Get(int skillId)
         {
-            ReadSkillDTO skill = _service.GetSkill(skillId);
+            Skill skill = _service.GetSkill(skillId);
 
             if (skill == null) return BadRequest("There is no such skill!");
 

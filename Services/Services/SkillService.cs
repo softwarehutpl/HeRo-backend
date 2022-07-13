@@ -16,20 +16,22 @@ namespace Services.Services
         private readonly ILogger<SkillService> _logger;
         private readonly SkillRepository _repo;
         private readonly IMapper _mapper;
-        public SkillService(SkillRepository repo, ILogger<SkillService> logger, IMapper mapper)
+        private readonly RecruitmentSkillService _recruitmentSkillService;
+        public SkillService(SkillRepository repo, ILogger<SkillService> logger, IMapper mapper, RecruitmentSkillService recruitmentSkillService)
         {
             _repo = repo;
             _logger = logger;
             _mapper = mapper;
+            _recruitmentSkillService = recruitmentSkillService;
         }
-        public IEnumerable<ReadSkillDTO> GetSkills()
+        public IEnumerable<Skill> GetSkills()
         {
-            IEnumerable<ReadSkillDTO> result;
+            IEnumerable<Skill> result;
             try
             {
-                IEnumerable<Skill> skills = _repo.GetAllSkills();
-                result = _mapper.Map<IEnumerable<ReadSkillDTO>>(skills);
-            }catch(Exception ex)
+                result = _repo.GetAll();
+            }
+            catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return null;
@@ -37,31 +39,16 @@ namespace Services.Services
             
             return result;
         }
-        public IEnumerable<ReadSkillDTO> GetSkillsFilteredByName(string name)
+        public IEnumerable<Skill> GetSkillsFilteredByName(string name)
         {
-            IEnumerable<ReadSkillDTO> result;
+            IEnumerable<Skill> result;
             try
             {
-                IEnumerable<Skill> skills = _repo.GetAllSkills();
-                skills = skills.Where(e => e.Name.Contains(name));
-                skills = skills.Take(5);
-
-                result= _mapper.Map<IEnumerable<ReadSkillDTO>>(skills);
-            }catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return null;
-            }
-
-            return result;
-        }
-        public ReadSkillDTO GetSkill(int id)
-        {
-            ReadSkillDTO result;
-            try
-            {
-                Skill skill = _repo.GetSkillById(id);
-                result = _mapper.Map<ReadSkillDTO>(skill);
+                result = _repo.GetAll();
+                result = result
+                    .Where(e => e.Name.Contains(name))
+                    .OrderBy(e=>e.Name)
+                    .Take(5);
             }
             catch(Exception ex)
             {
@@ -71,13 +58,34 @@ namespace Services.Services
 
             return result;
         }
-        public int AddSkill(CreateSkillDTO dto)
+
+        public Skill GetSkill(int id)
+        {
+            Skill result;
+            try
+            {
+                result = _repo.GetById(id);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
+
+            return result;
+        }
+        public int AddSkill(string skillName)
         {
             try
             {
-                Skill skill = _mapper.Map<Skill>(dto);
+                bool exists = _repo.Exists(skillName);
+
+                if (exists == true) return 0;
+
+                Skill skill = new Skill(skillName);
                 _repo.AddAndSaveChanges(skill);
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -89,10 +97,15 @@ namespace Services.Services
         {
             try
             {
-                Skill skill = _repo.GetSkillById(dto.Id);
+                bool exists = _repo.Exists(dto.Name);
+
+                if (exists == true) return 0;
+
+                Skill skill = _repo.GetById(dto.Id);
                 skill.Name = dto.Name;
                 _repo.UpdateAndSaveChanges(skill);
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -101,30 +114,18 @@ namespace Services.Services
             return 1;
         }
 
-        public void UpdateUsed(int id, bool used)
-        {
-            try
-            {
-                Skill skill = _repo.GetSkillById(id);
-                skill.isUsed = used;
-                _repo.UpdateAndSaveChanges(skill);
-            }catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-            }
-        }
-
         public int DeleteSkill(int id)
         {
             try
             {
-                Skill skill = _repo.GetSkillById(id);
-                bool isUsed = skill.isUsed;
+                Skill skill = _repo.GetById(id);
+                bool isUsed = _recruitmentSkillService.IsSkillUsed(id);
 
                 if (isUsed == true) return 0;
 
                 _repo.RemoveByIdAndSaveChanges(id);
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
