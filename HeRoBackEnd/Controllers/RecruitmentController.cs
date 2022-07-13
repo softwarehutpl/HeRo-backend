@@ -3,8 +3,6 @@ using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using Services.DTOs.Recruitment;
-using Data.Entities;
-using Services.DTOs.Recruitment;
 using AutoMapper;
 using Common.Enums;
 using System.Security.Claims;
@@ -28,8 +26,12 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
         /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
+        /// <response code="400">Something went wrong!</response>
+        /// <response code="200"></response>
         [HttpPost]
         [Route("Recruitment/GetList")]
+        [ProducesResponseType(typeof(IEnumerable<ReadRecruitmentDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
             Paging paging = recruitmentListFilterViewModel.Paging;
@@ -43,28 +45,32 @@ namespace HeRoBackEnd.Controllers
 
             IEnumerable<ReadRecruitmentDTO> result = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
-            if (result == null) return BadRequest("Something went wrong!");
+            if (result == null) return BadRequest();
 
-            return new JsonResult(result);
+            return Ok(result);
         }
 
         /// <summary>
         /// Returns a recruitment specified by an id
         /// </summary>
-        /// <param name="recruitmentId">Id of an recruitment</param>
+        /// <param name="recruitmentId" example="1">Id of an recruitment</param>
         /// <returns>Onject of the JsonResult class representing a Recruitment in JSON format</returns>
+        /// <response code="400">There is no such recruitment!</response>
+        /// <response code="200"></response>
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ReadRecruitmentDTO),StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
             ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
 
             if (recruitment == null)
             {
-                return BadRequest("There is no such recruitment!");
+                return BadRequest();
             }
 
-            return new JsonResult(recruitment);
+            return Ok(recruitment);
         }
 
         /// <summary>
@@ -72,9 +78,12 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="newRecruitment">Contains information about a new recruitment</param>
         /// <returns>IActionResult</returns>
+        /// <response code="200">Recruitment created successfully</response>
+        /// <response code="400">Wrong data</response>
         [HttpPost]
         [Route("Recruitment/Create")]
-        //[ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(void),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
         public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
         {
 
@@ -90,18 +99,21 @@ namespace HeRoBackEnd.Controllers
 
             if (result == -1) return BadRequest("Wrong data!");
 
-            return Ok("Recruitment created successfully");
+            return Ok();
         }
 
         /// <summary>
         /// Updates information about a recruitment represented by an id
         /// </summary>
-        /// <param name="recruitmentId">Id representing a recruitment</param>
+        /// <param name="recruitmentId" example="1">Id representing a recruitment</param>
         /// <param name="recruitment">Contains new information about a recruitment</param>
         /// <returns>IActionResult</returns>
+        /// <response code="200">Recruitment updated successfully</response>
+        /// <response code="400">Wrong data!</response>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
-        //[ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(void),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void),StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
         {
             UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(recruitment);
@@ -112,19 +124,22 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.UpdateRecruitment(recruitmentId, dto);
 
-            if (result == -1) return BadRequest("Wrong data!");
+            if (result == -1) return BadRequest();
 
-            return Ok("Recruitment updated successfully");
+            return Ok();
         }
 
         /// <summary>
         /// Ends a recruitment represented by an id
         /// </summary>
-        /// <param name="recruitmentId">Id representing a recruitment</param>
+        /// <param name="recruitmentId" example="1">Id representing a recruitment</param>
         /// <returns>IActionResult</returns>
+        /// <response code="200">Recruitment ended successfully</response>
+        /// <response code="400">There is no such recruitment!</response>
         [HttpGet]
         [Route("Recruitment/End/{recruitmentId}")]
-        //[ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult End(int recruitmentId)
         {
             EndRecruimentDTO dto = new EndRecruimentDTO(recruitmentId);
@@ -136,18 +151,21 @@ namespace HeRoBackEnd.Controllers
             dto.EndedDate = DateTime.Now;
             int result = service.EndRecruitment(dto);
 
-            if (result == -1) return BadRequest("There is no such recruitment!");
+            if (result == -1) return BadRequest();
 
-            return Ok("Recruitment ended successfully");
+            return Ok();
         }
         /// <summary>
         /// Deletes a recruitment represented by an id
         /// </summary>
-        /// <param name="recruitmentId">Id representing a recruitment</param>
+        /// <param name="recruitmentId" example="1">Id representing a recruitment</param>
         /// <returns>IActionResult</returns>
+        /// <response code="200">Recruitment deleted successfully</response>
+        /// <response code="400">There is no such recruitment!</response>
         [HttpGet]
         [Route("Recruitment/Delete/{recruitmentId}")]
-        //[ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int recruitmentId)
         {
             DeleteRecruitmentDTO dto = new DeleteRecruitmentDTO(recruitmentId);
@@ -160,9 +178,9 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.DeleteRecruitment(dto);
 
-            if (result == -1) return BadRequest("There is no such recruitment!");
+            if (result == -1) return BadRequest();
 
-            return Ok("Recruitment deleted successfully");
+            return Ok();
         }
     }
 }
