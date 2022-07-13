@@ -1,10 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data.Repositories;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
     [Table("Candidate")]
-    public class Candidate
+    public class Candidate : IEntity
     {
         [Key]
         public int Id { get; set; }

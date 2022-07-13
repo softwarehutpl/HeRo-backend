@@ -9,10 +9,14 @@ namespace Services.Services
     public class InterviewService
     {
         private InterviewRepository _interviewRepository;
+        private UserRepository _userRepository;
+        private CandidateRepository _candidateRepository;
 
-        public InterviewService(InterviewRepository interviewRepository)
+        public InterviewService(InterviewRepository interviewRepository, UserRepository userRepository, CandidateRepository candidateRepository)
         {
             _interviewRepository = interviewRepository;
+            _userRepository = userRepository;
+            _candidateRepository = candidateRepository;
         }
 
         public InterviewDTO Get(int interviewId)
@@ -23,12 +27,20 @@ namespace Services.Services
                 return null;
             }
 
-            InterviewDTO interviewDTO = new InterviewDTO(interview.Date, interview.CandidateId, interview.UserId, interview.Type);
+            InterviewDTO interviewDTO =
+                new InterviewDTO(
+                    interview.Id,
+                    interview.Date,
+                    interview.CandidateId,
+                    _candidateRepository.GetById(interview.CandidateId).Email,
+                    interview.UserId,
+                    _userRepository.GetById(interview.UserId).Email,
+                    interview.Type);
 
             return interviewDTO;
         }
 
-        public IEnumerable<InterviewListingDTO> GetInterviews(Paging paging, SortOrder sortOrder, InterviewFiltringDTO interviewFiltringDTO)
+        public IEnumerable<InterviewDTO> GetInterviews(Paging paging, SortOrder sortOrder, InterviewFiltringDTO interviewFiltringDTO)
         {
             IQueryable<Interview> interviews = _interviewRepository.GetAll();
 
@@ -38,9 +50,9 @@ namespace Services.Services
             {
                 interviews = interviews.Where(s => s.CandidateId == interviewFiltringDTO.CandidateId);
             }
-            if (interviewFiltringDTO.UserId.HasValue)
+            if (interviewFiltringDTO.WorkerId.HasValue)
             {
-                interviews = interviews.Where(s => s.UserId == interviewFiltringDTO.UserId);
+                interviews = interviews.Where(s => s.UserId == interviewFiltringDTO.WorkerId);
             }
             if (!String.IsNullOrEmpty(interviewFiltringDTO.Type))
             {
@@ -96,7 +108,14 @@ namespace Services.Services
             }
 
             var result = interviews
-                .Select(x => new InterviewListingDTO(x.Date, x.CandidateId, x.UserId, x.Type))
+                .Select(x => new InterviewDTO(
+                    x.Id,
+                    x.Date,
+                    x.CandidateId,
+                    _candidateRepository.GetById(x.CandidateId).Email,
+                    x.UserId,
+                    _userRepository.GetById(x.UserId).Email,
+                    x.Type))
                 .ToPagedList(paging.PageNumber, paging.PageSize);
 
             return result;

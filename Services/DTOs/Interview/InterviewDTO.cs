@@ -2,19 +2,28 @@
 {
     public class InterviewDTO
     {
+        public int InterviewId { get; set; }
+
         public DateTime Date { get; set; }
 
         public int CandidateId { get; set; }
 
-        public int UserId { get; set; }
+        public string CandidateEmail { get; set; }
+
+        public int WorkerId { get; set; }
+
+        public string WorkerEmail { get; set; }
 
         public string Type { get; set; }
 
-        public InterviewDTO(DateTime date, int condidateId, int userId, string type)
+        public InterviewDTO(int interviewId, DateTime date, int candidateId, string candidateEmail, int workerId, string workerEmail, string type)
         {
+            InterviewId = interviewId;
             Date = date;
-            CandidateId = condidateId;
-            UserId = userId;
+            CandidateId = candidateId;
+            CandidateEmail = candidateEmail;
+            WorkerId = workerId;
+            WorkerEmail = workerEmail;
             Type = type;
         }
     }

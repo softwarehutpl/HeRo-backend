@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace HeRoBackEnd.ViewModels.Interview
 {
-    public class InterviewListViewModel
+    public class InterviewFiltringViewModel
     {
         [Required]
         public DateTime FromDate { get; set; }
@@ -13,7 +13,7 @@ namespace HeRoBackEnd.ViewModels.Interview
 
         public int? CandidateId { get; set; }
 
-        public int? UserId { get; set; }
+        public int? WorkerId { get; set; }
 
         public string? Type { get; set; }
 
