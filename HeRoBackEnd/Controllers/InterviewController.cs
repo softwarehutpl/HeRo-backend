@@ -1,5 +1,6 @@
 ﻿using Common.Listing;
 using HeRoBackEnd.ViewModels.Interview;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.Interview;
 using Services.Services;
@@ -142,6 +143,23 @@ namespace HeRoBackEnd.Controllers
             }
 
             return Ok("Editing was successful");
+        }
+
+        [HttpDelete]
+        [Route("Interview/Delete/{interviewId}")]
+        [Authorize(Policy = "AdminRequirment")]
+        public IActionResult Delete(int interviewId)
+        {
+            int loginUserId = GetUserId();
+
+            int result = _interviewService.Delete(interviewId, loginUserId);
+
+            if (result == 0)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }

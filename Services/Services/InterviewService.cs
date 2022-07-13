@@ -9,14 +9,10 @@ namespace Services.Services
     public class InterviewService
     {
         private InterviewRepository _interviewRepository;
-        private UserRepository _userRepository;
-        private CandidateRepository _candidateRepository;
 
-        public InterviewService(InterviewRepository interviewRepository, UserRepository userRepository, CandidateRepository candidateRepository)
+        public InterviewService(InterviewRepository interviewRepository)
         {
             _interviewRepository = interviewRepository;
-            _userRepository = userRepository;
-            _candidateRepository = candidateRepository;
         }
 
         public InterviewDTO Get(int interviewId)
@@ -130,7 +126,7 @@ namespace Services.Services
 
             interview.Date = interviewCreate.Date;
             interview.CandidateId = interviewCreate.CandidateId;
-            interview.UserId = interviewCreate.UserId;
+            interview.WorkerId = interviewCreate.UserId;
             interview.CreatedById = userCreatedId;
             interview.CreatedDate = DateTime.UtcNow;
 
@@ -147,9 +143,25 @@ namespace Services.Services
 
             interview.Date = interviewEdit.Date;
             interview.CandidateId = interviewEdit.CandidateId;
-            interview.UserId = interviewEdit.UserId;
+            interview.WorkerId = interviewEdit.UserId;
             interview.LastUpdatedById = userEditId;
             interview.LastUpdatedDate = DateTime.UtcNow;
+
+            _interviewRepository.UpdateAndSaveChanges(interview);
+
+            return interview.Id;
+        }
+
+        public int Delete(int interviewId, int loginUserId)
+        {
+            Interview interview = _interviewRepository.GetById(interviewId);
+            if (interview == null)
+            {
+                return 0;
+            }
+
+            interview.DeletedById = loginUserId;
+            interview.DeletedDate = DateTime.UtcNow;
 
             _interviewRepository.UpdateAndSaveChanges(interview);
 
