@@ -17,7 +17,7 @@ namespace Services.Services
 
         public InterviewDTO Get(int interviewId)
         {
-            Interview interview = _interviewRepository.GetInterviewById(interviewId);
+            Interview interview = _interviewRepository.GetById(interviewId);
             if (interview == null)
             {
                 return null;
@@ -30,7 +30,7 @@ namespace Services.Services
 
         public IEnumerable<InterviewListingDTO> GetInterviews(Paging paging, SortOrder sortOrder, InterviewFiltringDTO interviewFiltringDTO)
         {
-            IQueryable<Interview> interviews = _interviewRepository.GetAllInterviews();
+            IQueryable<Interview> interviews = _interviewRepository.GetAll();
 
             interviews = interviews.Where(i => (i.Date >= interviewFiltringDTO.FromDate && i.Date <= interviewFiltringDTO.ToDate));
 
