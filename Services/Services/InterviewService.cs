@@ -101,5 +101,18 @@ namespace Services.Services
 
             return result;
         }
+
+        public void Create(InterviewCreateDTO interviewCreate, int userCreatedId)
+        {
+            Interview interview = new Interview();
+
+            interview.Date = interviewCreate.Date;
+            interview.CandidateId = interviewCreate.CandidateId;
+            interview.UserId = interviewCreate.UserId;
+            interview.CreatedById = userCreatedId;
+            interview.CreatedDate = DateTime.UtcNow;
+
+            _interviewRepository.AddAndSaveChanges(interview);
+        }
     }
 }

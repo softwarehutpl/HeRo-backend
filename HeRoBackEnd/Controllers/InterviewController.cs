@@ -80,5 +80,26 @@ namespace HeRoBackEnd.Controllers
 
             return new JsonResult(resutl);
         }
+
+        /// <summary>
+        /// Add new interview
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        [HttpPost]
+        [Route("User/Create")]
+        public IActionResult Create(InterviewCreateViewModel interview)
+        {
+            InterviewCreateDTO interviewCreate =
+                new InterviewCreateDTO(
+                    interview.Date,
+                    interview.CandidateId,
+                    interview.UserId,
+                    interview.Type);
+
+            int userCreatedId = GetUserId();
+            _interviewService.Create(interviewCreate, userCreatedId);
+
+            return Ok("Creating was successful");
+        }
     }
 }
