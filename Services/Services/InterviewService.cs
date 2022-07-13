@@ -33,8 +33,8 @@ namespace Services.Services
                     interview.Date,
                     interview.CandidateId,
                     _candidateRepository.GetById(interview.CandidateId).Email,
-                    interview.UserId,
-                    _userRepository.GetById(interview.UserId).Email,
+                    interview.WorkerId,
+                    _userRepository.GetById(interview.WorkerId).Email,
                     interview.Type);
 
             return interviewDTO;
@@ -52,7 +52,7 @@ namespace Services.Services
             }
             if (interviewFiltringDTO.WorkerId.HasValue)
             {
-                interviews = interviews.Where(s => s.UserId == interviewFiltringDTO.WorkerId);
+                interviews = interviews.Where(s => s.WorkerId == interviewFiltringDTO.WorkerId);
             }
             if (!String.IsNullOrEmpty(interviewFiltringDTO.Type))
             {
@@ -87,11 +87,11 @@ namespace Services.Services
                 {
                     if (sort.Value.ToUpper() == "DESC")
                     {
-                        interviews = interviews.OrderByDescending(i => i.UserId);
+                        interviews = interviews.OrderByDescending(i => i.WorkerId);
                     }
                     else
                     {
-                        interviews = interviews.OrderBy(i => i.UserId);
+                        interviews = interviews.OrderBy(i => i.WorkerId);
                     }
                 }
                 if (sort.Key.ToLower() == "type")
@@ -113,8 +113,8 @@ namespace Services.Services
                     x.Date,
                     x.CandidateId,
                     _candidateRepository.GetById(x.CandidateId).Email,
-                    x.UserId,
-                    _userRepository.GetById(x.UserId).Email,
+                    x.WorkerId,
+                    _userRepository.GetById(x.WorkerId).Email,
                     x.Type))
                 .ToPagedList(paging.PageNumber, paging.PageSize);
 

@@ -17,7 +17,7 @@ namespace Data.Entities
         public int CandidateId { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public int WorkerId { get; set; }
 
         [Required]
         public string Type { get; set; }
@@ -34,7 +34,10 @@ namespace Data.Entities
 
         public DateTime? DeletedDate { get; set; }
 
-        [ForeignKey("UserId")]
+        [ForeignKey("CandidateId")]
+        public virtual Candidate Candidate { get; set; }
+
+        [ForeignKey("WorkerId")]
         public virtual User User { get; set; }
 
         [ForeignKey("CreatedById")]
