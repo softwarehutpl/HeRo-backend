@@ -1,11 +1,20 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Data.Repositories;
 
 namespace Data.Entities
 {
     [Table("Skill")]
-    public class Skill
+    public class Skill : IEntity
     {
+        public Skill(string name)
+        {
+            Name = name;
+        }
+        public Skill()
+        {
+
+        }
         [Key]
         [Required(ErrorMessage = "Field is required!")]
         public int Id { get; set; }

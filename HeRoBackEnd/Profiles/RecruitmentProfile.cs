@@ -2,6 +2,7 @@
 using Services.DTOs.Recruitment;
 using Data.Entities;
 using HeRoBackEnd.ViewModels.Recruitment;
+using Services.DTOs.Skill;
 
 namespace HeRoBackEnd.Profiles
 {
