@@ -1,15 +1,20 @@
-﻿namespace Data.Repositories
+﻿using Data.Entities;
+
+namespace Data.Repositories
 {
-    public class SkillRepository 
+    public class SkillRepository : BaseRepository<Skill>
     {
-        public void GetSkillById(int id) { }
+        public SkillRepository(DataContext context) : base(context)
+        {
 
-        public void GetAllSkills() { }
+        }
+        public bool Exists(string name)
+        {
+            IQueryable<Skill> skills = GetAll();
+            bool result = skills.Any(x => x.Name == name);
 
-        public void AddSkill(int id) { }
-
-        public void RemoveSkill(int id) { }
-
+            return result;
+        }
     }
 
 }
