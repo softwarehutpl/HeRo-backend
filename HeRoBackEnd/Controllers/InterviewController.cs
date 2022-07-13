@@ -101,5 +101,33 @@ namespace HeRoBackEnd.Controllers
 
             return Ok("Creating was successful");
         }
+
+        /// <summary>
+        /// Updates information about a interview represented by an id
+        /// </summary>
+        /// <param name="interviewId">Id of a interview</param>
+        /// <returns>IActionResult</returns>
+        [HttpPost]
+        [Route("User/Edit/{interviewId}")]
+        public IActionResult Edit(int interviewId, InterviewEditViewModel interview)
+        {
+            InterviewEditDTO interviewEdit =
+                new InterviewEditDTO(
+                    interviewId,
+                    interview.Date,
+                    interview.CandidateId,
+                    interview.UserId,
+                    interview.Type);
+
+            int userEditId = GetUserId();
+            int result = _interviewService.Update(interviewEdit, userEditId);
+
+            if (result == 0)
+            {
+                return NotFound("No interview with this Id");
+            }
+
+            return Ok("Editing was successful");
+        }
     }
 }

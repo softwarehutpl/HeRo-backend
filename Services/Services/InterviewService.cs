@@ -114,5 +114,24 @@ namespace Services.Services
 
             _interviewRepository.AddAndSaveChanges(interview);
         }
+
+        public int Update(InterviewEditDTO interviewEdit, int userEditId)
+        {
+            Interview interview = _interviewRepository.GetById(interviewEdit.InterviewId);
+            if (interview == null)
+            {
+                return 0;
+            }
+
+            interview.Date = interviewEdit.Date;
+            interview.CandidateId = interviewEdit.CandidateId;
+            interview.UserId = interviewEdit.UserId;
+            interview.LastUpdatedById = userEditId;
+            interview.LastUpdatedDate = DateTime.UtcNow;
+
+            _interviewRepository.UpdateAndSaveChanges(interview);
+
+            return interview.Id;
+        }
     }
 }
