@@ -10,17 +10,5 @@ namespace Data.Repositories
         {
             _dataContext = context;
         }
-
-        public Interview GetInterviewById(int id)
-        {
-            var result = _dataContext.Interviews.Find(id);
-            return result;
-        }
-
-        public IQueryable<Interview> GetAllInterviews()
-        {
-            var result = _dataContext.Interviews;
-            return result;
-        }
     }
 }
