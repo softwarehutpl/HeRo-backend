@@ -28,6 +28,8 @@ namespace HeRoBackEnd.Controllers
         ///        "interviewId" : 1,
         ///        "date": "2012-12-12T12:12:12.121Z",
         ///        "candidateId": 1,
+        ///        "candidateName": "Jan"
+        ///        "candidateLastName": "Naj"
         ///        "candidateEmail": "test@da.com",
         ///        "workerId": 1,
         ///        "workerEmail": "testHR@da.com",
@@ -62,6 +64,8 @@ namespace HeRoBackEnd.Controllers
         ///              "interviewId" : 1,
         ///              "date": "2012-12-12T12:12:12.121Z",
         ///              "candidateId": 1,
+        ///              "candidateName": "Jan"
+        ///              "candidateLastName": "Naj"
         ///              "candidateEmail": "test@da.com",
         ///              "workerId": 1,
         ///              "workerEmail": "testHR@da.com",
@@ -71,6 +75,8 @@ namespace HeRoBackEnd.Controllers
         ///             "interviewId" : 2,
         ///              "date": "2013-13-13T13:13:13.131Z",
         ///              "candidateId": 3,
+        ///              "candidateName": "Maja"
+        ///              "candidateLastName": "Listopad"
         ///              "candidateEmail": "test33@da.com",
         ///              "workerId": 2,
         ///              "workerEmail": "testTech@da.com",

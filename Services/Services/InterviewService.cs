@@ -32,9 +32,11 @@ namespace Services.Services
                     interview.Id,
                     interview.Date,
                     interview.CandidateId,
-                    _candidateRepository.GetById(interview.CandidateId).Email,
+                    interview.Candidate.Name,
+                    interview.Candidate.LastName,
+                    interview.Candidate.Email,
                     interview.WorkerId,
-                    _userRepository.GetById(interview.WorkerId).Email,
+                    interview.User.Email,
                     interview.Type);
 
             return interviewDTO;
@@ -107,22 +109,19 @@ namespace Services.Services
                 }
             }
 
-            IEnumerable<InterviewDTO> resutl2 = (from i in interviews
-                                                  from c in _candidateRepository.GetAll()
-                                                  from u in _userRepository.GetAll()
-                                                  where i.CandidateId == c.Id && i.WorkerId == u.Id
-                                                  select new InterviewDTO
-                                                  (
-                                                      i.Id,
-                                                      i.Date,
-                                                      i.CandidateId,
-                                                      c.Email,
-                                                      i.WorkerId,
-                                                      u.Email,
-                                                      i.Type
-                                                  )).ToPagedList(paging.PageNumber, paging.PageSize);
+            var resutl = interviews.Select(i => new InterviewDTO(
+                                                    i.Id,
+                                                    i.Date,
+                                                    i.CandidateId,
+                                                    i.Candidate.Name,
+                                                    i.Candidate.LastName,
+                                                    i.Candidate.Email,
+                                                    i.WorkerId,
+                                                    i.User.Email,
+                                                    i.Type
+                                                )).ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return resutl2;
+            return resutl;
         }
     }
 }
