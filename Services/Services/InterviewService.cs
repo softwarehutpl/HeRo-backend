@@ -107,18 +107,22 @@ namespace Services.Services
                 }
             }
 
-            var result = interviews
-                .Select(x => new InterviewDTO(
-                    x.Id,
-                    x.Date,
-                    x.CandidateId,
-                    _candidateRepository.GetById(x.CandidateId).Email,
-                    x.WorkerId,
-                    _userRepository.GetById(x.WorkerId).Email,
-                    x.Type))
-                .ToPagedList(paging.PageNumber, paging.PageSize);
+            IEnumerable<InterviewDTO> resutl2 = (from i in interviews
+                                                  from c in _candidateRepository.GetAll()
+                                                  from u in _userRepository.GetAll()
+                                                  where i.CandidateId == c.Id && i.WorkerId == u.Id
+                                                  select new InterviewDTO
+                                                  (
+                                                      i.Id,
+                                                      i.Date,
+                                                      i.CandidateId,
+                                                      c.Email,
+                                                      i.WorkerId,
+                                                      u.Email,
+                                                      i.Type
+                                                  )).ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return result;
+            return resutl2;
         }
     }
 }
