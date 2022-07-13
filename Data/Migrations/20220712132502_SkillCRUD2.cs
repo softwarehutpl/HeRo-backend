@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
-
 namespace Data.Migrations
 {
     public partial class SkillCRUD2 : Migration
