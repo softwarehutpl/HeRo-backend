@@ -7,6 +7,16 @@ namespace Data.Entities
     [Table("RecruitmentSkill")]
     public class RecruitmentSkill
     {
+        public RecruitmentSkill(int recruitmentId, int skillId, int skillLevel)
+        {
+            this.RecruitmentId = recruitmentId;
+            this.SkillId = skillId;
+            this.SkillLevel = skillLevel;
+        }
+        public RecruitmentSkill()
+        {
+
+        }
         [Key]
         [Required(ErrorMessage = "Field is required!")]
         public int RecruitmentId { get; set; }

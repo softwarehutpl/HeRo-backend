@@ -16,13 +16,13 @@ namespace Services.Services
         private readonly ILogger<SkillService> _logger;
         private readonly SkillRepository _repo;
         private readonly IMapper _mapper;
-        private readonly RecruitmentSkillService _recruitmentSkillService;
-        public SkillService(SkillRepository repo, ILogger<SkillService> logger, IMapper mapper, RecruitmentSkillService recruitmentSkillService)
+        private readonly RecruitmentSkillRepository _recruitmentSkillRepo;
+        public SkillService(SkillRepository repo, ILogger<SkillService> logger, IMapper mapper, RecruitmentSkillRepository recruitmentSkillRepo)
         {
             _repo = repo;
             _logger = logger;
             _mapper = mapper;
-            _recruitmentSkillService = recruitmentSkillService;
+            _recruitmentSkillRepo = recruitmentSkillRepo;
         }
         public IEnumerable<Skill> GetSkills()
         {
@@ -119,7 +119,7 @@ namespace Services.Services
             try
             {
                 Skill skill = _repo.GetById(id);
-                bool isUsed = _recruitmentSkillService.IsSkillUsed(id);
+                bool isUsed = _recruitmentSkillRepo.IsSkillUsed(id);
 
                 if (isUsed == true) return 0;
 

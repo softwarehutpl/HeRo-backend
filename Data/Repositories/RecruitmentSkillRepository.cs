@@ -4,31 +4,22 @@ namespace Data.Repositories
 {
     public class RecruitmentSkillRepository : BaseRepository<RecruitmentSkill>
     {
-        private readonly DataContext context;
+        private readonly DataContext _context;
         public RecruitmentSkillRepository(DataContext context) : base(context)
         {
-            this.context = context;
+            this._context = context;
         }
         public RecruitmentSkill Get(int recruitmentId, int skillId)
         {
-            RecruitmentSkill result = context.RecruitmentSkills.Find(recruitmentId, skillId);
+            RecruitmentSkill result = _context.RecruitmentSkills.Find(recruitmentId, skillId);
 
             return result;
         }
-
-        public IQueryable<RecruitmentSkill> GetAllRecruitmentSkills(int recruitmentId)
+        public bool IsSkillUsed(int skillId)
         {
-            IQueryable<RecruitmentSkill> result = GetAll();
-            result = result.Where(e => e.RecruitmentId == recruitmentId);
+            bool result=GetAll().Any(e => e.SkillId == skillId);
 
             return result;
         }
-
-        public void Add(RecruitmentSkill recruitmentSkill)
-        {
-            AddAndSaveChanges(recruitmentSkill);
-        }
-
-        public void RemoveCampainRequrement(int id) { }
     }
 }

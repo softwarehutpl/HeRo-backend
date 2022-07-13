@@ -70,7 +70,7 @@ try
     builder.Services.AddScoped<RecruitmentService>();
     builder.Services.AddScoped<SkillRepository>();
     builder.Services.AddScoped<SkillService>();
-    builder.Services.AddScoped<RecruitmentSkillService>();
+    builder.Services.AddScoped<RecruitmentSkillRepository>();
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {
