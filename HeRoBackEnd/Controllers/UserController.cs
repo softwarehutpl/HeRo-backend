@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.User;
 using Services.Services;
-using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -23,25 +22,19 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="userId">Id of the user</param>
         /// <returns>Json string representing an object of the User class</returns>
-        /// <remarks>
-        /// Sample Responses:
-        ///
-        ///     {
-        ///        "email": "test@da.com",
-        ///        "userStatus": "Active",
-        ///        "roleName": "Admin"
-        ///     }
-        ///
-        /// </remarks>
+        /// <response code="200">User object</response>
+        /// <response code="404">No User with this UserId</response>
         [HttpGet]
         [Route("User/Get/{userId}")]
+        [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void),StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
         {
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
             {
-                return NotFound("No user with this UserId");
+                return NotFound();
             }
 
             return new JsonResult(user);
@@ -52,43 +45,33 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="userListFilterViewModel">An object containing information about the filter</param>
         /// <returns>Object of the JsonResult class representing a list of Users in the JSON format</returns>
-        /// <remarks>
-        /// Sample Responses:
-        ///
-        ///     [
-        ///          {
-        ///              "email": "test@da.com",
-        ///              "userStatus": "Active",
-        ///              "roleName": "Admin"
-        ///          },
-        ///          {
-        ///              "email": "test2@da.com",
-        ///              "userStatus": "Active",
-        ///              "roleName": "Recruiter"
-        ///         },
-        ///     ]
-        /// </remarks>
+        /// <response code="200">List of Users</response>
         [HttpPost]
         [Route("User/GetList")]
+        [ProducesResponseType(typeof(IEnumerable<UserFiltringDTO>), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
             Paging paging = userListFilterViewModel.Paging;
             SortOrder sortOrder = userListFilterViewModel.SortOrder;
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
-            var resutl = _userService.GetUsers(paging, sortOrder, userFiltringDTO);
+            IEnumerable<UserFiltringDTO>? result = _userService.GetUsers(paging, sortOrder, userFiltringDTO);
 
-            return new JsonResult(resutl);
+            return new JsonResult(result);
         }
 
         /// <summary>
         /// Updates information about a user represented by an id
         /// </summary>
-        /// <param name="userId">Id of a user</param>
-        /// <returns>IActionResult</returns>
+        /// <param name="userId" example="1">Id of a user</param>
+        /// <param name="editUser">Id of a user</param>
+        /// <returns>User object eddited</returns>
+        /// <response code="200">User edited</response>
+        /// <response code="404">No user with this UserId</response>
         [HttpPost]
         [Route("User/Edit/{userId}")]
-        //[ValidateAntiForgeryToken]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
         public IActionResult Edit(int userId, EditUserViewModel editUser)
         {
             UserEditDTO editUserDTO =
@@ -111,10 +94,14 @@ namespace HeRoBackEnd.Controllers
         /// Deletes a user represented by an id
         /// </summary>
         /// <param name="userId">Id of a user</param>
-        /// <returns>IActionResult</returns>
+        /// <returns>User object deleted</returns>
+        /// <response code="404">No user with this user id</response>
+        /// <response code="200">User deleted</response>
         [HttpDelete]
         [Route("User/Delete/{userId}")]
         [Authorize(Policy = "AdminRequirment")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
         public IActionResult Delete(int userId)
         {
             int loginUserId = GetUserId();
@@ -123,10 +110,10 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return NotFound("No user with this UserId");
+                return NotFound();
             }
 
-            return Ok("Deleting was successful");
+            return Ok();
         }
     }
 }

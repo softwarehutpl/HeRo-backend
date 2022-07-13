@@ -10,7 +10,7 @@ namespace HeRoBackEnd.Controllers
         {
             List<Claim> claims = HttpContext.User.Claims.ToList();
             Claim idClaim = claims.FirstOrDefault(e => e.Type == "Id");
-            int id = int.Parse(idClaim.Value);
+            int.TryParse(idClaim.Value,out int id);
 
             return id;
         }
