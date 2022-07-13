@@ -7,7 +7,7 @@ using System.ComponentModel.DataAnnotations;
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
-    public class CandidateController : Controller
+    public class CandidateController : BaseController
     {
         //private CandidateService candidateService;
         private ILogger<CandidateController> _logger;

@@ -16,21 +16,19 @@ namespace Common.Helpers
             _config = config;
         }
 
-        private MailMessage CreateEmail(string email)
+        public MailMessage CreateEmail(string email, string subject, string body)
         {
 
             MailMessage mailMessage = new();
             mailMessage.From = new MailAddress(_config.CompanyEmail);
-            mailMessage.To.Add("mrmaselko83@gmail.com");
-            mailMessage.Subject = _config.Subject;
-            mailMessage.Body = _config.Body;
+            mailMessage.To.Add(email);
+            mailMessage.Subject = subject;
+            mailMessage.Body = body;
 
             return mailMessage;
         }
-        public void SendEmail(string email)
+        public void SendEmail(MailMessage mailMessage)
         {
-            MailMessage mailMessage = CreateEmail(email);
-
             using ( SmtpClient smtp = new(_config.Smpt, _config.Port))
             {
                 smtp.UseDefaultCredentials = false;
