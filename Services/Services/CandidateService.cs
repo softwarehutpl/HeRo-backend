@@ -57,18 +57,21 @@ namespace Services.Services
         }
         public int ChangeStatus(int id, string status)
         {
-            Candidate candidate = _candidateRepository.GetCandidateById(id);
-            candidate.Status = status;
-            try
-            {
-                _candidateRepository.UpdateAndSaveChanges(candidate);
+            Candidate? candidate = _candidateRepository.GetById(id);
+            if(candidate!=null)
+            { 
+                candidate.Status = status;
+                try
+                {
+                   _candidateRepository.UpdateAndSaveChanges(candidate);
+                }
+                catch (Exception ex)
+                {
+                    return -1;
+                }
+                return 1;
             }
-            catch (Exception ex)
-            {
-                return -1;
-            }
-            return 1;
-            
+            return -1;
         }
         public int UpdateCandidate(int id, UpdateCandidateDTO dto)
         {
@@ -95,7 +98,6 @@ namespace Services.Services
             }
             return 1;
         }
-
         public int DeleteCandidate(int id)
         {
             int userId = GetUserId();
@@ -120,7 +122,6 @@ namespace Services.Services
             }
             else return -1;
         }
-
         public int AddHRNote(int id, string note, int score)
         {
             int userId = GetUserId();
@@ -143,7 +144,6 @@ namespace Services.Services
             }
             else return -1;
         }
-
         public int AddInterviewNote(int id, string note, int score)
         {
             int userId = GetUserId();
@@ -166,10 +166,9 @@ namespace Services.Services
             }
             else return -1;
         }
-
         public CandidateProfileDTO? GetCandidateProfileById(int id)
         {
-            Candidate candidate = _candidateRepository.GetCandidateById(id);
+            Candidate candidate = _candidateRepository.GetById(id);
             CandidateProfileDTO? result = null;
             if (candidate != null) result = _mapper.Map<CandidateProfileDTO>(candidate);
             return result;
@@ -243,7 +242,7 @@ namespace Services.Services
         public int AllocateRecruiterAndTech(int id, CandidateAssigneesDTO dto)
         {
             int userId = GetUserId();
-            Candidate candidate = _candidateRepository.GetCandidateById(id);
+            Candidate candidate = _candidateRepository.GetById(id);
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
@@ -259,7 +258,6 @@ namespace Services.Services
                     return -1;
                 }
                 return 1;
-
             }
             else return -1;
         }
@@ -267,7 +265,7 @@ namespace Services.Services
         public int AllocateRecruitmentInterview(int id, DateTime date)
         {
             int userId = GetUserId();
-            Candidate? candidate = _candidateRepository.GetCandidateById(id);
+            Candidate? candidate = _candidateRepository.GetById(id);
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
@@ -282,14 +280,13 @@ namespace Services.Services
                     return -1;
                 }
                 return 1;
-
             }
             else return -1;
         }
         public int AllocateTechInterview(int id, DateTime date)
         {
             int userId = GetUserId();
-            Candidate? candidate = _candidateRepository.GetCandidateById(id);
+            Candidate? candidate = _candidateRepository.GetById(id);
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
@@ -304,10 +301,8 @@ namespace Services.Services
                     return -1;
                 }
                 return 1;
-
             }
             else return -1;
-            
         }
     }
 }
