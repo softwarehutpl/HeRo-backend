@@ -8,11 +8,14 @@
 
         public int UserId { get; set; }
 
-        public InterviewDTO(DateTime date, int condidateId, int userId)
+        public string Type { get; set; }
+
+        public InterviewDTO(DateTime date, int condidateId, int userId, string type)
         {
             Date = date;
             CandidateId = condidateId;
             UserId = userId;
+            Type = type;
         }
     }
 }

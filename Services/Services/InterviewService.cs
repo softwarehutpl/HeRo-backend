@@ -23,7 +23,7 @@ namespace Services.Services
                 return null;
             }
 
-            InterviewDTO interviewDTO = new InterviewDTO(interview.Date, interview.CandidateId, interview.UserId);
+            InterviewDTO interviewDTO = new InterviewDTO(interview.Date, interview.CandidateId, interview.UserId, interview.Type);
 
             return interviewDTO;
         }
