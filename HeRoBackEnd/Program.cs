@@ -25,7 +25,7 @@ try
         config.SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true) //load base settings
                 .AddJsonFile("appsettings.local.json", optional: true, reloadOnChange: true) //load local settings
-                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true) //load environment settings                                                                             
+                .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true) //load environment settings
                 .AddEnvironmentVariables();
     });
 
@@ -55,7 +55,6 @@ try
             policy => policy.RequireClaim("RoleName", "Admin"));
     });
 
-
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
@@ -67,10 +66,13 @@ try
     builder.Services.AddScoped<UserService>();
     builder.Services.AddScoped<InterviewService>();
     builder.Services.AddScoped<InterviewRepository>();
+    builder.Services.AddScoped<CandidateRepository>();
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
-
+    builder.Services.AddScoped<SkillRepository>();
+    builder.Services.AddScoped<SkillService>();
+    builder.Services.AddScoped<RecruitmentSkillService>();
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {

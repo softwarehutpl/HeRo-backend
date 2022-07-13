@@ -25,9 +25,15 @@ namespace HeRoBackEnd.Controllers
         /// Sample Responses:
         ///
         ///     {
+        ///        "interviewId" : 1,
         ///        "date": "2012-12-12T12:12:12.121Z",
-        ///        "candidateId": "Active",
-        ///        "userId": "Admin"
+        ///        "candidateId": 1,
+        ///        "candidateName": "Jan"
+        ///        "candidateLastName": "Naj"
+        ///        "candidateEmail": "test@da.com",
+        ///        "workerId": 1,
+        ///        "workerEmail": "testHR@da.com",
+        ///        "type": "HR"
         ///     }
         ///
         /// </remarks>
@@ -55,28 +61,36 @@ namespace HeRoBackEnd.Controllers
         ///
         ///     [
         ///          {
+        ///              "interviewId" : 1,
         ///              "date": "2012-12-12T12:12:12.121Z",
-        ///              "candidateId": "1",
-        ///              "userId": "2",
-        ///              "type": "Tech"
+        ///              "candidateId": 1,
+        ///              "candidateName": "Jan"
+        ///              "candidateLastName": "Naj"
+        ///              "candidateEmail": "test@da.com",
+        ///              "workerId": 1,
+        ///              "workerEmail": "testHR@da.com",
+        ///              "type": "HR"
         ///          },
         ///          {
-        ///              "date": "2012-12-12T12:12:12.121Z",
-        ///              "candidateId": "2",
-        ///              "userId": "3",
-        ///              "type": "HR"
+        ///             "interviewId" : 2,
+        ///              "date": "2013-13-13T13:13:13.131Z",
+        ///              "candidateId": 3,
+        ///              "candidateName": "Maja"
+        ///              "candidateLastName": "Listopad"
+        ///              "candidateEmail": "test33@da.com",
+        ///              "workerId": 2,
+        ///              "workerEmail": "testTech@da.com",
+        ///              "type": "Tech"
         ///          }
         ///     ]
         /// </remarks>
         [HttpPost]
         [Route("Interview/GetList")]
-        public IActionResult GetList(InterviewListViewModel interview)
+        public IActionResult GetList(InterviewFiltringViewModel interview)
         {
-            Paging paging = interview.Paging;
-            SortOrder sortOrder = interview.SortOrder;
-            InterviewFiltringDTO interviewFiltringDTO = new InterviewFiltringDTO(interview.FromDate, interview.ToDate, interview.CandidateId, interview.UserId, interview.Type);
+            InterviewFiltringDTO interviewFiltringDTO = new InterviewFiltringDTO(interview.FromDate, interview.ToDate, interview.CandidateId, interview.WorkerId, interview.Type);
 
-            var resutl = _interviewService.GetInterviews(paging, sortOrder, interviewFiltringDTO);
+            var resutl = _interviewService.GetInterviews(interview.Paging, interview.SortOrder, interviewFiltringDTO);
 
             return new JsonResult(resutl);
         }

@@ -9,10 +9,14 @@ namespace Services.Services
     public class InterviewService
     {
         private InterviewRepository _interviewRepository;
+        private UserRepository _userRepository;
+        private CandidateRepository _candidateRepository;
 
-        public InterviewService(InterviewRepository interviewRepository)
+        public InterviewService(InterviewRepository interviewRepository, UserRepository userRepository, CandidateRepository candidateRepository)
         {
             _interviewRepository = interviewRepository;
+            _userRepository = userRepository;
+            _candidateRepository = candidateRepository;
         }
 
         public InterviewDTO Get(int interviewId)
@@ -23,12 +27,22 @@ namespace Services.Services
                 return null;
             }
 
-            InterviewDTO interviewDTO = new InterviewDTO(interview.Date, interview.CandidateId, interview.UserId);
+            InterviewDTO interviewDTO =
+                new InterviewDTO(
+                    interview.Id,
+                    interview.Date,
+                    interview.CandidateId,
+                    interview.Candidate.Name,
+                    interview.Candidate.LastName,
+                    interview.Candidate.Email,
+                    interview.WorkerId,
+                    interview.User.Email,
+                    interview.Type);
 
             return interviewDTO;
         }
 
-        public IEnumerable<InterviewListingDTO> GetInterviews(Paging paging, SortOrder sortOrder, InterviewFiltringDTO interviewFiltringDTO)
+        public IEnumerable<InterviewDTO> GetInterviews(Paging paging, SortOrder sortOrder, InterviewFiltringDTO interviewFiltringDTO)
         {
             IQueryable<Interview> interviews = _interviewRepository.GetAll();
 
@@ -38,9 +52,9 @@ namespace Services.Services
             {
                 interviews = interviews.Where(s => s.CandidateId == interviewFiltringDTO.CandidateId);
             }
-            if (interviewFiltringDTO.UserId.HasValue)
+            if (interviewFiltringDTO.WorkerId.HasValue)
             {
-                interviews = interviews.Where(s => s.UserId == interviewFiltringDTO.UserId);
+                interviews = interviews.Where(s => s.WorkerId == interviewFiltringDTO.WorkerId);
             }
             if (!String.IsNullOrEmpty(interviewFiltringDTO.Type))
             {
@@ -75,11 +89,11 @@ namespace Services.Services
                 {
                     if (sort.Value.ToUpper() == "DESC")
                     {
-                        interviews = interviews.OrderByDescending(i => i.UserId);
+                        interviews = interviews.OrderByDescending(i => i.WorkerId);
                     }
                     else
                     {
-                        interviews = interviews.OrderBy(i => i.UserId);
+                        interviews = interviews.OrderBy(i => i.WorkerId);
                     }
                 }
                 if (sort.Key.ToLower() == "type")
@@ -95,11 +109,19 @@ namespace Services.Services
                 }
             }
 
-            var result = interviews
-                .Select(x => new InterviewListingDTO(x.Date, x.CandidateId, x.UserId, x.Type))
-                .ToPagedList(paging.PageNumber, paging.PageSize);
+            var resutl = interviews.Select(i => new InterviewDTO(
+                                                    i.Id,
+                                                    i.Date,
+                                                    i.CandidateId,
+                                                    i.Candidate.Name,
+                                                    i.Candidate.LastName,
+                                                    i.Candidate.Email,
+                                                    i.WorkerId,
+                                                    i.User.Email,
+                                                    i.Type
+                                                )).ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return result;
+            return resutl;
         }
 
         public void Create(InterviewCreateDTO interviewCreate, int userCreatedId)

@@ -1,14 +1,14 @@
-﻿
+﻿using Data.Entities;
+
 namespace Data.Repositories
 {
-    public class CandidateRepository 
+    public class CandidateRepository : BaseRepository<Candidate>
     {
-        public void GetCandidatetById(int id) { }
+        private DataContext _dataContext;
 
-        public void GetAllCandidate() { }
-
-        public void AddCandidate(int id) { }
-
-        public void RemoveCandidate(int id) { }
+        public CandidateRepository(DataContext context) : base(context)
+        {
+            _dataContext = context;
+        }
     }
 }

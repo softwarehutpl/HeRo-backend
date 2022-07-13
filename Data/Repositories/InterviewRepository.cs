@@ -11,3 +11,4 @@ namespace Data.Repositories
             _dataContext = context;
         }
     }
+}

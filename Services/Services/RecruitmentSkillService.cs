@@ -7,7 +7,7 @@ using Data.Entities;
 
 namespace Services.Services
 {
-    public class RecruitmentRequirementService
+    public class RecruitmentSkillService
     {
         //tabela przejściowa między kampanią rekrutacyjną a wymaganiami
         public async Task<List<RecruitmentSkill>> GetRequirements()
@@ -17,6 +17,10 @@ namespace Services.Services
         public void AddRequirement(int recruitmentId, int skillId, int level)
         {
 
+        }
+        public bool IsSkillUsed(int skillId)
+        {
+            return false;
         }
     }
 }

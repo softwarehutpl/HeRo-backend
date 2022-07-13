@@ -22,7 +22,11 @@ namespace Services.Services
             this.userRepo = userRepo;
             this.logger = logger;
         }
+            
+            
 
+
+        
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
             try
