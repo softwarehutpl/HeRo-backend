@@ -29,7 +29,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Signs in user</returns>
         /// <response code="400">Wrong Credentials </response>
         /// <response code="200">Returns user email</response>
-        [HttpGet]
+        [HttpPost]
         [Route("Auth/SignIn")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
