@@ -13,7 +13,7 @@ namespace HeRoBackEnd.Profiles
             CreateMap<CreateRecruitmentDTO, Recruitment>();
             CreateMap<RecruitmentCreateViewModel, CreateRecruitmentDTO>();
             CreateMap<RecruitmentEditViewModel, UpdateRecruitmentDTO>();
-            CreateMap<Recruitment, ReadRecruitmentDTO>();
+            CreateMap<Recruitment, RecruitmentDetailsDTO>();
         }
     }
 }

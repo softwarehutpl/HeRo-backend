@@ -41,7 +41,7 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);
 
-            IEnumerable<ReadRecruitmentDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            IEnumerable<RecruitmentDetailsDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
             JsonResult result = new JsonResult(recruitments);
 
             if (result == null) return BadRequest("Something went wrong!");
@@ -58,7 +58,7 @@ namespace HeRoBackEnd.Controllers
         [Route("Recruitment/Get/{recruitmentId}")]
         public IActionResult Get(int recruitmentId)
         {
-            ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
+            RecruitmentDetailsDTO recruitment = service.GetRecruitment(recruitmentId);
 
             if (recruitment == null)
             {

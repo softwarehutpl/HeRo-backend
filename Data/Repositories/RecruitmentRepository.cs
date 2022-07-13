@@ -1,28 +1,36 @@
+using AutoMapper;
 using Common.Enums;
 using Data.Entities;
 using Microsoft.Data.SqlClient;
+using Services.DTOs.Recruitment;
 using System.Security.Claims;
+
 
 namespace Data.Repositories
 {
     public class RecruitmentRepository : BaseRepository<Recruitment>
     {
-        public RecruitmentRepository(DataContext context) : base(context)
+        private readonly IMapper _mapper;
+        public RecruitmentRepository(DataContext context, IMapper mapper) : base(context)
         {
-            
+            _mapper = mapper;
         }
-        public Recruitment GetRecruitmentById(int id)
+        public RecruitmentDetailsDTO GetRecruitmentById(int id) //RecruitmentDetailsDTO
         {
-            Recruitment result = GetById(id);
+            Recruitment recruitment = GetById(id);
 
-            if (result == default) return null;
+            RecruitmentDetailsDTO result = _mapper.Map<RecruitmentDetailsDTO>(recruitment);
 
             return result;
         }
 
-        public IQueryable<Recruitment> GetAllRecruitments()
+        public IQueryable<RecruitmentDetailsDTO> GetAllRecruitments()
         {
-            IQueryable<Recruitment> result = GetAll();
+            IQueryable<Recruitment> recruitments = GetAll().
+                Where(e => !(e.EndedDate.HasValue) && !(e.DeletedDate.HasValue));
+
+            IQueryable<RecruitmentDetailsDTO> result=recruitments
+                .Select(x =>_mapper.Map<RecruitmentDetailsDTO>(recruitments));
 
             return result;
         }

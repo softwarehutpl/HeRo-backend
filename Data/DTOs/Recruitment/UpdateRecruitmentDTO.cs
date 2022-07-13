@@ -23,5 +23,7 @@ namespace Services.DTOs.Recruitment
         public int? LastUpdatedById { get; set; }
 
         public DateTime? LastUpdatedDate { get; set; }
+
+        public IEnumerable<Data.Entities.RecruitmentSkill> Skills { get; set; }
     }
 }

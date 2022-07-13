@@ -29,6 +29,7 @@ namespace Services.Services
             {
                 Recruitment recruitment = _mapper.Map<Recruitment>(dto);
 
+                _recruitmentSkillRepo.AddRangeAndSaveChanges(dto.Skills);
                 _recruitmentRepo.AddAndSaveChanges(recruitment);
             }
             catch(Exception ex)
@@ -52,6 +53,7 @@ namespace Services.Services
                 recruitment.RecruiterId = dto.RecruiterId;
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
 
+                UpdateRecruitmentSkills(dto.Skills);
                 _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
             catch(Exception ex)
@@ -105,62 +107,65 @@ namespace Services.Services
             return 1;
         }
 
-        public IEnumerable<ReadRecruitmentDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
+        public IEnumerable<RecruitmentDetailsDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
+            IEnumerable<RecruitmentDetailsDTO> result;
             try
             {
+                IEnumerable<RecruitmentDetailsDTO> recruitments = _recruitmentRepo.GetAllRecruitments();
 
+                if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
+                {
+                    recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
+                }
+                if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
+                {
+                    recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
+                }
+                if (recruitmentFiltringDTO.BeginningDate.HasValue)
+                {
+                    recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
+                }
+                if (recruitmentFiltringDTO.EndingDate.HasValue)
+                {
+                    recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
+                }
+
+                foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
+                {
+                    if (sort.Value == "DESC")
+                    {
+                        recruitments = recruitments.OrderByDescending(u => u.Name);
+                    }
+                    else
+                    {
+                        recruitments = recruitments.OrderBy(s => s.Name);
+                    }
+                }
+
+                result = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
+
+                foreach(RecruitmentDetailsDTO dto in result)
+                {
+                    dto.Skills = GetAllRecruitmentSkills(dto.Id);
+                }
             }
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return null;
             }
-            IEnumerable<Recruitment> recruitments = _recruitmentRepo.GetAllRecruitments();
-            recruitments = recruitments.Where(e => !(e.EndedDate.HasValue) && !(e.DeletedDate.HasValue));
-
-            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
-            {
-                recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
-            }
-            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
-            {
-                recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
-            }
-            if (recruitmentFiltringDTO.BeginningDate.HasValue)
-            {
-                recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
-            }
-            if (recruitmentFiltringDTO.EndingDate.HasValue)
-            {
-                recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
-            }
-
-            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
-            {
-                if (sort.Value == "DESC")
-                {
-                    recruitments = recruitments.OrderByDescending(u => u.Name);
-                }
-                else
-                {
-                    recruitments = recruitments.OrderBy(s => s.Name);
-                }
-            }
-
-            IEnumerable<Recruitment> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
-            IEnumerable<ReadRecruitmentDTO> result = _mapper.Map<IEnumerable<ReadRecruitmentDTO>>(pagedRecruitments);
-
+            
             return result;
         }
 
-        public ReadRecruitmentDTO GetRecruitment(int recruitmentId)
+        public RecruitmentDetailsDTO GetRecruitment(int recruitmentId)
         {
-            Recruitment recruitment;
-            ReadRecruitmentDTO result = null;
+            RecruitmentDetailsDTO result = null;
             try
             {
-                recruitment = _recruitmentRepo.GetRecruitmentById(recruitmentId);
+                result = _recruitmentRepo.GetRecruitmentById(recruitmentId);
+                result.Skills = GetAllRecruitmentSkills(result.Id);
             }
             catch(Exception ex)
             {
@@ -168,45 +173,17 @@ namespace Services.Services
                 return null;
             }
 
-            if (recruitment != null) result = _mapper.Map<ReadRecruitmentDTO>(recruitment);
-
             return result;
         }
 
-        public int AddRrecruitmentSkills(IEnumerable<RecruitmentSkill> recruitmentSkills)
+        public void UpdateRecruitmentSkills(IEnumerable<RecruitmentSkill> recruitmentSkills)
         {
-            try
-            {
-                _recruitmentSkillRepo.AddRangeAndSaveChanges(recruitmentSkills);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return -1;
-            }
-
-            return 1;
-        }
-
-        public int UpdateRecruitmentSkills(IEnumerable<RecruitmentSkill> recruitmentSkills)
-        {
-            try
-            {
                 IQueryable<RecruitmentSkill> oldRecruitmentSkills =
                     _recruitmentSkillRepo.GetAll().
                     Where(e => e.RecruitmentId == recruitmentSkills.First().RecruitmentId);
 
                 _recruitmentSkillRepo.RemoveRangeAndSaveChanges(oldRecruitmentSkills);
                 _recruitmentSkillRepo.AddRangeAndSaveChanges(recruitmentSkills);
-            }
-            catch(Exception ex)
-            {
-                _logger.LogError(ex.Message);
-
-                return -1;
-            }
-
-            return 1;
         }
 
         public IEnumerable<RecruitmentSkill> GetAllRecruitmentSkills(int recruitmentId)

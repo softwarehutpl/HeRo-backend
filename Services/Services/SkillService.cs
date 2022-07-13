@@ -15,13 +15,11 @@ namespace Services.Services
     {
         private readonly ILogger<SkillService> _logger;
         private readonly SkillRepository _repo;
-        private readonly IMapper _mapper;
         private readonly RecruitmentSkillRepository _recruitmentSkillRepo;
-        public SkillService(SkillRepository repo, ILogger<SkillService> logger, IMapper mapper, RecruitmentSkillRepository recruitmentSkillRepo)
+        public SkillService(SkillRepository repo, ILogger<SkillService> logger, RecruitmentSkillRepository recruitmentSkillRepo)
         {
             _repo = repo;
             _logger = logger;
-            _mapper = mapper;
             _recruitmentSkillRepo = recruitmentSkillRepo;
         }
         public IEnumerable<Skill> GetSkills()

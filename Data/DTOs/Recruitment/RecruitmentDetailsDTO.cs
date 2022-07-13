@@ -4,11 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Common.Enums;
 
 namespace Services.DTOs.Recruitment
 {
-    public class CreateRecruitmentDTO
+    public class RecruitmentDetailsDTO
     {
+        public int Id { get; set; }
+
         public DateTime BeginningDate { get; set; }
 
         public DateTime EndingDate { get; set; }
@@ -19,12 +22,6 @@ namespace Services.DTOs.Recruitment
 
         public int RecruiterId { get; set; }
 
-        public int CreatedById { get; set; }
-
-        public DateTime CreatedDate { get; set; }
-
-        public int? LastUpdatedById { get; set; }
-
-        public DateTime? LastUpdatedDate { get; set; }
+        public IEnumerable<Data.Entities.RecruitmentSkill> Skills { get; set; }
     }
 }
