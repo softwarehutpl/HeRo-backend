@@ -54,7 +54,7 @@ namespace Services.Services
                 recruitment.Description = dto.Description;
                 recruitment.RecruiterId = dto.RecruiterId;
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
-                recruitment.Skills = (ICollection<RecruitmentSkillDTO>)dto.Skills;
+                recruitment.Skills = (ICollection<RecruitmentSkill>)dto.Skills;
 
                 IEnumerable<RecruitmentSkill> skills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
 

@@ -63,7 +63,7 @@ namespace Data.Entities
         [ForeignKey("EndedById")]
         public virtual User? EndedBy { get; set; }
 
-        public virtual ICollection<RecruitmentSkillDTO> Skills { get; set; }
+        public virtual ICollection<RecruitmentSkill> Skills { get; set; }
     }
 }
 

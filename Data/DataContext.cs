@@ -3,6 +3,7 @@ using Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Data.Repositories;
+using Data.DTOs.RecruitmentSkill;
 
 namespace Data
 {
@@ -30,6 +31,7 @@ namespace Data
                 u.RecruitmentId,
                 u.SkillId
             });
+            modelBuilder.Entity<RecruitmentSkillDTO>().HasNoKey();
         }
         public void AttachEntity<TEntity>(TEntity entity) where TEntity : class, new()
         {
