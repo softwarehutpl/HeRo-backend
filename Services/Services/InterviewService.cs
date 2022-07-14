@@ -1,8 +1,9 @@
 ﻿using Common.Listing;
+using Data.DTOs.Interview;
 using Data.Entities;
 using Data.Repositories;
 using PagedList;
-using Services.DTOs.Interview;
+using Data.DTOs.Interview;
 
 namespace Services.Services
 {

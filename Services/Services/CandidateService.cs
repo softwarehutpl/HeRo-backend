@@ -8,6 +8,7 @@ using PagedList;
 using Data.DTOs;
 using Data.DTOs.Candidate;
 using System.ComponentModel.DataAnnotations;
+using Data.DTOs.Interview;
 
 namespace Services.Services
 {
@@ -199,11 +200,6 @@ namespace Services.Services
         }
         //nie ma tabeli oraz klasy dla rozmowy także stworzyłem jak narazie DTO dla
         //potrzebnych danych
-        
-        public async Task<List<InterviewDTO>> GetInterviews()
-        {
-            return null;
-        }
 
         //public int AddRecruitmentToCandidate(int candId, int recrId)
         //{

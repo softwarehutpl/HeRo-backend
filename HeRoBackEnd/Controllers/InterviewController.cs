@@ -1,8 +1,9 @@
 ﻿using Common.Listing;
 using HeRoBackEnd.ViewModels.Interview;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.Interview;
+using Data.DTOs;
 using Services.Services;
+using Data.DTOs.Interview;
 
 namespace HeRoBackEnd.Controllers
 {

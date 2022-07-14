@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.DTOs.Candidate
+namespace Data.DTOs.Candidate
 {
     public class CandidateFilteringDTO
     {

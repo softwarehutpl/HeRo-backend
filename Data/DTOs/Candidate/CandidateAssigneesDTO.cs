@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.DTOs.Candidate
+namespace Data.DTOs.Candidate
 {
-    public class CandidateAddHRNoteDTO
+    public class CandidateAssigneesDTO
     {
-        public string Note { get; set; }
-        public int Score { get; set; }
+        public int Id { get; set; }
+        public int TechId { get; set; }
         public int RecruiterId { get; set; }
         public DateTime? LastUpdatedDate { get; set; }
         public int LastUpdatedBy { get; set; }

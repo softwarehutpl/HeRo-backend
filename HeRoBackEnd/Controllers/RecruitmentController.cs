@@ -31,7 +31,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200"></response>
         [HttpPost]
         [Route("Recruitment/GetList")]
-        [ProducesResponseType(typeof(IEnumerable<ReadRecruitmentDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<RecruitmentDetailsDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
@@ -66,7 +66,7 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ReadRecruitmentDTO),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RecruitmentDetailsDTO),StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
             RecruitmentDetailsDTO recruitment = service.GetRecruitment(recruitmentId);

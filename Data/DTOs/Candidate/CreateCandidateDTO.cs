@@ -4,23 +4,26 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.DTOs.Candidate
+namespace Data.DTOs.Candidate
 {
-    public class UpdateCandidateDTO
+    public class CreateCandidateDTO
     {
         public string Name { get; set; }
 
         public string LastName { get; set; }
         public string Status { get; set; }
-        public string Email { get; set; }
         public string PhoneNumber { get; set; }
+        public string Email { get; set; }
+        public DateTime ApplicationDate { get; set; }
 
         public DateTime? AvailableFrom { get; set; }
-        public DateTime? LastUpdatedDate { get; set; }
-        public int LastUpdatedBy { get; set; }
         public int? ExpectedMonthlySalary { get; set; }
         public string? OtherExpectations { get; set; }
 
         public string CvPath { get; set; }
+
+        public int RecruitmentId { get; set; }
+
+        public int RecruiterId { get; set; }
     }
 }

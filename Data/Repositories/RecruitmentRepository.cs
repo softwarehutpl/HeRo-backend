@@ -36,5 +36,13 @@ namespace Data.Repositories
 
             return result;
         }
+
+        public int GetRecruiterId(int id)
+        {
+            Recruitment recruitment = GetById(id);
+            int result = recruitment.RecruiterId;
+
+            return result;
+        }
     }
 }

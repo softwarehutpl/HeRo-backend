@@ -4,7 +4,7 @@ using Common.Listing;
 using Data.Entities;
 using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.Candidate;
+using Data.DTOs.Candidate;
 using Services.Services;
 using System.ComponentModel.DataAnnotations;
 //using Data.Entities;
