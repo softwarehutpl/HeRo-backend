@@ -1,4 +1,4 @@
-﻿namespace Services.DTOs.Recruitment
+﻿namespace Data.DTO
 {
     public class ReadRecruitmentDTO
     {

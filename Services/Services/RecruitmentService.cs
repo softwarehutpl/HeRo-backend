@@ -1,6 +1,7 @@
 using AutoMapper;
 using Common.Enums;
 using Common.Listing;
+using Data.DTO;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
@@ -109,16 +110,7 @@ namespace Services.Services
 
         public IEnumerable<ReadRecruitmentDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
-            try
-            {
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(ex.Message);
-                return null;
-            }
-            IEnumerable<Recruitment> recruitments = repo.GetAllRecruitments();
-            recruitments = recruitments.Where(e => !e.DeletedDate.HasValue);
+            IEnumerable<ReadRecruitmentDTO> recruitments = repo.GetAllRecruitmentsDTOs();
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
@@ -149,19 +141,18 @@ namespace Services.Services
                 }
             }
 
-            IEnumerable<Recruitment> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
-            IEnumerable<ReadRecruitmentDTO> results = mapper.Map<IEnumerable<ReadRecruitmentDTO>>(pagedRecruitments);
+            IEnumerable<ReadRecruitmentDTO> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return results;
+            return pagedRecruitments;
         }
 
         public ReadRecruitmentDTO? GetRecruitment(int recruitmentId)
         {
-            Recruitment recruitment;
+            ReadRecruitmentDTO? recruitment;
 
             try
             {
-                recruitment = repo.GetRecruitmentById(recruitmentId);
+                recruitment = repo.GetRecruitmentDTOById(recruitmentId);
             }
             catch (Exception ex)
             {
@@ -172,14 +163,7 @@ namespace Services.Services
             if (recruitment == null)
                 return null;
 
-            if (recruitment.DeletedDate.HasValue)
-                return null;
-
-            ReadRecruitmentDTO result = mapper.Map<ReadRecruitmentDTO>(recruitment);
-            result.CandidateCount = recruitment.Candidates.Count();
-            result.HiredCount = recruitment.Candidates.Count(e => e.Status == CandidateStatus.Hired.ToString());
-
-            return result;
+            return recruitment;
         }
     }
 }
