@@ -157,16 +157,23 @@ namespace Services.Services
 
         public ReadRecruitmentDTO? GetRecruitment(int recruitmentId)
         {
-            Recruitment recruitment;            
+            Recruitment recruitment;
+
             try
             {
                 recruitment = repo.GetById(recruitmentId);
-            }catch(Exception ex)
+            }
+            catch(Exception ex)
             {
                 logger.LogError(ex.Message);
                 return null;
             }
-            if (recruitment != null && recruitment.DeletedDate.HasValue ) return null;
+
+            if (recruitment == null) 
+                return null;
+            
+            if(recruitment.DeletedDate.HasValue) 
+                return null;
 
             ReadRecruitmentDTO result = mapper.Map<ReadRecruitmentDTO>(recruitment);
 
