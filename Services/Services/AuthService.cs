@@ -72,8 +72,8 @@ namespace Services.Services
                 Password = GetHash(password),
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                RoleName = RoleNameEnum.Anonymous.ToString(),
-                UserStatus = UserStatusEnum.Not_verified.ToString()
+                RoleName = RoleName.Anonymous.ToString(),
+                UserStatus = UserStatus.Not_verified.ToString()
             };
 
             return newUser;
@@ -120,7 +120,7 @@ namespace Services.Services
             User user = _userRepository.GetUserById(id);
             if(user.ConfirmationGuid == guid)
             {
-                user.UserStatus = UserStatusEnum.Active.ToString();
+                user.UserStatus = UserStatus.Active.ToString();
                 _userRepository.UpdateUser(user);
                 return true;
             }

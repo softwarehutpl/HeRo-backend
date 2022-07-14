@@ -1,6 +1,7 @@
 using Common.Enums;
 using Data.Entities;
 using Microsoft.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 
 namespace Data.Repositories
@@ -9,28 +10,31 @@ namespace Data.Repositories
     {
         public RecruitmentRepository(DataContext context) : base(context)
         {
-            
         }
 
         public int GetRecruiterId(int id)
         {
             Recruitment recruitment = GetById(id);
+
             int result = recruitment.RecruiterId;
+
             return result;
         }
 
         public Recruitment GetRecruitmentById(int id)
         {
-            Recruitment result = GetById(id);
+            Recruitment result = DataContext.Recruitments
+                .Include(x => x.Candidates)
+                .FirstOrDefault();
 
             if (result == default) return null;
 
             return result;
         }
 
-        public IQueryable<Recruitment> GetAllRecruitments()
+        public IEnumerable<Recruitment> GetAllRecruitments()
         {
-            IQueryable<Recruitment> result = GetAll();
+            IEnumerable<Recruitment> result = DataContext.Recruitments.Include(x => x.Candidates).ToList();
 
             return result;
         }

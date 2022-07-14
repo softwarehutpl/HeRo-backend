@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.Enums
 {
-    public enum StageNameEnum
+    public enum StageName
     {
         [Description("Evaluation")] Evaluation = 1,
         [Description("Interview")] Interview = 2,

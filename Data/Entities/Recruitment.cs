@@ -60,5 +60,6 @@ namespace Data.Entities
         public string RecruitmentPosition { get; set; }
         public string Localization { get; set; }
         public string Seniority { get; set; }
+        public virtual ICollection<Candidate> Candidates { get; set; }
     }
 }

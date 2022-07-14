@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.Enums
 {
-    public enum UserStatusEnum
+    public enum UserStatus
     {
         [Description("Not Verified")] Not_verified = 1,
         [Description("Active")] Active = 2,

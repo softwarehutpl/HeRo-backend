@@ -1,4 +1,5 @@
 using AutoMapper;
+using Common.Enums;
 using Common.Listing;
 using Data.Entities;
 using Data.Repositories;
@@ -149,9 +150,9 @@ namespace Services.Services
             }
 
             IEnumerable<Recruitment> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
-            IEnumerable<ReadRecruitmentDTO> result = mapper.Map<IEnumerable<ReadRecruitmentDTO>>(pagedRecruitments);
+            IEnumerable<ReadRecruitmentDTO> results = mapper.Map<IEnumerable<ReadRecruitmentDTO>>(pagedRecruitments);
 
-            return result;
+            return results;
         }
 
         public ReadRecruitmentDTO? GetRecruitment(int recruitmentId)
@@ -160,7 +161,7 @@ namespace Services.Services
 
             try
             {
-                recruitment = repo.GetById(recruitmentId);
+                recruitment = repo.GetRecruitmentById(recruitmentId);
             }
             catch (Exception ex)
             {
@@ -175,6 +176,8 @@ namespace Services.Services
                 return null;
 
             ReadRecruitmentDTO result = mapper.Map<ReadRecruitmentDTO>(recruitment);
+            result.CandidateCount = recruitment.Candidates.Count();
+            result.HiredCount = recruitment.Candidates.Count(e => e.Status == CandidateStatus.Hired.ToString());
 
             return result;
         }
