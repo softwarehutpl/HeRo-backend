@@ -2,7 +2,7 @@ using Common.Listing;
 using Data.Entities;
 using Data.Repositories;
 using PagedList;
-using Services.DTOs.User;
+using Data.DTOs.User;
 
 namespace Services.Services
 {

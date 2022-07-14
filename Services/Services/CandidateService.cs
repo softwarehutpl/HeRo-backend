@@ -1,6 +1,6 @@
 ﻿using Data;
 using Data.Entities;
-using Services.DTOs;
+using Data.DTOs;
 using System.ComponentModel.DataAnnotations;
 
 namespace Services.Services

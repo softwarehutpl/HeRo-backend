@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
 using Services.Services;
-using Services.DTOs.Skill;
+using Data.DTOs.Skill;
 using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
