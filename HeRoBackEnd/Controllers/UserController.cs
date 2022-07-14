@@ -48,7 +48,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Users</response>
         [HttpPost]
         [Route("User/GetList")]
-        [ProducesResponseType(typeof(IEnumerable<UserFiltringDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<UserDTO>), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
