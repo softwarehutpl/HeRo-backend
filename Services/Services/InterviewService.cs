@@ -88,7 +88,7 @@ namespace Services.Services
                         interviews = interviews.OrderBy(i => i.CandidateId);
                     }
                 }
-                if (sort.Key.ToLower() == "userid")
+                if (sort.Key.ToLower() == "workerId")
                 {
                     if (sort.Value.ToUpper() == "DESC")
                     {
@@ -125,6 +125,55 @@ namespace Services.Services
                                                 )).ToPagedList(paging.PageNumber, paging.PageSize);
 
             return resutl;
+        }
+
+        public void Create(InterviewCreateDTO interviewCreate, int userCreatedId)
+        {
+            Interview interview = new Interview();
+
+            interview.Date = interviewCreate.Date;
+            interview.CandidateId = interviewCreate.CandidateId;
+            interview.WorkerId = interviewCreate.WorkerId;
+            interview.Type = interviewCreate.Type;
+            interview.CreatedById = userCreatedId;
+            interview.CreatedDate = DateTime.UtcNow;
+
+            _interviewRepository.AddAndSaveChanges(interview);
+        }
+
+        public int Update(InterviewEditDTO interviewEdit, int userEditId)
+        {
+            Interview interview = _interviewRepository.GetById(interviewEdit.InterviewId);
+            if (interview == null)
+            {
+                return 0;
+            }
+
+            interview.Date = interviewEdit.Date;
+            interview.WorkerId = interviewEdit.WorkerId;
+            interview.Type = interviewEdit.Type;
+            interview.LastUpdatedById = userEditId;
+            interview.LastUpdatedDate = DateTime.UtcNow;
+
+            _interviewRepository.UpdateAndSaveChanges(interview);
+
+            return interview.Id;
+        }
+
+        public int Delete(int interviewId, int loginUserId)
+        {
+            Interview interview = _interviewRepository.GetById(interviewId);
+            if (interview == null)
+            {
+                return 0;
+            }
+
+            interview.DeletedById = loginUserId;
+            interview.DeletedDate = DateTime.UtcNow;
+
+            _interviewRepository.UpdateAndSaveChanges(interview);
+
+            return interview.Id;
         }
     }
 }

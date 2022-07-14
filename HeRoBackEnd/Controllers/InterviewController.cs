@@ -1,5 +1,5 @@
-﻿using Common.Listing;
-using HeRoBackEnd.ViewModels.Interview;
+﻿using HeRoBackEnd.ViewModels.Interview;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.Interview;
 using Services.Services;
@@ -19,33 +19,21 @@ namespace HeRoBackEnd.Controllers
         /// <summary>
         /// Gets a interview specified by an id
         /// </summary>
-        /// <param name="interviewId">Id of the interviewId</param>
-        /// <returns>Json string representing an object of the User class</returns>
-        /// <remarks>
-        /// Sample Responses:
-        ///
-        ///     {
-        ///        "interviewId" : 1,
-        ///        "date": "2012-12-12T12:12:12.121Z",
-        ///        "candidateId": 1,
-        ///        "candidateName": "Jan"
-        ///        "candidateLastName": "Naj"
-        ///        "candidateEmail": "test@da.com",
-        ///        "workerId": 1,
-        ///        "workerEmail": "testHR@da.com",
-        ///        "type": "HR"
-        ///     }
-        ///
-        /// </remarks>
+        /// <param name="interviewId">Id of the user</param>
+        /// <returns>Json string representing an object of the Interview class</returns>
+        /// <response code="200">Interview object</response>
+        /// <response code="400">No Interview with this InterviewId</response>
         [HttpGet]
         [Route("Interview/Get/{interviewId}")]
+        [ProducesResponseType(typeof(InterviewDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int interviewId)
         {
             InterviewDTO interview = _interviewService.Get(interviewId);
 
             if (interview == null)
             {
-                return NotFound("No interview with this interviewId");
+                return BadRequest();
             }
 
             return new JsonResult(interview);
@@ -55,37 +43,11 @@ namespace HeRoBackEnd.Controllers
         /// Gets all interviews that abide by the filter from the database
         /// </summary>
         /// <param name="interview">An object containing information about the filter</param>
-        /// <returns>Object of the JsonResult class representing a list of Users in the JSON format</returns>
-        /// <remarks>
-        /// Sample Responses:
-        ///
-        ///     [
-        ///          {
-        ///              "interviewId" : 1,
-        ///              "date": "2012-12-12T12:12:12.121Z",
-        ///              "candidateId": 1,
-        ///              "candidateName": "Jan"
-        ///              "candidateLastName": "Naj"
-        ///              "candidateEmail": "test@da.com",
-        ///              "workerId": 1,
-        ///              "workerEmail": "testHR@da.com",
-        ///              "type": "HR"
-        ///          },
-        ///          {
-        ///             "interviewId" : 2,
-        ///              "date": "2013-13-13T13:13:13.131Z",
-        ///              "candidateId": 3,
-        ///              "candidateName": "Maja"
-        ///              "candidateLastName": "Listopad"
-        ///              "candidateEmail": "test33@da.com",
-        ///              "workerId": 2,
-        ///              "workerEmail": "testTech@da.com",
-        ///              "type": "Tech"
-        ///          }
-        ///     ]
-        /// </remarks>
+        /// <returns>Object of the JsonResult class representing a list of Interview in the JSON format</returns>
+        /// <response code="200">List of Interview</response>
         [HttpPost]
         [Route("Interview/GetList")]
+        [ProducesResponseType(typeof(IEnumerable<InterviewDTO>), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
             InterviewFiltringDTO interviewFiltringDTO = new InterviewFiltringDTO(interview.FromDate, interview.ToDate, interview.CandidateId, interview.WorkerId, interview.Type);
@@ -93,6 +55,82 @@ namespace HeRoBackEnd.Controllers
             var resutl = _interviewService.GetInterviews(interview.Paging, interview.SortOrder, interviewFiltringDTO);
 
             return new JsonResult(resutl);
+        }
+
+        /// <summary>
+        /// Add new interview
+        /// </summary>
+        /// <returns>IActionResult</returns>
+        [HttpPost]
+        [Route("Interview/Create")]
+        public IActionResult Create(InterviewCreateViewModel interview)
+        {
+            InterviewCreateDTO interviewCreate =
+                new InterviewCreateDTO(
+                    interview.Date,
+                    interview.CandidateId,
+                    interview.WorkerId,
+                    interview.Type);
+
+            int userCreatedId = GetUserId();
+            _interviewService.Create(interviewCreate, userCreatedId);
+
+            return Ok("Creating was successful");
+        }
+
+        /// <summary>
+        /// Updates information about a interview represented by an id
+        /// </summary>
+        /// <param name="interviewId" example="1">Id of a interview</param>
+        /// <response code="200">Interview edited</response>
+        /// <response code="404">No interview with this InterviewId</response>
+        [HttpPost]
+        [Route("Interview/Edit/{interviewId}")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        public IActionResult Edit(int interviewId, InterviewEditViewModel interview)
+        {
+            InterviewEditDTO interviewEdit =
+                new InterviewEditDTO(
+                    interviewId,
+                    interview.Date,
+                    interview.WorkerId,
+                    interview.Type);
+
+            int userEditId = GetUserId();
+            int result = _interviewService.Update(interviewEdit, userEditId);
+
+            if (result == 0)
+            {
+                return BadRequest("No interview with this Id");
+            }
+
+            return Ok("Editing was successful");
+        }
+
+        /// <summary>
+        /// Deletes a interview represented by an id
+        /// </summary>
+        /// <param name="interviewId">Id of a interview</param>
+        /// <response code="200">Interview deleted</response>
+        /// <response code="400">No interview with this interviewId</response>
+        [HttpDelete]
+        [Route("Interview/Delete/{interviewId}")]
+        [Authorize(Policy = "AdminRequirment")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        public IActionResult Delete(int interviewId)
+        {
+            int loginUserId = GetUserId();
+
+            int result = _interviewService.Delete(interviewId, loginUserId);
+
+            if (result == 0)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
         }
     }
 }
