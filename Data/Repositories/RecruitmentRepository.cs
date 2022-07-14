@@ -32,7 +32,7 @@ namespace Data.Repositories
                 Where(e =>!(e.DeletedDate.HasValue));
 
             IQueryable<RecruitmentDetailsDTO> result=recruitments
-                .Select(x =>_mapper.Map<RecruitmentDetailsDTO>(recruitments));
+                .Select(x =>_mapper.Map<RecruitmentDetailsDTO>(x));
 
             return result;
         }

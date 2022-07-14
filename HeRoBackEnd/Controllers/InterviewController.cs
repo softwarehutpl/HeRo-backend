@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Data.DTOs;
 using Services.Services;
 using Data.DTOs.Interview;
+using Services.DTOs.Interview;
 
 namespace HeRoBackEnd.Controllers
 {

@@ -4,6 +4,7 @@ using Data.Entities;
 using Data.Repositories;
 using PagedList;
 using Data.DTOs.Interview;
+using Services.DTOs.Interview;
 
 namespace Services.Services
 {

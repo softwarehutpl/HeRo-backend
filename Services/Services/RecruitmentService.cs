@@ -23,18 +23,18 @@ namespace Services.Services
             this._recruitmentSkillRepo = recruitmentSkillRepo;
             this._logger = logger;
         }
-        
+
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
             try
             {
                 Recruitment recruitment = _mapper.Map<Recruitment>(dto);
                 IEnumerable<RecruitmentSkill> skills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
+                recruitment.Skills = (ICollection<RecruitmentSkill>)skills;
 
-                _recruitmentSkillRepo.AddRangeAndSaveChanges(skills);
                 _recruitmentRepo.AddAndSaveChanges(recruitment);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -54,14 +54,21 @@ namespace Services.Services
                 recruitment.Description = dto.Description;
                 recruitment.RecruiterId = dto.RecruiterId;
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
-                recruitment.Skills = (ICollection<RecruitmentSkill>)dto.Skills;
-
                 IEnumerable<RecruitmentSkill> skills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
 
-                UpdateRecruitmentSkills(skills);
+                foreach (RecruitmentSkill skill in skills)
+                {
+                    skill.RecruitmentId = recruitmentId;
+                }
+
+                recruitment.Skills = (ICollection<RecruitmentSkill>)skills;
+
+
+
+                DeleteRecruitmentSkills(recruitmentId);
                 _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -82,7 +89,7 @@ namespace Services.Services
 
                 _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -103,7 +110,7 @@ namespace Services.Services
 
                 _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -157,13 +164,13 @@ namespace Services.Services
                     dto.Skills = GetAllRecruitmentSkills(dto.Id);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return null;
             }
-            
-            
+
+
             return result;
         }
 
@@ -174,8 +181,8 @@ namespace Services.Services
             {
                 result = _recruitmentRepo.GetRecruitmentById(recruitmentId);
                 result.Skills = GetAllRecruitmentSkills(result.Id);
-    }
-            catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return null;
@@ -184,14 +191,13 @@ namespace Services.Services
             return result;
         }
 
-        public void UpdateRecruitmentSkills(IEnumerable<RecruitmentSkill> recruitmentSkills)
+        public void DeleteRecruitmentSkills(int recruitmentId)
         {
-                IQueryable<RecruitmentSkill> oldRecruitmentSkills =
-                    _recruitmentSkillRepo.GetAll().
-                    Where(e => e.RecruitmentId == recruitmentSkills.First().RecruitmentId);
+            IQueryable<RecruitmentSkill> oldRecruitmentSkills =
+                _recruitmentSkillRepo.GetAll().
+                Where(e => e.RecruitmentId == recruitmentId);
 
-                _recruitmentSkillRepo.RemoveRangeAndSaveChanges(oldRecruitmentSkills);
-                _recruitmentSkillRepo.AddRangeAndSaveChanges(recruitmentSkills);
+            _recruitmentSkillRepo.RemoveRangeAndSaveChanges(oldRecruitmentSkills);
         }
 
         public IEnumerable<RecruitmentSkillDTO> GetAllRecruitmentSkills(int recruitmentId)
@@ -199,7 +205,7 @@ namespace Services.Services
             IEnumerable<RecruitmentSkillDTO> result =
                 _recruitmentSkillRepo.GetAll().
                 Where(e => e.RecruitmentId == recruitmentId).
-                Select(e=>_mapper.Map<RecruitmentSkillDTO>(e));
+                Select(e => _mapper.Map<RecruitmentSkillDTO>(e));
 
             return result;
         }

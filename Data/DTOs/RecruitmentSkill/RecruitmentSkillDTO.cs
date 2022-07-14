@@ -8,8 +8,6 @@ namespace Data.DTOs.RecruitmentSkill
 {
     public class RecruitmentSkillDTO
     {
-        public int RecruitmentId { get; set; }
-
         public int SkillId { get; set; }
 
         public int SkillLevel { get; set; }

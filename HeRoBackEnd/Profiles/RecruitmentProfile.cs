@@ -10,9 +10,7 @@ namespace HeRoBackEnd.Profiles
     {
         public RecruitmentProfile()
         {
-            CreateMap<CreateRecruitmentDTO, Recruitment>().ForMember(
-                dest=>dest.Skills,
-                opt=>opt.MapFrom(src=>(ICollection<RecruitmentSkill>)src));
+            CreateMap<CreateRecruitmentDTO, Recruitment>();
             CreateMap<RecruitmentCreateViewModel, CreateRecruitmentDTO>();
             CreateMap<RecruitmentEditViewModel, UpdateRecruitmentDTO>();
             CreateMap<Recruitment, RecruitmentDetailsDTO>();

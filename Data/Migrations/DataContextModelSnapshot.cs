@@ -22,20 +22,6 @@ namespace Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Data.DTOs.RecruitmentSkill.RecruitmentSkillDTO", b =>
-                {
-                    b.Property<int>("RecruitmentId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SkillId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("SkillLevel")
-                        .HasColumnType("int");
-
-                    b.ToTable("RecruitmentSkillDTO");
-                });
-
             modelBuilder.Entity("Data.Entities.Candidate", b =>
                 {
                     b.Property<int>("Id")
@@ -137,7 +123,7 @@ namespace Data.Migrations
 
                     b.HasIndex("TechId");
 
-                    b.ToTable("Candidate", (string)null);
+                    b.ToTable("Candidate");
                 });
 
             modelBuilder.Entity("Data.Entities.Interview", b =>
@@ -223,7 +209,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Log", (string)null);
+                    b.ToTable("Log");
                 });
 
             modelBuilder.Entity("Data.Entities.Recruitment", b =>
@@ -287,7 +273,7 @@ namespace Data.Migrations
 
                     b.HasIndex("RecruiterId");
 
-                    b.ToTable("Recruitment", (string)null);
+                    b.ToTable("Recruitment");
                 });
 
             modelBuilder.Entity("Data.Entities.RecruitmentSkill", b =>
@@ -305,7 +291,7 @@ namespace Data.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("RecruitmentRequirement", (string)null);
+                    b.ToTable("RecruitmentSkill");
                 });
 
             modelBuilder.Entity("Data.Entities.Skill", b =>
@@ -323,7 +309,7 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Skill", (string)null);
+                    b.ToTable("Skill");
                 });
 
             modelBuilder.Entity("Data.Entities.User", b =>
@@ -373,7 +359,7 @@ namespace Data.Migrations
 
                     b.HasIndex("DeletedById");
 
-                    b.ToTable("User", (string)null);
+                    b.ToTable("User");
                 });
 
             modelBuilder.Entity("Data.Entities.Candidate", b =>

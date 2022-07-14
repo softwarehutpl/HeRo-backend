@@ -117,6 +117,9 @@ namespace Services.Services
             try
             {
                 Skill skill = _repo.GetById(id);
+
+                if (skill == null) return -1;
+
                 bool isUsed = _recruitmentSkillRepo.IsSkillUsed(id);
 
                 if (isUsed == true) return 0;
