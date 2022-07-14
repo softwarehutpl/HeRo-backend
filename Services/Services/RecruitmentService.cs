@@ -117,36 +117,45 @@ namespace Services.Services
             IEnumerable<RecruitmentDetailsDTO> result;
             try
             {
-                IEnumerable<RecruitmentDetailsDTO> recruitments = _recruitmentRepo.GetAllRecruitments();
 
-                if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
-                {
-                    recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
-                }
-                if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
-                {
-                    recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
-                }
-                if (recruitmentFiltringDTO.BeginningDate.HasValue)
-                {
-                    recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
-                }
-                if (recruitmentFiltringDTO.EndingDate.HasValue)
-                {
-                    recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
-                }
+            }catch(Exception ex)
+            {
+                logger.LogError(ex.Message);
+                return null;
+            }
+            IEnumerable<Recruitment> recruitments = repo.GetAllRecruitments();
+            recruitments = recruitments.Where(e => !e.DeletedDate.HasValue);
 
-                foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
+
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
+            {
+                recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
+            }
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
+            {
+                recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
+            }
+            if (recruitmentFiltringDTO.BeginningDate.HasValue)
+            {
+                recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
+            }
+            if (recruitmentFiltringDTO.EndingDate.HasValue)
+            {
+                recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
+            }
+            
+
+            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
+            {
+                if (sort.Value == "DESC")
                 {
-                    if (sort.Value == "DESC")
-                    {
-                        recruitments = recruitments.OrderByDescending(u => u.Name);
-                    }
-                    else
-                    {
-                        recruitments = recruitments.OrderBy(s => s.Name);
-                    }
+                    recruitments = recruitments.OrderByDescending(u => u.Name);
                 }
+                else
+                {
+                    recruitments = recruitments.OrderBy(s => s.Name);
+                }
+            }
 
                 result = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
 
@@ -171,7 +180,9 @@ namespace Services.Services
             {
                 result = _recruitmentRepo.GetRecruitmentById(recruitmentId);
                 result.Skills = GetAllRecruitmentSkills(result.Id);
-            }
+                if (result.DeletedDate.HasValue)
+                return null;
+    }
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
