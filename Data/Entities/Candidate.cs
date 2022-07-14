@@ -30,7 +30,7 @@ namespace Data.Entities
         [Required]
         public DateTime ApplicationDate { get; set; }
 
-        public DateTime? AvailableFrom{ get; set; }
+        public DateTime? AvailableFrom { get; set; }
 
         public int? ExpectedMonthlySalary { get; set; }
 
@@ -40,18 +40,15 @@ namespace Data.Entities
         public string? InterviewOpinionText { get; set; }
 
         public int? HROpinionScore { get; set; }
-        public string? HROpinionText{ get; set; }
+        public string? HROpinionText { get; set; }
 
-        
         public string? Source { get; set; }
 
-        
         public string? Stage { get; set; }
 
         [Required]
         public int RecruitmentId { get; set; }
 
-        
         public int? RecruiterId { get; set; }
 
         public int? TechId { get; set; }
@@ -60,16 +57,8 @@ namespace Data.Entities
 
         public DateTime? TechInterviewDate { get; set; }
 
-
         [Required]
         public string CvPath { get; set; }
-
-        
-
-
-
-
-
 
         public int? LastUpdatedById { get; set; }
 

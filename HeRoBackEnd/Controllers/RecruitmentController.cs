@@ -1,11 +1,9 @@
+using AutoMapper;
 using Common.Listing;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
-using Services.Services;
 using Services.DTOs.Recruitment;
-using AutoMapper;
-using Common.Enums;
-using System.Security.Claims;
+using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -50,10 +48,6 @@ namespace HeRoBackEnd.Controllers
             return Ok(recruitments);
         }
 
-        
-
-
-
         /// <summary>
         /// Returns a recruitment specified by an id
         /// </summary>
@@ -64,7 +58,7 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ReadRecruitmentDTO),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ReadRecruitmentDTO), StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
             ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
@@ -85,11 +79,10 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Wrong data</response>
         [HttpPost]
         [Route("Recruitment/Create")]
-        [ProducesResponseType(typeof(void),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
         {
-
             CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
             int id = GetUserId();
 
@@ -115,8 +108,8 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Wrong data!</response>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
-        [ProducesResponseType(typeof(void),StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
         {
             UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(recruitment);
@@ -158,6 +151,7 @@ namespace HeRoBackEnd.Controllers
 
             return Ok();
         }
+
         /// <summary>
         /// Deletes a recruitment represented by an id
         /// </summary>

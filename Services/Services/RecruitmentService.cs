@@ -5,7 +5,6 @@ using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
 using Services.DTOs.Recruitment;
-using System.Security.Claims;
 
 namespace Services.Services
 {
@@ -15,6 +14,7 @@ namespace Services.Services
         private readonly RecruitmentRepository repo;
         private readonly UserRepository userRepo;
         private readonly ILogger<RecruitmentService> logger;
+
         public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger<RecruitmentService> logger)
         {
             mapper = map;
@@ -22,11 +22,7 @@ namespace Services.Services
             this.userRepo = userRepo;
             this.logger = logger;
         }
-            
-            
 
-
-        
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
             try
@@ -34,7 +30,8 @@ namespace Services.Services
                 Recruitment recruitment = mapper.Map<Recruitment>(dto);
 
                 repo.AddAndSaveChanges(recruitment);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 return -1;
@@ -42,6 +39,7 @@ namespace Services.Services
 
             return 1;
         }
+
         public int UpdateRecruitment(int recruitmentId, UpdateRecruitmentDTO dto)
         {
             try
@@ -56,7 +54,8 @@ namespace Services.Services
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
 
                 repo.UpdateAndSaveChanges(recruitment);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 return -1;
@@ -76,7 +75,8 @@ namespace Services.Services
                 recruitment.EndedById = dto.EndedById;
 
                 repo.UpdateAndSaveChanges(recruitment);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 return -1;
@@ -96,7 +96,8 @@ namespace Services.Services
                 recruitment.DeletedById = dto.LastUpdatedById;
 
                 repo.UpdateAndSaveChanges(recruitment);
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 return -1;
@@ -109,15 +110,14 @@ namespace Services.Services
         {
             try
             {
-
-            }catch(Exception ex)
+            }
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 return null;
             }
             IEnumerable<Recruitment> recruitments = repo.GetAllRecruitments();
             recruitments = recruitments.Where(e => !e.DeletedDate.HasValue);
-
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
@@ -135,7 +135,6 @@ namespace Services.Services
             {
                 recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
             }
-            
 
             foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
             {
@@ -163,16 +162,16 @@ namespace Services.Services
             {
                 recruitment = repo.GetById(recruitmentId);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex.Message);
                 return null;
             }
 
-            if (recruitment == null) 
+            if (recruitment == null)
                 return null;
-            
-            if(recruitment.DeletedDate.HasValue) 
+
+            if (recruitment.DeletedDate.HasValue)
                 return null;
 
             ReadRecruitmentDTO result = mapper.Map<ReadRecruitmentDTO>(recruitment);
