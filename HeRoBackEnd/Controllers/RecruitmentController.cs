@@ -44,12 +44,15 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.EndingDate);
 
             IEnumerable<ReadRecruitmentDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
-            JsonResult result = new JsonResult(recruitments);
 
-            if (result == null) return BadRequest();
+            if (recruitments == null) return BadRequest();
 
-            return Ok(result);
+            return Ok(recruitments);
         }
+
+        
+
+
 
         /// <summary>
         /// Returns a recruitment specified by an id

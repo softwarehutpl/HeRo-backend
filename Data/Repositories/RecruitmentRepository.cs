@@ -11,6 +11,14 @@ namespace Data.Repositories
         {
             
         }
+
+        public int GetRecruiterId(int id)
+        {
+            Recruitment recruitment = GetById(id);
+            int result = recruitment.RecruiterId;
+            return result;
+        }
+
         public Recruitment GetRecruitmentById(int id)
         {
             Recruitment result = GetById(id);

@@ -4,7 +4,7 @@ namespace HeRoBackEnd.ViewModels.Recruitment
 {
     public class RecruitmentCreateViewModel
     {
-        [Required(ErrorMessage = "This filed is required")]
+        [Required(ErrorMessage = "This field is required")]
         public DateTime BeginningDate { get; set; }
 
         [Required(ErrorMessage = "This field is required")]
