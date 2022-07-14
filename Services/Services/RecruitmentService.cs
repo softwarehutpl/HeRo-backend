@@ -167,8 +167,8 @@ namespace Services.Services
                 return null;
             }
             if (recruitment != null && recruitment.DeletedDate.HasValue ) return null;
-            ReadRecruitmentDTO result = null;
-            if (recruitment != null) result = mapper.Map<ReadRecruitmentDTO>(recruitment);
+
+            ReadRecruitmentDTO result = mapper.Map<ReadRecruitmentDTO>(recruitment);
 
             return result;
         }
