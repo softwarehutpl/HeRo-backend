@@ -95,11 +95,15 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Create(CandidateCreateViewModel newCandidate)
         {
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
+
             dto.Status = CandidateStatusEnum.New.ToString();
             dto.ApplicationDate = DateTime.Now;
-            int result = _candidateService.CreateCandidate(dto);
 
-            if (result == -1) return BadRequest("Error creating candidate");
+            int result = _candidateService.CreateCandidate(dto);
+            if (result == -1)
+            {
+                return BadRequest("Error creating candidate");
+            }
 
             return Ok("Candidate created successfully");
         }
@@ -133,11 +137,15 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Edit(int candidateId, CandidateEditViewModel candidate)
         {
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
+
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
-            int result = _candidateService.UpdateCandidate(candidateId, dto);
 
-            if (result == -1) return BadRequest("Error updating candidate");
+            int result = _candidateService.UpdateCandidate(candidateId, dto);
+            if (result == -1)
+            {
+                return BadRequest("Error updating candidate");
+            }
 
             return Ok("Candidate updated successfully");
         }
@@ -154,16 +162,18 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Delete(int candidateId)
         {
             DeleteCandidateDTO dto = new DeleteCandidateDTO(candidateId);
-            int id = GetUserId();
 
+            int id = GetUserId();
             dto.LastUpdatedById = id;
             dto.LastUpdatedDate = DateTime.Now;
             dto.DeletedById = id;
             dto.DeletedDate = DateTime.Now;
 
             int result = _candidateService.DeleteCandidate(dto);
-
-            if (result == -1) return BadRequest("Error deleting candidate (or candidate doesn't exist)");
+            if (result == -1)
+            {
+                return BadRequest("Error deleting candidate (or candidate doesn't exist)");
+            }
 
             return Ok("Candidate deleted successfully");
         }
@@ -191,9 +201,16 @@ namespace HeRoBackEnd.Controllers
         public IActionResult AddHRNote(int candidateId, CandidateAddHRNoteViewModel AddHrNote)
         {
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
+
             int result = _candidateService.AddHRNote(candidateId, dto);
-            if (result == -1) return BadRequest("Error adding note to candidate");
-            else return Ok("Interview note added correctly");
+            if (result == -1)
+            {
+                return BadRequest("Error adding note to candidate");
+            }
+            else
+            {
+                return Ok("Interview note added correctly");
+            }
         }
 
         /// <summary>
@@ -219,9 +236,16 @@ namespace HeRoBackEnd.Controllers
         public IActionResult AddTechInterviewNote(int candidateId, CandidateAddTechNoteViewModel AddTechNote)
         {
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
+
             int result = _candidateService.AddTechNote(candidateId, dto);
-            if (result == -1) return BadRequest("Error adding tech note to candidate");
-            else return Ok("Tech interview note added correctly");
+            if (result == -1)
+            {
+                return BadRequest("Error adding tech note to candidate");
+            }
+            else
+            {
+                return Ok("Tech interview note added correctly");
+            }
         }
 
         /// <summary>
@@ -247,8 +271,8 @@ namespace HeRoBackEnd.Controllers
             CandidateAssigneesDTO dto = _mapper.Map<CandidateAssigneesDTO>(assignees);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
-            int result = _candidateService.AllocateRecruiterAndTech(candidateId, dto);
 
+            int result = _candidateService.AllocateRecruiterAndTech(candidateId, dto);
             if (result == -1)
             {
                 return BadRequest("Error assigning employees to candidate");
@@ -281,8 +305,14 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedBy = GetUserId();
 
             int result = _candidateService.AllocateRecruitmentInterview(candidateId, dto);
-            if (result == -1) return BadRequest("Error setting interview date");
-            else return Ok("Interview date set correctly");
+            if (result == -1)
+            {
+                return BadRequest("Error setting interview date");
+            }
+            else
+            {
+                return Ok("Interview date set correctly");
+            }
         }
 
         /// <summary>
@@ -309,8 +339,14 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedBy = GetUserId();
 
             int result = _candidateService.AllocateTechInterview(candidateId, dto);
-            if (result == -1) return BadRequest("Error setting tech interview date");
-            else return Ok("Tech interview date set correctly");
+            if (result == -1)
+            {
+                return BadRequest("Error setting tech interview date");
+            }
+            else
+            {
+                return Ok("Tech interview date set correctly");
+            }
         }
     }
 }

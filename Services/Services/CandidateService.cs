@@ -27,9 +27,9 @@ namespace Services.Services
 
         public int CreateCandidate(CreateCandidateDTO dto)
         {
-            //przekazanie wartości z DTO do obiektu
             Candidate candidate = _mapper.Map<Candidate>(dto);
             candidate.RecruiterId = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
+
             try
             {
                 _candidateRepository.AddAndSaveChanges(candidate);
@@ -38,6 +38,7 @@ namespace Services.Services
             {
                 return -1;
             }
+
             return 1;
         }
 
@@ -47,6 +48,7 @@ namespace Services.Services
             if (candidate != null)
             {
                 candidate.Status = status;
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -55,8 +57,10 @@ namespace Services.Services
                 {
                     return -1;
                 }
+
                 return 1;
             }
+
             return -1;
         }
 
@@ -89,6 +93,7 @@ namespace Services.Services
             Candidate candidate = _candidateRepository.GetById(dto.Id);
             candidate.DeletedDate = dto.DeletedDate;
             candidate.DeletedById = dto.DeletedById;
+
             try
             {
                 _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -97,6 +102,7 @@ namespace Services.Services
             {
                 return -1;
             }
+
             return 1;
         }
 
@@ -109,6 +115,7 @@ namespace Services.Services
                 candidate.LastUpdatedById = dto.RecruiterId;
                 candidate.HROpinionText = dto.Note;
                 candidate.HROpinionScore = dto.Score;
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -117,9 +124,13 @@ namespace Services.Services
                 {
                     return -1;
                 }
+
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
 
         public int AddTechNote(int candidateId, CandidateAddTechNoteDTO dto)
@@ -131,6 +142,7 @@ namespace Services.Services
                 candidate.LastUpdatedById = dto.TechId;
                 candidate.InterviewOpinionText = dto.Note;
                 candidate.InterviewOpinionScore = dto.Score;
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -139,9 +151,13 @@ namespace Services.Services
                 {
                     return -1;
                 }
+
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
 
         public CandidateProfileDTO? GetCandidateProfileById(int id)
@@ -251,34 +267,20 @@ namespace Services.Services
             return result;
         }
 
-        //nie ma tabeli oraz klasy dla rozmowy także stworzyłem jak narazie DTO dla
-        //potrzebnych danych
-
-        public async Task<List<InterviewDTO>> GetInterviews()
-        {
-            return null;
-        }
-
-        //public int AddRecruitmentToCandidate(int candId, int recrId)
-        //{
-        //    Candidate? candidate = GetCandidateById(candId);
-        //    Recruitment? recruitment = GetRecruitmentById(recrId);
-        //    if (candidate != null)
-        //    {
-        //        candidate.TechId = recrId;
-        //        int result = _candidateRepository.UpdateCandidate(candidate);
-        //        return result;
-        //    }
-        //    else return -1;
-        //}
-
         public int AllocateRecruiterAndTech(int id, CandidateAssigneesDTO dto)
         {
             Candidate candidate = _candidateRepository.GetById(id);
             if (candidate != null)
             {
-                if (dto.TechId != null) candidate.TechId = dto.TechId;
-                if (dto.RecruiterId != null) candidate.RecruiterId = dto.RecruiterId;
+                if (dto.TechId != null)
+                {
+                    candidate.TechId = dto.TechId;
+                }
+                if (dto.RecruiterId != null)
+                {
+                    candidate.RecruiterId = dto.RecruiterId;
+                }
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -287,9 +289,13 @@ namespace Services.Services
                 {
                     return -1;
                 }
+
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
 
         public int AllocateRecruitmentInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
@@ -308,19 +314,25 @@ namespace Services.Services
                 {
                     return -1;
                 }
+
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
 
         public int AllocateTechInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
+
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
                 candidate.LastUpdatedById = dto.LastUpdatedBy;
                 candidate.TechInterviewDate = dto.Date;
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -331,7 +343,10 @@ namespace Services.Services
                 }
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
     }
 }
