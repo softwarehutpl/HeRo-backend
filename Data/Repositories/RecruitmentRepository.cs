@@ -2,7 +2,7 @@ using AutoMapper;
 using Common.Enums;
 using Data.Entities;
 using Microsoft.Data.SqlClient;
-using Services.DTOs.Recruitment;
+using Data.DTOs.Recruitment;
 using System.Security.Claims;
 
 

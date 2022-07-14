@@ -1,4 +1,4 @@
-﻿namespace Services.DTOs.User
+﻿namespace Data.DTOs.User
 {
     public class UserEditDTO
     {

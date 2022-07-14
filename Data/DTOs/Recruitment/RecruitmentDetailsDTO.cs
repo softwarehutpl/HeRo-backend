@@ -5,8 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
 using Common.Enums;
+using Data.DTOs.RecruitmentSkill;
 
-namespace Services.DTOs.Recruitment
+namespace Data.DTOs.Recruitment
 {
     public class RecruitmentDetailsDTO
     {
@@ -22,6 +23,6 @@ namespace Services.DTOs.Recruitment
 
         public int RecruiterId { get; set; }
 
-        public IEnumerable<Data.Entities.RecruitmentSkill> Skills { get; set; }
+        public IEnumerable<RecruitmentSkillDTO> Skills { get; set; }
     }
 }

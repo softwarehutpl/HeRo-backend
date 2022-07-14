@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.DTOs.RecruitmentSkill
+namespace Data.DTOs.RecruitmentSkill
 {
-    public class ReadRecruitmentSkillDTO
+    public class RecruitmentSkillDTO
     {
         public int RecruitmentId { get; set; }
 

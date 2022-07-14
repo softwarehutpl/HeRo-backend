@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
-using Services.DTOs.Recruitment;
+using Data.DTOs.Recruitment;
 using Data.Entities;
 using HeRoBackEnd.ViewModels.Recruitment;
-using Services.DTOs.Skill;
+using Data.DTOs.Skill;
 
 namespace HeRoBackEnd.Profiles
 {

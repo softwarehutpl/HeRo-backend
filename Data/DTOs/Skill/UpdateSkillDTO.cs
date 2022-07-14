@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.DTOs.Skill
+namespace Data.DTOs.Skill
 {
     public class UpdateSkillDTO
     {

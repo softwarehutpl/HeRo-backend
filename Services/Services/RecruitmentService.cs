@@ -4,8 +4,9 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.DTOs.Recruitment;
+using Data.DTOs.Recruitment;
 using System.Security.Claims;
+using Data.DTOs.RecruitmentSkill;
 
 namespace Services.Services
 {
@@ -28,8 +29,9 @@ namespace Services.Services
             try
             {
                 Recruitment recruitment = _mapper.Map<Recruitment>(dto);
+                IEnumerable<RecruitmentSkill> skills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
 
-                _recruitmentSkillRepo.AddRangeAndSaveChanges(dto.Skills);
+                _recruitmentSkillRepo.AddRangeAndSaveChanges(skills);
                 _recruitmentRepo.AddAndSaveChanges(recruitment);
             }
             catch(Exception ex)
@@ -52,8 +54,11 @@ namespace Services.Services
                 recruitment.Description = dto.Description;
                 recruitment.RecruiterId = dto.RecruiterId;
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
+                recruitment.Skills = (ICollection<RecruitmentSkillDTO>)dto.Skills;
 
-                UpdateRecruitmentSkills(dto.Skills);
+                IEnumerable<RecruitmentSkill> skills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
+
+                UpdateRecruitmentSkills(skills);
                 _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
             catch(Exception ex)
@@ -186,11 +191,12 @@ namespace Services.Services
                 _recruitmentSkillRepo.AddRangeAndSaveChanges(recruitmentSkills);
         }
 
-        public IEnumerable<RecruitmentSkill> GetAllRecruitmentSkills(int recruitmentId)
+        public IEnumerable<RecruitmentSkillDTO> GetAllRecruitmentSkills(int recruitmentId)
         {
-            IEnumerable<RecruitmentSkill> result =
+            IEnumerable<RecruitmentSkillDTO> result =
                 _recruitmentSkillRepo.GetAll().
-                Where(e => e.RecruitmentId == recruitmentId);
+                Where(e => e.RecruitmentId == recruitmentId).
+                Select(e=>_mapper.Map<RecruitmentSkillDTO>(e));
 
             return result;
         }

@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Common.Enums;
+using Data.DTOs.RecruitmentSkill;
 using Data.Repositories;
 
 namespace Data.Entities
@@ -62,7 +63,7 @@ namespace Data.Entities
         [ForeignKey("EndedById")]
         public virtual User? EndedBy { get; set; }
 
-        public virtual ICollection<RecruitmentSkill> Skills { get; set; }
+        public virtual ICollection<RecruitmentSkillDTO> Skills { get; set; }
     }
 }
 

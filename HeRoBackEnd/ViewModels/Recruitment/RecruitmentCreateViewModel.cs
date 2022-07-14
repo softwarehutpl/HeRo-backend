@@ -1,4 +1,5 @@
-﻿using Data.Entities;
+﻿using Data.DTOs.RecruitmentSkill;
+using Data.Entities;
 using System.ComponentModel.DataAnnotations;
 
 namespace HeRoBackEnd.ViewModels.Recruitment
@@ -21,6 +22,6 @@ namespace HeRoBackEnd.ViewModels.Recruitment
         public int RecruiterId { get; set; }
 
         [MinLength(1,ErrorMessage ="You have to specify at least one skill")]
-        public IEnumerable<RecruitmentSkill> Skills { get; set; }
+        public IEnumerable<RecruitmentSkillDTO> Skills { get; set; }
     }
 }

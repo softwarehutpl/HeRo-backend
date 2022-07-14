@@ -4,8 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.ComponentModel.DataAnnotations;
+using Data.DTOs.RecruitmentSkill;
 
-namespace Services.DTOs.Recruitment
+namespace Data.DTOs.Recruitment
 {
     public class CreateRecruitmentDTO
     {
@@ -27,6 +28,6 @@ namespace Services.DTOs.Recruitment
 
         public DateTime? LastUpdatedDate { get; set; }
 
-        public IEnumerable<Data.Entities.RecruitmentSkill> Skills { get; set; }
+        public IEnumerable<RecruitmentSkillDTO> Skills { get; set; }
     }
 }

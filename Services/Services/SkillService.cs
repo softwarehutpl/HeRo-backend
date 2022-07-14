@@ -7,7 +7,7 @@ using AutoMapper;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
-using Services.DTOs.Skill;
+using Data.DTOs.Skill;
 
 namespace Services.Services
 {
