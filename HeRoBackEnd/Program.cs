@@ -70,6 +70,8 @@ try
     builder.Services.AddScoped<AuthService>();
     builder.Services.AddScoped<RecruitmentRepository>();
     builder.Services.AddScoped<RecruitmentService>();
+    builder.Services.AddScoped<CandidateService>();
+    builder.Services.AddScoped<CandidateRepository>();
     builder.Services.AddScoped<SkillRepository>();
     builder.Services.AddScoped<SkillService>();
     builder.Services.AddScoped<RecruitmentSkillService>();
@@ -83,6 +85,7 @@ try
             Title = "API documentation",
             Description = "API documentation for the HeRo app"
         });
+        
         var xmlFilename = $"{System.Reflection.Assembly.GetExecutingAssembly().GetName().Name}.xml";
         options.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, xmlFilename));
         options.ResolveConflictingActions(apiDescriptions => apiDescriptions.First());

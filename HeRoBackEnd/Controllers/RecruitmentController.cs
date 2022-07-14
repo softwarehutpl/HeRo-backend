@@ -50,6 +50,10 @@ namespace HeRoBackEnd.Controllers
             return Ok(recruitments);
         }
 
+        
+
+
+
         /// <summary>
         /// Returns a recruitment specified by an id
         /// </summary>
