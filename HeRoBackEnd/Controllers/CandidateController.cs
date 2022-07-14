@@ -22,31 +22,6 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Returns a Json result object representing a list of candidates
-        /// </summary>
-        ///<param name="candidate">An object containing information about the filter</param>
-        /// <returns>Json result object representing a list of Candidates</returns>
-        /// <response code="200">List of Candidates</response>
-        [HttpPost]
-        [Route("Candidate/GetList")]
-        [ProducesResponseType(typeof(IEnumerable<CandidateInfoForListDTO>), StatusCodes.Status200OK)]
-        public IActionResult GetList(CandidateListFilterViewModel candidate)
-        {
-            CandidateFilteringDTO candidateFilteringDTO
-                = new CandidateFilteringDTO(
-                    candidate.Status,
-                    candidate.Stage);
-
-            IEnumerable<CandidateInfoForListDTO> result =
-                _candidateService.GetCandidates(
-                    candidate.Paging,
-                    candidate.SortOrder,
-                    candidateFilteringDTO);
-
-            return new JsonResult(result);
-        }
-
-        /// <summary>
         /// Returns a candidate specified by the id
         /// </summary>
         /// <param name="candidateId">Takes the id of a candidate</param>
@@ -67,6 +42,41 @@ namespace HeRoBackEnd.Controllers
             }
 
             return new JsonResult(candDTO);
+        }
+
+        /// <summary>
+        /// Returns a Json result object representing a list of candidates
+        /// </summary>
+        /// <param name="candidate">An object containing information about the filter</param>
+        /// <returns>Json result object representing a list of Candidates</returns>
+        /// <remarks>
+        /// <h2>Filtring:</h2>
+        ///    <h3>Possible statuses:</h3> "NEW" , "IN_PROCESSING", "DROPPED_OUT", "HIRED" <br />
+        ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br /><br />
+        /// <h2>Sorting:</h2>
+        ///     <h3>Possible keys:</h3> "name", "source", "project", "status", "stage" <br />
+        ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
+        ///                      Another value - sort the result in ascending order <br />
+        ///
+        /// </remarks>
+        /// <response code="200">List of Candidates</response>
+        [HttpPost]
+        [Route("Candidate/GetList")]
+        [ProducesResponseType(typeof(IEnumerable<CandidateInfoForListDTO>), StatusCodes.Status200OK)]
+        public IActionResult GetList(CandidateListFilterViewModel candidate)
+        {
+            CandidateFilteringDTO candidateFilteringDTO
+                = new CandidateFilteringDTO(
+                    candidate.Status,
+                    candidate.Stage);
+
+            IEnumerable<CandidateInfoForListDTO> result =
+                _candidateService.GetCandidates(
+                    candidate.Paging,
+                    candidate.SortOrder,
+                    candidateFilteringDTO);
+
+            return new JsonResult(result);
         }
 
         /// <summary> Creates a candidate </summary>
