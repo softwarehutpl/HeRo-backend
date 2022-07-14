@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.Listing;
+using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using Services.DTOs.Candidate;
 
 namespace Services.Services
 {
+    [ScopedRegistration]
     public class CandidateService
     {
         private readonly CandidateRepository _candidateRepository;
@@ -60,7 +62,6 @@ namespace Services.Services
 
                 return 1;
             }
-
             return -1;
         }
 
@@ -85,6 +86,7 @@ namespace Services.Services
             {
                 return -1;
             }
+
             return 1;
         }
 

@@ -1,6 +1,4 @@
-﻿using Common.Helpers;
-using Common.ServiceRegistrationAttributes;
-using Data.Repositories;
+﻿using Common.ServiceRegistrationAttributes;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
