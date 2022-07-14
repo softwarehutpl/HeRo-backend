@@ -1,5 +1,4 @@
-﻿using Common.Listing;
-using HeRoBackEnd.ViewModels.Interview;
+﻿using HeRoBackEnd.ViewModels.Interview;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.Interview;
@@ -63,14 +62,14 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <returns>IActionResult</returns>
         [HttpPost]
-        [Route("User/Create")]
+        [Route("Interview/Create")]
         public IActionResult Create(InterviewCreateViewModel interview)
         {
             InterviewCreateDTO interviewCreate =
                 new InterviewCreateDTO(
                     interview.Date,
                     interview.CandidateId,
-                    interview.UserId,
+                    interview.WorkerId,
                     interview.Type);
 
             int userCreatedId = GetUserId();
@@ -86,7 +85,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">Interview edited</response>
         /// <response code="404">No interview with this InterviewId</response>
         [HttpPost]
-        [Route("User/Edit/{interviewId}")]
+        [Route("Interview/Edit/{interviewId}")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int interviewId, InterviewEditViewModel interview)
@@ -95,8 +94,7 @@ namespace HeRoBackEnd.Controllers
                 new InterviewEditDTO(
                     interviewId,
                     interview.Date,
-                    interview.CandidateId,
-                    interview.UserId,
+                    interview.WorkerId,
                     interview.Type);
 
             int userEditId = GetUserId();

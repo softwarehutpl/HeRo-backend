@@ -8,10 +8,7 @@ namespace HeRoBackEnd.ViewModels.Interview
         public DateTime Date { get; set; }
 
         [Required]
-        public int CandidateId { get; set; }
-
-        [Required]
-        public int UserId { get; set; }
+        public int WorkerId { get; set; }
 
         [Required]
         public string Type { get; set; }

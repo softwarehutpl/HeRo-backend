@@ -6,15 +6,15 @@
 
         public int CandidateId { get; set; }
 
-        public int UserId { get; set; }
+        public int WorkerId { get; set; }
 
         public string Type { get; set; }
 
-        public InterviewCreateDTO(DateTime date, int candidateId, int userId, string type)
+        public InterviewCreateDTO(DateTime date, int candidateId, int workerId, string type)
         {
             Date = date;
             CandidateId = candidateId;
-            UserId = userId;
+            WorkerId = workerId;
             Type = type;
         }
     }

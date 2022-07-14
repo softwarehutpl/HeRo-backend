@@ -9,10 +9,14 @@ namespace Services.Services
     public class InterviewService
     {
         private InterviewRepository _interviewRepository;
+        private UserRepository _userRepository;
+        private CandidateRepository _candidateRepository;
 
-        public InterviewService(InterviewRepository interviewRepository)
+        public InterviewService(InterviewRepository interviewRepository, UserRepository userRepository, CandidateRepository candidateRepository)
         {
             _interviewRepository = interviewRepository;
+            _userRepository = userRepository;
+            _candidateRepository = candidateRepository;
         }
 
         public InterviewDTO Get(int interviewId)
@@ -84,7 +88,7 @@ namespace Services.Services
                         interviews = interviews.OrderBy(i => i.CandidateId);
                     }
                 }
-                if (sort.Key.ToLower() == "userid")
+                if (sort.Key.ToLower() == "workerId")
                 {
                     if (sort.Value.ToUpper() == "DESC")
                     {
@@ -129,7 +133,8 @@ namespace Services.Services
 
             interview.Date = interviewCreate.Date;
             interview.CandidateId = interviewCreate.CandidateId;
-            interview.WorkerId = interviewCreate.UserId;
+            interview.WorkerId = interviewCreate.WorkerId;
+            interview.Type = interviewCreate.Type;
             interview.CreatedById = userCreatedId;
             interview.CreatedDate = DateTime.UtcNow;
 
@@ -145,8 +150,8 @@ namespace Services.Services
             }
 
             interview.Date = interviewEdit.Date;
-            interview.CandidateId = interviewEdit.CandidateId;
-            interview.WorkerId = interviewEdit.UserId;
+            interview.WorkerId = interviewEdit.WorkerId;
+            interview.Type = interviewEdit.Type;
             interview.LastUpdatedById = userEditId;
             interview.LastUpdatedDate = DateTime.UtcNow;
 

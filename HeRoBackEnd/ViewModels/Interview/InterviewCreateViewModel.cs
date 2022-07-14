@@ -11,7 +11,7 @@ namespace HeRoBackEnd.ViewModels.Interview
         public int CandidateId { get; set; }
 
         [Required]
-        public int UserId { get; set; }
+        public int WorkerId { get; set; }
 
         [Required]
         public string Type { get; set; }
