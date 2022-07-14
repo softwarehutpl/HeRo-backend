@@ -15,11 +15,12 @@ namespace Data
         }
 
         public DbSet<Candidate> Candidates { get; set; }
+        public DbSet<Interview> Interviews { get; set; }
+        public DbSet<Log> Logs { get; set; }
         public DbSet<Recruitment> Recruitments { get; set; }
         public DbSet<RecruitmentSkill> RecruitmentRequirements { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<User> Users { get; set; }
-        public DbSet<Log> Logs { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
