@@ -22,6 +22,20 @@ namespace Data.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
+            modelBuilder.Entity("Data.DTOs.RecruitmentSkill.RecruitmentSkillDTO", b =>
+                {
+                    b.Property<int>("RecruitmentId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SkillId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SkillLevel")
+                        .HasColumnType("int");
+
+                    b.ToTable("RecruitmentSkillDTO");
+                });
+
             modelBuilder.Entity("Data.Entities.Candidate", b =>
                 {
                     b.Property<int>("Id")

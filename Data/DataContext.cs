@@ -31,7 +31,6 @@ namespace Data
                 u.RecruitmentId,
                 u.SkillId
             });
-            modelBuilder.Entity<RecruitmentSkillDTO>().HasNoKey();
         }
         public void AttachEntity<TEntity>(TEntity entity) where TEntity : class, new()
         {
