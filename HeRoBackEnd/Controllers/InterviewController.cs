@@ -40,6 +40,18 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
+        /// Get a number of Interview
+        /// </summary>
+        [HttpGet]
+        [Route("Interview/GetQuantity")]
+        public int GetQuantity()
+        {
+            int numberOfInterview = _interviewService.GetQuantity();
+
+            return numberOfInterview;
+        }
+
+        /// <summary>
         /// Gets all interviews that abide by the filter from the database
         /// </summary>
         /// <param name="interview">An object containing information about the filter</param>

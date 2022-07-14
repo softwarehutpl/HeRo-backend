@@ -44,6 +44,18 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
+        /// Get a number of Recruitment
+        /// </summary>
+        [HttpGet]
+        [Route("Recruitment/GetQuantity")]
+        public int GetQuantity()
+        {
+            int numberOfRecruitment = service.GetQuantity();
+
+            return numberOfRecruitment;
+        }
+
+        /// <summary>
         /// Returns a list of recruitments
         /// </summary>
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>

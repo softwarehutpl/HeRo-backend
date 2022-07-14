@@ -45,6 +45,18 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
+        /// Get a number of Candidate
+        /// </summary>
+        [HttpGet]
+        [Route("Candidate/GetQuantity")]
+        public int GetQuantity()
+        {
+            int numberOfCandidate = _candidateService.GetQuantity();
+
+            return numberOfCandidate;
+        }
+
+        /// <summary>
         /// Returns a Json result object representing a list of candidates
         /// </summary>
         /// <param name="candidate">An object containing information about the filter</param>

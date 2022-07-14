@@ -21,6 +21,13 @@ namespace Services.Services
             return result;
         }
 
+        public int GetQuantity()
+        {
+            int result = _userRepository.GetAll().Count();
+
+            return result;
+        }
+
         public void SetUserRecoveryGuid(string email, Guid guid)
         {
             var user = _userRepository.GetUserByEmail(email);

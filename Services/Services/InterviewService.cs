@@ -45,6 +45,13 @@ namespace Services.Services
             return interviewDTO;
         }
 
+        public int GetQuantity()
+        {
+            int result = _interviewRepository.GetAll().Count();
+
+            return result;
+        }
+
         public IEnumerable<InterviewDTO> GetInterviews(Paging paging, SortOrder sortOrder, InterviewFiltringDTO interviewFiltringDTO)
         {
             IQueryable<Interview> interviews = _interviewRepository.GetAll();
