@@ -3,7 +3,6 @@ using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using Services.DTOs.Recruitment;
-using Data.Entities;
 using AutoMapper;
 using Common.Enums;
 using System.Security.Claims;

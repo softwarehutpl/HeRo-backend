@@ -14,15 +14,16 @@ namespace Services.Services
     public class CandidateService
     {
         private readonly CandidateRepository _candidateRepository;
+        private readonly RecruitmentRepository _recruitmentRepository;
         private readonly IMapper _mapper;
-        private readonly DataContext _dataContext;
         private readonly ILogger<RecruitmentService> _logger;
 
-        public CandidateService(IMapper map, CandidateRepository candidateRepository, DataContext dataContext,  ILogger<RecruitmentService>logger)
+        public CandidateService(IMapper map, CandidateRepository candidateRepository, 
+            ILogger<RecruitmentService>logger, RecruitmentRepository recruitmentRepository)
         {
             _mapper = map;
             _candidateRepository = candidateRepository;
-            _dataContext = dataContext;
+            _recruitmentRepository = recruitmentRepository;
             _logger = logger;
         }
        
@@ -30,12 +31,7 @@ namespace Services.Services
         {
             //przekazanie wartości z DTO do obiektu
             Candidate candidate = _mapper.Map<Candidate>(dto);
-            int recId = candidate.RecruitmentId;
-            
-            RecruitmentRepository recRepo  = new RecruitmentRepository(_dataContext);
-            UserRepository userRepo = new UserRepository(_dataContext);
-            RecruitmentService rs = new RecruitmentService(_mapper, recRepo, userRepo, _logger);
-            candidate.RecruiterId = rs.GetRecruitment(recId).RecruiterId;
+            candidate.RecruiterId = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
             try
             {
                 _candidateRepository.AddAndSaveChanges(candidate);
@@ -46,6 +42,7 @@ namespace Services.Services
             }
             return 1;
         }
+
         public int ChangeStatus(int id, string status)
         {
             Candidate? candidate = _candidateRepository.GetById(id);
@@ -64,6 +61,7 @@ namespace Services.Services
             }
             return -1;
         }
+
         public int UpdateCandidate(int id, UpdateCandidateDTO dto)
         {
             Candidate candidate = _candidateRepository.GetById(id);
@@ -87,6 +85,7 @@ namespace Services.Services
             }
             return 1;
         }
+
         public int DeleteCandidate(DeleteCandidateDTO dto)
         {
             Candidate candidate = _candidateRepository.GetById(dto.Id);
@@ -123,6 +122,7 @@ namespace Services.Services
             }
             else return -1;
         }
+
         public int AddTechNote(int candidateId, CandidateAddTechNoteDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
@@ -144,6 +144,7 @@ namespace Services.Services
             }
             else return -1;
         }
+
         public CandidateProfileDTO? GetCandidateProfileById(int id)
         {
             Candidate candidate = _candidateRepository.GetById(id);

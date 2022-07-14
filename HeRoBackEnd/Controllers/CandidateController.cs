@@ -15,13 +15,15 @@ namespace HeRoBackEnd.Controllers
     public class CandidateController : BaseController
     {
         private CandidateService _candidateService;
+        private RecruitmentService _recruitmentService;
         private ILogger<CandidateController> _logger;
         private readonly IMapper _mapper;
     
 
-        public CandidateController(CandidateService candidateService, ILogger<CandidateController> logger, IMapper map)
+        public CandidateController(CandidateService candidateService, ILogger<CandidateController> logger, IMapper map, RecruitmentService recruitmentService)
         {
             this._candidateService = candidateService;
+            _recruitmentService = recruitmentService;
             _mapper = map;
             _logger = logger;
         }
@@ -131,8 +133,7 @@ namespace HeRoBackEnd.Controllers
         {
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
             dto.Status = CandidateStatusEnum.New.ToString();
-            dto.ApplicationDate = DateTime.Now;
-            
+            dto.ApplicationDate = DateTime.Now;            
             int result = _candidateService.CreateCandidate(dto);
 
             if (result == -1) return BadRequest("Error creating candidate");
