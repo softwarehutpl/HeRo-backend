@@ -116,7 +116,8 @@ namespace Services.Services
                 return null;
             }
             IEnumerable<Recruitment> recruitments = repo.GetAllRecruitments();
-            recruitments = recruitments.Where(e => !(e.EndedDate.HasValue) && !(e.DeletedDate.HasValue));
+            recruitments = recruitments.Where(e => !e.DeletedDate.HasValue);
+
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
@@ -134,6 +135,7 @@ namespace Services.Services
             {
                 recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
             }
+            
 
             foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
             {
@@ -153,19 +155,19 @@ namespace Services.Services
             return result;
         }
 
-        public ReadRecruitmentDTO GetRecruitment(int recruitmentId)
+        public ReadRecruitmentDTO? GetRecruitment(int recruitmentId)
         {
-            Recruitment recruitment;
-            ReadRecruitmentDTO result = null;
+            Recruitment recruitment;            
             try
             {
-                recruitment = repo.GetRecruitmentById(recruitmentId);
+                recruitment = repo.GetById(recruitmentId);
             }catch(Exception ex)
             {
                 logger.LogError(ex.Message);
                 return null;
             }
-
+            if (recruitment != null && recruitment.DeletedDate.HasValue ) return null;
+            ReadRecruitmentDTO result = null;
             if (recruitment != null) result = mapper.Map<ReadRecruitmentDTO>(recruitment);
 
             return result;
