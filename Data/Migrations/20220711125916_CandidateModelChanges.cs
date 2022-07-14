@@ -18,10 +18,6 @@ namespace Data.Migrations
                 table: "Candidate");
 
             migrationBuilder.DropColumn(
-                name: "Name",
-                table: "RecruitmentRequirement");
-
-            migrationBuilder.DropColumn(
                 name: "CreatedById",
                 table: "Candidate");
 
@@ -131,14 +127,6 @@ namespace Data.Migrations
                 name: "PhoneNumber",
                 table: "Candidate",
                 newName: "Notes");
-
-            migrationBuilder.AddColumn<string>(
-                name: "Name",
-                table: "RecruitmentRequirement",
-                type: "nvarchar(75)",
-                maxLength: 75,
-                nullable: false,
-                defaultValue: "");
 
             migrationBuilder.AddColumn<int>(
                 name: "CreatedById",
