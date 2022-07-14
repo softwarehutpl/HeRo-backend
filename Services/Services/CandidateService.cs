@@ -1,18 +1,14 @@
 ﻿using AutoMapper;
 using Common.Listing;
-using Common.ServiceRegistrationAttributes;
-using Data;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
 using Services.DTOs;
 using Services.DTOs.Candidate;
-using System.ComponentModel.DataAnnotations;
 
 namespace Services.Services
 {
-    [ScopedRegistration]
     public class CandidateService
     {
         private readonly CandidateRepository _candidateRepository;
@@ -20,20 +16,20 @@ namespace Services.Services
         private readonly IMapper _mapper;
         private readonly ILogger<RecruitmentService> _logger;
 
-        public CandidateService(IMapper map, CandidateRepository candidateRepository, 
-            ILogger<RecruitmentService>logger, RecruitmentRepository recruitmentRepository)
+        public CandidateService(IMapper map, CandidateRepository candidateRepository,
+            ILogger<RecruitmentService> logger, RecruitmentRepository recruitmentRepository)
         {
             _mapper = map;
             _candidateRepository = candidateRepository;
             _recruitmentRepository = recruitmentRepository;
             _logger = logger;
         }
-       
+
         public int CreateCandidate(CreateCandidateDTO dto)
         {
-            //przekazanie wartości z DTO do obiektu
             Candidate candidate = _mapper.Map<Candidate>(dto);
             candidate.RecruiterId = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
+
             try
             {
                 _candidateRepository.AddAndSaveChanges(candidate);
@@ -42,30 +38,31 @@ namespace Services.Services
             {
                 return -1;
             }
+
             return 1;
         }
 
-        public int ChangeStageAndStatus(int id, CandidateChangeStageAndStatusDTO dto)
+        public int ChangeStatus(int id, string status)
         {
             Candidate? candidate = _candidateRepository.GetById(id);
-            if(candidate!=null)
-            { 
-                candidate.Status = dto.Status;
-                candidate.Stage = dto.Stage;
+            if (candidate != null)
+            {
+                candidate.Status = status;
+
                 try
                 {
-                   _candidateRepository.UpdateAndSaveChanges(candidate);
+                    _candidateRepository.UpdateAndSaveChanges(candidate);
                 }
                 catch (Exception ex)
                 {
                     return -1;
                 }
+
                 return 1;
             }
+
             return -1;
         }
-
-
 
         public int UpdateCandidate(int id, UpdateCandidateDTO dto)
         {
@@ -96,6 +93,7 @@ namespace Services.Services
             Candidate candidate = _candidateRepository.GetById(dto.Id);
             candidate.DeletedDate = dto.DeletedDate;
             candidate.DeletedById = dto.DeletedById;
+
             try
             {
                 _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -104,8 +102,10 @@ namespace Services.Services
             {
                 return -1;
             }
+
             return 1;
         }
+
         public int AddHRNote(int candidateId, CandidateAddHRNoteDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
@@ -115,6 +115,7 @@ namespace Services.Services
                 candidate.LastUpdatedById = dto.RecruiterId;
                 candidate.HROpinionText = dto.Note;
                 candidate.HROpinionScore = dto.Score;
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -123,9 +124,13 @@ namespace Services.Services
                 {
                     return -1;
                 }
+
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
 
         public int AddTechNote(int candidateId, CandidateAddTechNoteDTO dto)
@@ -137,6 +142,7 @@ namespace Services.Services
                 candidate.LastUpdatedById = dto.TechId;
                 candidate.InterviewOpinionText = dto.Note;
                 candidate.InterviewOpinionScore = dto.Score;
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -145,91 +151,136 @@ namespace Services.Services
                 {
                     return -1;
                 }
+
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
 
         public CandidateProfileDTO? GetCandidateProfileById(int id)
         {
             Candidate candidate = _candidateRepository.GetById(id);
-            CandidateProfileDTO? result = null;
-            if (candidate != null) result = _mapper.Map<CandidateProfileDTO>(candidate);
-            return result;
-        }
-       
-        public IEnumerable<CandidateInfoForListDTO> GetCandidates(Paging paging, SortOrder sortOrder, CandidateFilteringDTO dto)
-        {
-            IEnumerable<Candidate> candidates = _candidateRepository.GetAll();
 
-           
-            if (!String.IsNullOrEmpty(dto.Status))
+            CandidateProfileDTO candidateProfileDTO = new CandidateProfileDTO(
+                                                    candidate.Id,
+                                                    (candidate.Name + " " + candidate.LastName),
+                                                    candidate.Email,
+                                                    candidate.PhoneNumber,
+                                                    candidate.AvailableFrom,
+                                                    candidate.ExpectedMonthlySalary,
+                                                    candidate.OtherExpectations,
+                                                    candidate.CvPath
+                                                );
+
+            return candidateProfileDTO;
+        }
+
+        public IEnumerable<CandidateInfoForListDTO> GetCandidates(Paging paging, SortOrder sortOrder, CandidateFilteringDTO candidateFilteringDTO)
+        {
+            IQueryable<Candidate> candidates = _candidateRepository.GetAll();
+            candidates = candidates.Where(s => !s.DeletedById.HasValue);
+
+            if (candidateFilteringDTO.Status.Count > 0)
             {
-                candidates = candidates.Where(s => s.Status.Contains(dto.Status));
+                candidates = candidates.Where(s => candidateFilteringDTO.Status.Contains(s.Status));
             }
-            if (!String.IsNullOrEmpty(dto.Stage))
+            if (candidateFilteringDTO.Stages.Count > 0)
             {
-                candidates = candidates.Where(s => s.Stage.Contains(dto.Stage));
-            } 
-            if (dto.RecruiterId!=0)
-            {
-                candidates = candidates.Where(s => s.RecruiterId==dto.RecruiterId);
-            } 
-            if (dto.RecruitmentId!=0)
-            {
-                candidates = candidates.Where(s => s.RecruitmentId == dto.RecruitmentId);
-            } 
-            if (dto.TechId!=0)
-            {
-                candidates = candidates.Where(s => s.TechId == dto.TechId);
+                candidates = candidates.Where(s => candidateFilteringDTO.Stages.Contains(s.Stage));
             }
-            candidates = candidates.Where(s => s.DeletedById == null);
+
             foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
             {
-                if (sort.Value == "DESC")
+                if (sort.Key.ToLower() == "name")
                 {
-                    candidates = candidates.OrderByDescending(u => u.Name);
+                    if (sort.Value.ToUpper() == "DESC")
+                    {
+                        candidates = candidates.OrderByDescending(c => c.FullName);
+                    }
+                    else
+                    {
+                        candidates = candidates.OrderBy(c => c.FullName);
+                    }
                 }
-                else
+                if (sort.Key.ToLower() == "source")
                 {
-                    candidates = candidates.OrderBy(s => s.Name);
+                    if (sort.Value.ToUpper() == "DESC")
+                    {
+                        candidates = candidates.OrderByDescending(c => c.Source);
+                    }
+                    else
+                    {
+                        candidates = candidates.OrderBy(c => c.FullName);
+                    }
+                }
+                if (sort.Key.ToLower() == "project")
+                {
+                    if (sort.Value.ToUpper() == "DESC")
+                    {
+                        candidates = candidates.OrderByDescending(c => c.Recruitment.Name);
+                    }
+                    else
+                    {
+                        candidates = candidates.OrderBy(c => c.Recruitment.Name);
+                    }
+                }
+                if (sort.Key.ToLower() == "status")
+                {
+                    if (sort.Value.ToUpper() == "DESC")
+                    {
+                        candidates = candidates.OrderByDescending(c => c.Status);
+                    }
+                    else
+                    {
+                        candidates = candidates.OrderBy(c => c.Status);
+                    }
+                }
+                if (sort.Key.ToLower() == "stage")
+                {
+                    if (sort.Value.ToUpper() == "DESC")
+                    {
+                        candidates = candidates.OrderByDescending(c => c.Stage);
+                    }
+                    else
+                    {
+                        candidates = candidates.OrderBy(c => c.Stage);
+                    }
                 }
             }
 
-            IEnumerable<Candidate> pagedCandidates = candidates.ToPagedList(paging.PageNumber, paging.PageSize);
-            //Missing type map configuration or unsupported mapping.
+            var result = candidates.Select(c => new CandidateInfoForListDTO(
+                                                    c.Id,
+                                                    (c.Name + " " + c.LastName),
+                                                    c.Source,
+                                                    c.Recruitment.Name,
+                                                    c.Status,
+                                                    c.Stage,
+                                                    c.TechId,
+                                                    c.Tech.Email,
+                                                    c.RecruiterId,
+                                                    c.Recruiter.Email
+                                                )).ToPagedList(paging.PageNumber, paging.PageSize);
 
-            IEnumerable<CandidateInfoForListDTO> result = _mapper.Map<IEnumerable<CandidateInfoForListDTO>>(pagedCandidates);
             return result;
         }
-        //nie ma tabeli oraz klasy dla rozmowy także stworzyłem jak narazie DTO dla
-        //potrzebnych danych
-        
-        public async Task<List<InterviewDTO>> GetInterviews()
-        {
-            return null;
-        }
-
-        //public int AddRecruitmentToCandidate(int candId, int recrId)
-        //{
-        //    Candidate? candidate = GetCandidateById(candId);
-        //    Recruitment? recruitment = GetRecruitmentById(recrId);
-        //    if (candidate != null)
-        //    {
-        //        candidate.TechId = recrId;
-        //        int result = _candidateRepository.UpdateCandidate(candidate);
-        //        return result;
-        //    }
-        //    else return -1;
-        //}
 
         public int AllocateRecruiterAndTech(int id, CandidateAssigneesDTO dto)
         {
             Candidate candidate = _candidateRepository.GetById(id);
             if (candidate != null)
             {
-                if(dto.TechId!=null) candidate.TechId = dto.TechId;
-                if(dto.RecruiterId!=null) candidate.RecruiterId = dto.RecruiterId;
+                if (dto.TechId != null)
+                {
+                    candidate.TechId = dto.TechId;
+                }
+                if (dto.RecruiterId != null)
+                {
+                    candidate.RecruiterId = dto.RecruiterId;
+                }
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -238,11 +289,15 @@ namespace Services.Services
                 {
                     return -1;
                 }
+
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
-       
+
         public int AllocateRecruitmentInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
@@ -259,19 +314,25 @@ namespace Services.Services
                 {
                     return -1;
                 }
+
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
+
         public int AllocateTechInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
         {
-            
             Candidate? candidate = _candidateRepository.GetById(candidateId);
+
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
                 candidate.LastUpdatedById = dto.LastUpdatedBy;
                 candidate.TechInterviewDate = dto.Date;
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -282,7 +343,10 @@ namespace Services.Services
                 }
                 return 1;
             }
-            else return -1;
+            else
+            {
+                return -1;
+            }
         }
     }
 }

@@ -53,14 +53,6 @@ namespace Services.Services
 
             interviews = interviews.Where(i => (i.Date >= interviewFiltringDTO.FromDate && i.Date <= interviewFiltringDTO.ToDate));
 
-            if (interviewFiltringDTO.CandidateId.HasValue)
-            {
-                interviews = interviews.Where(s => s.CandidateId == interviewFiltringDTO.CandidateId);
-            }
-            if (interviewFiltringDTO.WorkerId.HasValue)
-            {
-                interviews = interviews.Where(s => s.WorkerId == interviewFiltringDTO.WorkerId);
-            }
             if (!String.IsNullOrEmpty(interviewFiltringDTO.Type))
             {
                 interviews = interviews.Where(s => s.Type.Equals(interviewFiltringDTO.Type));
@@ -90,7 +82,7 @@ namespace Services.Services
                         interviews = interviews.OrderBy(i => i.CandidateId);
                     }
                 }
-                if (sort.Key.ToLower() == "userid")
+                if (sort.Key.ToLower() == "workerId")
                 {
                     if (sort.Value.ToUpper() == "DESC")
                     {
@@ -114,7 +106,7 @@ namespace Services.Services
                 }
             }
 
-            var resutl = interviews.Select(i => new InterviewDTO(
+            var result = interviews.Select(i => new InterviewDTO(
                                                     i.Id,
                                                     i.Date,
                                                     i.CandidateId,
@@ -126,7 +118,56 @@ namespace Services.Services
                                                     i.Type
                                                 )).ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return resutl;
+            return result;
+        }
+
+        public void Create(InterviewCreateDTO interviewCreate, int userCreatedId)
+        {
+            Interview interview = new Interview();
+
+            interview.Date = interviewCreate.Date;
+            interview.CandidateId = interviewCreate.CandidateId;
+            interview.WorkerId = interviewCreate.WorkerId;
+            interview.Type = interviewCreate.Type;
+            interview.CreatedById = userCreatedId;
+            interview.CreatedDate = DateTime.UtcNow;
+
+            _interviewRepository.AddAndSaveChanges(interview);
+        }
+
+        public int Update(InterviewEditDTO interviewEdit, int userEditId)
+        {
+            Interview interview = _interviewRepository.GetById(interviewEdit.InterviewId);
+            if (interview == null)
+            {
+                return 0;
+            }
+
+            interview.Date = interviewEdit.Date;
+            interview.WorkerId = interviewEdit.WorkerId;
+            interview.Type = interviewEdit.Type;
+            interview.LastUpdatedById = userEditId;
+            interview.LastUpdatedDate = DateTime.UtcNow;
+
+            _interviewRepository.UpdateAndSaveChanges(interview);
+
+            return interview.Id;
+        }
+
+        public int Delete(int interviewId, int loginUserId)
+        {
+            Interview interview = _interviewRepository.GetById(interviewId);
+            if (interview == null)
+            {
+                return 0;
+            }
+
+            interview.DeletedById = loginUserId;
+            interview.DeletedDate = DateTime.UtcNow;
+
+            _interviewRepository.UpdateAndSaveChanges(interview);
+
+            return interview.Id;
         }
     }
 }
