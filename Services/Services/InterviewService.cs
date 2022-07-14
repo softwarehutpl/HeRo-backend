@@ -112,7 +112,7 @@ namespace Services.Services
                 }
             }
 
-            var resutl = interviews.Select(i => new InterviewDTO(
+            var result = interviews.Select(i => new InterviewDTO(
                                                     i.Id,
                                                     i.Date,
                                                     i.CandidateId,
@@ -124,7 +124,7 @@ namespace Services.Services
                                                     i.Type
                                                 )).ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return resutl;
+            return result;
         }
 
         public void Create(InterviewCreateDTO interviewCreate, int userCreatedId)
