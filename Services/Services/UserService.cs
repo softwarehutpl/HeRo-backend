@@ -43,12 +43,12 @@ namespace Services.Services
                 return null;
             }
 
-            UserDTO userDTO = new UserDTO(user.Email, user.UserStatus, user.RoleName);
+            UserDTO userDTO = new UserDTO(user.Id, user.Email, user.UserStatus, user.RoleName);
 
             return userDTO;
         }
 
-        public IEnumerable<UserFiltringDTO> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
+        public IEnumerable<UserDTO> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
         {
             IQueryable<User> users = _userRepository.GetAllUsers();
 
@@ -103,7 +103,7 @@ namespace Services.Services
             }
 
             var result = users
-                .Select(x => new UserFiltringDTO(x.Email, x.UserStatus, x.RoleName))
+                .Select(x => new UserDTO(x.Id, x.Email, x.UserStatus, x.RoleName))
                 .ToPagedList(paging.PageNumber, paging.PageSize);
 
             return result;

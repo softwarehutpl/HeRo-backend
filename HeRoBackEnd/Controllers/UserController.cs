@@ -27,7 +27,7 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [Route("User/Get/{userId}")]
         [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void),StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
         {
             UserDTO user = _userService.Get(userId);
@@ -48,14 +48,12 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Users</response>
         [HttpPost]
         [Route("User/GetList")]
-        [ProducesResponseType(typeof(IEnumerable<UserFiltringDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<UserDTO>), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
-            Paging paging = userListFilterViewModel.Paging;
-            SortOrder sortOrder = userListFilterViewModel.SortOrder;
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
-            IEnumerable<UserFiltringDTO>? result = _userService.GetUsers(paging, sortOrder, userFiltringDTO);
+            IEnumerable<UserDTO>? result = _userService.GetUsers(userListFilterViewModel.Paging, userListFilterViewModel.SortOrder, userFiltringDTO);
 
             return new JsonResult(result);
         }
@@ -71,7 +69,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("User/Edit/{userId}")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string),StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Edit(int userId, EditUserViewModel editUser)
         {
             UserEditDTO editUserDTO =

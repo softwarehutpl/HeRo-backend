@@ -23,16 +23,19 @@ namespace Services.Services
                 return null;
             }
 
+            var candidateTemp = _candidateRepository.GetAll().Where(x => x.Id == interview.CandidateId).Select(x => new { x.Name, x.LastName, x.Email }).First();
+            string workerEmail = _userRepository.GetUserEmail(interview.WorkerId);
+
             InterviewDTO interviewDTO =
                 new InterviewDTO(
                     interview.Id,
                     interview.Date,
                     interview.CandidateId,
-                    interview.Candidate.Name,
-                    interview.Candidate.LastName,
-                    interview.Candidate.Email,
+                    candidateTemp.Name,
+                    candidateTemp.LastName,
+                    candidateTemp.Email,
                     interview.WorkerId,
-                    interview.User.Email,
+                    workerEmail,
                     interview.Type);
 
             return interviewDTO;
