@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.Listing;
+using Common.ServiceRegistrationAttributes;
 using Data;
 using Data.Entities;
 using Data.Repositories;
@@ -11,6 +12,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Services.Services
 {
+    [ScopedRegistration]
     public class CandidateService
     {
         private readonly CandidateRepository _candidateRepository;
@@ -43,12 +45,13 @@ namespace Services.Services
             return 1;
         }
 
-        public int ChangeStatus(int id, string status)
+        public int ChangeStageAndStatus(int id, CandidateChangeStageAndStatusDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(id);
             if(candidate!=null)
             { 
-                candidate.Status = status;
+                candidate.Status = dto.Status;
+                candidate.Stage = dto.Stage;
                 try
                 {
                    _candidateRepository.UpdateAndSaveChanges(candidate);
@@ -61,6 +64,8 @@ namespace Services.Services
             }
             return -1;
         }
+
+
 
         public int UpdateCandidate(int id, UpdateCandidateDTO dto)
         {

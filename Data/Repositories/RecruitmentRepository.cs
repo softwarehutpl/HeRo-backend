@@ -1,10 +1,12 @@
 using Common.Enums;
+using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Microsoft.Data.SqlClient;
 using System.Security.Claims;
 
 namespace Data.Repositories
 {
+    [ScopedRegistration]
     public class RecruitmentRepository : BaseRepository<Recruitment>
     {
         public RecruitmentRepository(DataContext context) : base(context)

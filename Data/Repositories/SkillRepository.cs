@@ -1,7 +1,9 @@
-﻿using Data.Entities;
+﻿using Common.ServiceRegistrationAttributes;
+using Data.Entities;
 
 namespace Data.Repositories
 {
+    [ScopedRegistration]
     public class SkillRepository : BaseRepository<Skill>
     {
         public SkillRepository(DataContext context) : base(context)

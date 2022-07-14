@@ -6,7 +6,10 @@ using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.Candidate;
 using Services.Services;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 //using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
@@ -80,8 +83,6 @@ namespace HeRoBackEnd.Controllers
             
             return new JsonResult(result);
         }
-        //Return user email
-        //string "coś tam"
 
         /// <summary> Returns a candidate specified by the id </summary>
         /// <param name="candidateId">Takes the id of a candidate</param>
@@ -132,7 +133,7 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Create(CandidateCreateViewModel newCandidate)
         {
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
-            dto.Status = CandidateStatusEnum.New.ToString();
+            dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;            
             int result = _candidateService.CreateCandidate(dto);
 
@@ -161,7 +162,7 @@ namespace HeRoBackEnd.Controllers
         ///       "otherExpectations": "otherExpectationsString",
         ///       "cvPath": "CVPathString",
         ///       "recruitmentId": 1,
-        ///       "status": "Hired",
+        ///       "status": "Hired"
         ///     }
         /// </remarks>
         /// <response code="200">string "Candidate updated successfully"</response>
@@ -209,6 +210,28 @@ namespace HeRoBackEnd.Controllers
             return Ok("Candidate deleted successfully");
         }
 
+        /// <summary>
+        /// Updates the stage and status of candidates recruitment 
+        /// </summary>
+        /// <param name="candidateId">Id of the candidate</param>
+        /// <param name="ChangeState">Object of the CandidateChangeStageViewModel class containing fields used to update stage and status of candidate</param>
+        /// <returns>IActionResult</returns>
+        /// <remarks>
+        ///
+        /// </remarks>
+        /// <response code="200">string "Stage and status changed successfully"</response>
+        /// <response code="400">string "Error changing stage and status of candidate recruitment"</response>
+        [HttpPost]
+        [Route("Candidate/ChangeStageAndStatus/{candidateId}")]
+        //[ValidateAntiForgeryToken]
+        public IActionResult ChangeStageAndStatus(int candidateId, CandidateChangeStageViewModel ChangeState)
+        {
+            CandidateChangeStageAndStatusDTO dto = _mapper.Map<CandidateChangeStageAndStatusDTO>(ChangeState);
+            int result = _candidateService.ChangeStageAndStatus(candidateId, dto);
+            if (result == -1) return BadRequest("Error changing stage and status of candidate recruitment");
+            else return Ok("Stage and status changed successfully");
+
+        }
 
         /// <summary>
         /// Adds a note concerning the candidate (given by HR)
@@ -223,7 +246,7 @@ namespace HeRoBackEnd.Controllers
         ///     {
         ///         "score": 5,
         ///         "note": "Note about candidate given by HR",
-        ///         "recruiterId": 5
+        ///         "recruiterId": 3
         ///     }
         /// </remarks>
         /// <response code="200">string "Interview note added correctly"</response>
@@ -254,7 +277,7 @@ namespace HeRoBackEnd.Controllers
         ///     {
         ///         "score": 5,
         ///         "note": "Note about candidate given by tech",
-        ///         "recruiterId": 3
+        ///         "techId": 6
         ///     }
         /// </remarks>
         /// <response code="200">string "Tech interview note added correctly"</response>
@@ -365,6 +388,36 @@ namespace HeRoBackEnd.Controllers
                if (result == -1) return BadRequest("Error setting tech interview date");
                else return Ok("Tech interview date set correctly");
             
-        }      
-    }
+        }
+
+        /// <summary>
+        /// Shows list of existing stages of recruitment.
+        /// </summary>
+        /// <returns>JSON list of existing stages of recruitment</returns>
+        
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
+        [HttpGet]
+        [Route("Candidate/GetStageList")]
+        public IActionResult GetStageList()
+        {
+            var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>();
+
+            return new JsonResult(listOfStages);
+        }
+
+        /// <summary>
+        /// Shows list of existing status values of recruitment.
+        /// </summary>
+        /// <returns>JSON list of existing status values of recruitment</returns>
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
+        [HttpGet]
+        [Route("Candidate/GetStatusList")]
+        public IActionResult GetStatusList()
+        {
+            
+            var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>();
+
+            return new JsonResult(listOfStatus);
+        }
+    }     
 }

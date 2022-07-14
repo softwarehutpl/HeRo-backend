@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.Listing;
+using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
@@ -9,6 +10,7 @@ using System.Security.Claims;
 
 namespace Services.Services
 {
+    [ScopedRegistration]
     public class RecruitmentService
     {
         private readonly IMapper mapper;

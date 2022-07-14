@@ -6,9 +6,11 @@ using Data.Repositories;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Common.Enums;
 using System;
+using Common.ServiceRegistrationAttributes;
 
 namespace Services.Services
 {
+    [ScopedRegistration]
     public class AuthService
     {
         private UserRepository _userRepository;
@@ -72,8 +74,8 @@ namespace Services.Services
                 Password = GetHash(password),
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
-                RoleName = RoleNameEnum.Anonymous.ToString(),
-                UserStatus = UserStatusEnum.Not_verified.ToString()
+                RoleName = RoleNames.ANONYMOUS.ToString(),
+                UserStatus = UserStatuses.NOT_VERIFIED.ToString()
             };
 
             return newUser;
@@ -120,7 +122,7 @@ namespace Services.Services
             User user = _userRepository.GetUserById(id);
             if(user.ConfirmationGuid == guid)
             {
-                user.UserStatus = UserStatusEnum.Active.ToString();
+                user.UserStatus = UserStatuses.ACTIVE.ToString();
                 _userRepository.UpdateUser(user);
                 return true;
             }
