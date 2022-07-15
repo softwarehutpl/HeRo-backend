@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.Enums
 {
-    public enum  CandidateStatusEnum
+    public enum  CandidateStatus
     {
         [Description("New")] New = 1,
         [Description("In processing")] InProcessing = 2,

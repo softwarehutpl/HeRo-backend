@@ -35,7 +35,6 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SignIn(string password, string email)
         {
-
             ClaimsIdentity? claimsIdentity = await _authServices.ValidateAndCreateClaim(password, email);
 
             if (claimsIdentity != null)
@@ -47,7 +46,6 @@ namespace HeRoBackEnd.Controllers
             return BadRequest();
         }
 
-
         /// <summary>
         /// Sign out user method
         /// </summary>
@@ -55,7 +53,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">Returns user Logs out</response>
         [HttpGet]
         [Route("Auth/LogOut")]
-        [ProducesResponseType(typeof(void),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync("Cookies");
@@ -76,8 +74,8 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)
         {
             bool created = await _authServices.ValidateAndCreateUserAccount(newUser.Password, newUser.Email);
-            
-            if(!created) return BadRequest();
+
+            if (!created) return BadRequest();
 
             Guid confirmationGuid = Guid.NewGuid();
             _userService.SetUserConfirmationGuid(newUser.Email, confirmationGuid);
@@ -94,14 +92,13 @@ namespace HeRoBackEnd.Controllers
         /// <param name="confirmationGuid" example="9fb49f98-f169-4316-9737-23b656058c5c"></param>
         [HttpGet]
         [Route("Auth/ConfirmAccount")]
-        [ProducesResponseType(typeof(void),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         public async Task<IActionResult> ConfirmAccount(Guid confirmationGuid)
         {
             int userId = GetUserId();
             bool check = _authServices.ConfirmUser(confirmationGuid, userId);
             return Ok();
         }
-
 
         /// <summary>
         /// If user exist, sends recovery to mail parameter adress.
@@ -115,17 +112,17 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> PasswordRecoveryMail(string email)
-        {          
+        {
             bool changedPassword = _authServices.CheckUserExist(email);
             if (!changedPassword) return BadRequest();
 
             var recoveryGuid = Guid.NewGuid();
-            _userService.SetUserRecoveryGuid(email,recoveryGuid);
-            
+            _userService.SetUserRecoveryGuid(email, recoveryGuid);
+
             var fullUrl = this.Url.Action("RecoverPassword", "Auth", new { guid = recoveryGuid }, protocol: "https");
 
             _emailService.SendPasswordRecoveryEmail(email, fullUrl);
-            return Ok(); 
+            return Ok();
         }
 
         /// <summary>
@@ -138,7 +135,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Auth/RecoverPassword")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void),StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RecoverPassword(UserPasswordRecoveryViewModel user)
         {
             bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.Guid, user.Email);

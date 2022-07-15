@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.Enums
 {
-    public enum RoleNameEnum
+    public enum RoleName
     {
         [Description("Anonymous")] Anonymous = 1,
         [Description("HR Manager")] HRmanager = 2,

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.Enums
 {
-    public enum SkillNameEnum
+    public enum SkillName
     {
         [Description("C#")] C_Sharp = 1,
         [Description("C++")] C_PlusPlus = 2,

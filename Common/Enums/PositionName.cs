@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Common.Enums
 {
-    public enum PositionNameEnum
+    public enum PositionName
     {
         [Description("Developer")] Dev = 1,
         [Description("Designer")] Designer = 2,
