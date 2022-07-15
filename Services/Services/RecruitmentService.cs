@@ -5,7 +5,7 @@ using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
 using Services.DTOs.Recruitment;
-using System.Security.Claims;
+using Services.Listing;
 
 namespace Services.Services
 {
@@ -114,7 +114,7 @@ namespace Services.Services
             return 1;
         }
 
-        public IEnumerable<ReadRecruitmentDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
+        public RecruitmentListing GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
             try
             {
@@ -124,8 +124,9 @@ namespace Services.Services
                 logger.LogError(ex.Message);
                 return null;
             }
-            IEnumerable<Recruitment> recruitments = repo.GetAllRecruitments();
-            recruitments = recruitments.Where(e => !e.DeletedDate.HasValue);
+
+            IQueryable<Recruitment> recruitments = repo.GetAllRecruitments();
+            recruitments = recruitments.Where(r => !r.DeletedDate.HasValue);
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
@@ -144,25 +145,18 @@ namespace Services.Services
                 recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
             }
 
-            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
-            {
-                if (sort.Key.ToLower() == "name")
-                {
-                    if (sort.Value == "DESC")
-                    {
-                        recruitments = recruitments.OrderByDescending(u => u.Name);
-                    }
-                    else
-                    {
-                        recruitments = recruitments.OrderBy(s => s.Name);
-                    }
-                }
-            }
+            recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
+
+            RecruitmentListing recruitmentListing = new RecruitmentListing();
+            recruitmentListing.TotalCount = recruitments.Count();
+            recruitmentListing.RecruitmentFiltringDTO = recruitmentFiltringDTO;
+            recruitmentListing.Paging = paging;
+            recruitmentListing.SortOrder = sortOrder;
 
             IEnumerable<Recruitment> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
-            IEnumerable<ReadRecruitmentDTO> result = mapper.Map<IEnumerable<ReadRecruitmentDTO>>(pagedRecruitments);
+            recruitmentListing.ReadRecruitmentDTOs = mapper.Map<IEnumerable<ReadRecruitmentDTO>>(pagedRecruitments);
 
-            return result;
+            return recruitmentListing;
         }
 
         public ReadRecruitmentDTO? GetRecruitment(int recruitmentId)

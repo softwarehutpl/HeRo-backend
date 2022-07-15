@@ -1,8 +1,8 @@
-﻿using Common.Listing;
-using HeRoBackEnd.ViewModels.User;
+﻿using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.User;
+using Services.Listing;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers
@@ -41,18 +41,6 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Get a number of User
-        /// </summary>
-        [HttpGet]
-        [Route("User/GetQuantity")]
-        public int GetQuantity()
-        {
-            int numberOfUser = _userService.GetQuantity();
-
-            return numberOfUser;
-        }
-
-        /// <summary>
         /// Gets all users that abide by the filter from the database
         /// </summary>
         /// <param name="userListFilterViewModel">An object containing information about the filter</param>
@@ -62,7 +50,7 @@ namespace HeRoBackEnd.Controllers
         ///    <h3>Contains:</h3> "email" <br />
         ///    <h3>Equals:</h3> "userStatus" or "roleName" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "email", "userstatus", "rolename" <br />
+        ///     <h3>Possible keys:</h3> "Email", "UserStatus", "RoleName" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -70,12 +58,12 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Users</response>
         [HttpPost]
         [Route("User/GetList")]
-        [ProducesResponseType(typeof(IEnumerable<UserDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
-            IEnumerable<UserDTO>? result = _userService.GetUsers(userListFilterViewModel.Paging, userListFilterViewModel.SortOrder, userFiltringDTO);
+            var result = _userService.GetUsers(userListFilterViewModel.Paging, userListFilterViewModel.SortOrder, userFiltringDTO);
 
             return new JsonResult(result);
         }

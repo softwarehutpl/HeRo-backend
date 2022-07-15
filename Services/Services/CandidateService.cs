@@ -4,8 +4,8 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.DTOs;
 using Services.DTOs.Candidate;
+using Services.Listing;
 
 namespace Services.Services
 {
@@ -185,93 +185,43 @@ namespace Services.Services
             return candidateProfileDTO;
         }
 
-        public IEnumerable<CandidateInfoForListDTO> GetCandidates(Paging paging, SortOrder sortOrder, CandidateFilteringDTO candidateFilteringDTO)
+        public CandidateListing GetCandidates(Paging paging, SortOrder sortOrder, CandidateFilteringDTO candidateFilteringDTO)
         {
             IQueryable<Candidate> candidates = _candidateRepository.GetAll();
             candidates = candidates.Where(s => !s.DeletedById.HasValue);
 
             if (candidateFilteringDTO.Status.Count > 0)
             {
-                candidates = candidates.Where(s => candidateFilteringDTO.Status.Contains(s.Status));
+                candidates = candidates.Where(c => candidateFilteringDTO.Status.Contains(c.Status));
             }
             if (candidateFilteringDTO.Stages.Count > 0)
             {
-                candidates = candidates.Where(s => candidateFilteringDTO.Stages.Contains(s.Stage));
+                candidates = candidates.Where(c => candidateFilteringDTO.Stages.Contains(c.Stage));
             }
 
-            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
-            {
-                if (sort.Key.ToLower() == "name")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        candidates = candidates.OrderByDescending(c => c.FullName);
-                    }
-                    else
-                    {
-                        candidates = candidates.OrderBy(c => c.FullName);
-                    }
-                }
-                if (sort.Key.ToLower() == "source")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        candidates = candidates.OrderByDescending(c => c.Source);
-                    }
-                    else
-                    {
-                        candidates = candidates.OrderBy(c => c.FullName);
-                    }
-                }
-                if (sort.Key.ToLower() == "project")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        candidates = candidates.OrderByDescending(c => c.Recruitment.Name);
-                    }
-                    else
-                    {
-                        candidates = candidates.OrderBy(c => c.Recruitment.Name);
-                    }
-                }
-                if (sort.Key.ToLower() == "status")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        candidates = candidates.OrderByDescending(c => c.Status);
-                    }
-                    else
-                    {
-                        candidates = candidates.OrderBy(c => c.Status);
-                    }
-                }
-                if (sort.Key.ToLower() == "stage")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        candidates = candidates.OrderByDescending(c => c.Stage);
-                    }
-                    else
-                    {
-                        candidates = candidates.OrderBy(c => c.Stage);
-                    }
-                }
-            }
+            candidates = Sorter<Candidate>.Sort(candidates, sortOrder.Sort);
 
-            var result = candidates.Select(c => new CandidateInfoForListDTO(
-                                                    c.Id,
-                                                    (c.Name + " " + c.LastName),
-                                                    c.Source,
-                                                    c.Recruitment.Name,
-                                                    c.Status,
-                                                    c.Stage,
-                                                    c.TechId,
-                                                    c.Tech.Email,
-                                                    c.RecruiterId,
-                                                    c.Recruiter.Email
-                                                )).ToPagedList(paging.PageNumber, paging.PageSize);
+            CandidateListing candidateListing = new CandidateListing();
+            candidateListing.TotalCount = candidates.Count();
+            candidateListing.CandidateFilteringDTO = candidateFilteringDTO;
+            candidateListing.Paging = paging;
+            candidateListing.SortOrder = sortOrder;
 
-            return result;
+            candidateListing.CandidateInfoForListDTOs = candidates
+                .Select(c => new CandidateInfoForListDTO(
+                            c.Id,
+                           (c.Name + " " + c.LastName),
+                            c.Source,
+                            c.Recruitment.Name,
+                            c.Status,
+                            c.Stage,
+                            c.TechId,
+                            c.Tech.Email,
+                            c.RecruiterId,
+                            c.Recruiter.Email
+                            )).ToPagedList(paging.PageNumber, paging.PageSize);
+
+            return candidateListing;
         }
 
         public int AllocateRecruiterAndTech(int id, CandidateAssigneesDTO dto)

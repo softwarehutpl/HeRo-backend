@@ -10,6 +10,7 @@ namespace HeRoBackEnd.Controllers
     public class SkillController : Controller
     {
         private readonly SkillService _service;
+
         public SkillController(SkillService service)
         {
             _service = service;
@@ -75,7 +76,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Object of the JsonResult class representing the IEnumerable collection of skills in the JSON format</returns>
         /// <remarks>
         /// Sample response:
-        /// 
+        ///
         ///     [
         ///          {
         ///              "id": 1,
@@ -87,7 +88,7 @@ namespace HeRoBackEnd.Controllers
         ///          },
         ///     ]
         /// </remarks>
-        [HttpPost]
+        [HttpGet]
         [Route("Skill/GetList")]
         public IActionResult GetList()
         {
@@ -103,9 +104,9 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="name">String used to find skills which names contain it</param>
         /// <returns>Object of the JsonResult class representing the IEnumerable collection of skills in the JSON format</returns>
-        /// <remarks> 
+        /// <remarks>
         /// Sample response for the phrase "Program":
-        /// 
+        ///
         ///     [
         ///         {
         ///             "id": 1,
@@ -147,7 +148,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Object of the JsonResult class representing the skill in the JSON format</returns>
         /// <remarks>
         /// Sample response:
-        /// 
+        ///
         ///     {
         ///         "id": 2,
         ///         "name": "Programming in C#"

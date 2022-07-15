@@ -1,11 +1,10 @@
+using AutoMapper;
 using Common.Listing;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
-using Services.Services;
 using Services.DTOs.Recruitment;
-using AutoMapper;
-using Common.Enums;
-using System.Security.Claims;
+using Services.Listing;
+using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -44,28 +43,22 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Get a number of Recruitment
-        /// </summary>
-        [HttpGet]
-        [Route("Recruitment/GetQuantity")]
-        public int GetQuantity()
-        {
-            int numberOfRecruitment = service.GetQuantity();
-
-            return numberOfRecruitment;
-        }
-
-        /// <summary>
         /// Returns a list of recruitments
         /// </summary>
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
         /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
         /// <remarks>
+        /// <h2>Format:</h2>
+        ///    <h3>Date:</h3>
+        ///    yyyy-MM-dd <br />
+        ///    yyyy-MM-ddTHH:mm <br />
+        ///    yyyy-MM-ddTHH:mm:ss <br />
+        ///    yyyy-MM-ddTHH:mm:ss.fff <br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "name", "description" <br />
-        ///    <h3>Equals:</h3> "userStatus", "roleName" <br /><br />
+        ///    <h3>Nullable:</h3> "beginningDate", "endingDate" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "name" <br />
+        ///     <h3>Possible keys:</h3> "Name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -74,7 +67,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200"></response>
         [HttpPost]
         [Route("Recruitment/GetList")]
-        [ProducesResponseType(typeof(IEnumerable<ReadRecruitmentDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RecruitmentListing), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
@@ -87,7 +80,7 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);
 
-            IEnumerable<ReadRecruitmentDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
             if (recruitments == null) return BadRequest();
 

@@ -3,6 +3,7 @@ using Common.Enums;
 using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.Candidate;
+using Services.Listing;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers
@@ -45,18 +46,6 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Get a number of Candidate
-        /// </summary>
-        [HttpGet]
-        [Route("Candidate/GetQuantity")]
-        public int GetQuantity()
-        {
-            int numberOfCandidate = _candidateService.GetQuantity();
-
-            return numberOfCandidate;
-        }
-
-        /// <summary>
         /// Returns a Json result object representing a list of candidates
         /// </summary>
         /// <param name="candidate">An object containing information about the filter</param>
@@ -64,9 +53,10 @@ namespace HeRoBackEnd.Controllers
         /// <remarks>
         /// <h2>Filtring:</h2>
         ///    <h3>Possible statuses:</h3> "NEW" , "IN_PROCESSING", "DROPPED_OUT", "HIRED" <br />
-        ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br /><br />
+        ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br />
+        ///    <h3>Nullable:</h3> "statuses", "stages" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "name", "source", "project", "status", "stage" <br />
+        ///     <h3>Possible keys:</h3> "Name", "Source", "Status", "Stage" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -74,7 +64,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Candidates</response>
         [HttpPost]
         [Route("Candidate/GetList")]
-        [ProducesResponseType(typeof(IEnumerable<CandidateInfoForListDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CandidateListing), StatusCodes.Status200OK)]
         public IActionResult GetList(CandidateListFilterViewModel candidate)
         {
             CandidateFilteringDTO candidateFilteringDTO
@@ -82,8 +72,8 @@ namespace HeRoBackEnd.Controllers
                     candidate.Status,
                     candidate.Stage);
 
-            IEnumerable<CandidateInfoForListDTO> result =
-                _candidateService.GetCandidates(
+            var result = _candidateService
+                .GetCandidates(
                     candidate.Paging,
                     candidate.SortOrder,
                     candidateFilteringDTO);
