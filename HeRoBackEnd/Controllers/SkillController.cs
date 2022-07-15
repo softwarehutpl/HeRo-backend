@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using Services.Services;
 using Services.DTOs.Skill;
 using Data.Entities;
+using Microsoft.AspNetCore.Authorization;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -10,6 +11,7 @@ namespace HeRoBackEnd.Controllers
     public class SkillController : Controller
     {
         private readonly SkillService _service;
+
         public SkillController(SkillService service)
         {
             _service = service;
@@ -22,6 +24,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPut]
         [Route("Skill/Create")]
+        [Authorize(Policy = "AdminRequirment")]
         public IActionResult Create(string skillName)
         {
             int result = _service.AddSkill(skillName);
@@ -40,6 +43,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPut]
         [Route("Skill/Update/{skillId}")]
+        [Authorize(Policy = "AdminRequirment")]
         public IActionResult Update(int skillId, string newSkillName)
         {
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
@@ -61,6 +65,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpDelete]
         [Route("Skill/Delete/{skillId}")]
+        [Authorize(Policy = "AdminRequirment")]
         public IActionResult Delete(int skillId)
         {
             int result = _service.DeleteSkill(skillId);
@@ -83,7 +88,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Object of the JsonResult class representing the IEnumerable collection of skills in the JSON format</returns>
         /// <remarks>
         /// Sample response:
-        /// 
+        ///
         ///     [
         ///          {
         ///              "id": 1,
@@ -97,6 +102,7 @@ namespace HeRoBackEnd.Controllers
         /// </remarks>
         [HttpGet]
         [Route("Skill/GetList")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetList()
         {
             IEnumerable<Skill> skills = _service.GetSkills();
@@ -111,9 +117,9 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="name">String used to find skills which names contain it</param>
         /// <returns>Object of the JsonResult class representing the IEnumerable collection of skills in the JSON format</returns>
-        /// <remarks> 
+        /// <remarks>
         /// Sample response for the phrase "Program":
-        /// 
+        ///
         ///     [
         ///         {
         ///             "id": 1,
@@ -139,6 +145,7 @@ namespace HeRoBackEnd.Controllers
         /// </remarks>
         [HttpGet]
         [Route("Skill/GetListFilteredByName{name}")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetListFilteredByName(string name)
         {
             IEnumerable<Skill> skills = _service.GetSkillsFilteredByName(name);
@@ -155,7 +162,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Object of the JsonResult class representing the skill in the JSON format</returns>
         /// <remarks>
         /// Sample response:
-        /// 
+        ///
         ///     {
         ///         "id": 2,
         ///         "name": "Programming in C#"
@@ -163,6 +170,7 @@ namespace HeRoBackEnd.Controllers
         /// </remarks>
         [HttpGet]
         [Route("Skill/Get/{skillId}")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult Get(int skillId)
         {
             Skill skill = _service.GetSkill(skillId);

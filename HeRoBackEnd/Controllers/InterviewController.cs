@@ -25,6 +25,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">No Interview with this InterviewId</response>
         [HttpGet]
         [Route("Interview/Get/{interviewId}")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(InterviewDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int interviewId)
@@ -57,6 +58,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Interview</response>
         [HttpPost]
         [Route("Interview/GetList")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(IEnumerable<InterviewDTO>), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
@@ -73,6 +75,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Interview/Create")]
+        [Authorize(Policy = "HrRequirment")]
         public IActionResult Create(InterviewCreateViewModel interview)
         {
             InterviewCreateDTO interviewCreate =
@@ -96,6 +99,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No interview with this InterviewId</response>
         [HttpPost]
         [Route("Interview/Edit/{interviewId}")]
+        [Authorize(Policy = "HrRequirment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int interviewId, InterviewEditViewModel interview)
@@ -126,7 +130,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">No interview with this interviewId</response>
         [HttpDelete]
         [Route("Interview/Delete/{interviewId}")]
-        [Authorize(Policy = "AdminRequirment")]
+        [Authorize(Policy = "HrRequirment")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int interviewId)

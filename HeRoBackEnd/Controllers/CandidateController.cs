@@ -1,6 +1,7 @@
 using AutoMapper;
 using Common.Enums;
 using HeRoBackEnd.ViewModels.Candidate;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.Candidate;
 using Services.Services;
@@ -30,6 +31,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">"Error getting candidate (bad parameters or candidate doesn't exist)"</response>
         [HttpGet]
         [Route("Candidate/Get/{candidateId}")]
+        [Authorize(Policy = "RecruiterRequirment")]
         [ProducesResponseType(typeof(CandidateProfileDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int candidateId)
@@ -62,6 +64,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Candidates</response>
         [HttpPost]
         [Route("Candidate/GetList")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(IEnumerable<CandidateInfoForListDTO>), StatusCodes.Status200OK)]
         public IActionResult GetList(CandidateListFilterViewModel candidate)
         {
@@ -103,6 +106,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error saving candidate in database"</response>
         [HttpPost]
         [Route("Candidate/Create")]
+        [AllowAnonymous]
         public IActionResult Create(CandidateCreateViewModel newCandidate)
         {
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
@@ -153,6 +157,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error updating candidate"</response>
         [HttpPost]
         [Route("Candidate/Edit/{candidateId}")]
+        [Authorize(Policy = "RecruiterRequirment")]
         public IActionResult Edit(int candidateId, CandidateEditViewModel candidate)
         {
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
@@ -183,6 +188,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error deleting candidate"</response>
         [HttpDelete]
         [Route("Candidate/Delete/{candidateId}")]
+        [Authorize(Policy = "RecruiterRequirment")]
         public IActionResult Delete(int candidateId)
         {
             DeleteCandidateDTO dto = new DeleteCandidateDTO(candidateId);
@@ -225,6 +231,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error adding note to candidate"</response>
         [HttpPost]
         [Route("Candidate/AddHRNote/")]
+        [Authorize(Policy = "RecruiterRequirment")]
         public IActionResult AddHRNote(int candidateId, CandidateAddHRNoteViewModel AddHrNote)
         {
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
@@ -264,6 +271,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error adding note to candidate"</response>
         [HttpPost]
         [Route("Candidate/AddTechInterviewNote/{candidateId}")]
+        [Authorize(Policy = "TechnicianRequirment")]
         public IActionResult AddTechInterviewNote(int candidateId, CandidateAddTechNoteViewModel AddTechNote)
         {
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
@@ -304,6 +312,7 @@ namespace HeRoBackEnd.Controllers
         /// </response>
         [HttpPost]
         [Route("Candidate/AssignTechAndRecruiter/{candidateId}")]
+        [Authorize(Policy = "RecruiterRequirment")]
         public IActionResult AssignTechAndRecruiter(int candidateId, CandidateAssigneesViewModel assignees)
         {
             CandidateAssigneesDTO dto = _mapper.Map<CandidateAssigneesDTO>(assignees);
@@ -341,6 +350,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error setting interview date"</response>
         [HttpPost]
         [Route("Candidate/SetInterviewDate/{candidateId}")]
+        [Authorize(Policy = "RecruiterRequirment")]
         public IActionResult SetInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
         {
             CandidateAllocateInterviewDateDTO dto = _mapper.Map<CandidateAllocateInterviewDateDTO>(interviewDateViewModel);
@@ -379,6 +389,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">string "Error setting tech interview date"</response>
         [HttpPost]
         [Route("Candidate/SetTechInterviewDate/{candidateId}")]
+        [Authorize(Policy = "RecruiterRequirment")]
         public IActionResult SetTechInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
         {
             CandidateAllocateInterviewDateDTO dto = _mapper.Map<CandidateAllocateInterviewDateDTO>(interviewDateViewModel);
@@ -404,6 +415,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [HttpGet]
         [Route("Candidate/GetStageList")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetStageList()
         {
             var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>();
@@ -418,6 +430,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [HttpGet]
         [Route("Candidate/GetStatusList")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetStatusList()
         {
             var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>();
