@@ -53,33 +53,33 @@ try
     {
         options.AddPolicy("AdminRequirment",
             policy => policy
-                        .RequireClaim("RoleName", "ADMIN")
-                        .RequireAuthenticatedUser());
+            .RequireClaim("RoleName", "ADMIN")
+            .RequireClaim("UserStatus", "ACTIVE"));
 
         options.AddPolicy("HrManagerRequirment",
             policy => policy
             .RequireClaim("RoleName", "HR_MANAGER")
-            .RequireAuthenticatedUser());
+            .RequireClaim("UserStatus", "ACTIVE"));
 
         options.AddPolicy("RecruiterRequirment",
             policy => policy
             .RequireClaim("RoleName", "RECRUITER")
-            .RequireAuthenticatedUser());
+            .RequireClaim("UserStatus", "ACTIVE"));
 
         options.AddPolicy("TechnicianRequirment",
             policy => policy
             .RequireClaim("RoleName", "TECHNICIAN")
-            .RequireAuthenticatedUser());
+            .RequireClaim("UserStatus", "ACTIVE"));
 
         options.AddPolicy("AnyRoleRequirment",
             policy => policy
             .RequireClaim("RoleName", "INTERVIEWER", "RECRUITER", "HR_MANAGER", "ADMIN")
-            .RequireAuthenticatedUser());
+            .RequireClaim("UserStatus", "ACTIVE"));
 
         options.AddPolicy("HrRequirment",
             policy => policy
             .RequireClaim("RoleName", "RECRUITER", "HR_MANAGER", "ADMIN")
-            .RequireAuthenticatedUser());
+            .RequireClaim("UserStatus", "ACTIVE"));
     });
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();

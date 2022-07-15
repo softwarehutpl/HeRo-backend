@@ -55,7 +55,8 @@ namespace Services.Services
                 {
                     new Claim("Id", user.Id.ToString()),
                     new Claim("Email", email),
-                    new Claim("RoleName", user.RoleName)
+                    new Claim("RoleName", user.RoleName),
+                    new Claim("UserStatus", user.UserStatus)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
