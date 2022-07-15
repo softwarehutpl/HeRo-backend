@@ -55,7 +55,8 @@ namespace Services.Services
                 {
                     new Claim("Id", user.Id.ToString()),
                     new Claim("Email", email),
-                    new Claim("RoleName", user.RoleName)
+                    new Claim("RoleName", user.RoleName),
+                    new Claim("UserStatus", user.UserStatus)
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
@@ -103,24 +104,25 @@ namespace Services.Services
 
         public async Task<bool> ChangeUserPassword(string email, string password)
         {
-
-            User myUser = _userRepository.GetUserByEmail(email);            
+            User myUser = _userRepository.GetUserByEmail(email);
             string passwordAfterHash = GetHash(password);
             if (myUser.Password == passwordAfterHash) return false;
 
             _userRepository.ChangeUserPasswordByEmail(email, passwordAfterHash);
             return true;
         }
+
         public async Task<bool> CheckPasswordRecoveryGuid(Guid guid, string email)
         {
             Guid userGuid = _userRepository.GetUserGuidByEmail(email);
             if (guid == userGuid) return true;
             return false;
         }
+
         public bool ConfirmUser(Guid guid, int id)
         {
             User user = _userRepository.GetUserById(id);
-            if(user.ConfirmationGuid == guid)
+            if (user.ConfirmationGuid == guid)
             {
                 user.UserStatus = UserStatuses.ACTIVE.ToString();
 
