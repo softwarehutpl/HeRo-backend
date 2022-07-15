@@ -1,4 +1,5 @@
 ﻿using Common.Listing;
+using Data.DTO;
 using Services.DTOs.Recruitment;
 
 namespace Services.Listing

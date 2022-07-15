@@ -3,7 +3,6 @@
     public class ReadRecruitmentDTO
     {
         public int Id { get; set; }
-
         public DateTime BeginningDate { get; set; }
         public DateTime EndingDate { get; set; }
         public string Name { get; set; }

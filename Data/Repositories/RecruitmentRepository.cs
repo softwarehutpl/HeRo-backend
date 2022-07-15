@@ -15,6 +15,13 @@ namespace Data.Repositories
         {
         }
 
+        public IQueryable<Recruitment> GetAllRecruitments()
+        {
+            var result = GetAll();
+
+            return result;
+        }
+
         public int GetRecruiterId(int id)
         {
             Recruitment recruitment = GetById(id);
