@@ -123,6 +123,7 @@ namespace Services.Services
             if(user.ConfirmationGuid == guid)
             {
                 user.UserStatus = UserStatuses.ACTIVE.ToString();
+
                 _userRepository.UpdateUser(user);
                 return true;
             }

@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Common.Enums;
 using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Mvc;

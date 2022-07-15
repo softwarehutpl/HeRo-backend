@@ -1,11 +1,10 @@
+using AutoMapper;
 using Common.Listing;
+using Data.DTO;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
-using Services.Services;
 using Services.DTOs.Recruitment;
-using AutoMapper;
-using Common.Enums;
-using System.Security.Claims;
+using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {

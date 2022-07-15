@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Common.Enums;
 using Data.Repositories;
 
 namespace Data.Entities
@@ -35,32 +34,32 @@ namespace Data.Entities
         public virtual User Recruiter { get; set; }
 
         public int CreatedById { get; set; }
-
         public DateTime CreatedDate { get; set; }
 
         [ForeignKey("CreatedById")]
         public virtual User CreatedBy { get; set; }
 
         public int? LastUpdatedById { get; set; }
-
         public DateTime? LastUpdatedDate { get; set; }
 
         [ForeignKey("LastUpdatedById")]
         public virtual User? LastUpdatedBy { get; set; }
 
         public int? DeletedById { get; set; }
-
         public DateTime? DeletedDate { get; set; }
 
         [ForeignKey("DeletedById")]
         public virtual User? DeletedBy { get; set; }
 
         public int? EndedById { get; set; }
-
         public DateTime? EndedDate { get; set; }
 
         [ForeignKey("EndedById")]
         public virtual User? EndedBy { get; set; }
+
+        public string RecruitmentPosition { get; set; }
+        public string Localization { get; set; }
+        public string Seniority { get; set; }
+        public virtual ICollection<Candidate> Candidates { get; set; }
     }
 }
-
