@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+using AutoMapper;
 using Common.Enums;
 using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Mvc;
@@ -106,7 +106,7 @@ namespace HeRoBackEnd.Controllers
         {
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
 
-            dto.Status = CandidateStatusEnum.New.ToString();
+            dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
 
             int result = _candidateService.CreateCandidate(dto);
@@ -358,8 +358,7 @@ namespace HeRoBackEnd.Controllers
                 return Ok("Tech interview date set correctly");
             }
         }
-
-
+        
         /// <summary>
         /// Shows list of existing stages of recruitment.
         /// </summary>

@@ -1,9 +1,11 @@
 ﻿using System.Net.Mail;
 using Common.Helpers;
+using Common.ServiceRegistrationAttributes;
 using Data.Repositories;
 
 namespace Services.Services
 {
+    [ScopedRegistration]
     public class EmailService
     {
         private readonly EmailHelper _emailHelper;

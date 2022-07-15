@@ -31,8 +31,5 @@ namespace HeRoBackEnd.ViewModels.Candidate
 
         [Required(ErrorMessage = "This field is required")]
         public int RecruitmentId { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
-        public string Status { get; set; }
     }
 }
