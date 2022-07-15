@@ -6,6 +6,7 @@ using Services.Services;
 using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Common.Enums;
+using Data.Entities;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -82,10 +83,8 @@ namespace HeRoBackEnd.Controllers
             if (check)
                 return BadRequest("User already exist");
 
-            _userService.CreateUser(newUser.Password, newUser.Email);
+            Guid confirmationGuid = await _userService.CreateUser(newUser.Password, newUser.Email);
 
-            Guid confirmationGuid = Guid.NewGuid();
-            _userService.SetUserConfirmationGuid(newUser.Email, confirmationGuid);
             string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid }, protocol: "https");
             _emailService.SendConfirmationEmail(newUser.Email, url);
 
@@ -123,8 +122,7 @@ namespace HeRoBackEnd.Controllers
             bool changedPassword = _userService.CheckIfUserExist(email);
             if (!changedPassword) return BadRequest($"Account:{email} doesn't exist");
 
-            var recoveryGuid = Guid.NewGuid();
-            _userService.SetUserRecoveryGuid(email, recoveryGuid);
+            var recoveryGuid = _userService.SetUserRecoveryGuid(email);
 
             var fullUrl = this.Url.Action("RecoverPassword", "Auth", new { guid = recoveryGuid }, protocol: "https");
 

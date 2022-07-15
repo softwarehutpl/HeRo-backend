@@ -25,18 +25,13 @@ namespace Services.Services
             return result;
         }
 
-        public void SetUserRecoveryGuid(string email, Guid guid)
+        public Guid SetUserRecoveryGuid(string email)
         {
             var user = _userRepository.GetUserByEmail(email);
-            user.PasswordRecoveryGuid = guid;
+            user.PasswordRecoveryGuid = new Guid();
             _userRepository.UpdateAndSaveChanges(user);
-        }
 
-        public void SetUserConfirmationGuid(string email, Guid guid)
-        {
-            var user = _userRepository.GetUserByEmail(email);
-            user.ConfirmationGuid = guid;
-            _userRepository.UpdateAndSaveChanges(user);
+            return user.PasswordRecoveryGuid;
         }
 
         public UserDTO Get(int userId)
@@ -149,11 +144,11 @@ namespace Services.Services
         public bool CheckIfUserExist(string email)
         {
             bool check = _userRepository.CheckIfUserExist(email);
-            if (!check) return false;
-            return true;
+
+            return check;
         }
 
-        public async Task CreateUser(string password, string email)
+        public async Task<Guid> CreateUser(string password, string email)
         {
             User newUser = new()
             {
@@ -162,10 +157,12 @@ namespace Services.Services
                 CreatedDate = DateTime.Now,
                 LastUpdatedDate = DateTime.Now,
                 RoleName = RoleNames.ANONYMOUS.ToString(),
-                UserStatus = UserStatuses.NOT_VERIFIED.ToString()
+                UserStatus = UserStatuses.NOT_VERIFIED.ToString(),
+                ConfirmationGuid = new Guid()
             };
-
             _userRepository.AddAndSaveChanges(newUser);
+
+            return newUser.ConfirmationGuid;
         }
 
         public async Task<bool> ChangeUserPassword(string email, string password)
