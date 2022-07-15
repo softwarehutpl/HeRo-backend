@@ -4,6 +4,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Services.Services;
 using HeRoBackEnd.ViewModels.User;
+using Microsoft.AspNetCore.Authorization;
+using Common.Enums;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -31,6 +33,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">Returns user email</response>
         [HttpPost]
         [Route("Auth/SignIn")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SignIn(string password, string email)
@@ -69,6 +72,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Invalid email or password or user already exist</response>
         [HttpPost]
         [Route("Auth/CreateNewUser")]
+        [Authorize(Policy = "AdminRequirment")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)

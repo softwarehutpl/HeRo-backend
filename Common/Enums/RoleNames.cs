@@ -14,7 +14,7 @@ namespace Common.Enums
         [Description("Anonymous")] ANONYMOUS = 1,
         [Description("HR Manager")] HR_MANAGER = 2,
         [Description("Recruiter")] RECRUITER = 3,
-        [Description("Interviewer")] INTERVIEWER = 4,
+        [Description("Interviewer")] TECHNICIAN = 4,
         [Description("Admin")] ADMIN = 5,
     }
 }

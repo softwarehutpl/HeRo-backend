@@ -26,6 +26,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No User with this UserId</response>
         [HttpGet]
         [Route("User/Get/{userId}")]
+        [Authorize(Policy = "AdminRequirment")]
         [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
@@ -58,6 +59,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Users</response>
         [HttpPost]
         [Route("User/GetList")]
+        [Authorize(Policy = "AdminRequirment")]
         [ProducesResponseType(typeof(IEnumerable<UserDTO>), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
@@ -78,6 +80,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No user with this UserId</response>
         [HttpPost]
         [Route("User/Edit/{userId}")]
+        [Authorize(Policy = "AdminRequirment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Edit(int userId, EditUserViewModel editUser)
