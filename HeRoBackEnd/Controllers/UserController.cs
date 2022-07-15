@@ -28,17 +28,15 @@ namespace HeRoBackEnd.Controllers
         [Route("User/Get/{userId}")]
         [Authorize(Policy = "AdminRequirment")]
         [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
         {
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
-            {
-                return NotFound();
-            }
+                return NotFound("Not found");
 
-            return new JsonResult(user);
+            return Ok(user);
         }
 
         /// <summary>
@@ -67,7 +65,7 @@ namespace HeRoBackEnd.Controllers
 
             IEnumerable<UserDTO>? result = _userService.GetUsers(userListFilterViewModel.Paging, userListFilterViewModel.SortOrder, userFiltringDTO);
 
-            return new JsonResult(result);
+            return Ok(result);
         }
 
         /// <summary>
@@ -111,8 +109,8 @@ namespace HeRoBackEnd.Controllers
         [HttpDelete]
         [Route("User/Delete/{userId}")]
         [Authorize(Policy = "AdminRequirment")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Delete(int userId)
         {
             int loginUserId = GetUserId();
@@ -121,10 +119,10 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return NotFound();
+                return NotFound("User not found");
             }
 
-            return Ok();
+            return Ok("User deleted");
         }
     }
 }

@@ -15,19 +15,6 @@ namespace Data.Repositories
             _dataContext = context;
         }
 
-        public void ChangeUserPassword(string email, string password)
-        {
-            User user = GetUserByEmail(email);
-            user.Password = password;
-            UpdateUser(user);
-        }
-
-        public User GetUserById(int id)
-        {
-            var result = _dataContext.Users.Find(id);
-            return result;
-        }
-
         public User GetUserByEmail(string mail)
         {
             var result = _dataContext.Users.Where(x => x.Email == mail).FirstOrDefault();
@@ -40,24 +27,10 @@ namespace Data.Repositories
             return result;
         }
 
-        public void AddUser(User user)
-        {
-            _dataContext.Add(user);
-            _dataContext.SaveChanges();
-        }
-
-        public void UpdateUser(User user)
-        {
-            _dataContext.Update(user);
-            _dataContext.SaveChanges();
-        }
-
-        public void RemoveUser(int id)
-        { }
-
         public string GetUserEmail(int id)
         {
-            var result = GetById(id).Email;
+            var result = _dataContext.Users.Where(x => x.Id == id).Select(x => x.Email).FirstOrDefault();
+
             return result;
         }
 
