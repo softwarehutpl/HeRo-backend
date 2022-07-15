@@ -95,7 +95,7 @@ namespace Services.Services
         {
             try
             {
-                bool exists = _repo.Exists(dto.Name);
+                bool exists = _repo.Exists(dto.Id, dto.Name);
 
                 if (exists == true) return 0;
 
