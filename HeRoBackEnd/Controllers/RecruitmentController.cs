@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.Listing;
+using Data.DTO;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Mvc;
 using Services.DTOs.Recruitment;

@@ -1,9 +1,11 @@
 ﻿using System.Linq;
+using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Microsoft.AspNetCore.Identity;
 
 namespace Data.Repositories
 {
+    [ScopedRegistration]
     public class UserRepository : BaseRepository<User>
     {
         private DataContext _dataContext;

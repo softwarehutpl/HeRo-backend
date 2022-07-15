@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
-using Common.Enums;
-
-namespace Services.DTOs.Recruitment
+﻿namespace Services.DTOs.Recruitment
 {
     public class UpdateRecruitmentDTO
     {
@@ -23,5 +15,8 @@ namespace Services.DTOs.Recruitment
         public int? LastUpdatedById { get; set; }
 
         public DateTime? LastUpdatedDate { get; set; }
+        public string RecruitmentPosition { get; set; }
+        public string Localization { get; set; }
+        public string Seniority { get; set; }
     }
 }

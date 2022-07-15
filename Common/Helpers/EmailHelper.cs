@@ -3,9 +3,11 @@ using System.Net;
 using Newtonsoft.Json;
 using Microsoft.Extensions.Configuration;
 using Common.ConfigClasses;
+using Common.ServiceRegistrationAttributes;
 
 namespace Common.Helpers
 {
+    [ScopedRegistration]
     public class EmailHelper 
     {
          

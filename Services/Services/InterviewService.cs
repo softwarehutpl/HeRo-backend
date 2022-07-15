@@ -1,4 +1,5 @@
 ﻿using Common.Listing;
+using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Data.Repositories;
 using PagedList;
@@ -7,6 +8,7 @@ using Services.Listing;
 
 namespace Services.Services
 {
+    [ScopedRegistration]
     public class InterviewService
     {
         private InterviewRepository _interviewRepository;
