@@ -19,9 +19,9 @@ namespace Services.Services
         public RecruitmentService(IMapper map, RecruitmentRepository repo, RecruitmentSkillRepository recruitmentSkillRepo, ILogger<RecruitmentService> logger)
         {
             _mapper = map;
-            this._recruitmentRepo = repo;
-            this._recruitmentSkillRepo = recruitmentSkillRepo;
-            this._logger = logger;
+            _recruitmentRepo = repo;
+            _recruitmentSkillRepo = recruitmentSkillRepo;
+            _logger = logger;
         }
 
         public int AddRecruitment(CreateRecruitmentDTO dto)
@@ -47,6 +47,12 @@ namespace Services.Services
             try
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(recruitmentId);
+
+                if (recruitment == null)
+                {
+                    return -1;
+                }
+
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
                 recruitment.BeginningDate = dto.BeginningDate;
                 recruitment.EndingDate = dto.EndingDate;
@@ -54,18 +60,45 @@ namespace Services.Services
                 recruitment.Description = dto.Description;
                 recruitment.RecruiterId = dto.RecruiterId;
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
-                IEnumerable<RecruitmentSkill> skills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
+                IEnumerable<RecruitmentSkill> newSkills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
 
-                foreach (RecruitmentSkill skill in skills)
+                foreach(RecruitmentSkill newSkill in newSkills)
                 {
-                    skill.RecruitmentId = recruitmentId;
+                    RecruitmentSkill oldSkill=recruitment.Skills
+                        .FirstOrDefault(e => e.SkillId == newSkill.SkillId);
+
+                    if(oldSkill!=default && oldSkill.SkillLevel != newSkill.SkillLevel)
+                    {
+                        oldSkill.SkillLevel = newSkill.SkillLevel;
+                    }
+                    else if(oldSkill==default)
+                    {
+                        RecruitmentSkill skill = new RecruitmentSkill();
+                        skill.RecruitmentId = recruitmentId;
+                        skill.SkillId = newSkill.SkillId;
+                        skill.SkillLevel = newSkill.SkillLevel;
+
+                        recruitment.Skills.Add(skill);
+                    }
                 }
 
-                recruitment.Skills = (ICollection<RecruitmentSkill>)skills;
+                var skillsIdsToRemove = new List<int>();
 
+                foreach (RecruitmentSkill oldSkill in recruitment.Skills)
+                {
+                    RecruitmentSkill newSkill = newSkills
+                        .FirstOrDefault(e => e.SkillId == oldSkill.SkillId);
 
+                    if (newSkill == default)
+                    {
+                        skillsIdsToRemove.Add(oldSkill.SkillId);
+                    }
+                }
 
-                DeleteRecruitmentSkills(recruitmentId);
+                recruitment.Skills = (ICollection<RecruitmentSkill>)recruitment.Skills.
+                    Where(e => !skillsIdsToRemove.Any(f => f == e.SkillId))
+                    .ToList();
+
                 _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
             catch (Exception ex)
@@ -82,6 +115,9 @@ namespace Services.Services
             try
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
+
+                if (recruitment == null) return -1;
+
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
                 recruitment.EndedDate = dto.EndedDate;
@@ -89,7 +125,7 @@ namespace Services.Services
 
                 _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -103,6 +139,9 @@ namespace Services.Services
             try
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
+
+                if (recruitment == null) return -1;
+
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
                 recruitment.DeletedDate = dto.DeletedDate;
@@ -158,11 +197,6 @@ namespace Services.Services
                 }
 
                 result = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
-
-                foreach (RecruitmentDetailsDTO dto in result)
-                {
-                    dto.Skills = GetAllRecruitmentSkills(dto.Id);
-                }
             }
             catch (Exception ex)
             {
@@ -180,32 +214,17 @@ namespace Services.Services
             try
             {
                 result = _recruitmentRepo.GetRecruitmentById(recruitmentId);
-                result.Skills = GetAllRecruitmentSkills(result.Id);
+
+                if(result==null)
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return null;
             }
-
-            return result;
-        }
-
-        public void DeleteRecruitmentSkills(int recruitmentId)
-        {
-            IQueryable<RecruitmentSkill> oldRecruitmentSkills =
-                _recruitmentSkillRepo.GetAll().
-                Where(e => e.RecruitmentId == recruitmentId);
-
-            _recruitmentSkillRepo.RemoveRangeAndSaveChanges(oldRecruitmentSkills);
-        }
-
-        public IEnumerable<RecruitmentSkillDTO> GetAllRecruitmentSkills(int recruitmentId)
-        {
-            IEnumerable<RecruitmentSkillDTO> result =
-                _recruitmentSkillRepo.GetAll().
-                Where(e => e.RecruitmentId == recruitmentId).
-                Select(e => _mapper.Map<RecruitmentSkillDTO>(e));
 
             return result;
         }

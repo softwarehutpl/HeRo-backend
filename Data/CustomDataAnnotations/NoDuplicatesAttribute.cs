@@ -16,7 +16,9 @@ namespace Data.CustomDataAnnotations
 
             if (skills == null) return false;
 
-            bool hasDuplicates = skills.Any(e => skills.Any(f => f.SkillId == e.SkillId && e!=f));
+            bool hasDuplicates = skills.
+                Any(e => skills.
+                Any(f => f.SkillId == e.SkillId && e!=f));
 
             if (hasDuplicates == true)
             {

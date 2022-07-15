@@ -43,10 +43,10 @@ namespace Services.Services
             try
             {
                 result = _repo.GetAll();
-                result = result
-                    .Where(e => e.Name.Contains(name))
-                    .OrderBy(e=>e.Name)
-                    .Take(5);
+                result = result.
+                    Where(e => e.Name.Contains(name)).
+                    OrderBy(e=>e.Name).
+                    Take(5);
             }
             catch(Exception ex)
             {

@@ -11,7 +11,8 @@ namespace Data.Repositories
         public bool Exists(string name)
         {
             IQueryable<Skill> skills = GetAll();
-            bool result = skills.Any(x => x.Name == name);
+            bool result = skills.
+                Any(x => x.Name == name);
 
             return result;
         }
