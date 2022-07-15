@@ -14,30 +14,28 @@ namespace Services.Services
     [ScopedRegistration]
     public class RecruitmentService
     {
-        private readonly IMapper mapper;
-        private readonly RecruitmentRepository repo;
-        private readonly UserRepository userRepo;
-        private readonly ILogger<RecruitmentService> logger;
+        private readonly IMapper _mapper;
+        private readonly RecruitmentRepository _recruitmentRepository;
+        private readonly ILogger<RecruitmentService> _logger;
 
-        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger<RecruitmentService> logger)
+        public RecruitmentService(IMapper map, RecruitmentRepository repo, ILogger<RecruitmentService> logger)
         {
-            mapper = map;
-            this.repo = repo;
-            this.userRepo = userRepo;
-            this.logger = logger;
+            _mapper = map;
+            _recruitmentRepository = repo;
+            _logger = logger;
         }
 
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
             try
             {
-                Recruitment recruitment = mapper.Map<Recruitment>(dto);
+                Recruitment recruitment = _mapper.Map<Recruitment>(dto);
 
-                repo.AddAndSaveChanges(recruitment);
+                _recruitmentRepository.AddAndSaveChanges(recruitment);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return -1;
             }
 
@@ -48,7 +46,7 @@ namespace Services.Services
         {
             try
             {
-                Recruitment recruitment = repo.GetById(recruitmentId);
+                Recruitment recruitment = _recruitmentRepository.GetById(recruitmentId);
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
                 recruitment.BeginningDate = dto.BeginningDate;
                 recruitment.EndingDate = dto.EndingDate;
@@ -57,11 +55,11 @@ namespace Services.Services
                 recruitment.RecruiterId = dto.RecruiterId;
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
 
-                repo.UpdateAndSaveChanges(recruitment);
+                _recruitmentRepository.UpdateAndSaveChanges(recruitment);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return -1;
             }
 
@@ -72,17 +70,17 @@ namespace Services.Services
         {
             try
             {
-                Recruitment recruitment = repo.GetById(dto.Id);
+                Recruitment recruitment = _recruitmentRepository.GetById(dto.Id);
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
                 recruitment.EndedDate = dto.EndedDate;
                 recruitment.EndedById = dto.EndedById;
 
-                repo.UpdateAndSaveChanges(recruitment);
+                _recruitmentRepository.UpdateAndSaveChanges(recruitment);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return -1;
             }
 
@@ -93,17 +91,17 @@ namespace Services.Services
         {
             try
             {
-                Recruitment recruitment = repo.GetById(dto.Id);
+                Recruitment recruitment = _recruitmentRepository.GetById(dto.Id);
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
                 recruitment.DeletedDate = dto.DeletedDate;
                 recruitment.DeletedById = dto.LastUpdatedById;
 
-                repo.UpdateAndSaveChanges(recruitment);
+                _recruitmentRepository.UpdateAndSaveChanges(recruitment);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return -1;
             }
 
@@ -112,7 +110,7 @@ namespace Services.Services
 
         public IEnumerable<ReadRecruitmentDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
-            IEnumerable<ReadRecruitmentDTO> recruitments = repo.GetAllRecruitmentsDTOs();
+            IEnumerable<ReadRecruitmentDTO> recruitments = _recruitmentRepository.GetAllRecruitmentsDTOs();
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
@@ -157,11 +155,11 @@ namespace Services.Services
 
             try
             {
-                recruitment = repo.GetRecruitmentDTOById(recruitmentId);
+                recruitment = _recruitmentRepository.GetRecruitmentDTOById(recruitmentId);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return null;
             }
 
