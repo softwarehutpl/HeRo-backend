@@ -42,7 +42,7 @@ namespace Data.Repositories
                     RecruitmentPosition = x.RecruitmentPosition,
                     Seniority = x.Seniority,
                     CandidateCount = x.Candidates.Count(),
-                    HiredCount = x.Candidates.Count(e => e.Status == CandidateStatus.Hired.ToString())
+                    HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString())
                 })
                 .FirstOrDefault();
 
@@ -68,7 +68,7 @@ namespace Data.Repositories
                     RecruitmentPosition = x.RecruitmentPosition,
                     Seniority = x.Seniority,
                     CandidateCount = x.Candidates.Count(),
-                    HiredCount = x.Candidates.Count(e => e.Status == CandidateStatus.Hired.ToString())
+                    HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString())
                 }).ToList();
 
             return result;
