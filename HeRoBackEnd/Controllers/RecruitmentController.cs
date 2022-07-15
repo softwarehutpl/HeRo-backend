@@ -35,7 +35,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(ReadRecruitmentDTO), StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
-            ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
+            ReadRecruitmentDTO? recruitment = service.GetRecruitment(recruitmentId);
 
             if (recruitment == null)
             {
