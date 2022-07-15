@@ -25,6 +25,8 @@ namespace HeRoBackEnd.Controllers
         [HttpPut]
         [Route("Skill/Create")]
         [Authorize(Policy = "AdminRequirment")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(string skillName)
         {
             int result = _service.AddSkill(skillName);
@@ -44,6 +46,8 @@ namespace HeRoBackEnd.Controllers
         [HttpPut]
         [Route("Skill/Update/{skillId}")]
         [Authorize(Policy = "AdminRequirment")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Update(int skillId, string newSkillName)
         {
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
@@ -63,6 +67,8 @@ namespace HeRoBackEnd.Controllers
         [HttpDelete]
         [Route("Skill/Delete/{skillId}")]
         [Authorize(Policy = "AdminRequirment")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int skillId)
         {
             int result = _service.DeleteSkill(skillId);
@@ -95,13 +101,12 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Skill/GetList")]
         [Authorize(Policy = "AnyRoleRequirment")]
+        [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetList()
         {
             IEnumerable<Skill> skills = _service.GetSkills();
 
-            JsonResult result = new JsonResult(skills);
-
-            return result;
+            return Ok(skills);
         }
 
         /// <summary>
@@ -138,13 +143,12 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [Route("Skill/GetListFilteredByName{name}")]
         [Authorize(Policy = "AnyRoleRequirment")]
+        [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetListFilteredByName(string name)
         {
             IEnumerable<Skill> skills = _service.GetSkillsFilteredByName(name);
 
-            JsonResult result = new JsonResult(skills);
-
-            return result;
+            return Ok(skills);
         }
 
         /// <summary>
@@ -163,15 +167,15 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [Route("Skill/Get/{skillId}")]
         [Authorize(Policy = "AnyRoleRequirment")]
+        [ProducesResponseType(typeof(Skill), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int skillId)
         {
             Skill skill = _service.GetSkill(skillId);
 
             if (skill == null) return BadRequest("There is no such skill!");
 
-            JsonResult result = new JsonResult(skill);
-
-            return result;
+            return Ok(skill);
         }
     }
 }

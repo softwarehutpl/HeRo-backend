@@ -27,14 +27,14 @@ namespace HeRoBackEnd.Controllers
         [Route("Interview/Get/{interviewId}")]
         [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(InterviewDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int interviewId)
         {
             InterviewDTO interview = _interviewService.Get(interviewId);
 
             if (interview == null)
             {
-                return BadRequest();
+                return BadRequest("Interview doesn't exist");
             }
 
             return new JsonResult(interview);
@@ -76,6 +76,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Interview/Create")]
         [Authorize(Policy = "HrRequirment")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult Create(InterviewCreateViewModel interview)
         {
             InterviewCreateDTO interviewCreate =
@@ -131,8 +132,8 @@ namespace HeRoBackEnd.Controllers
         [HttpDelete]
         [Route("Interview/Delete/{interviewId}")]
         [Authorize(Policy = "HrRequirment")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int interviewId)
         {
             int loginUserId = GetUserId();
@@ -141,10 +142,10 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return BadRequest();
+                return BadRequest("Interview doesn't exist");
             }
 
-            return Ok();
+            return Ok("Interview deleted");
         }
     }
 }
