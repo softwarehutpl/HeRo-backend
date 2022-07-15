@@ -28,13 +28,6 @@ namespace Services.Services
             this.logger = logger;
         }
 
-        public int GetQuantity()
-        {
-            int result = repo.GetAll().Count();
-
-            return result;
-        }
-
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
             try

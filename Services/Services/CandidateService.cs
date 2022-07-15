@@ -27,13 +27,6 @@ namespace Services.Services
             _logger = logger;
         }
 
-        public int GetQuantity()
-        {
-            int result = _candidateRepository.GetAll().Count();
-
-            return result;
-        }
-
         public int CreateCandidate(CreateCandidateDTO dto)
         {
             Candidate candidate = _mapper.Map<Candidate>(dto);
