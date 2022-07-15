@@ -4,6 +4,7 @@ using Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Data.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20220713130342_AddRecruitmentSkills")]
+    partial class AddRecruitmentSkills
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -33,7 +35,10 @@ namespace Data.Migrations
                     b.Property<DateTime>("ApplicationDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime?>("AvailableFrom")
+                    b.Property<int>("CreatedById")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("CvPath")
@@ -50,28 +55,8 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("ExpectedMonthlySalary")
-                        .HasColumnType("int");
-
-                    b.Property<string>("FullName")
-                        .IsRequired()
-                        .ValueGeneratedOnAddOrUpdate()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("HROpinionScore")
-                        .HasColumnType("int");
-
-                    b.Property<string>("HROpinionText")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime?>("InterviewDate")
                         .HasColumnType("datetime2");
-
-                    b.Property<int?>("InterviewOpinionScore")
-                        .HasColumnType("int");
-
-                    b.Property<string>("InterviewOpinionText")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -87,24 +72,15 @@ namespace Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("OtherExpectations")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
+                    b.Property<string>("Notes")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("RecruiterId")
+                    b.Property<int>("RecruiterId")
                         .HasColumnType("int");
 
                     b.Property<int>("RecruitmentId")
                         .HasColumnType("int");
-
-                    b.Property<string>("Source")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Stage")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Status")
                         .IsRequired()
@@ -118,6 +94,8 @@ namespace Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatedById");
+
                     b.HasIndex("DeletedById");
 
                     b.HasIndex("LastUpdatedById");
@@ -129,60 +107,6 @@ namespace Data.Migrations
                     b.HasIndex("TechId");
 
                     b.ToTable("Candidate");
-                });
-
-            modelBuilder.Entity("Data.Entities.Interview", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CandidateId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CreatedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("DeletedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("DeletedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("LastUpdatedById")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime?>("LastUpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Type")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int>("WorkerId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CandidateId");
-
-                    b.HasIndex("CreatedById");
-
-                    b.HasIndex("DeletedById");
-
-                    b.HasIndex("LastUpdatedById");
-
-                    b.HasIndex("WorkerId");
-
-                    b.ToTable("Interview");
                 });
 
             modelBuilder.Entity("Data.Entities.Log", b =>
@@ -259,24 +183,12 @@ namespace Data.Migrations
                     b.Property<DateTime?>("LastUpdatedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("Localization")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RecruiterId")
                         .HasColumnType("int");
-
-                    b.Property<string>("RecruitmentPosition")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Seniority")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
@@ -381,47 +293,6 @@ namespace Data.Migrations
 
             modelBuilder.Entity("Data.Entities.Candidate", b =>
                 {
-                    b.HasOne("Data.Entities.User", "DeletedBy")
-                        .WithMany()
-                        .HasForeignKey("DeletedById");
-
-                    b.HasOne("Data.Entities.User", "LastUpdatedBy")
-                        .WithMany()
-                        .HasForeignKey("LastUpdatedById");
-
-                    b.HasOne("Data.Entities.User", "Recruiter")
-                        .WithMany()
-                        .HasForeignKey("RecruiterId");
-
-                    b.HasOne("Data.Entities.Recruitment", "Recruitment")
-                        .WithMany()
-                        .HasForeignKey("RecruitmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Data.Entities.User", "Tech")
-                        .WithMany()
-                        .HasForeignKey("TechId");
-
-                    b.Navigation("DeletedBy");
-
-                    b.Navigation("LastUpdatedBy");
-
-                    b.Navigation("Recruiter");
-
-                    b.Navigation("Recruitment");
-
-                    b.Navigation("Tech");
-                });
-
-            modelBuilder.Entity("Data.Entities.Interview", b =>
-                {
-                    b.HasOne("Data.Entities.Candidate", "Candidate")
-                        .WithMany()
-                        .HasForeignKey("CandidateId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Data.Entities.User", "CreatedBy")
                         .WithMany()
                         .HasForeignKey("CreatedById")
@@ -436,13 +307,21 @@ namespace Data.Migrations
                         .WithMany()
                         .HasForeignKey("LastUpdatedById");
 
-                    b.HasOne("Data.Entities.User", "User")
+                    b.HasOne("Data.Entities.User", "Recruiter")
                         .WithMany()
-                        .HasForeignKey("WorkerId")
+                        .HasForeignKey("RecruiterId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Candidate");
+                    b.HasOne("Data.Entities.Recruitment", "Recruitment")
+                        .WithMany()
+                        .HasForeignKey("RecruitmentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Data.Entities.User", "Tech")
+                        .WithMany()
+                        .HasForeignKey("TechId");
 
                     b.Navigation("CreatedBy");
 
@@ -450,7 +329,11 @@ namespace Data.Migrations
 
                     b.Navigation("LastUpdatedBy");
 
-                    b.Navigation("User");
+                    b.Navigation("Recruiter");
+
+                    b.Navigation("Recruitment");
+
+                    b.Navigation("Tech");
                 });
 
             modelBuilder.Entity("Data.Entities.Recruitment", b =>

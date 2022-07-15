@@ -3,7 +3,7 @@ using Common.Enums;
 using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.Candidate;
+using Data.DTOs.Candidate;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers

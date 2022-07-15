@@ -4,8 +4,11 @@ using Data.DTO;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.Recruitment;
 using Services.Services;
+using Data.DTOs.Recruitment;
+using Data.Entities;
+using Common.Enums;
+using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -35,11 +38,11 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(ReadRecruitmentDTO), StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
-            ReadRecruitmentDTO? recruitment = service.GetRecruitment(recruitmentId);
+            RecruitmentDetailsDTO recruitment = service.GetRecruitment(recruitmentId);
 
             if (recruitment == null)
             {
-                return BadRequest("There is no such recruitment");
+                return BadRequest();
             }
             return Ok(recruitment);
         }
@@ -77,7 +80,8 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);
 
-            IEnumerable<ReadRecruitmentDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            IEnumerable<RecruitmentDetailsDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            JsonResult result = new JsonResult(recruitments);
 
             if (recruitments == null) return BadRequest();
 

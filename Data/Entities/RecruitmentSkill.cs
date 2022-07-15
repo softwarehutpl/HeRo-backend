@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
 {
-    [Table("RecruitmentRequirement")]
+    [Table("RecruitmentSkill")]
     public class RecruitmentSkill
     {
         [Key]

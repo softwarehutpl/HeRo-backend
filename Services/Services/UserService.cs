@@ -5,7 +5,7 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.DTOs.User;
+using Data.DTOs.User;
 
 namespace Services.Services
 {

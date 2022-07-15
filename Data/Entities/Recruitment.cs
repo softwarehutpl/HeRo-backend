@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Common.Enums;
+using Data.DTOs.RecruitmentSkill;
 using Data.Repositories;
 
 namespace Data.Entities
@@ -61,5 +63,7 @@ namespace Data.Entities
         public string Localization { get; set; }
         public string Seniority { get; set; }
         public virtual ICollection<Candidate> Candidates { get; set; }
+
+        public virtual ICollection<RecruitmentSkill> Skills { get; set; }
     }
 }
