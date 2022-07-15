@@ -56,9 +56,9 @@ namespace Data.Repositories
         }
         public int GetRecruiterId(int id)
         {
-            var result = DataContext.Recruitments.
-                Select(x => x.RecruiterId).
-                FirstOrDefault();
+            var result = DataContext.Recruitments
+                .Select(x => x.RecruiterId)
+                .FirstOrDefault();
             
             return result;
         }

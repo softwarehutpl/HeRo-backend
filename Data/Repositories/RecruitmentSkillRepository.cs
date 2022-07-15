@@ -16,8 +16,8 @@ namespace Data.Repositories
 
         public bool IsSkillUsed(int skillId)
         {
-            bool result=GetAll().
-                Any(e => e.SkillId == skillId);
+            bool result=GetAll()
+                .Any(e => e.SkillId == skillId);
 
             return result;
         }
