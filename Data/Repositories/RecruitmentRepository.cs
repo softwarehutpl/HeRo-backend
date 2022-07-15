@@ -1,18 +1,25 @@
+using AutoMapper;
 using Common.Enums;
 using Common.ServiceRegistrationAttributes;
 using Data.DTO;
 using Data.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Data.DTOs.Recruitment;
 using System.Security.Claims;
+using Data.DTOs.RecruitmentSkill;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
     [ScopedRegistration]
     public class RecruitmentRepository : BaseRepository<Recruitment>
     {
-        public RecruitmentRepository(DataContext context) : base(context)
+        private readonly IMapper _mapper;
+        public RecruitmentRepository(DataContext context, IMapper mapper) : base(context)
         {
+            _mapper = mapper;
+
         }
 
         public int GetRecruiterId(int id)
@@ -23,14 +30,15 @@ namespace Data.Repositories
 
             return result;
         }
+        public int GetRecruiterId(int id)
 
-        public ReadRecruitmentDTO? GetRecruitmentDTOById(int id)
+        public RecruitmentDetailsDTO? GetRecruitmentDTOById(int id)
         {
-            ReadRecruitmentDTO? result = DataContext.Recruitments
+            RecruitmentDetailsDTO? result = DataContext.Recruitments
                 .Include(x => x.Candidates)
                 .Where(x => x.Id == id)
                 .Where(e => !e.DeletedDate.HasValue)
-                .Select(x => new ReadRecruitmentDTO
+                .Select(x => new RecruitmentDetailsDTO
                 {
                     Id = x.Id,
                     Name = x.Name,
@@ -42,7 +50,13 @@ namespace Data.Repositories
                     RecruitmentPosition = x.RecruitmentPosition,
                     Seniority = x.Seniority,
                     CandidateCount = x.Candidates.Count(),
-                    HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString())
+                    HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString()),
+                    Skills = x.Skills.Select(s => new RecruitmentSkillDetailsDTO()
+                    {
+                        SkillId = s.SkillId,
+                        SkillLevel = s.SkillLevel,
+                        Name = s.Skill.Name
+                    }).ToList()
                 })
                 .FirstOrDefault();
 
@@ -50,28 +64,36 @@ namespace Data.Repositories
 
             return result;
         }
-
-        public IEnumerable<ReadRecruitmentDTO> GetAllRecruitmentsDTOs()
+        public Recruitment GetById(int id)
         {
-            IEnumerable<ReadRecruitmentDTO> result = DataContext.Recruitments
-                .Include(x => x.Candidates)
-                .Where(e => !e.DeletedDate.HasValue)
-                .Select(x => new ReadRecruitmentDTO
-                {
-                    Id = x.Id,
-                    Name = x.Name,
-                    BeginningDate = x.BeginningDate,
-                    EndingDate = x.EndingDate,
-                    Description = x.Description,
-                    Localization = x.Localization,
-                    RecruiterId = x.RecruiterId,
-                    RecruitmentPosition = x.RecruitmentPosition,
-                    Seniority = x.Seniority,
-                    CandidateCount = x.Candidates.Count(),
-                    HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString())
-                }).ToList();
+            Recruitment result = DataContext.Recruitments
+                .Include(x => x.Skills)
+                .FirstOrDefault(x => x.Id == id);
+        }
+
+        public IEnumerable<RecruitmentDetailsDTO> GetAllRecruitmentsDTOs()
+        {
+            IEnumerable<RecruitmentDetailsDTO> result = DataContext.Recruitments
+            .Include(x => x.Candidates)
+            .Where(e => !e.DeletedDate.HasValue)
+            .Select(x => new ReadRecruitmentDTO
+            {
+                Id = x.Id,
+                Name = x.Name,
+                BeginningDate = x.BeginningDate,
+                EndingDate = x.EndingDate,
+                Description = x.Description,
+                Localization = x.Localization,
+                RecruiterId = x.RecruiterId,
+                RecruitmentPosition = x.RecruitmentPosition,
+                Seniority = x.Seniority,
+                CandidateCount = x.Candidates.Count(),
+                HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString())
+            }).ToList();
+        
+            
 
             return result;
         }
-    }
+}
 }

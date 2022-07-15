@@ -2,7 +2,7 @@
 using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.User;
+using Data.DTOs.User;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers

@@ -7,37 +7,41 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.DTOs.Recruitment;
+using Data.DTOs.Recruitment;
+using System.Security.Claims;
+using Data.DTOs.RecruitmentSkill;
 
 namespace Services.Services
 {
     [ScopedRegistration]
     public class RecruitmentService
     {
-        private readonly IMapper mapper;
-        private readonly RecruitmentRepository repo;
-        private readonly UserRepository userRepo;
-        private readonly ILogger<RecruitmentService> logger;
+        private readonly IMapper _mapper;
+        private readonly RecruitmentRepository _recruitmentRepo;
+        private readonly UserRepository _userRepo;
+        private readonly ILogger<RecruitmentService> _logger;
 
         public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger<RecruitmentService> logger)
         {
-            mapper = map;
-            this.repo = repo;
-            this.userRepo = userRepo;
-            this.logger = logger;
+            _mapper = map;
+            _recruitmentRepo = repo;
+            _recruitmentSkillRepo = recruitmentSkillRepo;
+            _logger = logger;
         }
 
         public int AddRecruitment(CreateRecruitmentDTO dto)
         {
             try
             {
-                Recruitment recruitment = mapper.Map<Recruitment>(dto);
+                Recruitment recruitment = _mapper.Map<Recruitment>(dto);
+                IEnumerable<RecruitmentSkill> skills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
+                recruitment.Skills = (ICollection<RecruitmentSkill>)skills;
 
-                repo.AddAndSaveChanges(recruitment);
+                _recruitmentRepo.AddAndSaveChanges(recruitment);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return -1;
             }
 
@@ -48,7 +52,13 @@ namespace Services.Services
         {
             try
             {
-                Recruitment recruitment = repo.GetById(recruitmentId);
+                Recruitment recruitment = _recruitmentRepo.GetById(recruitmentId);
+
+                if (recruitment == null)
+                {
+                    return -1;
+                }
+
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
                 recruitment.BeginningDate = dto.BeginningDate;
                 recruitment.EndingDate = dto.EndingDate;
@@ -56,12 +66,50 @@ namespace Services.Services
                 recruitment.Description = dto.Description;
                 recruitment.RecruiterId = dto.RecruiterId;
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
+                IEnumerable<RecruitmentSkill> newSkills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
 
-                repo.UpdateAndSaveChanges(recruitment);
+                foreach(RecruitmentSkill newSkill in newSkills)
+                {
+                    RecruitmentSkill oldSkill=recruitment.Skills
+                        .FirstOrDefault(e => e.SkillId == newSkill.SkillId);
+
+                    if(oldSkill!=default && oldSkill.SkillLevel != newSkill.SkillLevel)
+                    {
+                        oldSkill.SkillLevel = newSkill.SkillLevel;
+                    }
+                    else if(oldSkill==default)
+                    {
+                        RecruitmentSkill skill = new RecruitmentSkill();
+                        skill.RecruitmentId = recruitmentId;
+                        skill.SkillId = newSkill.SkillId;
+                        skill.SkillLevel = newSkill.SkillLevel;
+
+                        recruitment.Skills.Add(skill);
+                    }
+                }
+
+                var skillsIdsToRemove = new List<int>();
+
+                foreach (RecruitmentSkill oldSkill in recruitment.Skills)
+                {
+                    RecruitmentSkill newSkill = newSkills
+                        .FirstOrDefault(e => e.SkillId == oldSkill.SkillId);
+
+                    if (newSkill == default)
+                    {
+                        skillsIdsToRemove.Add(oldSkill.SkillId);
+                    }
+                }
+
+                recruitment.Skills = (ICollection<RecruitmentSkill>)recruitment.Skills.
+                    Where(e => !skillsIdsToRemove.Any(f => f == e.SkillId))
+                    .ToList();
+
+                _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return -1;
             }
 
@@ -72,17 +120,20 @@ namespace Services.Services
         {
             try
             {
-                Recruitment recruitment = repo.GetById(dto.Id);
+                Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
+
+                if (recruitment == null) return -1;
+
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
                 recruitment.EndedDate = dto.EndedDate;
                 recruitment.EndedById = dto.EndedById;
 
-                repo.UpdateAndSaveChanges(recruitment);
+                _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return -1;
             }
 
@@ -93,26 +144,31 @@ namespace Services.Services
         {
             try
             {
-                Recruitment recruitment = repo.GetById(dto.Id);
+                Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
+
+                if (recruitment == null) return -1;
+
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
                 recruitment.DeletedDate = dto.DeletedDate;
                 recruitment.DeletedById = dto.LastUpdatedById;
 
-                repo.UpdateAndSaveChanges(recruitment);
+                _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return -1;
             }
 
             return 1;
         }
 
-        public IEnumerable<ReadRecruitmentDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
+        public IEnumerable<RecruitmentDetailsDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
-            IEnumerable<ReadRecruitmentDTO> recruitments = repo.GetAllRecruitmentsDTOs();
+            try
+            {
+                IEnumerable<RecruitmentDetailsDTO> recruitments = _recruitmentRepo.GetAllRecruitments();
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
@@ -146,29 +202,38 @@ namespace Services.Services
                 }
             }
 
-            IEnumerable<ReadRecruitmentDTO> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
+                IEnumerable<RecruitmentDetailsDTO> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return null;
+            }
+     
 
             return pagedRecruitments;
         }
 
-        public ReadRecruitmentDTO? GetRecruitment(int recruitmentId)
+        public RecruitmentDetailsDTO GetRecruitment(int recruitmentId)
         {
-            ReadRecruitmentDTO? recruitment;
-
+            RecruitmentDetailsDTO result = null;
             try
             {
-                recruitment = repo.GetRecruitmentDTOById(recruitmentId);
+                result = _recruitmentRepo.GetRecruitmentById(recruitmentId);
+
+                if(result==null)
+                {
+                    return null;
+                }
             }
             catch (Exception ex)
             {
-                logger.LogError(ex.Message);
+                _logger.LogError(ex.Message);
                 return null;
             }
 
-            if (recruitment == null)
-                return null;
 
-            return recruitment;
+            return result;
         }
     }
 }

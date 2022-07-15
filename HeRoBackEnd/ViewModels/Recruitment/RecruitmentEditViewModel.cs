@@ -1,4 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data.DTOs.RecruitmentSkill;
+using Data.Entities;
+using System.ComponentModel.DataAnnotations;
+using Data.CustomDataAnnotations;
 
 namespace HeRoBackEnd.ViewModels.Recruitment
 {
@@ -18,5 +21,9 @@ namespace HeRoBackEnd.ViewModels.Recruitment
 
         [Required(ErrorMessage = "This field is required")]
         public int RecruiterId { get; set; }
+
+        [NoDuplicates]
+        [MinLength(1, ErrorMessage = "You have to specify at least one skill")]
+        public IEnumerable<RecruitmentSkillDTO> Skills { get; set; }
     }
 }

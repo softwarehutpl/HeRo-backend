@@ -5,8 +5,10 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.DTOs;
-using Services.DTOs.Candidate;
+using Data.DTOs;
+using Data.DTOs.Candidate;
+using System.ComponentModel.DataAnnotations;
+using Data.DTOs.Interview;
 
 namespace Services.Services
 {
