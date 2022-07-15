@@ -16,6 +16,7 @@ namespace HeRoBackEnd.Profiles
             CreateMap<CandidateAddHRNoteViewModel, CandidateAddHRNoteDTO>();
             CreateMap<CandidateAddTechNoteViewModel, CandidateAddTechNoteDTO>();
             CreateMap<CandidateAllocateInterviewDateViewModel, CandidateAllocateInterviewDateDTO>();
+            CreateMap<CandidateChangeStageViewModel, CandidateChangeStageAndStatusDTO>();
             CreateMap<Candidate, CandidateProfileDTO>();
             CreateMap<Candidate, CandidateInfoForListDTO>();
 

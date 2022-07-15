@@ -1,6 +1,7 @@
 using AutoMapper;
 using Common.Enums;
 using Common.Listing;
+using Common.ServiceRegistrationAttributes;
 using Data.DTO;
 using Data.Entities;
 using Data.Repositories;
@@ -10,6 +11,7 @@ using Services.DTOs.Recruitment;
 
 namespace Services.Services
 {
+    [ScopedRegistration]
     public class RecruitmentService
     {
         private readonly IMapper mapper;

@@ -60,20 +60,23 @@ try
     var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
 
     builder.Services.AddSingleton(config);
-    builder.Services.AddScoped<EmailHelper>();
-    builder.Services.AddScoped<EmailService>();
-    builder.Services.AddScoped<UserRepository>();
-    builder.Services.AddScoped<UserService>();
-    builder.Services.AddScoped<InterviewService>();
-    builder.Services.AddScoped<InterviewRepository>();
-    builder.Services.AddScoped<CandidateRepository>();
-    builder.Services.AddScoped<AuthService>();
-    builder.Services.AddScoped<RecruitmentRepository>();
-    builder.Services.AddScoped<RecruitmentService>();
-    builder.Services.AddScoped<CandidateService>();
-    builder.Services.AddScoped<SkillRepository>();
-    builder.Services.AddScoped<SkillService>();
-    builder.Services.AddScoped<RecruitmentSkillService>();
+    //builder.Services.AddScoped<EmailHelper>();
+    //builder.Services.AddScoped<EmailService>();
+    //builder.Services.AddScoped<UserRepository>();
+    //builder.Services.AddScoped<UserService>();
+    //builder.Services.AddScoped<InterviewService>();
+    //builder.Services.AddScoped<InterviewRepository>();
+    //builder.Services.AddScoped<AuthService>();
+    //builder.Services.AddScoped<RecruitmentRepository>();
+    //builder.Services.AddScoped<RecruitmentService>();
+    //builder.Services.AddScoped<SkillRepository>();
+    //builder.Services.AddScoped<SkillService>();
+    //builder.Services.AddScoped<RecruitmentSkillService>();
+    //builder.Services.AddScoped<CandidateService>();
+    //builder.Services.AddScoped<CandidateRepository>();
+
+    builder.Services.RegisterServices(builder.Configuration);
+
     builder.Services.AddControllersWithViews();
     builder.Services.AddSwaggerGen(options =>
     {

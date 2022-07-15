@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ using Services.DTOs.Skill;
 
 namespace Services.Services
 {
+    [ScopedRegistration]
     public class SkillService
     {
         private readonly ILogger<SkillService> _logger;
