@@ -51,14 +51,6 @@ namespace Services.Services
 
             interviews = interviews.Where(i => (i.Date >= interviewFiltringDTO.FromDate && i.Date <= interviewFiltringDTO.ToDate));
 
-            if (interviewFiltringDTO.CandidateId.HasValue)
-            {
-                interviews = interviews.Where(s => s.CandidateId == interviewFiltringDTO.CandidateId);
-            }
-            if (interviewFiltringDTO.WorkerId.HasValue)
-            {
-                interviews = interviews.Where(s => s.WorkerId == interviewFiltringDTO.WorkerId);
-            }
             if (!String.IsNullOrEmpty(interviewFiltringDTO.Type))
             {
                 interviews = interviews.Where(s => s.Type.Equals(interviewFiltringDTO.Type));
@@ -112,7 +104,7 @@ namespace Services.Services
                 }
             }
 
-            var resutl = interviews.Select(i => new InterviewDTO(
+            var result = interviews.Select(i => new InterviewDTO(
                                                     i.Id,
                                                     i.Date,
                                                     i.CandidateId,
@@ -124,7 +116,7 @@ namespace Services.Services
                                                     i.Type
                                                 )).ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return resutl;
+            return result;
         }
 
         public void Create(InterviewCreateDTO interviewCreate, int userCreatedId)

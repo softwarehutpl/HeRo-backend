@@ -44,6 +44,16 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="interview">An object containing information about the filter</param>
         /// <returns>Object of the JsonResult class representing a list of Interview in the JSON format</returns>
+        /// <remarks>
+        /// <h2>Filtring:</h2>
+        ///    <h3>Contains:</h3> "name", "description" <br />
+        ///    <h3>Equals:</h3> "type" <br /><br />
+        /// <h2>Sorting:</h2>
+        ///     <h3>Possible keys:</h3> "date", "candidateid", "workerId", "type" <br />
+        ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
+        ///                      Another value - sort the result in ascending order <br />
+        ///
+        /// </remarks>
         /// <response code="200">List of Interview</response>
         [HttpPost]
         [Route("Interview/GetList")]

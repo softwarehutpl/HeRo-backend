@@ -16,6 +16,13 @@ namespace Data.Entities
         [Required]
         public string LastName { get; set; }
 
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public string FullName
+        {
+            get { return Name + " " + LastName; }
+            private set { }
+        }
+
         [Required]
         public string Status { get; set; }
 
@@ -37,9 +44,11 @@ namespace Data.Entities
         public string? OtherExpectations { get; set; }
 
         public int? InterviewOpinionScore { get; set; }
+
         public string? InterviewOpinionText { get; set; }
 
         public int? HROpinionScore { get; set; }
+
         public string? HROpinionText { get; set; }
 
         public string? Source { get; set; }

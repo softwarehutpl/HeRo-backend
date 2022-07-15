@@ -131,13 +131,16 @@ namespace Services.Services
 
             foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
             {
-                if (sort.Value == "DESC")
+                if (sort.Key.ToLower() == "name")
                 {
-                    recruitments = recruitments.OrderByDescending(u => u.Name);
-                }
-                else
-                {
-                    recruitments = recruitments.OrderBy(s => s.Name);
+                    if (sort.Value == "DESC")
+                    {
+                        recruitments = recruitments.OrderByDescending(u => u.Name);
+                    }
+                    else
+                    {
+                        recruitments = recruitments.OrderBy(s => s.Name);
+                    }
                 }
             }
 

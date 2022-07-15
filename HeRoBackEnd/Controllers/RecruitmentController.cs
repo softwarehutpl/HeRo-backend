@@ -21,10 +21,42 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
+        /// Returns a recruitment specified by an id
+        /// </summary>
+        /// <param name="recruitmentId" example="1">Id of an recruitment</param>
+        /// <returns>Onject of the JsonResult class representing a Recruitment in JSON format</returns>
+        /// <response code="400">There is no such recruitment!</response>
+        /// <response code="200"></response>
+        [HttpGet]
+        [Route("Recruitment/Get/{recruitmentId}")]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ReadRecruitmentDTO), StatusCodes.Status200OK)]
+        public IActionResult Get(int recruitmentId)
+        {
+            ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
+
+            if (recruitment == null)
+            {
+                return BadRequest();
+            }
+            return Ok(recruitment);
+        }
+
+        /// <summary>
         /// Returns a list of recruitments
         /// </summary>
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
         /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
+        /// <remarks>
+        /// <h2>Filtring:</h2>
+        ///    <h3>Contains:</h3> "name", "description" <br />
+        ///    <h3>Equals:</h3> "userStatus", "roleName" <br /><br />
+        /// <h2>Sorting:</h2>
+        ///     <h3>Possible keys:</h3> "name" <br />
+        ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
+        ///                      Another value - sort the result in ascending order <br />
+        ///
+        /// </remarks>
         /// <response code="400">Something went wrong!</response>
         /// <response code="200"></response>
         [HttpPost]
@@ -48,6 +80,7 @@ namespace HeRoBackEnd.Controllers
 
             return Ok(recruitments);
         }
+
 
         /// <summary>
         /// Returns a recruitment specified by an id
