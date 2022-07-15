@@ -106,7 +106,7 @@ namespace HeRoBackEnd.Controllers
         {
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
 
-            dto.Status = CandidateStatusEnum.New.ToString();
+            dto.Status = CandidateStatus.New.ToString();
             dto.ApplicationDate = DateTime.Now;
 
             int result = _candidateService.CreateCandidate(dto);

@@ -81,29 +81,6 @@ namespace HeRoBackEnd.Controllers
             return Ok(recruitments);
         }
 
-
-        /// <summary>
-        /// Returns a recruitment specified by an id
-        /// </summary>
-        /// <param name="recruitmentId" example="1">Id of an recruitment</param>
-        /// <returns>Onject of the JsonResult class representing a Recruitment in JSON format</returns>
-        /// <response code="400">There is no such recruitment!</response>
-        /// <response code="200"></response>
-        [HttpGet]
-        [Route("Recruitment/Get/{recruitmentId}")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ReadRecruitmentDTO), StatusCodes.Status200OK)]
-        public IActionResult Get(int recruitmentId)
-        {
-            ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
-
-            if (recruitment == null)
-            {
-                return BadRequest();
-            }
-            return Ok(recruitment);
-        }
-
         /// <summary>
         /// Creates a recruitment
         /// </summary>
