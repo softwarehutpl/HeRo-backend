@@ -45,8 +45,11 @@ namespace HeRoBackEnd.Controllers
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
             int result = _service.UpdateSkill(dto);
 
-            if (result == 0) return BadRequest("Skill with that name already exists!");
-            if (result == -1) return BadRequest("Wrong data!");
+            if (result == 0) 
+                return BadRequest("Skill with that name already exists!");
+
+            if (result == -1) 
+                return BadRequest("Wrong data!");
 
             return Ok("Skill updated successfully");
         }
@@ -55,16 +58,21 @@ namespace HeRoBackEnd.Controllers
         /// Deletes a skill specified by an id, you can't delete a skill that is used in one of the recruitments
         /// </summary>
         /// <param name="skillId">Id of the skill</param>
-        /// <returns>IAcionResult</returns>
+        /// <returns>IActionResult</returns>
         [HttpDelete]
         [Route("Skill/Delete/{skillId}")]
         public IActionResult Delete(int skillId)
         {
             int result = _service.DeleteSkill(skillId);
 
-            if (result == -1) return BadRequest("There is no such skill!");
-            if (result == 0) return BadRequest("This skill is currently used in one of the recruitments." +
-                " You can't delete it.");
+            if (result == 0) 
+                return BadRequest("This skill is currently used in one of the recruitments. You can't delete it.");
+
+            if (result == -1)
+                return BadRequest("There is no such skill!");
+
+            if (result == -2)
+                return BadRequest("Error while deleting skill!");
 
             return Ok("Skill deleted successfully");
         }
@@ -87,7 +95,7 @@ namespace HeRoBackEnd.Controllers
         ///          },
         ///     ]
         /// </remarks>
-        [HttpPost]
+        [HttpGet]
         [Route("Skill/GetList")]
         public IActionResult GetList()
         {

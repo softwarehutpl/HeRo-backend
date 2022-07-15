@@ -48,7 +48,7 @@ namespace Services.Services
             {
                 result = _repo.GetAll();
                 result = result
-                    .Where(e => e.Name.Contains(name))
+                    .Where(e => e.Name.ToLower().Contains(name.ToLower()))
                     .OrderBy(e=>e.Name)
                     .Take(5);
             }
@@ -118,9 +118,15 @@ namespace Services.Services
 
         public int DeleteSkill(int id)
         {
+            Skill skill = _repo.GetById(id);
+            if (skill == null)
+            {
+                return -1;
+            }
+
             try
             {
-                Skill skill = _repo.GetById(id);
+                
                 bool isUsed = _recruitmentSkillService.IsSkillUsed(id);
 
                 if (isUsed == true) return 0;
@@ -130,7 +136,7 @@ namespace Services.Services
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return -1;
+                return -2;
             }
 
             return 1;

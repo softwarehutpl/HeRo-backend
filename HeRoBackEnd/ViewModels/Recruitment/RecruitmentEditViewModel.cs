@@ -18,5 +18,14 @@ namespace HeRoBackEnd.ViewModels.Recruitment
 
         [Required(ErrorMessage = "This field is required")]
         public int RecruiterId { get; set; }
+
+        [Required(ErrorMessage = "This field is required")]
+        public string RecruitmentPosition { get; set; }
+
+        [Required(ErrorMessage = "This field is required")]
+        public string Localization { get; set; }
+
+        [Required(ErrorMessage = "This field is required")]
+        public string Seniority { get; set; }
     }
 }

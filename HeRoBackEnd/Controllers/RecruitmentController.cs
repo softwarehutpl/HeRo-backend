@@ -37,7 +37,7 @@ namespace HeRoBackEnd.Controllers
 
             if (recruitment == null)
             {
-                return BadRequest();
+                return BadRequest("There is no such recruitment");
             }
             return Ok(recruitment);
         }
