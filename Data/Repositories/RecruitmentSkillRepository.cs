@@ -1,9 +1,11 @@
 ﻿using AutoMapper;
+using Common.ServiceRegistrationAttributes;
 using Data.DTOs.RecruitmentSkill;
 using Data.Entities;
 
 namespace Data.Repositories
 {
+    [ScopedRegistration]
     public class RecruitmentSkillRepository : BaseRepository<RecruitmentSkill>
     {
         private readonly DataContext _context;

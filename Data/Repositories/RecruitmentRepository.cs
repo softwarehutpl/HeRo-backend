@@ -1,7 +1,7 @@
 using AutoMapper;
 using Common.Enums;
 using Common.ServiceRegistrationAttributes;
-using Data.DTO;
+using Data.DTOs;
 using Data.Entities;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -30,7 +30,6 @@ namespace Data.Repositories
 
             return result;
         }
-        public int GetRecruiterId(int id)
 
         public RecruitmentDetailsDTO? GetRecruitmentDTOById(int id)
         {
@@ -69,6 +68,8 @@ namespace Data.Repositories
             Recruitment result = DataContext.Recruitments
                 .Include(x => x.Skills)
                 .FirstOrDefault(x => x.Id == id);
+
+            return result;
         }
 
         public IEnumerable<RecruitmentDetailsDTO> GetAllRecruitmentsDTOs()
@@ -76,7 +77,7 @@ namespace Data.Repositories
             IEnumerable<RecruitmentDetailsDTO> result = DataContext.Recruitments
             .Include(x => x.Candidates)
             .Where(e => !e.DeletedDate.HasValue)
-            .Select(x => new ReadRecruitmentDTO
+            .Select(x => new RecruitmentDetailsDTO
             {
                 Id = x.Id,
                 Name = x.Name,

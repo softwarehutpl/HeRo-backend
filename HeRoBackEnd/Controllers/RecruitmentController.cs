@@ -1,6 +1,6 @@
 using AutoMapper;
 using Common.Listing;
-using Data.DTO;
+using Data.DTOs;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -35,7 +35,7 @@ namespace HeRoBackEnd.Controllers
         [Route("Recruitment/Get/{recruitmentId}")]
         [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ReadRecruitmentDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RecruitmentDetailsDTO), StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
             RecruitmentDetailsDTO recruitment = service.GetRecruitment(recruitmentId);
@@ -67,7 +67,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Recruitment/GetList")]
         [Authorize(Policy = "AnyRoleRequirment")]
-        [ProducesResponseType(typeof(IEnumerable<ReadRecruitmentDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<RecruitmentDetailsDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {

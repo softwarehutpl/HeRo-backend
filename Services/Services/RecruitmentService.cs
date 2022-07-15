@@ -1,15 +1,11 @@
 using AutoMapper;
-using Common.Enums;
 using Common.Listing;
 using Common.ServiceRegistrationAttributes;
-using Data.DTO;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
 using Data.DTOs.Recruitment;
-using System.Security.Claims;
-using Data.DTOs.RecruitmentSkill;
 
 namespace Services.Services
 {
@@ -25,7 +21,7 @@ namespace Services.Services
         {
             _mapper = map;
             _recruitmentRepo = repo;
-            _recruitmentSkillRepo = recruitmentSkillRepo;
+            _userRepo = userRepo;
             _logger = logger;
         }
 
@@ -166,9 +162,10 @@ namespace Services.Services
 
         public IEnumerable<RecruitmentDetailsDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
+            IEnumerable<RecruitmentDetailsDTO> pagedRecruitments;
             try
             {
-                IEnumerable<RecruitmentDetailsDTO> recruitments = _recruitmentRepo.GetAllRecruitments();
+                IEnumerable<RecruitmentDetailsDTO> recruitments = _recruitmentRepo.GetAllRecruitmentsDTOs();
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
@@ -202,7 +199,7 @@ namespace Services.Services
                 }
             }
 
-                IEnumerable<RecruitmentDetailsDTO> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
+                 pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
             }
             catch (Exception ex)
             {
@@ -219,7 +216,7 @@ namespace Services.Services
             RecruitmentDetailsDTO result = null;
             try
             {
-                result = _recruitmentRepo.GetRecruitmentById(recruitmentId);
+                result = _recruitmentRepo.GetRecruitmentDTOById(recruitmentId);
 
                 if(result==null)
                 {
