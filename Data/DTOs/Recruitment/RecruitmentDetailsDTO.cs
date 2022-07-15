@@ -23,6 +23,6 @@ namespace Data.DTOs.Recruitment
 
         public int RecruiterId { get; set; }
 
-        public IEnumerable<RecruitmentSkillDTO> Skills { get; set; }
+        public IEnumerable<RecruitmentSkillDetailsDTO> Skills { get; set; }
     }
 }

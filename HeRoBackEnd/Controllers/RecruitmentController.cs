@@ -23,7 +23,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Returns a list of recruitments
+        /// Returns a list of recruitments, doesn't include the skill list
         /// </summary>
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
         /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
