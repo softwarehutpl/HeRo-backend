@@ -1,3 +1,5 @@
+using Common.Enums;
+using Common.Helpers;
 using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.Entities;
@@ -27,19 +29,19 @@ namespace Services.Services
         {
             var user = _userRepository.GetUserByEmail(email);
             user.PasswordRecoveryGuid = guid;
-            _userRepository.UpdateUser(user);
+            _userRepository.UpdateAndSaveChanges(user);
         }
 
         public void SetUserConfirmationGuid(string email, Guid guid)
         {
             var user = _userRepository.GetUserByEmail(email);
             user.ConfirmationGuid = guid;
-            _userRepository.UpdateUser(user);
+            _userRepository.UpdateAndSaveChanges(user);
         }
 
         public UserDTO Get(int userId)
         {
-            User user = _userRepository.GetUserById(userId);
+            User user = _userRepository.GetById(userId);
             if (user == null)
             {
                 return null;
@@ -113,7 +115,7 @@ namespace Services.Services
 
         public int Update(UserEditDTO userEdit)
         {
-            User user = _userRepository.GetUserById(userEdit.Id);
+            User user = _userRepository.GetById(userEdit.Id);
             if (user == null)
             {
                 return 0;
@@ -130,7 +132,7 @@ namespace Services.Services
 
         public int Delete(int userId, int loginUserId)
         {
-            User user = _userRepository.GetUserById(userId);
+            User user = _userRepository.GetById(userId);
             if (user == null)
             {
                 return 0;
@@ -142,6 +144,38 @@ namespace Services.Services
             _userRepository.UpdateAndSaveChanges(user);
 
             return user.Id;
+        }
+
+        public bool CheckIfUserExist(string email)
+        {
+            bool check = _userRepository.CheckIfUserExist(email);
+            if (!check) return false;
+            return true;
+        }
+
+        public async Task CreateUser(string password, string email)
+        {
+            User newUser = new()
+            {
+                Email = email,
+                Password = PasswordHashHelper.GetHash(password),
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleName = RoleNames.ANONYMOUS.ToString(),
+                UserStatus = UserStatuses.NOT_VERIFIED.ToString()
+            };
+
+            _userRepository.AddAndSaveChanges(newUser);
+        }
+
+        public async Task<bool> ChangeUserPassword(string email, string password)
+        {
+            User myUser = _userRepository.GetUserByEmail(email);
+            string passwordAfterHash = PasswordHashHelper.GetHash(password);
+            if (myUser.Password == passwordAfterHash) return false;
+
+            _userRepository.ChangeUserPasswordByEmail(email, passwordAfterHash);
+            return true;
         }
     }
 }
