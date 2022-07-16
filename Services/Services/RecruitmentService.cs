@@ -113,7 +113,7 @@ namespace Services.Services
 
         public RecruitmentListing GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
-            IQueryable<Recruitment> recruitments = repo.GetAllRecruitments();
+            IQueryable<Recruitment> recruitments = repo.GetAll();
             recruitments = recruitments.Where(r => !r.DeletedDate.HasValue);
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
@@ -132,6 +132,8 @@ namespace Services.Services
             {
                 recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
             }
+
+            recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
 
             RecruitmentListing recruitmentListing = new RecruitmentListing();
             recruitmentListing.TotalCount = recruitments.Count();

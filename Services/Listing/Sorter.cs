@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Reflection;
 
 namespace Services.Listing
 {
@@ -6,25 +7,33 @@ namespace Services.Listing
     {
         public static IQueryable<TEntity> Sort(IQueryable<TEntity> entities, List<KeyValuePair<string, string>> sort)
         {
+            List<KeyValuePair<string, string>> tempSort = new List<KeyValuePair<string, string>>();
             for (int i = 0; i < sort.Count; i++)
             {
                 if (!String.IsNullOrEmpty(sort[i].Key))
                 {
-                    if (i == 0)
+                    PropertyInfo prop = typeof(TEntity).GetProperty(sort[i].Key);
+                    if (prop != null)
                     {
-                        entities = OrderByUser(entities, sort[i], i);
-                    }
-                    else
-                    {
-                        entities = ThenByUser((IOrderedQueryable<TEntity>)entities, sort[i], i);
+                        if (i == 0)
+                        {
+                            entities = OrderBy(entities, sort[i], i);
+                        }
+                        else
+                        {
+                            entities = ThenBy((IOrderedQueryable<TEntity>)entities, sort[i], i);
+                        }
+                        tempSort.Add(sort[i]);
                     }
                 }
             }
 
+            sort = tempSort;
+
             return entities;
         }
 
-        public static IQueryable<TEntity> OrderByUser(IQueryable<TEntity> entities, KeyValuePair<string, string> sort, int index)
+        private static IQueryable<TEntity> OrderBy(IQueryable<TEntity> entities, KeyValuePair<string, string> sort, int index)
         {
             if (sort.Value.ToUpper() == "DESC")
             {
@@ -38,7 +47,7 @@ namespace Services.Listing
             return entities;
         }
 
-        public static IQueryable<TEntity> ThenByUser(IOrderedQueryable<TEntity> entities, KeyValuePair<string, string> sort, int index)
+        private static IQueryable<TEntity> ThenBy(IOrderedQueryable<TEntity> entities, KeyValuePair<string, string> sort, int index)
         {
             if (sort.Value.ToUpper() == "DESC")
             {
