@@ -18,10 +18,11 @@ namespace Services.Services
     {
         private readonly IMapper _mapper;
         private readonly RecruitmentRepository _recruitmentRepo;
+        private readonly RecruitmentSkillRepository _recruitmentSkillRepo;
         private readonly UserRepository _userRepo;
         private readonly ILogger<RecruitmentService> _logger;
 
-        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger<RecruitmentService> logger)
+        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger<RecruitmentService> logger, RecruitmentSkillRepository recruitmentSkillRepo)
         {
             _mapper = map;
             _recruitmentRepo = repo;
@@ -166,60 +167,60 @@ namespace Services.Services
 
         public IEnumerable<RecruitmentDetailsDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
+            IEnumerable<RecruitmentDetailsDTO> pagedRecruitments;
             try
             {
-                IEnumerable<RecruitmentDetailsDTO> recruitments = _recruitmentRepo.GetAllRecruitments();
+                IEnumerable<RecruitmentDetailsDTO> recruitments = _recruitmentRepo.GetAllRecruitmentsDTOs();
 
-            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
-            {
-                recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
-            }
-            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
-            {
-                recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
-            }
-            if (recruitmentFiltringDTO.BeginningDate.HasValue)
-            {
-                recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
-            }
-            if (recruitmentFiltringDTO.EndingDate.HasValue)
-            {
-                recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
-            }
-
-            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
-            {
-                if (sort.Key.ToLower() == "name")
+                if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
                 {
-                    if (sort.Value == "DESC")
+                    recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
+                }
+                if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
+                {
+                    recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
+                }
+                if (recruitmentFiltringDTO.BeginningDate.HasValue)
+                {
+                    recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
+                }
+                if (recruitmentFiltringDTO.EndingDate.HasValue)
+                {
+                    recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
+                }
+
+                foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
+                {
+                    if (sort.Key.ToLower() == "name")
                     {
-                        recruitments = recruitments.OrderByDescending(u => u.Name);
-                    }
-                    else
-                    {
-                        recruitments = recruitments.OrderBy(s => s.Name);
+                        if (sort.Value == "DESC")
+                        {
+                            recruitments = recruitments.OrderByDescending(u => u.Name);
+                        }
+                        else
+                        {
+                            recruitments = recruitments.OrderBy(s => s.Name);
+                        }
                     }
                 }
-            }
-
-                IEnumerable<RecruitmentDetailsDTO> pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
+                pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return null;
             }
-     
+            
 
             return pagedRecruitments;
         }
 
         public RecruitmentDetailsDTO GetRecruitment(int recruitmentId)
         {
-            RecruitmentDetailsDTO result = null;
+            RecruitmentDetailsDTO? result;
             try
             {
-                result = _recruitmentRepo.GetRecruitmentById(recruitmentId);
+                result = _recruitmentRepo.GetRecruitmentDTOById(recruitmentId);
 
                 if(result==null)
                 {
