@@ -91,10 +91,8 @@ namespace Data.Repositories
                 CandidateCount = x.Candidates.Count(),
                 HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString())
             }).ToList();
-        
-            
 
             return result;
         }
-}
+    }
 }

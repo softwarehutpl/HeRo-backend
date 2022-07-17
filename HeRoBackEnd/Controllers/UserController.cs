@@ -104,8 +104,10 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="userId">Id of a user</param>
         /// <returns>User object deleted</returns>
+        /// <response code="200">User deleted successfully</response>
+        /// <response code="400">Error while deleting the user</response>
         /// <response code="404">No user with this user id</response>
-        /// <response code="200">User deleted</response>
+
         [HttpDelete]
         [Route("User/Delete/{userId}")]
         [Authorize(Policy = "AdminRequirment")]
@@ -119,10 +121,13 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return NotFound("User not found");
+                return NotFound("No user with this user id");
             }
-
-            return Ok("User deleted");
+            if (result == -1)
+            {
+                return BadRequest("Error while deleting the user");
+            }
+            return Ok("User deleted successfully");
         }
     }
 }
