@@ -63,14 +63,6 @@ namespace Data.Repositories
 
             return result;
         }
-        public Recruitment GetById(int id)
-        {
-            Recruitment result = DataContext.Recruitments
-                .Include(x => x.Skills)
-                .FirstOrDefault(x => x.Id == id);
-
-            return result;
-        }
 
         public IEnumerable<RecruitmentDetailsDTO> GetAllRecruitmentsDTOs()
         {

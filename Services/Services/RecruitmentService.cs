@@ -67,7 +67,7 @@ namespace Services.Services
 
                 foreach(RecruitmentSkill newSkill in newSkills)
                 {
-                    RecruitmentSkill oldSkill=recruitment.Skills
+                    RecruitmentSkill? oldSkill=recruitment.Skills
                         .FirstOrDefault(e => e.SkillId == newSkill.SkillId);
 
                     if(oldSkill!=default && oldSkill.SkillLevel != newSkill.SkillLevel)
@@ -89,7 +89,7 @@ namespace Services.Services
 
                 foreach (RecruitmentSkill oldSkill in recruitment.Skills)
                 {
-                    RecruitmentSkill newSkill = newSkills
+                    RecruitmentSkill? newSkill = newSkills
                         .FirstOrDefault(e => e.SkillId == oldSkill.SkillId);
 
                     if (newSkill == default)

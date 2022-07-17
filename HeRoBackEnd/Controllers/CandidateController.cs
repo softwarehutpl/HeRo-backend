@@ -115,11 +115,10 @@ namespace HeRoBackEnd.Controllers
 
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
-
             int result = _candidateService.CreateCandidate(dto);
             if (result == -1)
             {
-                return BadRequest("Error creating candidate (one of more invalid parameters)");
+                return BadRequest("Error creating candidate (one or more invalid parameters)");
             }
             if (result == -2)
             {
@@ -236,7 +235,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">string "Candidate with given ID doesn't exist"<br />
         /// string "Error adding note to candidate"</response>
         [HttpPost]
-        [Route("Candidate/AddHRNote/")]
+        [Route("Candidate/AddHRNote/{candidateId}")]
         [Authorize(Policy = "RecruiterRequirment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -434,7 +433,7 @@ namespace HeRoBackEnd.Controllers
         [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetStageList()
         {
-            var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>();
+            var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>().Select(v => v.ToString());
 
             return new JsonResult(listOfStages);
         }
@@ -449,7 +448,7 @@ namespace HeRoBackEnd.Controllers
         [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetStatusList()
         {
-            var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>();
+            var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>().Select(v => v.ToString());
 
             return new JsonResult(listOfStatus);
         }

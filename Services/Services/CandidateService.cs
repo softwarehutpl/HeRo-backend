@@ -8,6 +8,7 @@ using PagedList;
 using Data.DTOs.Candidate;
 using System.ComponentModel.DataAnnotations;
 using Data.DTOs.Interview;
+using Common.Enums;
 
 namespace Services.Services
 {
@@ -43,6 +44,7 @@ namespace Services.Services
 
             try 
             {
+                //candidate.Stage = StageNames.EVALUATION.ToString();
                 candidate.RecruiterId = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
             }
             catch (Exception ex) 

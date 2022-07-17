@@ -138,8 +138,14 @@ namespace Services.Services
             user.RoleName = userEdit.RoleName;
             user.LastUpdatedDate = DateTime.UtcNow;
 
-            _userRepository.UpdateAndSaveChanges(user);
-
+            try
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
             return user.Id;
         }
 
@@ -186,7 +192,16 @@ namespace Services.Services
                 UserStatus = UserStatuses.NOT_VERIFIED.ToString(),
                 ConfirmationGuid = new Guid()
             };
-            _userRepository.AddAndSaveChanges(newUser);
+
+            try
+            {
+                _userRepository.AddAndSaveChanges(newUser);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+           
 
             return newUser.ConfirmationGuid;
         }
