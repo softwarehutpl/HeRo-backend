@@ -8,6 +8,7 @@ namespace Services.Listing
         public static IQueryable<TEntity> Sort(IQueryable<TEntity> entities, List<KeyValuePair<string, string>> sort)
         {
             List<KeyValuePair<string, string>> tempSort = new List<KeyValuePair<string, string>>();
+            bool IsFirst = true;
             for (int i = 0; i < sort.Count; i++)
             {
                 if (!String.IsNullOrEmpty(sort[i].Key))
@@ -15,9 +16,10 @@ namespace Services.Listing
                     PropertyInfo prop = typeof(TEntity).GetProperty(sort[i].Key);
                     if (prop != null)
                     {
-                        if (i == 0)
+                        if (IsFirst)
                         {
                             entities = OrderBy(entities, sort[i], i);
+                            IsFirst = false;
                         }
                         else
                         {
