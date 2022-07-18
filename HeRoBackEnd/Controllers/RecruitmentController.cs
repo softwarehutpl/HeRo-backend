@@ -60,7 +60,7 @@ namespace HeRoBackEnd.Controllers
         ///     <h3>Possible keys:</h3> "name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
-        ///
+        /// <h2>In the returned object the skill variable is always null</h2>
         /// </remarks>
         /// <response code="400">Something went wrong!</response>
         /// <response code="200"></response>
