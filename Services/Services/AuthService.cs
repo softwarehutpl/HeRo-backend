@@ -60,26 +60,25 @@ namespace Services.Services
             return false;
         }
 
-        public bool ConfirmUser(Guid guid, int id)
+        public bool ConfirmUser(Guid guid, string email)
         {
-            User user;
             try
             {
-                user = _userRepository.GetById(id);
+                User user = _userRepository.GetUserByEmail(email);
+                if (user.ConfirmationGuid == guid)
+                {
+                    user.UserStatus = UserStatuses.ACTIVE.ToString();
+
+                    _userRepository.UpdateAndSaveChanges(user);
+                    return true;
+                }
+                
+                return false;
             }
             catch (Exception ex)
             {
                 return false;
-            }
-            
-            if (user.ConfirmationGuid == guid)
-            {
-                user.UserStatus = UserStatuses.ACTIVE.ToString();
-
-                _userRepository.UpdateAndSaveChanges(user);
-                return true;
-            }
-            return false;
+            }        
         }
     }
 }
