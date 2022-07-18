@@ -4,7 +4,6 @@ using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
-    [EnableCors("corspolicy")]
     public class BaseController : Controller
     {
         protected int GetUserId()
