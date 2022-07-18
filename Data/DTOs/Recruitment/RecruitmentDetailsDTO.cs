@@ -23,9 +23,13 @@ namespace Data.DTOs.Recruitment
         public int RecruiterId { get; set; }
 
         public int? CandidateCount { get; set; }
+
         public string RecruitmentPosition { get; set; }
+
         public string Localization { get; set; }
+
         public string Seniority { get; set; }
+
         public int? HiredCount { get; set; }
 
         public IEnumerable<RecruitmentSkillDetailsDTO> Skills { get; set; }
