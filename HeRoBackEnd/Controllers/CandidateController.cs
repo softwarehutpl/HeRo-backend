@@ -4,6 +4,7 @@ using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Data.DTOs.Candidate;
+using Services.Listing;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers
@@ -54,9 +55,10 @@ namespace HeRoBackEnd.Controllers
         /// <remarks>
         /// <h2>Filtring:</h2>
         ///    <h3>Possible statuses:</h3> "NEW" , "IN_PROCESSING", "DROPPED_OUT", "HIRED" <br />
-        ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br /><br />
+        ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br />
+        ///    <h3>Nullable:</h3> "statuses", "stages" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "name", "source", "project", "status", "stage" <br />
+        ///     <h3>Possible keys:</h3> "Name", "Source", "Status", "Stage" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -65,7 +67,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Candidate/GetList")]
         [Authorize(Policy = "AnyRoleRequirment")]
-        [ProducesResponseType(typeof(IEnumerable<CandidateInfoForListDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CandidateListing), StatusCodes.Status200OK)]
         public IActionResult GetList(CandidateListFilterViewModel candidate)
         {
             CandidateFilteringDTO candidateFilteringDTO
@@ -73,8 +75,8 @@ namespace HeRoBackEnd.Controllers
                     candidate.Status,
                     candidate.Stage);
 
-            IEnumerable<CandidateInfoForListDTO> result =
-                _candidateService.GetCandidates(
+            var result = _candidateService
+                .GetCandidates(
                     candidate.Paging,
                     candidate.SortOrder,
                     candidateFilteringDTO);

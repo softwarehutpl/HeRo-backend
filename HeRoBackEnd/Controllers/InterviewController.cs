@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Data.DTOs;
+using Services.Listing;
 using Services.Services;
 using Data.DTOs.Interview;
 using Services.DTOs.Interview;
@@ -48,11 +49,18 @@ namespace HeRoBackEnd.Controllers
         /// <param name="interview">An object containing information about the filter</param>
         /// <returns>Object of the JsonResult class representing a list of Interview in the JSON format</returns>
         /// <remarks>
+        /// <h2>Format:</h2>
+        ///    <h3>Date:</h3>
+        ///    yyyy-MM-dd <br />
+        ///    yyyy-MM-ddTHH:mm <br />
+        ///    yyyy-MM-ddTHH:mm:ss <br />
+        ///    yyyy-MM-ddTHH:mm:ss.fff <br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "name", "description" <br />
-        ///    <h3>Equals:</h3> "type" <br /><br />
+        ///    <h3>Equals:</h3> "type" <br />
+        ///    <h3>Nullable:</h3> "fromDate", "toDate", "candidateId", "workerId", "type" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "date", "candidateid", "workerId", "type" <br />
+        ///     <h3>Possible keys:</h3> "Date", "Candidateid", "WorkerId", "Type" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -61,7 +69,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Interview/GetList")]
         [Authorize(Policy = "AnyRoleRequirment")]
-        [ProducesResponseType(typeof(IEnumerable<InterviewDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(InterviewListing), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
             InterviewFiltringDTO interviewFiltringDTO = new InterviewFiltringDTO(interview.FromDate, interview.ToDate, interview.CandidateId, interview.WorkerId, interview.Type);

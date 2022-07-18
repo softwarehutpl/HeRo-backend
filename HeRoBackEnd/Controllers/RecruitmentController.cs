@@ -4,6 +4,7 @@ using Data.DTOs;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.Listing;
 using Services.Services;
 using Data.DTOs.Recruitment;
 using Data.Entities;
@@ -53,11 +54,17 @@ namespace HeRoBackEnd.Controllers
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
         /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
         /// <remarks>
+        /// <h2>Format:</h2>
+        ///    <h3>Date:</h3>
+        ///    yyyy-MM-dd <br />
+        ///    yyyy-MM-ddTHH:mm <br />
+        ///    yyyy-MM-ddTHH:mm:ss <br />
+        ///    yyyy-MM-ddTHH:mm:ss.fff <br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "name", "description" <br />
-        ///    <h3>Equals:</h3> "userStatus", "roleName" <br /><br />
+        ///    <h3>Nullable:</h3> "beginningDate", "endingDate" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "name" <br />
+        ///     <h3>Possible keys:</h3> "Name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -67,7 +74,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Recruitment/GetList")]
         [Authorize(Policy = "AnyRoleRequirment")]
-        [ProducesResponseType(typeof(IEnumerable<RecruitmentDetailsDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RecruitmentListing), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
@@ -80,8 +87,7 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);
 
-            IEnumerable<RecruitmentDetailsDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
-            JsonResult result = new JsonResult(recruitments);
+            RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
             if (recruitments == null) return BadRequest();
 
