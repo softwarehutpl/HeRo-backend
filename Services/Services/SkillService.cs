@@ -8,7 +8,7 @@ using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
-using Services.DTOs.Skill;
+using Data.DTOs.Skill;
 
 namespace Services.Services
 {
@@ -17,14 +17,12 @@ namespace Services.Services
     {
         private readonly ILogger<SkillService> _logger;
         private readonly SkillRepository _repo;
-        private readonly IMapper _mapper;
-        private readonly RecruitmentSkillService _recruitmentSkillService;
-        public SkillService(SkillRepository repo, ILogger<SkillService> logger, IMapper mapper, RecruitmentSkillService recruitmentSkillService)
+        private readonly RecruitmentSkillRepository _recruitmentSkillRepo;
+        public SkillService(SkillRepository repo, ILogger<SkillService> logger, RecruitmentSkillRepository recruitmentSkillRepo)
         {
             _repo = repo;
             _logger = logger;
-            _mapper = mapper;
-            _recruitmentSkillService = recruitmentSkillService;
+            _recruitmentSkillRepo = recruitmentSkillRepo;
         }
         public IEnumerable<Skill> GetSkills()
         {
@@ -48,7 +46,7 @@ namespace Services.Services
             {
                 result = _repo.GetAll();
                 result = result
-                    .Where(e => e.Name.Contains(name))
+                    .Where(e => e.Name.ToLower().Contains(name.ToLower()))
                     .OrderBy(e=>e.Name)
                     .Take(5);
             }
@@ -99,7 +97,7 @@ namespace Services.Services
         {
             try
             {
-                bool exists = _repo.Exists(dto.Name);
+                bool exists = _repo.Exists(dto.Id, dto.Name);
 
                 if (exists == true) return 0;
 
@@ -121,7 +119,10 @@ namespace Services.Services
             try
             {
                 Skill skill = _repo.GetById(id);
-                bool isUsed = _recruitmentSkillService.IsSkillUsed(id);
+
+                if (skill == null) return -1;
+
+                bool isUsed = _recruitmentSkillRepo.IsSkillUsed(id);
 
                 if (isUsed == true) return 0;
 
@@ -130,7 +131,7 @@ namespace Services.Services
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return -1;
+                return -2;
             }
 
             return 1;

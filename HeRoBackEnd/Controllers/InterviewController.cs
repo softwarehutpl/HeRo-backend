@@ -1,9 +1,11 @@
 ﻿using HeRoBackEnd.ViewModels.Interview;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.Interview;
+using Data.DTOs;
 using Services.Listing;
 using Services.Services;
+using Data.DTOs.Interview;
+using Services.DTOs.Interview;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -23,18 +25,19 @@ namespace HeRoBackEnd.Controllers
         /// <param name="interviewId">Id of the user</param>
         /// <returns>Json string representing an object of the Interview class</returns>
         /// <response code="200">Interview object</response>
-        /// <response code="400">No Interview with this InterviewId</response>
+        /// <response code="400">string "No Interview with this InterviewId"</response>
         [HttpGet]
         [Route("Interview/Get/{interviewId}")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(InterviewDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int interviewId)
         {
             InterviewDTO interview = _interviewService.Get(interviewId);
 
             if (interview == null)
             {
-                return BadRequest();
+                return BadRequest("No Interview with this InterviewId");
             }
 
             return new JsonResult(interview);
@@ -62,9 +65,10 @@ namespace HeRoBackEnd.Controllers
         ///                      Another value - sort the result in ascending order <br />
         ///
         /// </remarks>
-        /// <response code="200">List of Interview</response>
+        /// <response code="200">List of Interviews</response>
         [HttpPost]
         [Route("Interview/GetList")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(InterviewListing), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
@@ -79,8 +83,11 @@ namespace HeRoBackEnd.Controllers
         /// Add new interview
         /// </summary>
         /// <returns>IActionResult</returns>
+        /// <response code="200">string "Interview created successfully"</response>
         [HttpPost]
         [Route("Interview/Create")]
+        [Authorize(Policy = "HrRequirment")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult Create(InterviewCreateViewModel interview)
         {
             InterviewCreateDTO interviewCreate =
@@ -93,17 +100,18 @@ namespace HeRoBackEnd.Controllers
             int userCreatedId = GetUserId();
             _interviewService.Create(interviewCreate, userCreatedId);
 
-            return Ok("Creating was successful");
+            return Ok("Interview created successfully");
         }
 
         /// <summary>
         /// Updates information about a interview represented by an id
         /// </summary>
         /// <param name="interviewId" example="1">Id of a interview</param>
-        /// <response code="200">Interview edited</response>
+        /// <response code="200">Interview edited successfully</response>
         /// <response code="404">No interview with this InterviewId</response>
         [HttpPost]
         [Route("Interview/Edit/{interviewId}")]
+        [Authorize(Policy = "HrRequirment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int interviewId, InterviewEditViewModel interview)
@@ -123,20 +131,20 @@ namespace HeRoBackEnd.Controllers
                 return BadRequest("No interview with this Id");
             }
 
-            return Ok("Editing was successful");
+            return Ok("Interview edited successfully");
         }
 
         /// <summary>
         /// Deletes a interview represented by an id
         /// </summary>
         /// <param name="interviewId">Id of a interview</param>
-        /// <response code="200">Interview deleted</response>
+        /// <response code="200">Interview deleted successfully</response>
         /// <response code="400">No interview with this interviewId</response>
         [HttpDelete]
         [Route("Interview/Delete/{interviewId}")]
-        [Authorize(Policy = "AdminRequirment")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        [Authorize(Policy = "HrRequirment")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int interviewId)
         {
             int loginUserId = GetUserId();
@@ -145,10 +153,10 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return BadRequest();
+                return BadRequest("No interview with this interviewId");
             }
 
-            return Ok();
+            return Ok("Interview deleted successfully");
         }
     }
 }

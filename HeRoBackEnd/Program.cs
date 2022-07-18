@@ -49,10 +49,44 @@ try
         options.Cookie.HttpOnly = true;
     });
 
+    builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
+    {
+        build.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    }));
+
     builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("AdminRequirment",
-            policy => policy.RequireClaim("RoleName", "Admin"));
+            policy => policy
+            .RequireClaim("RoleName", "ADMIN")
+            .RequireClaim("UserStatus", "ACTIVE"));
+
+        options.AddPolicy("HrManagerRequirment",
+            policy => policy
+            .RequireClaim("RoleName", "HR_MANAGER")
+            .RequireClaim("UserStatus", "ACTIVE"));
+
+        options.AddPolicy("RecruiterRequirment",
+            policy => policy
+            .RequireClaim("RoleName", "RECRUITER")
+            .RequireClaim("UserStatus", "ACTIVE"));
+
+        options.AddPolicy("TechnicianRequirment",
+            policy => policy
+            .RequireClaim("RoleName", "TECHNICIAN")
+            .RequireClaim("UserStatus", "ACTIVE"));
+
+        options.AddPolicy("AnyRoleRequirment",
+            policy => policy
+            .RequireClaim("RoleName", "INTERVIEWER", "RECRUITER", "HR_MANAGER", "ADMIN")
+            .RequireClaim("UserStatus", "ACTIVE"));
+
+        options.AddPolicy("HrRequirment",
+            policy => policy
+            .RequireClaim("RoleName", "RECRUITER", "HR_MANAGER", "ADMIN")
+            .RequireClaim("UserStatus", "ACTIVE"));
     });
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
@@ -60,20 +94,6 @@ try
     var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
 
     builder.Services.AddSingleton(config);
-    //builder.Services.AddScoped<EmailHelper>();
-    //builder.Services.AddScoped<EmailService>();
-    //builder.Services.AddScoped<UserRepository>();
-    //builder.Services.AddScoped<UserService>();
-    //builder.Services.AddScoped<InterviewService>();
-    //builder.Services.AddScoped<InterviewRepository>();
-    //builder.Services.AddScoped<AuthService>();
-    //builder.Services.AddScoped<RecruitmentRepository>();
-    //builder.Services.AddScoped<RecruitmentService>();
-    //builder.Services.AddScoped<SkillRepository>();
-    //builder.Services.AddScoped<SkillService>();
-    //builder.Services.AddScoped<RecruitmentSkillService>();
-    //builder.Services.AddScoped<CandidateService>();
-    //builder.Services.AddScoped<CandidateRepository>();
 
     builder.Services.RegisterServices(builder.Configuration);
 
@@ -94,6 +114,10 @@ try
     });
 
     builder.Services.AddAutoMapper(typeof(Program));
+    builder.Services.AddControllersWithViews()
+    .AddNewtonsoftJson(options =>
+    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+);
 
     // NLog: Setup NLog for Dependency injection
     builder.Logging.ClearProviders();
@@ -121,6 +145,8 @@ try
         {
             Secure = CookieSecurePolicy.Always
         });
+
+    app.UseCors("corspolicy");
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();

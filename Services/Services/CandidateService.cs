@@ -5,8 +5,11 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.DTOs.Candidate;
 using Services.Listing;
+using Data.DTOs.Candidate;
+using System.ComponentModel.DataAnnotations;
+using Data.DTOs.Interview;
+using Common.Enums;
 
 namespace Services.Services
 {
@@ -29,16 +32,36 @@ namespace Services.Services
 
         public int CreateCandidate(CreateCandidateDTO dto)
         {
-            Candidate candidate = _mapper.Map<Candidate>(dto);
-            candidate.RecruiterId = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
+            Candidate candidate;
+            try
+            {
+                candidate = _mapper.Map<Candidate>(dto);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error when mapping CreateCandidateDTO to Candidate: " + ex);
+                return -1;
+            }
 
+            try 
+            {
+                //candidate.Stage = StageNames.EVALUATION.ToString();
+                candidate.RecruiterId = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
+            }
+            catch (Exception ex) 
+            {
+                _logger.LogError("Error when getting recruiterId of recruitment which doesn't exist: " + ex);
+                return -2;
+            }
+            
             try
             {
                 _candidateRepository.AddAndSaveChanges(candidate);
             }
             catch (Exception ex)
             {
-                return -1;
+                _logger.LogError("Error when adding and saving candidate: " + ex);
+                return -3;
             }
 
             return 1;
@@ -57,26 +80,36 @@ namespace Services.Services
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError("Error when changing candidate status: " + ex);
                     return -1;
                 }
-
                 return 1;
             }
-            return -1;
+            else return -1;
         }
 
         public int UpdateCandidate(int id, UpdateCandidateDTO dto)
         {
-            Candidate candidate = _candidateRepository.GetById(id);
-            candidate.Name = dto.Name;
-            candidate.LastName = dto.LastName;
-            candidate.Status = dto.Status;
-            candidate.Email = dto.Email;
-            candidate.PhoneNumber = dto.PhoneNumber;
-            candidate.AvailableFrom = dto.AvailableFrom;
-            candidate.ExpectedMonthlySalary = dto.ExpectedMonthlySalary;
-            candidate.OtherExpectations = dto.OtherExpectations;
-            candidate.CvPath = dto.CvPath;
+            Candidate candidate = _candidateRepository.GetById(id); 
+            
+            if(candidate==null)
+            {
+                //_logger.LogError("Error getting candidate with given Id: ");
+                return -1;
+            }
+            else
+            {
+                candidate.Name = dto.Name;
+                candidate.LastName = dto.LastName;
+                candidate.Status = dto.Status;
+                candidate.Stage = dto.Stage;
+                candidate.Email = dto.Email;
+                candidate.PhoneNumber = dto.PhoneNumber;
+                candidate.AvailableFrom = dto.AvailableFrom;
+                candidate.ExpectedMonthlySalary = dto.ExpectedMonthlySalary;
+                candidate.OtherExpectations = dto.OtherExpectations;
+                candidate.CvPath = dto.CvPath;
+            }
 
             try
             {
@@ -84,7 +117,8 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
-                return -1;
+                _logger.LogError("Error when updating candidate: " + ex);
+                return -2;
             }
 
             return 1;
@@ -93,6 +127,13 @@ namespace Services.Services
         public int DeleteCandidate(DeleteCandidateDTO dto)
         {
             Candidate candidate = _candidateRepository.GetById(dto.Id);
+
+            if (candidate == null)
+            {
+                _logger.LogError("Error removing candidate with given ID - candidate doesn't exist");
+                return -1;
+            }
+
             candidate.DeletedDate = dto.DeletedDate;
             candidate.DeletedById = dto.DeletedById;
 
@@ -102,7 +143,8 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
-                return -1;
+                _logger.LogError("Error when deleting candidate: " + ex);
+                return -2;
             }
 
             return 1;
@@ -111,7 +153,12 @@ namespace Services.Services
         public int AddHRNote(int candidateId, CandidateAddHRNoteDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
-            if (candidate != null)
+            if(candidate== null)
+            {
+                //_logger.LogError("Error getting candidate with given ID");
+                return -1;
+            }
+            else
             {
                 candidate.LastUpdatedDate = DateTime.Now;
                 candidate.LastUpdatedById = dto.RecruiterId;
@@ -124,21 +171,23 @@ namespace Services.Services
                 }
                 catch (Exception ex)
                 {
-                    return -1;
+                    _logger.LogError("Error when adding HR note to candidate: " + ex);
+                    return -2;
                 }
 
                 return 1;
-            }
-            else
-            {
-                return -1;
             }
         }
 
         public int AddTechNote(int candidateId, CandidateAddTechNoteDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
-            if (candidate != null)
+            if (candidate == null)
+            {
+                //_logger.LogError("Error getting candidate with given ID");
+                return -1;
+            }
+            else
             {
                 candidate.LastUpdatedDate = DateTime.Now;
                 candidate.LastUpdatedById = dto.TechId;
@@ -151,22 +200,32 @@ namespace Services.Services
                 }
                 catch (Exception ex)
                 {
-                    return -1;
+                    _logger.LogError("Error when adding tech note to candidate: " + ex);
+                    return -2;
                 }
 
                 return 1;
-            }
-            else
-            {
-                return -1;
             }
         }
 
         public CandidateProfileDTO? GetCandidateProfileById(int id)
         {
-            Candidate candidate = _candidateRepository.GetById(id);
+            Candidate candidate;
+            CandidateProfileDTO candidateProfileDTO;
 
-            CandidateProfileDTO candidateProfileDTO = new CandidateProfileDTO(
+            try 
+            {
+                candidate = _candidateRepository.GetById(id);
+            }
+            catch (Exception ex) 
+            {
+                //_logger.LogError("Cannot get candidate profile by ID: " + ex);
+                return null;
+            }
+
+            try
+            {
+                candidateProfileDTO = new CandidateProfileDTO(
                                                     candidate.Id,
                                                     (candidate.Name + " " + candidate.LastName),
                                                     candidate.Email,
@@ -176,7 +235,13 @@ namespace Services.Services
                                                     candidate.OtherExpectations,
                                                     candidate.CvPath
                                                 );
-
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error creating candidateProfileDTO (candidate == null ?): " + ex);
+                return null;
+            }
+             
             return candidateProfileDTO;
         }
 
@@ -224,11 +289,12 @@ namespace Services.Services
             Candidate candidate = _candidateRepository.GetById(id);
             if (candidate != null)
             {
-                if (dto.TechId != null)
-                {
+                if (dto.TechId != 0)
+                { 
                     candidate.TechId = dto.TechId;
                 }
-                if (dto.RecruiterId != null)
+
+                if (dto.RecruiterId != 0)
                 {
                     candidate.RecruiterId = dto.RecruiterId;
                 }
@@ -239,40 +305,40 @@ namespace Services.Services
                 }
                 catch (Exception ex)
                 {
-                    return -1;
+                    _logger.LogError("Error updating candidate when allocating recruiters: " + ex);
+                    return -2;
                 }
 
                 return 1;
             }
-            else
-            {
-                return -1;
-            }
+
+            return -1;
         }
 
         public int AllocateRecruitmentInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
+
             if (candidate != null)
             {
                 candidate.LastUpdatedDate = DateTime.Now;
                 candidate.LastUpdatedById = dto.LastUpdatedBy;
                 candidate.InterviewDate = dto.Date;
+
                 try
                 {
                     _candidateRepository.UpdateAndSaveChanges(candidate);
                 }
                 catch (Exception ex)
                 {
-                    return -1;
+                    _logger.LogError("Error updating candidate when assigning interview date" + ex);
+                    return -2;
                 }
 
                 return 1;
             }
-            else
-            {
-                return -1;
-            }
+          
+            return -1;
         }
 
         public int AllocateTechInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
@@ -291,14 +357,14 @@ namespace Services.Services
                 }
                 catch (Exception ex)
                 {
+                    _logger.LogError("Error updating candidate when assigning tech interview date" + ex);
                     return -1;
                 }
+
                 return 1;
             }
-            else
-            {
-                return -1;
-            }
+            
+            return -1;
         }
     }
 }

@@ -1,11 +1,15 @@
 using AutoMapper;
 using Common.Listing;
-using Data.DTO;
+using Data.DTOs;
 using HeRoBackEnd.ViewModels.Recruitment;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.Recruitment;
 using Services.Listing;
 using Services.Services;
+using Data.DTOs.Recruitment;
+using Data.Entities;
+using Common.Enums;
+using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -30,11 +34,12 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200"></response>
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ReadRecruitmentDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RecruitmentDetailsDTO), StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
-            ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
+            RecruitmentDetailsDTO recruitment = service.GetRecruitment(recruitmentId);
 
             if (recruitment == null)
             {
@@ -68,6 +73,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200"></response>
         [HttpPost]
         [Route("Recruitment/GetList")]
+        [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(RecruitmentListing), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
@@ -97,6 +103,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Wrong data</response>
         [HttpPost]
         [Route("Recruitment/Create")]
+        [Authorize(Policy = "RecruiterRequirment")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
@@ -126,6 +133,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Wrong data!</response>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
+        [Authorize(Policy = "RecruiterRequirment")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
@@ -152,6 +160,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">There is no such recruitment!</response>
         [HttpGet]
         [Route("Recruitment/End/{recruitmentId}")]
+        [Authorize(Policy = "RecruiterRequirment")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult End(int recruitmentId)
@@ -179,6 +188,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">There is no such recruitment!</response>
         [HttpGet]
         [Route("Recruitment/Delete/{recruitmentId}")]
+        [Authorize(Policy = "RecruiterRequirment")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int recruitmentId)

@@ -1,9 +1,12 @@
+using Common.Enums;
+using Common.Helpers;
 using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Data.Repositories;
+using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.DTOs.User;
+using Data.DTOs.User;
 using Services.Listing;
 
 namespace Services.Services
@@ -12,35 +15,47 @@ namespace Services.Services
     public class UserService
     {
         private UserRepository _userRepository;
+        private ILogger<UserService> _logger;
 
-        public UserService(UserRepository userRepository)
+        public UserService(ILogger<UserService> logger, UserRepository userRepository)
         {
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         public Guid GetUserGuid(string email)
         {
-            var result = _userRepository.GetUserGuidByEmail(email);
+            Guid result;
+            try
+            {
+                result = _userRepository.GetUserGuidByEmail(email);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return default;
+            }
             return result;
         }
 
-        public void SetUserRecoveryGuid(string email, Guid guid)
+        public Guid SetUserRecoveryGuid(string email)
         {
             var user = _userRepository.GetUserByEmail(email);
-            user.PasswordRecoveryGuid = guid;
-            _userRepository.UpdateUser(user);
-        }
-
-        public void SetUserConfirmationGuid(string email, Guid guid)
-        {
-            var user = _userRepository.GetUserByEmail(email);
-            user.ConfirmationGuid = guid;
-            _userRepository.UpdateUser(user);
+            user.PasswordRecoveryGuid = new Guid();
+            try
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+            return user.PasswordRecoveryGuid;
         }
 
         public UserDTO Get(int userId)
         {
-            User user = _userRepository.GetUserById(userId);
+            User user = _userRepository.GetById(userId);
             if (user == null)
             {
                 return null;
@@ -85,7 +100,7 @@ namespace Services.Services
 
         public int Update(UserEditDTO userEdit)
         {
-            User user = _userRepository.GetUserById(userEdit.Id);
+            User user = _userRepository.GetById(userEdit.Id);
             if (user == null)
             {
                 return 0;
@@ -95,25 +110,82 @@ namespace Services.Services
             user.RoleName = userEdit.RoleName;
             user.LastUpdatedDate = DateTime.UtcNow;
 
-            _userRepository.UpdateAndSaveChanges(user);
-
+            try
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
             return user.Id;
         }
 
         public int Delete(int userId, int loginUserId)
         {
-            User user = _userRepository.GetUserById(userId);
+            User user = _userRepository.GetById(userId);
             if (user == null)
             {
                 return 0;
             }
-
+            user.UserStatus = UserStatuses.DELETED.ToString();
             user.DeletedById = loginUserId;
             user.DeletedDate = DateTime.UtcNow;
-
-            _userRepository.UpdateAndSaveChanges(user);
+            try 
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Error updating user while deleting");
+                return -1;
+            }
+            
 
             return user.Id;
+        }
+
+        public bool CheckIfUserExist(string email)
+        {
+            bool check = _userRepository.CheckIfUserExist(email);
+
+            return check;
+        }
+
+        public async Task<Guid> CreateUser(string password, string email)
+        {
+            User newUser = new()
+            {
+                Email = email,
+                Password = PasswordHashHelper.GetHash(password),
+                CreatedDate = DateTime.Now,
+                LastUpdatedDate = DateTime.Now,
+                RoleName = RoleNames.ANONYMOUS.ToString(),
+                UserStatus = UserStatuses.NOT_VERIFIED.ToString(),
+                ConfirmationGuid = new Guid()
+            };
+
+            try
+            {
+                _userRepository.AddAndSaveChanges(newUser);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+           
+
+            return newUser.ConfirmationGuid;
+        }
+
+        public async Task<bool> ChangeUserPassword(string email, string password)
+        {
+            User myUser = _userRepository.GetUserByEmail(email);
+            string passwordAfterHash = PasswordHashHelper.GetHash(password);
+            if (myUser.Password == passwordAfterHash) return false;
+
+            _userRepository.ChangeUserPasswordByEmail(email, passwordAfterHash);
+            return true;
         }
     }
 }

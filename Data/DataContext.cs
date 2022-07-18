@@ -3,6 +3,7 @@ using Data.Entities;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using Data.Repositories;
+using Data.DTOs.RecruitmentSkill;
 
 namespace Data
 {
@@ -18,7 +19,7 @@ namespace Data
         public DbSet<Interview> Interviews { get; set; }
         public DbSet<Log> Logs { get; set; }
         public DbSet<Recruitment> Recruitments { get; set; }
-        public DbSet<RecruitmentSkill> RecruitmentRequirements { get; set; }
+        public DbSet<RecruitmentSkill> RecruitmentSkills { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<User> Users { get; set; }
 

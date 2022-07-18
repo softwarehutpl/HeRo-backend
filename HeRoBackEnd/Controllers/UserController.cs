@@ -1,8 +1,8 @@
 ﻿using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.User;
 using Services.Listing;
+using Data.DTOs.User;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers
@@ -26,18 +26,17 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No User with this UserId</response>
         [HttpGet]
         [Route("User/Get/{userId}")]
+        [Authorize(Policy = "AdminRequirment")]
         [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
         {
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
-            {
-                return NotFound();
-            }
+                return NotFound("Not found");
 
-            return new JsonResult(user);
+            return Ok(user);
         }
 
         /// <summary>
@@ -58,6 +57,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Users</response>
         [HttpPost]
         [Route("User/GetList")]
+        [Authorize(Policy = "AdminRequirment")]
         [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
@@ -65,7 +65,7 @@ namespace HeRoBackEnd.Controllers
 
             var result = _userService.GetUsers(userListFilterViewModel.Paging, userListFilterViewModel.SortOrder, userFiltringDTO);
 
-            return new JsonResult(result);
+            return Ok(result);
         }
 
         /// <summary>
@@ -78,6 +78,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No user with this UserId</response>
         [HttpPost]
         [Route("User/Edit/{userId}")]
+        [Authorize(Policy = "AdminRequirment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Edit(int userId, EditUserViewModel editUser)
@@ -103,13 +104,15 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="userId">Id of a user</param>
         /// <returns>User object deleted</returns>
+        /// <response code="200">User deleted successfully</response>
+        /// <response code="400">Error while deleting the user</response>
         /// <response code="404">No user with this user id</response>
-        /// <response code="200">User deleted</response>
+
         [HttpDelete]
         [Route("User/Delete/{userId}")]
         [Authorize(Policy = "AdminRequirment")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(void), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Delete(int userId)
         {
             int loginUserId = GetUserId();
@@ -118,10 +121,13 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return NotFound();
+                return NotFound("No user with this user id");
             }
-
-            return Ok();
+            if (result == -1)
+            {
+                return BadRequest("Error while deleting the user");
+            }
+            return Ok("User deleted successfully");
         }
     }
 }

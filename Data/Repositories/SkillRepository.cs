@@ -10,10 +10,19 @@ namespace Data.Repositories
         {
 
         }
+        public bool Exists(int id, string name)
+        {
+            IQueryable<Skill> skills = GetAll();
+            bool result = skills.
+                Any(x => x.Name == name && x.Id!=id);
+
+            return result;
+        }
         public bool Exists(string name)
         {
             IQueryable<Skill> skills = GetAll();
-            bool result = skills.Any(x => x.Name == name);
+            bool result = skills.
+                Any(x => x.Name == name);
 
             return result;
         }
