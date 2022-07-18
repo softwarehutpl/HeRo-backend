@@ -1,11 +1,9 @@
-﻿using HeRoBackEnd.ViewModels.Interview;
+﻿using Data.DTOs.Interview;
+using HeRoBackEnd.ViewModels.Interview;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Data.DTOs;
-using Services.Listing;
 using Services.Services;
-using Data.DTOs.Interview;
-using Services.DTOs.Interview;
 
 namespace HeRoBackEnd.Controllers
 {

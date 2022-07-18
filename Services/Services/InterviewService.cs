@@ -3,10 +3,7 @@ using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Interview;
 using Data.Entities;
 using Data.Repositories;
-using PagedList;
-using Services.DTOs.Interview;
 using Microsoft.Extensions.Logging;
-using Services.Listing;
 
 namespace Services.Services
 {
@@ -132,9 +129,8 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message);;
+                _logger.LogError(ex.Message); ;
             }
-            
         }
 
         public int Update(InterviewEditDTO interviewEdit, int userEditId)
@@ -178,7 +174,7 @@ namespace Services.Services
             {
                 _interviewRepository.UpdateAndSaveChanges(interview);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return 0;
