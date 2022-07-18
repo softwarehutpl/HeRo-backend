@@ -3,8 +3,10 @@ using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Interview;
 using Data.Entities;
 using Data.Repositories;
-using Microsoft.Extensions.Logging;
 using PagedList;
+using Services.DTOs.Interview;
+using Microsoft.Extensions.Logging;
+using Services.Listing;
 
 namespace Services.Services
 {
@@ -50,66 +52,56 @@ namespace Services.Services
             return interviewDTO;
         }
 
-        public IEnumerable<InterviewDTO> GetInterviews(Paging paging, SortOrder sortOrder, InterviewFiltringDTO interviewFiltringDTO)
+        public int GetQuantity()
+        {
+            int result = _interviewRepository.GetAll().Count();
+
+            return result;
+        }
+
+        public InterviewListing GetInterviews(Paging paging, SortOrder sortOrder, InterviewFiltringDTO interviewFiltringDTO)
         {
             IQueryable<Interview> interviews = _interviewRepository.GetAll();
+            interviews = interviews.Where(i => !i.DeletedDate.HasValue);
 
-            interviews = interviews.Where(i => (i.Date >= interviewFiltringDTO.FromDate && i.Date <= interviewFiltringDTO.ToDate));
+            if (interviewFiltringDTO.FromDate.HasValue)
+            {
+                if (interviewFiltringDTO.ToDate.HasValue)
+                {
+                    interviews = interviews.Where(i => (i.Date >= interviewFiltringDTO.FromDate && i.Date <= interviewFiltringDTO.ToDate));
+                }
+                else
+                {
+                    interviews = interviews.Where(i => i.Date >= interviewFiltringDTO.FromDate);
+                }
+            }
+            else if (interviewFiltringDTO.ToDate.HasValue)
+            {
+                interviews = interviews.Where(i => i.Date <= interviewFiltringDTO.ToDate);
+            }
+
+            if (interviewFiltringDTO.CandidateId.HasValue)
+            {
+                interviews = interviews.Where(s => s.CandidateId == interviewFiltringDTO.CandidateId);
+            }
+            if (interviewFiltringDTO.WorkerId.HasValue)
+            {
+                interviews = interviews.Where(s => s.WorkerId == interviewFiltringDTO.WorkerId);
+            }
 
             if (!String.IsNullOrEmpty(interviewFiltringDTO.Type))
             {
                 interviews = interviews.Where(s => s.Type.Equals(interviewFiltringDTO.Type));
             }
 
-            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
-            {
-                if (sort.Key.ToLower() == "date")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        interviews = interviews.OrderByDescending(i => i.Date);
-                    }
-                    else
-                    {
-                        interviews = interviews.OrderBy(i => i.Date);
-                    }
-                }
-                if (sort.Key.ToLower() == "candidateid")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        interviews = interviews.OrderByDescending(i => i.CandidateId);
-                    }
-                    else
-                    {
-                        interviews = interviews.OrderBy(i => i.CandidateId);
-                    }
-                }
-                if (sort.Key.ToLower() == "workerId")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        interviews = interviews.OrderByDescending(i => i.WorkerId);
-                    }
-                    else
-                    {
-                        interviews = interviews.OrderBy(i => i.WorkerId);
-                    }
-                }
-                if (sort.Key.ToLower() == "type")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        interviews = interviews.OrderByDescending(i => i.Type);
-                    }
-                    else
-                    {
-                        interviews = interviews.OrderBy(i => i.Type);
-                    }
-                }
-            }
+            interviews = Sorter<Interview>.Sort(interviews, sortOrder.Sort);
 
-            var result = interviews.Select(i => new InterviewDTO(
+            InterviewListing interviewListing = new InterviewListing();
+            interviewListing.TotalCount = interviews.Count();
+            interviewListing.InterviewFiltringDTO = interviewFiltringDTO;
+            interviewListing.Paging = paging;
+            interviewListing.SortOrder = sortOrder;
+            interviewListing.InterviewDTOs = interviews.Select(i => new InterviewDTO(
                                                     i.Id,
                                                     i.Date,
                                                     i.CandidateId,
@@ -121,7 +113,7 @@ namespace Services.Services
                                                     i.Type
                                                 )).ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return result;
+            return interviewListing;
         }
 
         public void Create(InterviewCreateDTO interviewCreate, int userCreatedId)
@@ -140,8 +132,9 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message); ;
+                _logger.LogError(ex.Message);;
             }
+            
         }
 
         public int Update(InterviewEditDTO interviewEdit, int userEditId)
@@ -185,7 +178,7 @@ namespace Services.Services
             {
                 _interviewRepository.UpdateAndSaveChanges(interview);
             }
-            catch (Exception ex)
+            catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return 0;
