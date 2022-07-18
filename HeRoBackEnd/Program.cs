@@ -41,6 +41,8 @@ try
         options.Cookie.Name = "UserLoginCookie";
         options.SlidingExpiration = true;
         options.ExpireTimeSpan = new TimeSpan(0, 20, 0);
+        options.Cookie.Domain = "";
+        options.Cookie.Path = "/";
         options.Events.OnRedirectToLogin = (context) =>
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
