@@ -49,6 +49,13 @@ try
         options.Cookie.HttpOnly = true;
     });
 
+    builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
+    {
+        build.AllowAnyOrigin()
+        .AllowAnyMethod()
+        .AllowAnyHeader();
+    }));
+
     builder.Services.AddAuthorization(options =>
     {
         options.AddPolicy("AdminRequirment",
@@ -134,6 +141,8 @@ try
         {
             Secure = CookieSecurePolicy.Always
         });
+
+    app.UseCors("corspolicy");
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();
