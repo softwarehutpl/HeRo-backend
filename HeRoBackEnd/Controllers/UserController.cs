@@ -1,8 +1,9 @@
-﻿using HeRoBackEnd.ViewModels.User;
+﻿using Data.DTOs.User;
+using HeRoBackEnd.ViewModels;
+using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Listing;
-using Data.DTOs.User;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers
@@ -34,7 +35,9 @@ namespace HeRoBackEnd.Controllers
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
-                return NotFound("Not found");
+            {
+                return BadRequest(new ResponseViewModel("Not found"));
+            }
 
             return Ok(user);
         }
@@ -93,10 +96,10 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return NotFound("No user with this UserId");
+                return NotFound(new ResponseViewModel("No user with this UserId"));
             }
 
-            return Ok("Editing was successful");
+            return Ok(new ResponseViewModel("Editing was successful"));
         }
 
         /// <summary>
@@ -121,13 +124,14 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return NotFound("No user with this user id");
+                return NotFound(new ResponseViewModel("No user with this user id"));
             }
             if (result == -1)
             {
-                return BadRequest("Error while deleting the user");
+                return BadRequest(new ResponseViewModel("Error while deleting the user"));
             }
-            return Ok("User deleted successfully");
+
+            return Ok(new ResponseViewModel("User deleted successfully"));
         }
     }
 }
