@@ -53,10 +53,10 @@ namespace HeRoBackEnd.Controllers
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
             int result = _service.UpdateSkill(dto);
 
-            if (result == 0) 
+            if (result == 0)
                 return BadRequest("Skill with that name already exists!");
 
-            if (result == -1) 
+            if (result == -1)
                 return BadRequest("Wrong data!");
 
             return Ok("Skill updated successfully");
@@ -76,7 +76,7 @@ namespace HeRoBackEnd.Controllers
         {
             int result = _service.DeleteSkill(skillId);
 
-            if (result == 0) 
+            if (result == 0)
                 return BadRequest("This skill is currently used in one of the recruitments. You can't delete it.");
 
             if (result == -1)
@@ -149,7 +149,7 @@ namespace HeRoBackEnd.Controllers
         ///     ]
         /// </remarks>
         [HttpGet]
-        [Route("Skill/GetListFilteredByName{name}")]
+        [Route("Skill/GetListFilteredByName")]
         [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetListFilteredByName(string name)

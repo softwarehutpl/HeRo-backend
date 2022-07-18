@@ -43,17 +43,17 @@ namespace Services.Services
                 return -1;
             }
 
-            try 
+            try
             {
-                //candidate.Stage = StageNames.EVALUATION.ToString();
+                candidate.Stage = StageNames.EVALUATION.ToString();
                 candidate.RecruiterId = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError("Error when getting recruiterId of recruitment which doesn't exist: " + ex);
                 return -2;
             }
-            
+
             try
             {
                 _candidateRepository.AddAndSaveChanges(candidate);
@@ -85,18 +85,18 @@ namespace Services.Services
                 }
                 return 1;
             }
-            else 
+            else
             {
                 _logger.LogError("Error getting candidate with given ID");
-                return -1; 
+                return -1;
             }
         }
 
         public int UpdateCandidate(int id, UpdateCandidateDTO dto)
         {
-            Candidate candidate = _candidateRepository.GetById(id); 
-            
-            if(candidate==null)
+            Candidate candidate = _candidateRepository.GetById(id);
+
+            if (candidate == null)
             {
                 _logger.LogError("Error getting candidate with given ID");
                 return -1;
@@ -157,7 +157,7 @@ namespace Services.Services
         public int AddHRNote(int candidateId, CandidateAddHRNoteDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
-            if(candidate== null)
+            if (candidate == null)
             {
                 _logger.LogError("Error getting candidate with given ID");
                 return -1;
@@ -217,11 +217,11 @@ namespace Services.Services
             Candidate candidate;
             CandidateProfileDTO candidateProfileDTO;
 
-            try 
+            try
             {
                 candidate = _candidateRepository.GetById(id);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError("Error getting candidate with given ID: " + ex);
                 return null;
@@ -245,7 +245,7 @@ namespace Services.Services
                 _logger.LogError("Error creating candidateProfileDTO (candidate == null ?): " + ex);
                 return null;
             }
-             
+
             return candidateProfileDTO;
         }
 
@@ -294,7 +294,7 @@ namespace Services.Services
             if (candidate != null)
             {
                 if (dto.TechId != 0)
-                { 
+                {
                     candidate.TechId = dto.TechId;
                 }
 
