@@ -1,5 +1,5 @@
 ﻿using Common.Listing;
-using Services.DTOs.User;
+using Data.DTOs.User;
 
 namespace Services.Listing
 {

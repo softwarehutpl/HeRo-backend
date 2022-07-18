@@ -1,12 +1,13 @@
 using AutoMapper;
+using Common.Enums;
 using Common.Listing;
 using Common.ServiceRegistrationAttributes;
+using Data.DTOs.Recruitment;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
 using Services.Listing;
-using Data.DTOs.Recruitment;
 
 namespace Services.Services
 {
@@ -66,16 +67,16 @@ namespace Services.Services
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 IEnumerable<RecruitmentSkill> newSkills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
 
-                foreach(RecruitmentSkill newSkill in newSkills)
+                foreach (RecruitmentSkill newSkill in newSkills)
                 {
-                    RecruitmentSkill? oldSkill=recruitment.Skills
+                    RecruitmentSkill? oldSkill = recruitment.Skills
                         .FirstOrDefault(e => e.SkillId == newSkill.SkillId);
 
-                    if(oldSkill!=default && oldSkill.SkillLevel != newSkill.SkillLevel)
+                    if (oldSkill != default && oldSkill.SkillLevel != newSkill.SkillLevel)
                     {
                         oldSkill.SkillLevel = newSkill.SkillLevel;
                     }
-                    else if(oldSkill==default)
+                    else if (oldSkill == default)
                     {
                         RecruitmentSkill skill = new RecruitmentSkill();
                         skill.RecruitmentId = recruitmentId;
@@ -129,7 +130,7 @@ namespace Services.Services
 
                 _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -164,30 +165,27 @@ namespace Services.Services
 
         public RecruitmentListing GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
-            try
-            {
-            IQueryable<Recruitment> recruitments = repo.GetAll();
+            IQueryable<Recruitment> recruitments = _recruitmentRepo.GetAll();
             recruitments = recruitments.Where(r => !r.DeletedDate.HasValue);
 
-                if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
-                {
-                    recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
-                }
-                if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
-                {
-                    recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
-                }
-                if (recruitmentFiltringDTO.BeginningDate.HasValue)
-                {
-                    recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
-                }
-                if (recruitmentFiltringDTO.EndingDate.HasValue)
-                {
-                    recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
-                }
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
+            {
+                recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
+            }
+            if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
+            {
+                recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
+            }
+            if (recruitmentFiltringDTO.BeginningDate.HasValue)
+            {
+                recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
+            }
+            if (recruitmentFiltringDTO.EndingDate.HasValue)
+            {
+                recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
+            }
 
             recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
-
             RecruitmentListing recruitmentListing = new RecruitmentListing();
             recruitmentListing.TotalCount = recruitments.Count();
             recruitmentListing.RecruitmentFiltringDTO = recruitmentFiltringDTO;
@@ -208,12 +206,6 @@ namespace Services.Services
                 CandidateCount = x.Candidates.Count(),
                 HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString())
             }).ToPagedList(paging.PageNumber, paging.PageSize);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return null;
-            }
 
             return recruitmentListing;
         }
@@ -225,7 +217,7 @@ namespace Services.Services
             {
                 result = _recruitmentRepo.GetRecruitmentDTOById(recruitmentId);
 
-                if(result==null)
+                if (result == null)
                 {
                     return null;
                 }
@@ -235,7 +227,6 @@ namespace Services.Services
                 _logger.LogError(ex.Message);
                 return null;
             }
-
 
             return result;
         }

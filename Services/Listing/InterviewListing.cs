@@ -1,5 +1,5 @@
 ﻿using Common.Listing;
-using Services.DTOs.Interview;
+using Data.DTOs.Interview;
 
 namespace Services.Listing
 {
