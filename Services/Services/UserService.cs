@@ -28,7 +28,7 @@ namespace Services.Services
         public Guid SetUserRecoveryGuid(string email)
         {
             var user = _userRepository.GetUserByEmail(email);
-            user.PasswordRecoveryGuid = new Guid();
+            user.PasswordRecoveryGuid = Guid.NewGuid();
             _userRepository.UpdateAndSaveChanges(user);
 
             return user.PasswordRecoveryGuid;
@@ -158,7 +158,7 @@ namespace Services.Services
                 LastUpdatedDate = DateTime.Now,
                 RoleName = RoleNames.ANONYMOUS.ToString(),
                 UserStatus = UserStatuses.NOT_VERIFIED.ToString(),
-                ConfirmationGuid = new Guid()
+                ConfirmationGuid = Guid.NewGuid()
             };
             _userRepository.AddAndSaveChanges(newUser);
 
