@@ -62,6 +62,7 @@ namespace HeRoBackEnd.Controllers
         ///    yyyy-MM-ddTHH:mm:ss.fff <br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "name", "description" <br />
+        ///    <h3>Open or closed:</h3> "showOpen", "showClosed" <br />
         ///    <h3>Nullable:</h3> "beginningDate", "endingDate" <br /><br />
         /// <h2>Sorting:</h2>
         ///     <h3>Possible keys:</h3> "Name" <br />
@@ -85,9 +86,9 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.Description,
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate,
+                    false,
                     recruitmentListFilterViewModel.ShowOpen,
-                    recruitmentListFilterViewModel.ShowClosed,
-                    false);
+                    recruitmentListFilterViewModel.ShowClosed);
 
             RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
@@ -110,6 +111,7 @@ namespace HeRoBackEnd.Controllers
         ///    yyyy-MM-ddTHH:mm:ss.fff <br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "name", "description" <br />
+        ///    <h3>Open or closed:</h3> "showOpen", "showClosed" <br />
         ///    <h3>Nullable:</h3> "beginningDate", "endingDate" <br /><br />
         /// <h2>Sorting:</h2>
         ///     <h3>Possible keys:</h3> "Name" <br />
@@ -134,9 +136,9 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.Description,
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate,
+                    true,
                     recruitmentListFilterViewModel.ShowOpen,
-                    recruitmentListFilterViewModel.ShowClosed,
-                    true);
+                    recruitmentListFilterViewModel.ShowClosed);
 
             RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
