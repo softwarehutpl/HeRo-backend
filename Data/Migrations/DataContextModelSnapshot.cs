@@ -308,7 +308,7 @@ namespace Data.Migrations
 
                     b.HasIndex("SkillId");
 
-                    b.ToTable("RecruitmentRequirement");
+                    b.ToTable("RecruitmentSkill");
                 });
 
             modelBuilder.Entity("Data.Entities.Skill", b =>
@@ -493,7 +493,7 @@ namespace Data.Migrations
             modelBuilder.Entity("Data.Entities.RecruitmentSkill", b =>
                 {
                     b.HasOne("Data.Entities.Recruitment", "Recruitment")
-                        .WithMany()
+                        .WithMany("Skills")
                         .HasForeignKey("RecruitmentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -516,6 +516,11 @@ namespace Data.Migrations
                         .HasForeignKey("DeletedById");
 
                     b.Navigation("DeletedBy");
+                });
+
+            modelBuilder.Entity("Data.Entities.Recruitment", b =>
+                {
+                    b.Navigation("Skills");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,8 +1,8 @@
-﻿using Common.Listing;
-using HeRoBackEnd.ViewModels.User;
+﻿using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.User;
+using Services.Listing;
+using Data.DTOs.User;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers
@@ -49,7 +49,7 @@ namespace HeRoBackEnd.Controllers
         ///    <h3>Contains:</h3> "email" <br />
         ///    <h3>Equals:</h3> "userStatus" or "roleName" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "email", "userstatus", "rolename" <br />
+        ///     <h3>Possible keys:</h3> "Email", "UserStatus", "RoleName" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -58,12 +58,12 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("User/GetList")]
         [Authorize(Policy = "AdminRequirment")]
-        [ProducesResponseType(typeof(IEnumerable<UserDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
-            IEnumerable<UserDTO>? result = _userService.GetUsers(userListFilterViewModel.Paging, userListFilterViewModel.SortOrder, userFiltringDTO);
+            var result = _userService.GetUsers(userListFilterViewModel.Paging, userListFilterViewModel.SortOrder, userFiltringDTO);
 
             return Ok(result);
         }
@@ -104,8 +104,10 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="userId">Id of a user</param>
         /// <returns>User object deleted</returns>
+        /// <response code="200">User deleted successfully</response>
+        /// <response code="400">Error while deleting the user</response>
         /// <response code="404">No user with this user id</response>
-        /// <response code="200">User deleted</response>
+
         [HttpDelete]
         [Route("User/Delete/{userId}")]
         [Authorize(Policy = "AdminRequirment")]
@@ -119,10 +121,13 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return NotFound("User not found");
+                return NotFound("No user with this user id");
             }
-
-            return Ok("User deleted");
+            if (result == -1)
+            {
+                return BadRequest("Error while deleting the user");
+            }
+            return Ok("User deleted successfully");
         }
     }
 }

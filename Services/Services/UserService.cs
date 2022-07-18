@@ -4,8 +4,10 @@ using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Data.Repositories;
+using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.DTOs.User;
+using Data.DTOs.User;
+using Services.Listing;
 
 namespace Services.Services
 {
@@ -13,15 +15,26 @@ namespace Services.Services
     public class UserService
     {
         private UserRepository _userRepository;
+        private ILogger<UserService> _logger;
 
-        public UserService(UserRepository userRepository)
+        public UserService(ILogger<UserService> logger, UserRepository userRepository)
         {
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         public Guid GetUserGuid(string email)
         {
-            var result = _userRepository.GetUserGuidByEmail(email);
+            Guid result;
+            try
+            {
+                result = _userRepository.GetUserGuidByEmail(email);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return default;
+            }
             return result;
         }
 
@@ -29,7 +42,15 @@ namespace Services.Services
         {
             var user = _userRepository.GetUserByEmail(email);
             user.PasswordRecoveryGuid = Guid.NewGuid();
-            _userRepository.UpdateAndSaveChanges(user);
+            
+            try
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
 
             return user.PasswordRecoveryGuid;
         }
@@ -47,9 +68,10 @@ namespace Services.Services
             return userDTO;
         }
 
-        public IEnumerable<UserDTO> GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
+        public UserListing GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
         {
             IQueryable<User> users = _userRepository.GetAllUsers();
+            users = users.Where(u => !u.DeletedDate.HasValue);
 
             if (!String.IsNullOrEmpty(userFiltringDTO.Email))
             {
@@ -64,48 +86,18 @@ namespace Services.Services
                 users = users.Where(s => s.RoleName.Equals(userFiltringDTO.RoleName));
             }
 
-            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
-            {
-                if (sort.Key.ToLower() == "email")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        users = users.OrderByDescending(u => u.Email);
-                    }
-                    else
-                    {
-                        users = users.OrderBy(s => s.Email);
-                    }
-                }
-                else if (sort.Key.ToLower() == "userstatus")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        users = users.OrderByDescending(u => u.UserStatus);
-                    }
-                    else
-                    {
-                        users = users.OrderBy(s => s.UserStatus);
-                    }
-                }
-                else if (sort.Key.ToLower() == "rolename")
-                {
-                    if (sort.Value.ToUpper() == "DESC")
-                    {
-                        users = users.OrderByDescending(u => u.RoleName);
-                    }
-                    else
-                    {
-                        users = users.OrderBy(s => s.RoleName);
-                    }
-                }
-            }
+            users = Sorter<User>.Sort(users, sortOrder.Sort);
 
-            var result = users
+            UserListing userListing = new UserListing();
+            userListing.TotalCount = users.Count();
+            userListing.UserFiltringDTO = userFiltringDTO;
+            userListing.Paging = paging;
+            userListing.SortOrder = sortOrder;
+            userListing.UserDTOs = users
                 .Select(x => new UserDTO(x.Id, x.Email, x.UserStatus, x.RoleName))
                 .ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return result;
+            return userListing;
         }
 
         public int Update(UserEditDTO userEdit)
@@ -120,8 +112,14 @@ namespace Services.Services
             user.RoleName = userEdit.RoleName;
             user.LastUpdatedDate = DateTime.UtcNow;
 
-            _userRepository.UpdateAndSaveChanges(user);
-
+            try
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
             return user.Id;
         }
 
@@ -132,11 +130,19 @@ namespace Services.Services
             {
                 return 0;
             }
-
+            user.UserStatus = UserStatuses.DELETED.ToString();
             user.DeletedById = loginUserId;
             user.DeletedDate = DateTime.UtcNow;
-
-            _userRepository.UpdateAndSaveChanges(user);
+            try 
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Error updating user while deleting");
+                return -1;
+            }
+            
 
             return user.Id;
         }
@@ -160,7 +166,16 @@ namespace Services.Services
                 UserStatus = UserStatuses.NOT_VERIFIED.ToString(),
                 ConfirmationGuid = Guid.NewGuid()
             };
-            _userRepository.AddAndSaveChanges(newUser);
+
+            try
+            {
+                _userRepository.AddAndSaveChanges(newUser);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+           
 
             return newUser.ConfirmationGuid;
         }

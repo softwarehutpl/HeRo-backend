@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Common.Enums;
+using Data.DTOs.RecruitmentSkill;
 using Data.Repositories;
 
 namespace Data.Entities
@@ -57,9 +59,17 @@ namespace Data.Entities
         [ForeignKey("EndedById")]
         public virtual User? EndedBy { get; set; }
 
+        [Required(ErrorMessage = "This field is required")]
         public string RecruitmentPosition { get; set; }
+
+        [Required(ErrorMessage = "This field is required")]
         public string Localization { get; set; }
+
+        [Required(ErrorMessage = "This field is required")]
         public string Seniority { get; set; }
+
         public virtual ICollection<Candidate> Candidates { get; set; }
+
+        public virtual ICollection<RecruitmentSkill> Skills { get; set; }
     }
 }

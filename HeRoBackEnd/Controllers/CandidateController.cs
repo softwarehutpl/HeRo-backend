@@ -3,7 +3,8 @@ using Common.Enums;
 using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.Candidate;
+using Data.DTOs.Candidate;
+using Services.Listing;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers
@@ -54,9 +55,10 @@ namespace HeRoBackEnd.Controllers
         /// <remarks>
         /// <h2>Filtring:</h2>
         ///    <h3>Possible statuses:</h3> "NEW" , "IN_PROCESSING", "DROPPED_OUT", "HIRED" <br />
-        ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br /><br />
+        ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br />
+        ///    <h3>Nullable:</h3> "statuses", "stages" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "name", "source", "project", "status", "stage" <br />
+        ///     <h3>Possible keys:</h3> "Name", "Source", "Status", "Stage" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -65,7 +67,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Candidate/GetList")]
         [Authorize(Policy = "AnyRoleRequirment")]
-        [ProducesResponseType(typeof(IEnumerable<CandidateInfoForListDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(CandidateListing), StatusCodes.Status200OK)]
         public IActionResult GetList(CandidateListFilterViewModel candidate)
         {
             CandidateFilteringDTO candidateFilteringDTO
@@ -73,8 +75,8 @@ namespace HeRoBackEnd.Controllers
                     candidate.Status,
                     candidate.Stage);
 
-            IEnumerable<CandidateInfoForListDTO> result =
-                _candidateService.GetCandidates(
+            var result = _candidateService
+                .GetCandidates(
                     candidate.Paging,
                     candidate.SortOrder,
                     candidateFilteringDTO);
@@ -101,8 +103,9 @@ namespace HeRoBackEnd.Controllers
         ///     }
         /// </remarks>
         /// <response code="200">string "Candidate created successfully"</response>
-        /// <response code="400">string "Error creating candidate"</response>
-
+        /// <response code="400">string "Error creating candidate (check parameters)<br />
+        /// string "Error creating candidate (invalid recruitmentId)<br />
+        /// string "Error saving candidate in database"</response>
         [HttpPost]
         [Route("Candidate/Create")]
         [AllowAnonymous]
@@ -114,13 +117,19 @@ namespace HeRoBackEnd.Controllers
 
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
-
             int result = _candidateService.CreateCandidate(dto);
             if (result == -1)
             {
-                return BadRequest("Error creating candidate");
+                return BadRequest("Error creating candidate (one or more invalid parameters)");
             }
-
+            if (result == -2)
+            {
+                return BadRequest("Error creating candidate (invalid recruitmentId)");
+            }
+            if (result == -3)
+            {
+                return BadRequest("Error saving candidate to database");
+            }
             return Ok("Candidate created successfully");
         }
 
@@ -142,12 +151,13 @@ namespace HeRoBackEnd.Controllers
         ///       "expectedMonthlySalary": 5000,
         ///       "otherExpectations": "otherExpectationsString",
         ///       "cvPath": "CVPathString",
-        ///       "recruitmentId": 1,
-        ///       "status": "Hired",
+        ///       "status": "IN_PROCESSING",
+        ///       "stage": "PHONE_INTERVIEW"
         ///     }
         /// </remarks>
         /// <response code="200">string "Candidate updated successfully"</response>
-        /// <response code="400">string "Error updating candidate"</response>
+        /// <response code="400">string "User with given Id doesn't exist"<br />
+        /// string "Error updating candidate"</response>
         [HttpPost]
         [Route("Candidate/Edit/{candidateId}")]
         [Authorize(Policy = "RecruiterRequirment")]
@@ -156,12 +166,16 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Edit(int candidateId, CandidateEditViewModel candidate)
         {
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
-
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
+            //wyjątek przy złym id kandydata dodać
             int result = _candidateService.UpdateCandidate(candidateId, dto);
             if (result == -1)
+            {
+                return BadRequest("User with given Id doesn't exist");
+            }
+            if (result == -2)
             {
                 return BadRequest("Error updating candidate");
             }
@@ -175,7 +189,8 @@ namespace HeRoBackEnd.Controllers
         /// <param name="candidateId">Id of the candidate</param>
         /// <returns>IActionResult</returns>
         /// <response code="200">string "Candidate deleted successfully"</response>
-        /// <response code="400">string "Error deleting candidate (or candidate doesn't exist)"</response>
+        /// <response code="400">string "Candidate with given ID doesn't exist"<br />
+        /// string "Error deleting candidate"</response>
         [HttpDelete]
         [Route("Candidate/Delete/{candidateId}")]
         [Authorize(Policy = "RecruiterRequirment")]
@@ -194,9 +209,12 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.DeleteCandidate(dto);
             if (result == -1)
             {
-                return BadRequest("Error deleting candidate (or candidate doesn't exist)");
+                return BadRequest("Candidate with given ID doesn't exist");
             }
-
+            if (result == -2)
+            {
+                return BadRequest("Error deleting candidate");
+            }
             return Ok("Candidate deleted successfully");
         }
 
@@ -212,23 +230,27 @@ namespace HeRoBackEnd.Controllers
         ///
         ///     {
         ///         "score": 5,
-        ///         "note": "Note about candidate given by HR",
-        ///         "recruiterId": 5
+        ///         "note": "Note about candidate given by HR"
         ///     }
         /// </remarks>
         /// <response code="200">string "Interview note added correctly"</response>
-        /// <response code="400">string "Error adding note to candidate"</response>
+        /// <response code="400">string "Candidate with given ID doesn't exist"<br />
+        /// string "Error adding note to candidate"</response>
         [HttpPost]
-        [Route("Candidate/AddHRNote/")]
+        [Route("Candidate/AddHRNote/{candidateId}")]
         [Authorize(Policy = "RecruiterRequirment")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AddHRNote(int candidateId, CandidateAddHRNoteViewModel AddHrNote)
         {
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
-
+            dto.RecruiterId = GetUserId();
             int result = _candidateService.AddHRNote(candidateId, dto);
             if (result == -1)
+            {
+                return BadRequest("Candidate with given ID doesn't exist");
+            }
+            if (result == -2)
             {
                 return BadRequest("Error adding note to candidate");
             }
@@ -250,12 +272,12 @@ namespace HeRoBackEnd.Controllers
         ///
         ///     {
         ///         "score": 5,
-        ///         "note": "Note about candidate given by tech",
-        ///         "recruiterId": 3
+        ///         "note": "Note about candidate given by tech"
         ///     }
         /// </remarks>
         /// <response code="200">string "Tech interview note added correctly"</response>
-        /// <response code="400">string "Error adding tech note to candidate"</response>
+        /// <response code="400">string "Candidate with given ID doesn't exist"<br />
+        /// string "Error adding note to candidate"</response>
         [HttpPost]
         [Route("Candidate/AddTechInterviewNote/{candidateId}")]
         [Authorize(Policy = "TechnicianRequirment")]
@@ -264,9 +286,13 @@ namespace HeRoBackEnd.Controllers
         public IActionResult AddTechInterviewNote(int candidateId, CandidateAddTechNoteViewModel AddTechNote)
         {
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
-
+            dto.TechId = GetUserId();
             int result = _candidateService.AddTechNote(candidateId, dto);
             if (result == -1)
+            {
+                return BadRequest("Candidate with given ID doesn't exist");
+            }
+            if (result == -2)
             {
                 return BadRequest("Error adding tech note to candidate");
             }
@@ -291,7 +317,10 @@ namespace HeRoBackEnd.Controllers
         ///     }
         /// </remarks>
         /// <response code="200">string "Employees assigned correctly"</response>
-        /// <response code="400">string "Error assigning employees to candidate"</response>
+        /// <response code="400">
+        /// string "Candidate with given ID doesn't exist"<br />
+        /// string "Error assigning employees to candidate"
+        /// </response>
         [HttpPost]
         [Route("Candidate/AssignTechAndRecruiter/{candidateId}")]
         [Authorize(Policy = "RecruiterRequirment")]
@@ -306,9 +335,13 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.AllocateRecruiterAndTech(candidateId, dto);
             if (result == -1)
             {
-                return BadRequest("Error assigning employees to candidate");
+                return BadRequest("Candidate with given ID doesn't exist");
             }
-
+           
+            if (result == -2)
+            {
+                return BadRequest("Error updating candidate when allocating recruiters");
+            }
             return Ok("Employees assigned correctly");
         }
 
@@ -326,7 +359,8 @@ namespace HeRoBackEnd.Controllers
         ///     }
         /// </remarks>
         /// <response code="200">string "Interview date set correctly"</response>
-        /// <response code="400">string "Error setting interview date"</response>
+        /// <response code="400">string "User with given ID doesn't exist"<br />
+        /// string "Error setting interview date"</response>
         [HttpPost]
         [Route("Candidate/SetInterviewDate/{candidateId}")]
         [Authorize(Policy = "RecruiterRequirment")]
@@ -340,6 +374,10 @@ namespace HeRoBackEnd.Controllers
 
             int result = _candidateService.AllocateRecruitmentInterview(candidateId, dto);
             if (result == -1)
+            {
+                return BadRequest("User with given ID doesn't exist");
+            }
+            if (result == -2)
             {
                 return BadRequest("Error setting interview date");
             }
@@ -397,7 +435,7 @@ namespace HeRoBackEnd.Controllers
         [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetStageList()
         {
-            var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>();
+            var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>().Select(v => v.ToString());
 
             return new JsonResult(listOfStages);
         }
@@ -412,7 +450,7 @@ namespace HeRoBackEnd.Controllers
         [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetStatusList()
         {
-            var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>();
+            var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>().Select(v => v.ToString());
 
             return new JsonResult(listOfStatus);
         }

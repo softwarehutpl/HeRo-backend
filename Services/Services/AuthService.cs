@@ -62,15 +62,23 @@ namespace Services.Services
 
         public bool ConfirmUser(Guid guid, string email)
         {
-            User user = _userRepository.GetUserByEmail(email);
-            if (user.ConfirmationGuid == guid)
+            try
             {
-                user.UserStatus = UserStatuses.ACTIVE.ToString();
+                User user = _userRepository.GetUserByEmail(email);
+                if (user.ConfirmationGuid == guid)
+                {
+                    user.UserStatus = UserStatuses.ACTIVE.ToString();
 
-                _userRepository.UpdateAndSaveChanges(user);
-                return true;
+                    _userRepository.UpdateAndSaveChanges(user);
+                    return true;
+                }
+                
+                return false;
             }
-            return false;
+            catch (Exception ex)
+            {
+                return false;
+            }        
         }
     }
 }

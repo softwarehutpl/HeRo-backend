@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using Data.Entities;
 using HeRoBackEnd.ViewModels.Candidate;
-using Services.DTOs.Candidate;
+using Data.DTOs;
+using Data.DTOs.Candidate;
 
 namespace HeRoBackEnd.Profiles
 {

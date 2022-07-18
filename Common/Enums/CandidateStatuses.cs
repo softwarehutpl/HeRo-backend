@@ -11,9 +11,9 @@ namespace Common.Enums
     [JsonConverter(typeof(JsonStringEnumConverter))]
     public enum  CandidateStatuses
     {
-        [Description("New")] NEW = 1,
-        [Description("In processing")] IN_PROCESSING = 2,
-        [Description("Dropped Out")] DROPPED_OUT = 3,
-        [Description("Hired")] HIRED = 4,
+        [Description("New")] NEW,
+        [Description("In processing")] IN_PROCESSING,
+        [Description("Dropped Out")] DROPPED_OUT,
+        [Description("Hired")] HIRED,
     }
 }

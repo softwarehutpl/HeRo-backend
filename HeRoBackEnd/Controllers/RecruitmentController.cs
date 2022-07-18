@@ -1,11 +1,15 @@
 using AutoMapper;
 using Common.Listing;
-using Data.DTO;
+using Data.DTOs;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.DTOs.Recruitment;
+using Services.Listing;
 using Services.Services;
+using Data.DTOs.Recruitment;
+using Data.Entities;
+using Common.Enums;
+using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -26,20 +30,20 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <param name="recruitmentId" example="1">Id of an recruitment</param>
         /// <returns>Onject of the JsonResult class representing a Recruitment in JSON format</returns>
-        /// <response code="400">There is no such recruitment!</response>
-        /// <response code="200"></response>
+        /// <response code="400">There is no recruitment with such Id</response>
+        /// <response code="200">Recruitment with given Id</response>
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
         [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(ReadRecruitmentDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RecruitmentDetailsDTO), StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
-            ReadRecruitmentDTO recruitment = service.GetRecruitment(recruitmentId);
+            RecruitmentDetailsDTO recruitment = service.GetRecruitment(recruitmentId);
 
             if (recruitment == null)
             {
-                return BadRequest();
+                return BadRequest("There is no recruitment with such Id");
             }
             return Ok(recruitment);
         }
@@ -50,21 +54,27 @@ namespace HeRoBackEnd.Controllers
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
         /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
         /// <remarks>
+        /// <h2>Format:</h2>
+        ///    <h3>Date:</h3>
+        ///    yyyy-MM-dd <br />
+        ///    yyyy-MM-ddTHH:mm <br />
+        ///    yyyy-MM-ddTHH:mm:ss <br />
+        ///    yyyy-MM-ddTHH:mm:ss.fff <br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "name", "description" <br />
-        ///    <h3>Equals:</h3> "userStatus", "roleName" <br /><br />
+        ///    <h3>Nullable:</h3> "beginningDate", "endingDate" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "name" <br />
+        ///     <h3>Possible keys:</h3> "Name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
         /// </remarks>
-        /// <response code="400">Something went wrong!</response>
-        /// <response code="200"></response>
+        /// <response code="400">Error getting list of recruitments</response>
+        /// <response code="200">List of recruitments</response>
         [HttpPost]
         [Route("Recruitment/GetList")]
         [Authorize(Policy = "AnyRoleRequirment")]
-        [ProducesResponseType(typeof(IEnumerable<ReadRecruitmentDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(RecruitmentListing), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
@@ -77,9 +87,9 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.BeginningDate,
                     recruitmentListFilterViewModel.EndingDate);
 
-            IEnumerable<ReadRecruitmentDTO> recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
-            if (recruitments == null) return BadRequest();
+            if (recruitments == null) return BadRequest("Error getting list of recruitments");
 
             return Ok(recruitments);
         }
@@ -90,7 +100,7 @@ namespace HeRoBackEnd.Controllers
         /// <param name="newRecruitment">Contains information about a new recruitment</param>
         /// <returns>IActionResult</returns>
         /// <response code="200">Recruitment created successfully</response>
-        /// <response code="400">Wrong data</response>
+        /// <response code="400">Error creating recruitment</response>
         [HttpPost]
         [Route("Recruitment/Create")]
         [Authorize(Policy = "RecruiterRequirment")]
@@ -108,9 +118,9 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.AddRecruitment(dto);
 
-            if (result == -1) return BadRequest("Wrong data!");
+            if (result == -1) return BadRequest("Error creating recruitment");
 
-            return Ok();
+            return Ok("Recruitment created successfully");
         }
 
         /// <summary>
@@ -120,7 +130,7 @@ namespace HeRoBackEnd.Controllers
         /// <param name="recruitment">Contains new information about a recruitment</param>
         /// <returns>IActionResult</returns>
         /// <response code="200">Recruitment updated successfully</response>
-        /// <response code="400">Wrong data!</response>
+        /// <response code="400">Error updating recruitment or there is no recruitment with such Id</response>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
         [Authorize(Policy = "RecruiterRequirment")]
@@ -136,9 +146,9 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.UpdateRecruitment(recruitmentId, dto);
 
-            if (result == -1) return BadRequest();
+            if (result == -1) return BadRequest("Error updating recruitment or there is no recruitment with such Id");
 
-            return Ok();
+            return Ok("Recruitment updated successfully");
         }
 
         /// <summary>
@@ -147,7 +157,7 @@ namespace HeRoBackEnd.Controllers
         /// <param name="recruitmentId" example="1">Id representing a recruitment</param>
         /// <returns>IActionResult</returns>
         /// <response code="200">Recruitment ended successfully</response>
-        /// <response code="400">There is no such recruitment!</response>
+        /// <response code="400">Error ending recruitment or there is no recruitment with such Id</response>
         [HttpGet]
         [Route("Recruitment/End/{recruitmentId}")]
         [Authorize(Policy = "RecruiterRequirment")]
@@ -164,9 +174,9 @@ namespace HeRoBackEnd.Controllers
             dto.EndedDate = DateTime.Now;
             int result = service.EndRecruitment(dto);
 
-            if (result == -1) return BadRequest();
+            if (result == -1) return BadRequest("Error ending recruitment or there is no recruitment with such Id");
 
-            return Ok();
+            return Ok("Recruitment ended successfully");
         }
 
         /// <summary>
@@ -175,11 +185,11 @@ namespace HeRoBackEnd.Controllers
         /// <param name="recruitmentId" example="1">Id representing a recruitment</param>
         /// <returns>IActionResult</returns>
         /// <response code="200">Recruitment deleted successfully</response>
-        /// <response code="400">There is no such recruitment!</response>
+        /// <response code="400">Error deleting recruitment or there is no recruitment with such Id</response>
         [HttpGet]
         [Route("Recruitment/Delete/{recruitmentId}")]
         [Authorize(Policy = "RecruiterRequirment")]
-        [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int recruitmentId)
         {
@@ -193,9 +203,9 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.DeleteRecruitment(dto);
 
-            if (result == -1) return BadRequest();
+            if (result == -1) return BadRequest("Error deleting recruitment or there is no recruitment with such Id");
 
-            return Ok();
+            return Ok("Recruitment deleted successfully");
         }
     }
 }

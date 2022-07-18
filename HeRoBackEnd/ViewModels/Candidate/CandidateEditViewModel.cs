@@ -30,6 +30,9 @@ namespace HeRoBackEnd.ViewModels.Candidate
         public string CvPath { get; set; }
 
         [Required(ErrorMessage = "This field is required")]
-        public int RecruitmentId { get; set; }
+        public string Status { get; set; }
+
+        [Required(ErrorMessage = "This field is required")]
+        public string Stage { get; set; }
     }
 }
