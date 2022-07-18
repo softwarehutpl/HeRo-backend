@@ -47,6 +47,7 @@ try
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             return Task.CompletedTask;
         };
+        options.Cookie.HttpOnly = true;
     });
 
     builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
