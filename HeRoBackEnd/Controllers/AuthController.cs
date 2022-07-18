@@ -95,14 +95,21 @@ namespace HeRoBackEnd.Controllers
         /// <returns></returns>
         /// <param name="confirmationGuid" example="9fb49f98-f169-4316-9737-23b656058c5c"></param>
         /// <response code="200">Account confirmed</response>
-        [HttpGet]
+        /// <response code="400">Confirmation Failed</response>
+        [HttpPost]        
         [Route("Auth/ConfirmAccount")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        public async Task<IActionResult> ConfirmAccount(Guid confirmationGuid)
+        public async Task<IActionResult> ConfirmAccount(ConfirmUserViewModel user)
         {
-            int userId = GetUserId();
-            bool check = _authServices.ConfirmUser(confirmationGuid, userId);
-            return Ok("Account confirmed");
+            bool check = _authServices.ConfirmUser(user.ConfirmationGuid, user.Email);
+
+            if (check)
+            {
+                _userService.ChangeUserPassword(user.Email, user.Password);
+                return Ok("Account confirmed. Your password has been changed");
+            }
+
+            return BadRequest("Confirmation Failed");
         }
 
         /// <summary>

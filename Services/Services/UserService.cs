@@ -42,6 +42,7 @@ namespace Services.Services
         {
             var user = _userRepository.GetUserByEmail(email);
             user.PasswordRecoveryGuid = Guid.NewGuid();
+            
             try
             {
                 _userRepository.UpdateAndSaveChanges(user);
@@ -50,6 +51,7 @@ namespace Services.Services
             {
                 _logger.LogError(ex.Message);
             }
+
             return user.PasswordRecoveryGuid;
         }
 
