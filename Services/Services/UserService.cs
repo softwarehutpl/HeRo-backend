@@ -4,6 +4,7 @@ using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.Entities;
 using Data.Repositories;
+using Microsoft.Extensions.Logging;
 using PagedList;
 using Data.DTOs.User;
 
@@ -13,15 +14,26 @@ namespace Services.Services
     public class UserService
     {
         private UserRepository _userRepository;
+        private ILogger<UserService> _logger;
 
-        public UserService(UserRepository userRepository)
+        public UserService(ILogger<UserService> logger, UserRepository userRepository)
         {
             _userRepository = userRepository;
+            _logger = logger;
         }
 
         public Guid GetUserGuid(string email)
         {
-            var result = _userRepository.GetUserGuidByEmail(email);
+            Guid result;
+            try
+            {
+                result = _userRepository.GetUserGuidByEmail(email);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return default;
+            }
             return result;
         }
 
@@ -29,8 +41,14 @@ namespace Services.Services
         {
             var user = _userRepository.GetUserByEmail(email);
             user.PasswordRecoveryGuid = new Guid();
-            _userRepository.UpdateAndSaveChanges(user);
-
+            try
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
             return user.PasswordRecoveryGuid;
         }
 
@@ -120,8 +138,14 @@ namespace Services.Services
             user.RoleName = userEdit.RoleName;
             user.LastUpdatedDate = DateTime.UtcNow;
 
-            _userRepository.UpdateAndSaveChanges(user);
-
+            try
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
             return user.Id;
         }
 
@@ -132,11 +156,19 @@ namespace Services.Services
             {
                 return 0;
             }
-
+            user.UserStatus = UserStatuses.DELETED.ToString();
             user.DeletedById = loginUserId;
             user.DeletedDate = DateTime.UtcNow;
-
-            _userRepository.UpdateAndSaveChanges(user);
+            try 
+            {
+                _userRepository.UpdateAndSaveChanges(user);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError("Error updating user while deleting");
+                return -1;
+            }
+            
 
             return user.Id;
         }
@@ -160,7 +192,16 @@ namespace Services.Services
                 UserStatus = UserStatuses.NOT_VERIFIED.ToString(),
                 ConfirmationGuid = new Guid()
             };
-            _userRepository.AddAndSaveChanges(newUser);
+
+            try
+            {
+                _userRepository.AddAndSaveChanges(newUser);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+            }
+           
 
             return newUser.ConfirmationGuid;
         }

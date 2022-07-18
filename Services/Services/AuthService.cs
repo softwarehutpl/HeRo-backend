@@ -62,7 +62,16 @@ namespace Services.Services
 
         public bool ConfirmUser(Guid guid, int id)
         {
-            User user = _userRepository.GetById(id);
+            User user;
+            try
+            {
+                user = _userRepository.GetById(id);
+            }
+            catch (Exception ex)
+            {
+                return false;
+            }
+            
             if (user.ConfirmationGuid == guid)
             {
                 user.UserStatus = UserStatuses.ACTIVE.ToString();

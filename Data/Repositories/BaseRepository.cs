@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -11,6 +12,7 @@ namespace Data.Repositories
         #region Private Members
 
         private readonly DataContext _dataContext;
+        private readonly ILogger<BaseRepository<TEntity>> _logger;
 
         #endregion Private Members
 

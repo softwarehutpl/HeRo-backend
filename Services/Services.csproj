@@ -31,6 +31,7 @@
 
   <ItemGroup>
     <Folder Include="DTOs\" />
+    <Folder Include="DTOs\Candidate\" />
   </ItemGroup>
 
 </Project>

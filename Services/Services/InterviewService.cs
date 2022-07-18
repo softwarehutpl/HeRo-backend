@@ -4,8 +4,8 @@ using Data.DTOs.Interview;
 using Data.Entities;
 using Data.Repositories;
 using PagedList;
-using Data.DTOs.Interview;
 using Services.DTOs.Interview;
+using Microsoft.Extensions.Logging;
 
 namespace Services.Services
 {
@@ -15,12 +15,14 @@ namespace Services.Services
         private InterviewRepository _interviewRepository;
         private UserRepository _userRepository;
         private CandidateRepository _candidateRepository;
+        private ILogger<InterviewService> _logger;
 
-        public InterviewService(InterviewRepository interviewRepository, UserRepository userRepository, CandidateRepository candidateRepository)
+        public InterviewService(ILogger<InterviewService> logger, InterviewRepository interviewRepository, UserRepository userRepository, CandidateRepository candidateRepository)
         {
             _interviewRepository = interviewRepository;
             _userRepository = userRepository;
             _candidateRepository = candidateRepository;
+            _logger = logger;
         }
 
         public InterviewDTO Get(int interviewId)
@@ -133,8 +135,15 @@ namespace Services.Services
             interview.Type = interviewCreate.Type;
             interview.CreatedById = userCreatedId;
             interview.CreatedDate = DateTime.UtcNow;
-
-            _interviewRepository.AddAndSaveChanges(interview);
+            try
+            {
+                _interviewRepository.AddAndSaveChanges(interview);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);;
+            }
+            
         }
 
         public int Update(InterviewEditDTO interviewEdit, int userEditId)
@@ -151,7 +160,15 @@ namespace Services.Services
             interview.LastUpdatedById = userEditId;
             interview.LastUpdatedDate = DateTime.UtcNow;
 
-            _interviewRepository.UpdateAndSaveChanges(interview);
+            try
+            {
+                _interviewRepository.UpdateAndSaveChanges(interview);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return 0;
+            }
 
             return interview.Id;
         }
@@ -166,9 +183,15 @@ namespace Services.Services
 
             interview.DeletedById = loginUserId;
             interview.DeletedDate = DateTime.UtcNow;
-
-            _interviewRepository.UpdateAndSaveChanges(interview);
-
+            try
+            {
+                _interviewRepository.UpdateAndSaveChanges(interview);
+            }
+            catch(Exception ex)
+            {
+                _logger.LogError(ex.Message);
+                return 0;
+            }
             return interview.Id;
         }
     }
