@@ -26,8 +26,7 @@ namespace HeRoBackEnd.Controllers
         /// <summary>
         /// Sign in user method
         /// </summary>
-        /// <param name="email" example ="test@gmail.com">E-mail of the user</param>
-        /// <param name="password" example = "password">User password</param>
+        /// <param name="user">E-mail of the user</param>
         /// <returns>Signs in user</returns>
         /// <response code="400">string "Cannot log in. Check your credentials."</response>
         /// <response code="200">Returns user email</response>
@@ -36,15 +35,15 @@ namespace HeRoBackEnd.Controllers
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> SignIn(string password, string email)
+        public async Task<IActionResult> SignIn(SignInViewModel user)
         {
-            ClaimsIdentity? claimsIdentity = await _authServices.ValidateAndCreateClaim(password, email);
+            ClaimsIdentity? claimsIdentity = await _authServices.ValidateAndCreateClaim(user.Password, user.Email);
 
             if (claimsIdentity != null)
             {
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                return Ok(new ResponseViewModel(email));
+                return Ok(new ResponseViewModel(user.Email));
             }
             return BadRequest(new ResponseViewModel("Wrong Credentials!"));
         }
@@ -98,7 +97,7 @@ namespace HeRoBackEnd.Controllers
         /// <param name="confirmationGuid" example="9fb49f98-f169-4316-9737-23b656058c5c"></param>
         /// <response code="200">Account confirmed</response>
         /// <response code="400">Confirmation Failed</response>
-        [HttpPost]        
+        [HttpPost]
         [Route("Auth/ConfirmAccount")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public async Task<IActionResult> ConfirmAccount(ConfirmUserViewModel user)
