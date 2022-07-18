@@ -22,7 +22,7 @@ namespace Services.Services
         public void SendConfirmationEmail(string email, string url)
         {          
             string subject = "Registration";
-            string body = $"Sucessfull registration. Click confiramtion link to complete the process. \n {url}";
+            string body = $"Registration successfull. Click confirmation link to complete the process. \n {url}";
             MailMessage mail = _emailHelper.CreateEmail(email, subject, body);
             _emailHelper.SendEmail(mail);
         }

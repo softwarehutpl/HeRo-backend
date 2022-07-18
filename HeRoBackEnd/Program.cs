@@ -40,6 +40,7 @@ try
     {
         options.Cookie.Name = "UserLoginCookie";
         options.SlidingExpiration = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.ExpireTimeSpan = new TimeSpan(0, 20, 0);
         options.Events.OnRedirectToLogin = (context) =>
         {
@@ -51,9 +52,12 @@ try
 
     builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
     {
-        build.AllowAnyOrigin()
+        build
+        .AllowAnyOrigin()
+        //.WithOrigins("http://localhost:3000", "http://localhost:7210")
         .AllowAnyMethod()
-        .AllowAnyHeader();
+        .AllowAnyHeader()
+        .AllowCredentials();
     }));
 
     builder.Services.AddAuthorization(options =>
@@ -146,12 +150,12 @@ try
             Secure = CookieSecurePolicy.Always
         });
 
-    app.UseCors("corspolicy");
-
     app.UseHttpsRedirection();
     app.UseStaticFiles();
 
     app.UseRouting();
+
+    app.UseCors("corspolicy");
 
     app.UseAuthentication();
     app.UseAuthorization();
