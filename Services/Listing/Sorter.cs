@@ -18,12 +18,12 @@ namespace Services.Listing
                     {
                         if (IsFirst)
                         {
-                            entities = OrderBy(entities, sort[i], i);
+                            entities = OrderBy(entities, sort[i]);
                             IsFirst = false;
                         }
                         else
                         {
-                            entities = ThenBy((IOrderedQueryable<TEntity>)entities, sort[i], i);
+                            entities = ThenBy((IOrderedQueryable<TEntity>)entities, sort[i]);
                         }
                         tempSort.Add(sort[i]);
                     }
@@ -35,29 +35,29 @@ namespace Services.Listing
             return entities;
         }
 
-        private static IQueryable<TEntity> OrderBy(IQueryable<TEntity> entities, KeyValuePair<string, string> sort, int index)
+        private static IQueryable<TEntity> OrderBy(IQueryable<TEntity> entities, KeyValuePair<string, string> sort)
         {
             if (sort.Value.ToUpper() == "DESC")
             {
-                entities = entities.OrderByDescending(u => EF.Property<object>(u, sort.Key));
+                entities = entities.OrderByDescending(e => EF.Property<object>(e, sort.Key));
             }
             else
             {
-                entities = entities.OrderBy(u => EF.Property<object>(u, sort.Key));
+                entities = entities.OrderBy(e => EF.Property<object>(e, sort.Key));
             }
 
             return entities;
         }
 
-        private static IQueryable<TEntity> ThenBy(IOrderedQueryable<TEntity> entities, KeyValuePair<string, string> sort, int index)
+        private static IQueryable<TEntity> ThenBy(IOrderedQueryable<TEntity> entities, KeyValuePair<string, string> sort)
         {
             if (sort.Value.ToUpper() == "DESC")
             {
-                entities = entities.ThenByDescending(u => EF.Property<object>(u, sort.Key));
+                entities = entities.ThenByDescending(e => EF.Property<object>(e, sort.Key));
             }
             else
             {
-                entities = entities.ThenBy(u => EF.Property<object>(u, sort.Key));
+                entities = entities.ThenBy(e => EF.Property<object>(e, sort.Key));
             }
 
             return entities;
