@@ -1,11 +1,13 @@
 using AutoMapper;
+using Common.Enums;
 using Common.Listing;
 using Common.ServiceRegistrationAttributes;
+using Data.DTOs.Recruitment;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Data.DTOs.Recruitment;
+using Services.Listing;
 
 namespace Services.Services
 {
@@ -14,10 +16,11 @@ namespace Services.Services
     {
         private readonly IMapper _mapper;
         private readonly RecruitmentRepository _recruitmentRepo;
+        private readonly RecruitmentSkillRepository _recruitmentSkillRepo;
         private readonly UserRepository _userRepo;
         private readonly ILogger<RecruitmentService> _logger;
 
-        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger<RecruitmentService> logger)
+        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger<RecruitmentService> logger, RecruitmentSkillRepository recruitmentSkillRepo)
         {
             _mapper = map;
             _recruitmentRepo = repo;
@@ -64,16 +67,16 @@ namespace Services.Services
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 IEnumerable<RecruitmentSkill> newSkills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
 
-                foreach(RecruitmentSkill newSkill in newSkills)
+                foreach (RecruitmentSkill newSkill in newSkills)
                 {
-                    RecruitmentSkill oldSkill=recruitment.Skills
+                    RecruitmentSkill? oldSkill = recruitment.Skills
                         .FirstOrDefault(e => e.SkillId == newSkill.SkillId);
 
-                    if(oldSkill!=default && oldSkill.SkillLevel != newSkill.SkillLevel)
+                    if (oldSkill != default && oldSkill.SkillLevel != newSkill.SkillLevel)
                     {
                         oldSkill.SkillLevel = newSkill.SkillLevel;
                     }
-                    else if(oldSkill==default)
+                    else if (oldSkill == default)
                     {
                         RecruitmentSkill skill = new RecruitmentSkill();
                         skill.RecruitmentId = recruitmentId;
@@ -88,7 +91,7 @@ namespace Services.Services
 
                 foreach (RecruitmentSkill oldSkill in recruitment.Skills)
                 {
-                    RecruitmentSkill newSkill = newSkills
+                    RecruitmentSkill? newSkill = newSkills
                         .FirstOrDefault(e => e.SkillId == oldSkill.SkillId);
 
                     if (newSkill == default)
@@ -127,7 +130,7 @@ namespace Services.Services
 
                 _recruitmentRepo.UpdateAndSaveChanges(recruitment);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -160,12 +163,10 @@ namespace Services.Services
             return 1;
         }
 
-        public IEnumerable<RecruitmentDetailsDTO> GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
+        public RecruitmentListing GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
-            IEnumerable<RecruitmentDetailsDTO> pagedRecruitments;
-            try
-            {
-                IEnumerable<RecruitmentDetailsDTO> recruitments = _recruitmentRepo.GetAllRecruitmentsDTOs();
+            IQueryable<Recruitment> recruitments = _recruitmentRepo.GetAll();
+            recruitments = recruitments.Where(r => !r.DeletedDate.HasValue);
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
@@ -184,41 +185,39 @@ namespace Services.Services
                 recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
             }
 
-            foreach (KeyValuePair<string, string> sort in sortOrder.Sort)
-            {
-                if (sort.Key.ToLower() == "name")
-                {
-                    if (sort.Value == "DESC")
-                    {
-                        recruitments = recruitments.OrderByDescending(u => u.Name);
-                    }
-                    else
-                    {
-                        recruitments = recruitments.OrderBy(s => s.Name);
-                    }
-                }
-            }
+            recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
+            RecruitmentListing recruitmentListing = new RecruitmentListing();
+            recruitmentListing.TotalCount = recruitments.Count();
+            recruitmentListing.RecruitmentFiltringDTO = recruitmentFiltringDTO;
+            recruitmentListing.Paging = paging;
+            recruitmentListing.SortOrder = sortOrder;
 
-                 pagedRecruitments = recruitments.ToPagedList(paging.PageNumber, paging.PageSize);
-            }
-            catch (Exception ex)
+            recruitmentListing.ReadRecruitmentDTOs = recruitments.Select(x => new ReadRecruitmentDTO
             {
-                _logger.LogError(ex.Message);
-                return null;
-            }
-     
+                Id = x.Id,
+                Name = x.Name,
+                BeginningDate = x.BeginningDate,
+                EndingDate = x.EndingDate,
+                Description = x.Description,
+                Localization = x.Localization,
+                RecruiterId = x.RecruiterId,
+                RecruitmentPosition = x.RecruitmentPosition,
+                Seniority = x.Seniority,
+                CandidateCount = x.Candidates.Count(),
+                HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString())
+            }).ToPagedList(paging.PageNumber, paging.PageSize);
 
-            return pagedRecruitments;
+            return recruitmentListing;
         }
 
         public RecruitmentDetailsDTO GetRecruitment(int recruitmentId)
         {
-            RecruitmentDetailsDTO result = null;
+            RecruitmentDetailsDTO? result;
             try
             {
                 result = _recruitmentRepo.GetRecruitmentDTOById(recruitmentId);
 
-                if(result==null)
+                if (result == null)
                 {
                     return null;
                 }
@@ -228,7 +227,6 @@ namespace Services.Services
                 _logger.LogError(ex.Message);
                 return null;
             }
-
 
             return result;
         }

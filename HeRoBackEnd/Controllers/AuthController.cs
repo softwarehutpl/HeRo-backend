@@ -1,12 +1,10 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
+﻿using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Services.Services;
-using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
-using Common.Enums;
-using Data.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Services.Services;
+using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -30,7 +28,7 @@ namespace HeRoBackEnd.Controllers
         /// <param name="email" example ="test@gmail.com">E-mail of the user</param>
         /// <param name="password" example = "password">User password</param>
         /// <returns>Signs in user</returns>
-        /// <response code="400">Wrong Credentials </response>
+        /// <response code="400">string "Cannot log in. Check your credentials."</response>
         /// <response code="200">Returns user email</response>
         [HttpPost]
         [Route("Auth/SignIn")]
@@ -69,7 +67,7 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <returns></returns>
         /// <param name="newUser">Object containing information about a new user</param>
-        /// <response code="200">User created</response>
+        /// <response code="200">User created successfully</response>
         /// <response code="400">Invalid email or password or user already exist</response>
         [HttpPost]
         [Route("Auth/CreateNewUser")]
@@ -88,7 +86,7 @@ namespace HeRoBackEnd.Controllers
             string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid }, protocol: "https");
             _emailService.SendConfirmationEmail(newUser.Email, url);
 
-            return Ok("UserCreated");
+            return Ok("User created successfully");
         }
 
         /// <summary>
@@ -96,6 +94,7 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <returns></returns>
         /// <param name="confirmationGuid" example="9fb49f98-f169-4316-9737-23b656058c5c"></param>
+        /// <response code="200">Account confirmed</response>
         [HttpGet]
         [Route("Auth/ConfirmAccount")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
@@ -111,7 +110,7 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <returns></returns>
         /// <param name="email" example="test@gmail.com"></param>
-        /// <response code="200">Recovery e-mail send</response>
+        /// <response code="200">Recovery e-mail sent</response>
         /// <response code="400">Account doesn't exist</response>
         [HttpPost]
         [Route("Auth/PasswordRecoveryMail")]
@@ -127,7 +126,7 @@ namespace HeRoBackEnd.Controllers
             var fullUrl = this.Url.Action("RecoverPassword", "Auth", new { guid = recoveryGuid }, protocol: "https");
 
             _emailService.SendPasswordRecoveryEmail(email, fullUrl);
-            return Ok("Recovery email send");
+            return Ok("Recovery e-mail sent");
         }
 
         /// <summary>
@@ -136,7 +135,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns></returns>
         /// <param name="user">object of the UserPasswordRecoveryViewModel class</param>
         /// <response code="200">Password changed</response>
-        /// <response code="400">Email and Guid values are assign to different users, try again</response>
+        /// <response code="400">Email and Guid values are assigned to different users, try again</response>
         [HttpPost]
         [Route("Auth/RecoverPassword")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]

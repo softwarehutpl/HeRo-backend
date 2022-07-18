@@ -3,7 +3,6 @@ using Data.Entities;
 using HeRoBackEnd.ViewModels.Candidate;
 using Data.DTOs;
 using Data.DTOs.Candidate;
-using Services.DTOs.Candidate;
 
 namespace HeRoBackEnd.Profiles
 {

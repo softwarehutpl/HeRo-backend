@@ -45,10 +45,10 @@ namespace Services.Services
             try
             {
                 result = _repo.GetAll();
-                result = result.
-                    Where(e => e.Name.Contains(name)).
-                    OrderBy(e=>e.Name).
-                    Take(5);
+                result = result
+                    .Where(e => e.Name.ToLower().Contains(name.ToLower()))
+                    .OrderBy(e=>e.Name)
+                    .Take(5);
             }
             catch(Exception ex)
             {
@@ -131,7 +131,7 @@ namespace Services.Services
             catch(Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return -1;
+                return -2;
             }
 
             return 1;

@@ -1,4 +1,4 @@
-﻿namespace Services.DTOs.Interview
+﻿namespace Data.DTOs.Interview
 {
     public class InterviewCreateDTO
     {
