@@ -51,9 +51,12 @@ try
 
     builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
     {
-        build.AllowAnyOrigin()
+        build
+        .AllowAnyOrigin()
+        //.WithOrigins("http://localhost:3000", "http://localhost:7210")
         .AllowAnyMethod()
-        .AllowAnyHeader();
+        .AllowAnyHeader()
+        .AllowCredentials();
     }));
 
     builder.Services.AddAuthorization(options =>
