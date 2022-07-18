@@ -1,10 +1,10 @@
 ﻿using Data.DTOs.Interview;
+using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.Interview;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Data.DTOs;
-using Services.Services;
 using Services.Listing;
+using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -36,7 +36,7 @@ namespace HeRoBackEnd.Controllers
 
             if (interview == null)
             {
-                return BadRequest("No Interview with this InterviewId");
+                return BadRequest(new ResponseViewModel("No Interview with this Id"));
             }
 
             return new JsonResult(interview);
@@ -99,7 +99,7 @@ namespace HeRoBackEnd.Controllers
             int userCreatedId = GetUserId();
             _interviewService.Create(interviewCreate, userCreatedId);
 
-            return Ok("Interview created successfully");
+            return Ok(new ResponseViewModel("Interview created successfully"));
         }
 
         /// <summary>
@@ -127,10 +127,10 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return BadRequest("No interview with this Id");
+                return BadRequest(new ResponseViewModel("No interview with this Id"));
             }
 
-            return Ok("Interview edited successfully");
+            return Ok(new ResponseViewModel("Interview edited successfully"));
         }
 
         /// <summary>
@@ -152,10 +152,10 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return BadRequest("No interview with this interviewId");
+                return BadRequest(new ResponseViewModel("No interview with this Id"));
             }
 
-            return Ok("Interview deleted successfully");
+            return Ok(new ResponseViewModel("Interview deleted successfully"));
         }
     }
 }

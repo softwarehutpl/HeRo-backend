@@ -1,15 +1,12 @@
 using AutoMapper;
 using Common.Listing;
-using Data.DTOs;
+using Data.DTOs.Recruitment;
+using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Listing;
 using Services.Services;
-using Data.DTOs.Recruitment;
-using Data.Entities;
-using Common.Enums;
-using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -43,8 +40,9 @@ namespace HeRoBackEnd.Controllers
 
             if (recruitment == null)
             {
-                return BadRequest();
+                return BadRequest(new ResponseViewModel("No Recruitment with this Id"));
             }
+
             return Ok(recruitment);
         }
 
@@ -69,7 +67,6 @@ namespace HeRoBackEnd.Controllers
         ///                      Another value - sort the result in ascending order <br />
         ///
         /// </remarks>
-        /// <response code="400">Something went wrong!</response>
         /// <response code="200"></response>
         [HttpPost]
         [Route("Recruitment/GetList")]
@@ -88,8 +85,6 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.EndingDate);
 
             RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
-
-            if (recruitments == null) return BadRequest();
 
             return Ok(recruitments);
         }
@@ -118,9 +113,12 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.AddRecruitment(dto);
 
-            if (result == -1) return BadRequest("Wrong data!");
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Wrong data!"));
+            }
 
-            return Ok();
+            return Ok(new ResponseViewModel("Recruitment created successfully"));
         }
 
         /// <summary>
@@ -146,9 +144,12 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.UpdateRecruitment(recruitmentId, dto);
 
-            if (result == -1) return BadRequest();
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("No recruitment with this Id"));
+            }
 
-            return Ok();
+            return Ok(new ResponseViewModel("Recruitment edited successfully"));
         }
 
         /// <summary>
@@ -174,9 +175,12 @@ namespace HeRoBackEnd.Controllers
             dto.EndedDate = DateTime.Now;
             int result = service.EndRecruitment(dto);
 
-            if (result == -1) return BadRequest();
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("No recruitment with this Id"));
+            }
 
-            return Ok();
+            return Ok(new ResponseViewModel("Recruitment end successfully"));
         }
 
         /// <summary>
@@ -203,9 +207,12 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.DeleteRecruitment(dto);
 
-            if (result == -1) return BadRequest();
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("No recruitment with this Id"));
+            }
 
-            return Ok();
+            return Ok(new ResponseViewModel("Recruitment deleted successfully"));
         }
     }
 }

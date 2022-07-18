@@ -1,4 +1,5 @@
-﻿using HeRoBackEnd.ViewModels.User;
+﻿using HeRoBackEnd.ViewModels;
+using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
@@ -43,9 +44,9 @@ namespace HeRoBackEnd.Controllers
             {
                 await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                return Ok(email);
+                return Ok(new ResponseViewModel(email));
             }
-            return BadRequest("Wrong Credentials!");
+            return BadRequest(new ResponseViewModel("Wrong Credentials!"));
         }
 
         /// <summary>
@@ -59,6 +60,7 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> LogOut()
         {
             await HttpContext.SignOutAsync("Cookies");
+
             return Ok();
         }
 
@@ -79,14 +81,14 @@ namespace HeRoBackEnd.Controllers
             bool check = _userService.CheckIfUserExist(newUser.Email);
 
             if (check)
-                return BadRequest("User already exist");
+                return BadRequest(new ResponseViewModel("User already exist"));
 
             Guid confirmationGuid = await _userService.CreateUser(newUser.Password, newUser.Email);
 
             string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid }, protocol: "https");
             _emailService.SendConfirmationEmail(newUser.Email, url);
 
-            return Ok("User created successfully");
+            return Ok(new ResponseViewModel("User created successfully"));
         }
 
         /// <summary>
@@ -102,7 +104,8 @@ namespace HeRoBackEnd.Controllers
         {
             int userId = GetUserId();
             bool check = _authServices.ConfirmUser(confirmationGuid, userId);
-            return Ok("Account confirmed");
+
+            return Ok(new ResponseViewModel("Account confirmed"));
         }
 
         /// <summary>
@@ -126,7 +129,8 @@ namespace HeRoBackEnd.Controllers
             var fullUrl = this.Url.Action("RecoverPassword", "Auth", new { guid = recoveryGuid }, protocol: "https");
 
             _emailService.SendPasswordRecoveryEmail(email, fullUrl);
-            return Ok("Recovery e-mail sent");
+
+            return Ok(new ResponseViewModel("Recovery e-mail sent"));
         }
 
         /// <summary>
@@ -146,7 +150,8 @@ namespace HeRoBackEnd.Controllers
             if (!userGuid) return BadRequest("User and Guid don't have same owner");
 
             await _userService.ChangeUserPassword(user.Email, user.Password);
-            return Ok("Password Changed");
+
+            return Ok(new ResponseViewModel("Password Changed"));
         }
     }
 }
