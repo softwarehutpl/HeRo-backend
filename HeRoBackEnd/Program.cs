@@ -40,6 +40,7 @@ try
     {
         options.Cookie.Name = "UserLoginCookie";
         options.SlidingExpiration = true;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.ExpireTimeSpan = new TimeSpan(0, 20, 0);
         options.Events.OnRedirectToLogin = (context) =>
         {
