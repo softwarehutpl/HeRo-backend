@@ -1,12 +1,10 @@
-﻿using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
+﻿using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Services.Services;
-using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
-using Common.Enums;
-using Data.Entities;
+using Microsoft.AspNetCore.Mvc;
+using Services.Services;
+using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {

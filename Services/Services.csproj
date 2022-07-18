@@ -29,9 +29,4 @@
     <ProjectReference Include="..\Data\Data.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="DTOs\" />
-    <Folder Include="DTOs\Candidate\" />
-  </ItemGroup>
-
 </Project>
