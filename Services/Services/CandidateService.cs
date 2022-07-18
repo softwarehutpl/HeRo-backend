@@ -85,7 +85,11 @@ namespace Services.Services
                 }
                 return 1;
             }
-            else return -1;
+            else 
+            {
+                _logger.LogError("Error getting candidate with given ID");
+                return -1; 
+            }
         }
 
         public int UpdateCandidate(int id, UpdateCandidateDTO dto)
@@ -94,7 +98,7 @@ namespace Services.Services
             
             if(candidate==null)
             {
-                //_logger.LogError("Error getting candidate with given Id: ");
+                _logger.LogError("Error getting candidate with given ID");
                 return -1;
             }
             else
@@ -155,7 +159,7 @@ namespace Services.Services
             Candidate? candidate = _candidateRepository.GetById(candidateId);
             if(candidate== null)
             {
-                //_logger.LogError("Error getting candidate with given ID");
+                _logger.LogError("Error getting candidate with given ID");
                 return -1;
             }
             else
@@ -184,7 +188,7 @@ namespace Services.Services
             Candidate? candidate = _candidateRepository.GetById(candidateId);
             if (candidate == null)
             {
-                //_logger.LogError("Error getting candidate with given ID");
+                _logger.LogError("Error getting candidate with given ID");
                 return -1;
             }
             else
@@ -219,7 +223,7 @@ namespace Services.Services
             }
             catch (Exception ex) 
             {
-                //_logger.LogError("Cannot get candidate profile by ID: " + ex);
+                _logger.LogError("Error getting candidate with given ID: " + ex);
                 return null;
             }
 
@@ -261,7 +265,7 @@ namespace Services.Services
 
             candidates = Sorter<Candidate>.Sort(candidates, sortOrder.Sort);
 
-            CandidateListing candidateListing = new CandidateListing();
+            CandidateListing candidateListing = new();
             candidateListing.TotalCount = candidates.Count();
             candidateListing.CandidateFilteringDTO = candidateFilteringDTO;
             candidateListing.Paging = paging;
@@ -311,8 +315,11 @@ namespace Services.Services
 
                 return 1;
             }
-
-            return -1;
+            else
+            {
+                _logger.LogError("Cannot get candidate with given Id");
+                return -1;
+            }
         }
 
         public int AllocateRecruitmentInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
@@ -337,8 +344,11 @@ namespace Services.Services
 
                 return 1;
             }
-          
-            return -1;
+            else
+            {
+                _logger.LogError("Cannot get candidate with given Id");
+                return -1;
+            }
         }
 
         public int AllocateTechInterview(int candidateId, CandidateAllocateInterviewDateDTO dto)
@@ -363,8 +373,11 @@ namespace Services.Services
 
                 return 1;
             }
-            
-            return -1;
+            else
+            {
+                _logger.LogError("Cannot get candidate with given Id");
+                return -1;
+            }
         }
     }
 }
