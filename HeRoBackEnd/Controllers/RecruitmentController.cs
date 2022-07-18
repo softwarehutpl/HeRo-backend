@@ -153,7 +153,7 @@ namespace HeRoBackEnd.Controllers
                 return BadRequest(new ResponseViewModel("No recruitment with this Id"));
             }
 
-            return Ok(new ResponseViewModel("Recruitment edited successfully"));
+            return Ok(new ResponseViewModel("Recruitment updated successfully"));
         }
 
         /// <summary>
@@ -184,7 +184,7 @@ namespace HeRoBackEnd.Controllers
                 return BadRequest(new ResponseViewModel("No recruitment with this Id"));
             }
 
-            return Ok(new ResponseViewModel("Recruitment end successfully"));
+            return Ok(new ResponseViewModel("Recruitment ended successfully"));
         }
 
         /// <summary>
