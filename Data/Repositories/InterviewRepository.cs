@@ -1,5 +1,6 @@
 ﻿using Common.ServiceRegistrationAttributes;
 using Data.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
@@ -16,16 +17,8 @@ namespace Data.Repositories
         public Interview GetInterview(int id)
         {
             Interview interview = _dataContext.Interviews.Where(i => i.Id == id)
-                .Select(x => new Interview
-                {
-                    Id = x.Id,
-                    Date = x.Date,
-                    CandidateId = x.CandidateId,
-                    WorkerId = x.WorkerId,
-                    Type = x.Type,
-                    Candidate = x.Candidate,
-                    User = x.User
-                })
+                .Include(i => i.Candidate)
+                .Include(i => i.User)
                 .FirstOrDefault();
 
             return interview;
