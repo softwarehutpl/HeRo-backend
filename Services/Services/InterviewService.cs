@@ -4,6 +4,8 @@ using Data.DTOs.Interview;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
+using PagedList;
+using Services.Listing;
 
 namespace Services.Services
 {
@@ -129,7 +131,7 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.Message); ;
+                _logger.LogError(ex.Message);
             }
         }
 
