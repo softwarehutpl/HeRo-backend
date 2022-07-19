@@ -31,15 +31,9 @@ namespace Tests.CandidateTests
                 );
 
             var dto = new CandidateProfileDTO(1, "fullName", "email", "phone", DateTime.Now, 1, "", "");
-
             con.Get(dto.Id);
 
             _candidateService.Verify(g => g.GetCandidateProfileById(dto.Id), Times.Once);
-
-
-
         }
-
-
     }
 }
