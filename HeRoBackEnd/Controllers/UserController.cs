@@ -48,6 +48,8 @@ namespace HeRoBackEnd.Controllers
         /// <param name="userListFilterViewModel">An object containing information about the filter</param>
         /// <returns>Object of the JsonResult class representing a list of Users in the JSON format</returns>
         /// <remarks>
+        /// <h2>Nullable:</h2>
+        ///    "email", "userStatus", "roleName", "sortOrder" <br /><br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "email" <br />
         ///    <h3>Equals:</h3> "userStatus" or "roleName" <br /><br />

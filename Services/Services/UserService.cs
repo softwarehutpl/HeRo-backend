@@ -2,11 +2,11 @@ using Common.Enums;
 using Common.Helpers;
 using Common.Listing;
 using Common.ServiceRegistrationAttributes;
+using Data.DTOs.User;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Data.DTOs.User;
 using Services.Listing;
 
 namespace Services.Services
@@ -30,7 +30,7 @@ namespace Services.Services
             {
                 result = _userRepository.GetUserGuidByEmail(email);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return default;
@@ -42,7 +42,7 @@ namespace Services.Services
         {
             var user = _userRepository.GetUserByEmail(email);
             user.PasswordRecoveryGuid = Guid.NewGuid();
-            
+
             try
             {
                 _userRepository.UpdateAndSaveChanges(user);
@@ -68,7 +68,7 @@ namespace Services.Services
             return userDTO;
         }
 
-        public UserListing GetUsers(Paging paging, SortOrder sortOrder, UserFiltringDTO userFiltringDTO)
+        public UserListing GetUsers(Paging paging, SortOrder? sortOrder, UserFiltringDTO userFiltringDTO)
         {
             IQueryable<User> users = _userRepository.GetAllUsers();
             users = users.Where(u => !u.DeletedDate.HasValue);
@@ -86,7 +86,18 @@ namespace Services.Services
                 users = users.Where(s => s.RoleName.Equals(userFiltringDTO.RoleName));
             }
 
-            users = Sorter<User>.Sort(users, sortOrder.Sort);
+            if (sortOrder != null && sortOrder.Sort != null)
+            {
+                users = Sorter<User>.Sort(users, sortOrder.Sort);
+            }
+            else
+            {
+                sortOrder = new SortOrder();
+                sortOrder.Sort = new List<KeyValuePair<string, string>>();
+                sortOrder.Sort.Add(new KeyValuePair<string, string>("Id", ""));
+
+                users = Sorter<User>.Sort(users, sortOrder.Sort);
+            }
 
             UserListing userListing = new UserListing();
             userListing.TotalCount = users.Count();
@@ -133,16 +144,15 @@ namespace Services.Services
             user.UserStatus = UserStatuses.DELETED.ToString();
             user.DeletedById = loginUserId;
             user.DeletedDate = DateTime.UtcNow;
-            try 
+            try
             {
                 _userRepository.UpdateAndSaveChanges(user);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError("Error updating user while deleting");
                 return -1;
             }
-            
 
             return user.Id;
         }
@@ -175,7 +185,6 @@ namespace Services.Services
             {
                 _logger.LogError(ex.Message);
             }
-           
 
             return newUser.ConfirmationGuid;
         }
