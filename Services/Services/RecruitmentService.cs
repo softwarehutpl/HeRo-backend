@@ -227,7 +227,7 @@ namespace Services.Services
             recruitmentListing.Paging = paging;
             recruitmentListing.SortOrder = sortOrder;
 
-            recruitmentListing.ReadRecruitmentDTOs = recruitments.Select(x => new RecruitmentDetailsDTO
+            recruitmentListing.RecruitmentDTOs = recruitments.Select(x => new RecruitmentDTO
             {
                 Id = x.Id,
                 Name = x.Name,

@@ -58,15 +58,15 @@ namespace HeRoBackEnd.Controllers
         ///    yyyy-MM-ddTHH:mm <br />
         ///    yyyy-MM-ddTHH:mm:ss <br />
         ///    yyyy-MM-ddTHH:mm:ss.fff <br />
+        ///<h2>Nullable:</h2>
+        ///    "name", "description", "beginningDate", "endingDate", "sortOrder" <br /><br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "name", "description" <br />
-        ///    <h3>Open or closed:</h3> "showOpen", "showClosed" <br />
-        ///    <h3>Nullable:</h3> "beginningDate", "endingDate" <br /><br />
+        ///    <h3>Bool:</h3> "showOpen", "showClosed" <br /><br />
         /// <h2>Sorting:</h2>
         ///     <h3>Possible keys:</h3> "Name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
-        /// <h2>In the returned object the skill variable is always null</h2>
         /// </remarks>
         /// <response code="400">Something went wrong!</response>
         /// <response code="200"></response>
@@ -111,12 +111,11 @@ namespace HeRoBackEnd.Controllers
         ///    "name", "description", "beginningDate", "endingDate", "sortOrder" <br /><br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "name", "description" <br />
-        ///    <h3>Open or closed:</h3> "showOpen", "showClosed" <br />
+        ///    <h3>Bool:</h3> "showOpen", "showClosed" <br /><br />
         /// <h2>Sorting:</h2>
         ///     <h3>Possible keys:</h3> "Name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
-        /// <h2>In the returned object the skill variable is always null</h2>
         /// </remarks>
         /// <response code="200"></response>
         /// <response code="400">Error getting list of recruitments</response>

@@ -1,8 +1,6 @@
-﻿using Data.DTOs.RecruitmentSkill;
-
-namespace Data.DTOs.Recruitment
+﻿namespace Data.DTOs.Recruitment
 {
-    public class RecruitmentDetailsDTO
+    public class RecruitmentDTO
     {
         public int Id { get; set; }
         public DateTime BeginningDate { get; set; }
@@ -15,6 +13,5 @@ namespace Data.DTOs.Recruitment
         public string Localization { get; set; }
         public string Seniority { get; set; }
         public int? HiredCount { get; set; }
-        public IEnumerable<RecruitmentSkillDetailsDTO> Skills { get; set; }
     }
 }
