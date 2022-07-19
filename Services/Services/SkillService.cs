@@ -3,11 +3,12 @@ using Data.DTOs.Skill;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
+using Services.IServices;
 
 namespace Services.Services
 {
-    [ScopedRegistration]
-    public class SkillService
+    [ScopedRegistrationWithInterface]
+    public class SkillService : ISkillService
     {
         private readonly ILogger<SkillService> _logger;
         private readonly SkillRepository _repo;

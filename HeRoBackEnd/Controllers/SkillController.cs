@@ -3,6 +3,7 @@ using Data.Entities;
 using HeRoBackEnd.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.IServices;
 using Services.Services;
 
 namespace HeRoBackEnd.Controllers
@@ -10,9 +11,9 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class SkillController : Controller
     {
-        private readonly SkillService _service;
+        private readonly ISkillService _service;
 
-        public SkillController(SkillService service)
+        public SkillController(ISkillService service)
         {
             _service = service;
         }

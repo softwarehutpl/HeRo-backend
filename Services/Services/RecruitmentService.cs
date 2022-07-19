@@ -7,12 +7,13 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
+using Services.IServices;
 using Services.Listing;
 
 namespace Services.Services
 {
-    [ScopedRegistration]
-    public class RecruitmentService
+    [ScopedRegistrationWithInterface]
+    public class RecruitmentService : IRecruitmentService
     {
         private readonly IMapper _mapper;
         private readonly RecruitmentRepository _recruitmentRepo;

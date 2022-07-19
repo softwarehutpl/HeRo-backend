@@ -7,12 +7,13 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
+using Services.IServices;
 using Services.Listing;
 
 namespace Services.Services
 {
-    [ScopedRegistration]
-    public class UserService
+    [ScopedRegistrationWithInterface]
+    public class UserService : IUserService
     {
         private UserRepository _userRepository;
         private ILogger<UserService> _logger;

@@ -3,6 +3,7 @@ using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.Interview;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.IServices;
 using Services.Listing;
 using Services.Services;
 
@@ -11,9 +12,9 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class InterviewController : BaseController
     {
-        private InterviewService _interviewService;
+        private IInterviewService _interviewService;
 
-        public InterviewController(InterviewService interviewService)
+        public InterviewController(IInterviewService interviewService)
         {
             _interviewService = interviewService;
         }

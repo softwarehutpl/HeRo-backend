@@ -5,23 +5,20 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
+using Services.IServices;
 using Services.Listing;
 
 namespace Services.Services
 {
-    [ScopedRegistration]
-    public class InterviewService
+    [ScopedRegistrationWithInterface]
+    public class InterviewService : IInterviewService
     {
         private InterviewRepository _interviewRepository;
-        private UserRepository _userRepository;
-        private CandidateRepository _candidateRepository;
         private ILogger<InterviewService> _logger;
 
-        public InterviewService(ILogger<InterviewService> logger, InterviewRepository interviewRepository, UserRepository userRepository, CandidateRepository candidateRepository)
+        public InterviewService(ILogger<InterviewService> logger, InterviewRepository interviewRepository)
         {
             _interviewRepository = interviewRepository;
-            _userRepository = userRepository;
-            _candidateRepository = candidateRepository;
             _logger = logger;
         }
 
