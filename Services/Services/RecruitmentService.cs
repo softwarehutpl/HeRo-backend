@@ -181,14 +181,23 @@ namespace Services.Services
             {
                 recruitments = recruitments.Where(s => s.EndedDate.HasValue || s.EndingDate < DateTime.Now);
             }
-            if (recruitmentFiltringDTO.ShowOpen == true && recruitmentFiltringDTO.ShowClosed == false)
+            else if (recruitmentFiltringDTO.ShowOpen == true && recruitmentFiltringDTO.ShowClosed == false)
             {
                 recruitments = recruitments.Where(s => !s.EndedDate.HasValue &&
                 s.BeginningDate < DateTime.Now && s.EndingDate > DateTime.Now);
             }
-            if(recruitmentFiltringDTO.ShowOpen==false && recruitmentFiltringDTO.ShowClosed==false)
+            else if(recruitmentFiltringDTO.ShowOpen==false && recruitmentFiltringDTO.ShowClosed==false)
             {
                 recruitments = Enumerable.Empty<Recruitment>().AsQueryable();
+
+                RecruitmentListing result = new RecruitmentListing();
+                result.TotalCount = recruitments.Count();
+                result.RecruitmentFiltringDTO = recruitmentFiltringDTO;
+                result.Paging = paging;
+                result.SortOrder = sortOrder;
+                result.ReadRecruitmentDTOs = Enumerable.Empty<RecruitmentDetailsDTO>();
+
+                return result;
             }
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
