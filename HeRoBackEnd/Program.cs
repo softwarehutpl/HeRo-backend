@@ -56,7 +56,7 @@ try
     {
         build
         .AllowAnyMethod()
-        .AllowAnyHeader();
+        .AllowAnyHeader()
         .AllowAnyOrigin()
         .Build();
     }));
