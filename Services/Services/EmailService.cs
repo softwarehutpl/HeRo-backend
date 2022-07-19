@@ -2,25 +2,22 @@
 using Common.Helpers;
 using Common.ServiceRegistrationAttributes;
 using Data.Repositories;
+using Services.IServices;
 
 namespace Services.Services
 {
-    [ScopedRegistration]
-    public class EmailService
+    [ScopedRegistrationWithInterface]
+    public class EmailService : IEmailService
     {
         private readonly EmailHelper _emailHelper;
-        private readonly UserRepository _userRepository;
-        private readonly AuthService _authService;
 
-        public EmailService(EmailHelper emailHelper, UserRepository userRepository, AuthService authService)
+        public EmailService(EmailHelper emailHelper)
         {
             _emailHelper = emailHelper;
-            _userRepository = userRepository;
-            _authService = authService;
         }
 
         public void SendConfirmationEmail(string email, string url)
-        {          
+        {
             string subject = "Registration";
             string body = $"Registration successfull. Click confirmation link to complete the process. \n {url}";
             MailMessage mail = _emailHelper.CreateEmail(email, subject, body);

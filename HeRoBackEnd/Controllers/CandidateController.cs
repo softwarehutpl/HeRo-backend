@@ -5,6 +5,7 @@ using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Services.IServices;
 using Services.Listing;
 using Services.Services;
 
@@ -13,11 +14,11 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class CandidateController : BaseController
     {
-        private CandidateService _candidateService;
+        private ICandidateService _candidateService;
         private ILogger<CandidateController> _logger;
         private readonly IMapper _mapper;
 
-        public CandidateController(CandidateService candidateService, ILogger<CandidateController> logger, IMapper map)
+        public CandidateController(ICandidateService candidateService, ILogger<CandidateController> logger, IMapper map)
         {
             this._candidateService = candidateService;
             _mapper = map;

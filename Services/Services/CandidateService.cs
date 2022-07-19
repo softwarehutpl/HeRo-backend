@@ -6,17 +6,19 @@ using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
+using Services.IServices;
 using Services.Listing;
 
 namespace Services.Services
 {
-    [ScopedRegistration]
-    public class CandidateService
+    [ScopedRegistrationWithInterface]
+    public class CandidateService : ICandidateService
     {
         private readonly CandidateRepository _candidateRepository;
         private readonly RecruitmentRepository _recruitmentRepository;
         private readonly IMapper _mapper;
         private readonly ILogger<RecruitmentService> _logger;
+
 
         public CandidateService(IMapper map, CandidateRepository candidateRepository,
             ILogger<RecruitmentService> logger, RecruitmentRepository recruitmentRepository)

@@ -8,11 +8,12 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Common.Enums;
 using System;
 using Common.ServiceRegistrationAttributes;
+using Services.IServices;
 
 namespace Services.Services
 {
-    [ScopedRegistration]
-    public class AuthService
+    [ScopedRegistrationWithInterface]
+    public class AuthService : IAuthService
     {
         private UserRepository _userRepository;
 
@@ -72,13 +73,13 @@ namespace Services.Services
                     _userRepository.UpdateAndSaveChanges(user);
                     return true;
                 }
-                
+
                 return false;
             }
             catch (Exception ex)
             {
                 return false;
-            }        
+            }
         }
     }
 }
