@@ -42,22 +42,23 @@ try
         options.SlidingExpiration = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.Cookie.SameSite = SameSiteMode.None;
+        options.Cookie.IsEssential = true;
         options.ExpireTimeSpan = new TimeSpan(0, 20, 0);
         options.Events.OnRedirectToLogin = (context) =>
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;
             return Task.CompletedTask;
         };
-        options.Cookie.HttpOnly = true;
+        options.Cookie.HttpOnly = false;
     });
 
     builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
     {
         build
-        .WithOrigins("http://localhost:3000", "http://localhost:7210", "http://localhost:4200")
         .AllowAnyMethod()
         .AllowAnyHeader()
-        .AllowCredentials();
+        .AllowAnyOrigin()
+        .Build();
     }));
 
     builder.Services.AddAuthorization(options =>
@@ -162,7 +163,7 @@ try
 
     app.MapControllerRoute(
         name: "default",
-        pattern: "{controller=Home}/{action=Index}/{id?}");
+        pattern: "{controller=Home}/{action=Index}/{id?}").RequireCors("corspolicy");
 
     app.Run();
 }
