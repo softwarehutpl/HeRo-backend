@@ -68,6 +68,9 @@ namespace Data.Entities
         [Required(ErrorMessage = "This field is required")]
         public string Seniority { get; set; }
 
+        [Required(ErrorMessage = "This field is required")]
+        public bool IsPublic { get; set; }
+
         public virtual ICollection<Candidate> Candidates { get; set; }
 
         public virtual ICollection<RecruitmentSkill> Skills { get; set; }

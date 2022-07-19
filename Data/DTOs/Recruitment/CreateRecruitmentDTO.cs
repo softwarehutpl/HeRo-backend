@@ -22,7 +22,7 @@ namespace Data.DTOs.Recruitment
         public string RecruitmentPosition { get; set; }
         public string Localization { get; set; }
         public string Seniority { get; set; }
-
+        public bool IsPublic { get; set; }
         public IEnumerable<RecruitmentSkillDTO> Skills { get; set; }
     }
 }
