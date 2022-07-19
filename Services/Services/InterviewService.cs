@@ -55,7 +55,7 @@ namespace Services.Services
             return result;
         }
 
-        public InterviewListing GetInterviews(Paging paging, SortOrder sortOrder, InterviewFiltringDTO interviewFiltringDTO)
+        public InterviewListing GetInterviews(Paging paging, SortOrder? sortOrder, InterviewFiltringDTO interviewFiltringDTO)
         {
             IQueryable<Interview> interviews = _interviewRepository.GetAll();
             interviews = interviews.Where(i => !i.DeletedDate.HasValue);
@@ -80,6 +80,7 @@ namespace Services.Services
             {
                 interviews = interviews.Where(s => s.CandidateId == interviewFiltringDTO.CandidateId);
             }
+
             if (interviewFiltringDTO.WorkerId.HasValue)
             {
                 interviews = interviews.Where(s => s.WorkerId == interviewFiltringDTO.WorkerId);
@@ -90,7 +91,18 @@ namespace Services.Services
                 interviews = interviews.Where(s => s.Type.Equals(interviewFiltringDTO.Type));
             }
 
-            interviews = Sorter<Interview>.Sort(interviews, sortOrder.Sort);
+            if (sortOrder != null && sortOrder.Sort != null)
+            {
+                interviews = Sorter<Interview>.Sort(interviews, sortOrder.Sort);
+            }
+            else
+            {
+                sortOrder = new SortOrder();
+                sortOrder.Sort = new List<KeyValuePair<string, string>>();
+                sortOrder.Sort.Add(new KeyValuePair<string, string>("Id", ""));
+
+                interviews = Sorter<Interview>.Sort(interviews, sortOrder.Sort);
+            }
 
             InterviewListing interviewListing = new InterviewListing();
             interviewListing.TotalCount = interviews.Count();

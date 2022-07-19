@@ -47,7 +47,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Returns a list of recruitments
+        /// Returns a list of public recruitments
         /// </summary>
         /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
         /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
@@ -58,14 +58,64 @@ namespace HeRoBackEnd.Controllers
         ///    yyyy-MM-ddTHH:mm <br />
         ///    yyyy-MM-ddTHH:mm:ss <br />
         ///    yyyy-MM-ddTHH:mm:ss.fff <br />
+        ///<h2>Nullable:</h2>
+        ///    "name", "description", "beginningDate", "endingDate", "sortOrder" <br /><br />
         /// <h2>Filtring:</h2>
         ///    <h3>Contains:</h3> "name", "description" <br />
-        ///    <h3>Nullable:</h3> "beginningDate", "endingDate" <br /><br />
+        ///    <h3>Bool:</h3> "showOpen", "showClosed" <br /><br />
         /// <h2>Sorting:</h2>
         ///     <h3>Possible keys:</h3> "Name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
-        ///
+        /// </remarks>
+        /// <response code="400">Something went wrong!</response>
+        /// <response code="200"></response>
+        [HttpPost]
+        [Route("Recruitment/GetPublicList")]
+        [ProducesResponseType(typeof(RecruitmentListing), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
+        public IActionResult GetPublicList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
+        {
+            Paging paging = recruitmentListFilterViewModel.Paging;
+            SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
+            RecruitmentFiltringDTO recruitmentFiltringDTO
+                = new RecruitmentFiltringDTO(
+                    recruitmentListFilterViewModel.Name,
+                    recruitmentListFilterViewModel.Description,
+                    recruitmentListFilterViewModel.BeginningDate,
+                    recruitmentListFilterViewModel.EndingDate,
+                    false,
+                    recruitmentListFilterViewModel.ShowOpen,
+                    recruitmentListFilterViewModel.ShowClosed);
+
+            RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+
+            if (recruitments == null) return BadRequest();
+
+            return Ok(recruitments);
+        }
+
+        /// <summary>
+        /// Returns a list of recruitments
+        /// </summary>
+        /// <param name="recruitmentListFilterViewModel">Object containing information about the filtering</param>
+        /// <returns>Object of the JsonResult class representing the list of Recruitments in JSON format</returns>
+        /// <remarks>
+        /// <h2>Format:</h2>
+        ///    <h3>Date:</h3>
+        ///    yyyy-MM-dd <br />
+        ///    yyyy-MM-ddTHH:mm <br />
+        ///    yyyy-MM-ddTHH:mm:ss <br />
+        ///    yyyy-MM-ddTHH:mm:ss.fff <br /><br />
+        /// <h2>Nullable:</h2>
+        ///    "name", "description", "beginningDate", "endingDate", "sortOrder" <br /><br />
+        /// <h2>Filtring:</h2>
+        ///    <h3>Contains:</h3> "name", "description" <br />
+        ///    <h3>Bool:</h3> "showOpen", "showClosed" <br /><br />
+        /// <h2>Sorting:</h2>
+        ///     <h3>Possible keys:</h3> "Name" <br />
+        ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
+        ///                      Another value - sort the result in ascending order <br />
         /// </remarks>
         /// <response code="200"></response>
         /// <response code="400">Error getting list of recruitments</response>
@@ -84,7 +134,10 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.Name,
                     recruitmentListFilterViewModel.Description,
                     recruitmentListFilterViewModel.BeginningDate,
-                    recruitmentListFilterViewModel.EndingDate);
+                    recruitmentListFilterViewModel.EndingDate,
+                    true,
+                    recruitmentListFilterViewModel.ShowOpen,
+                    recruitmentListFilterViewModel.ShowClosed);
 
             RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 

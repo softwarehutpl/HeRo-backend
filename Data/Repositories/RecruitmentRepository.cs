@@ -34,7 +34,7 @@ namespace Data.Repositories
         public RecruitmentDetailsDTO? GetRecruitmentDTOById(int id)
         {
             RecruitmentDetailsDTO? result = DataContext.Recruitments
-                .Include(x => x.Candidates)
+                //.Include(x => x.Candidates)
                 .Where(x => x.Id == id)
                 .Where(e => !e.DeletedDate.HasValue)
                 .Select(x => new RecruitmentDetailsDTO
@@ -83,6 +83,16 @@ namespace Data.Repositories
                 CandidateCount = x.Candidates.Count(),
                 HiredCount = x.Candidates.Count(e => e.Status == CandidateStatuses.HIRED.ToString())
             }).ToList();
+
+            return result;
+        }
+
+        public Recruitment GetRecruitmentDetails(int recruitmentId)
+        {
+            var result = DataContext.Recruitments
+                .Include(x => x.Skills)
+                .Where(x => x.Id == recruitmentId)
+                .FirstOrDefault();
 
             return result;
         }

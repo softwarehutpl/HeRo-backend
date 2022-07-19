@@ -56,9 +56,13 @@ try
     {
         build
         .AllowAnyMethod()
-        .AllowAnyHeader();
+<<<<<<< HEAD
+        .AllowAnyHeader()
         .AllowAnyOrigin()
         .Build();
+=======
+        .AllowAnyHeader();
+>>>>>>> 493714bdfa7777d9dc0743072d51536d4122452b
     }));
 
     builder.Services.AddAuthorization(options =>

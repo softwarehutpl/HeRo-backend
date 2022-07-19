@@ -1,6 +1,6 @@
 ﻿namespace Data.DTOs.Recruitment
 {
-    public class ReadRecruitmentDTO
+    public class RecruitmentDTO
     {
         public int Id { get; set; }
         public DateTime BeginningDate { get; set; }

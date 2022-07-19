@@ -2,6 +2,6 @@
 {
     public class SortOrder
     {
-        public List<KeyValuePair<string, string>> Sort { get; set; }
+        public List<KeyValuePair<string, string>>? Sort { get; set; }
     }
 }

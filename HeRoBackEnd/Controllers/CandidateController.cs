@@ -54,10 +54,11 @@ namespace HeRoBackEnd.Controllers
         /// <param name="candidate">An object containing information about the filter</param>
         /// <returns>Json result object representing a list of Candidates</returns>
         /// <remarks>
+        /// <h2>Nullable:</h2>
+        ///    "statuses", "stages", "sortOrder" <br /><br />
         /// <h2>Filtring:</h2>
         ///    <h3>Possible statuses:</h3> "NEW" , "IN_PROCESSING", "DROPPED_OUT", "HIRED" <br />
         ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br />
-        ///    <h3>Nullable:</h3> "statuses", "stages" <br /><br />
         /// <h2>Sorting:</h2>
         ///     <h3>Possible keys:</h3> "Name", "Source", "Status", "Stage" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />

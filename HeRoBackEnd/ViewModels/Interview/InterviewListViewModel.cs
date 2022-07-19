@@ -16,6 +16,6 @@ namespace HeRoBackEnd.ViewModels.Interview
 
         public Paging Paging { get; set; }
 
-        public SortOrder SortOrder { get; set; }
+        public SortOrder? SortOrder { get; set; }
     }
 }

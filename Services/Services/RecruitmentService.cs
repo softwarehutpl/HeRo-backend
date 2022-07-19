@@ -51,7 +51,7 @@ namespace Services.Services
         {
             try
             {
-                Recruitment recruitment = _recruitmentRepo.GetById(recruitmentId);
+                Recruitment recruitment = _recruitmentRepo.GetRecruitmentDetails(recruitmentId);
 
                 if (recruitment == null)
                 {
@@ -65,6 +65,11 @@ namespace Services.Services
                 recruitment.Description = dto.Description;
                 recruitment.RecruiterId = dto.RecruiterId;
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
+                recruitment.RecruitmentPosition = dto.RecruitmentPosition;
+                recruitment.Localization = dto.RecruitmentPosition;
+                recruitment.Seniority = dto.Seniority;
+                recruitment.IsPublic = dto.IsPublic;
+
                 IEnumerable<RecruitmentSkill> newSkills = _mapper.Map<IEnumerable<RecruitmentSkill>>(dto.Skills);
 
                 foreach (RecruitmentSkill newSkill in newSkills)
@@ -163,36 +168,66 @@ namespace Services.Services
             return 1;
         }
 
-        public RecruitmentListing GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
+        public RecruitmentListing GetRecruitments(Paging paging, SortOrder? sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
             IQueryable<Recruitment> recruitments = _recruitmentRepo.GetAll();
             recruitments = recruitments.Where(r => !r.DeletedDate.HasValue);
+
+            if (recruitmentFiltringDTO.ShowPrivate == false)
+            {
+                recruitments = recruitments.Where(s => s.IsPublic == true);
+            }
+
+            if (recruitmentFiltringDTO.ShowOpen == false && recruitmentFiltringDTO.ShowClosed == true)
+            {
+                recruitments = recruitments.Where(s => s.EndedDate.HasValue || s.EndingDate < DateTime.Now);
+            }
+            else if (recruitmentFiltringDTO.ShowOpen == true && recruitmentFiltringDTO.ShowClosed == false)
+            {
+                recruitments = recruitments.Where(s => !s.EndedDate.HasValue &&
+                s.BeginningDate < DateTime.Now && s.EndingDate > DateTime.Now);
+            }
 
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
                 recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
             }
+
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
             {
                 recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
             }
+
             if (recruitmentFiltringDTO.BeginningDate.HasValue)
             {
                 recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
             }
+
             if (recruitmentFiltringDTO.EndingDate.HasValue)
             {
                 recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
             }
 
-            recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
+            if (sortOrder != null && sortOrder.Sort != null)
+            {
+                recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
+            }
+            else
+            {
+                sortOrder = new SortOrder();
+                sortOrder.Sort = new List<KeyValuePair<string, string>>();
+                sortOrder.Sort.Add(new KeyValuePair<string, string>("Id", ""));
+
+                recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
+            }
+
             RecruitmentListing recruitmentListing = new RecruitmentListing();
             recruitmentListing.TotalCount = recruitments.Count();
             recruitmentListing.RecruitmentFiltringDTO = recruitmentFiltringDTO;
             recruitmentListing.Paging = paging;
             recruitmentListing.SortOrder = sortOrder;
 
-            recruitmentListing.ReadRecruitmentDTOs = recruitments.Select(x => new ReadRecruitmentDTO
+            recruitmentListing.RecruitmentDTOs = recruitments.Select(x => new RecruitmentDTO
             {
                 Id = x.Id,
                 Name = x.Name,
