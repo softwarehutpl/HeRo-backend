@@ -57,10 +57,11 @@ namespace HeRoBackEnd.Controllers
         ///    yyyy-MM-dd <br />
         ///    yyyy-MM-ddTHH:mm <br />
         ///    yyyy-MM-ddTHH:mm:ss <br />
-        ///    yyyy-MM-ddTHH:mm:ss.fff <br />
+        ///    yyyy-MM-ddTHH:mm:ss.fff <br /><br />
+        /// <h2>Nullable:</h2>
+        ///    "name", "description", "beginningDate", "endingDate", "sortOrder" <br /><br />
         /// <h2>Filtring:</h2>
-        ///    <h3>Contains:</h3> "name", "description" <br />
-        ///    <h3>Nullable:</h3> "beginningDate", "endingDate" <br /><br />
+        ///    <h3>Contains:</h3> "name", "description" <br /><br />
         /// <h2>Sorting:</h2>
         ///     <h3>Possible keys:</h3> "Name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />

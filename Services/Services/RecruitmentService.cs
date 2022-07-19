@@ -163,7 +163,7 @@ namespace Services.Services
             return 1;
         }
 
-        public RecruitmentListing GetRecruitments(Paging paging, SortOrder sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
+        public RecruitmentListing GetRecruitments(Paging paging, SortOrder? sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)
         {
             IQueryable<Recruitment> recruitments = _recruitmentRepo.GetAll();
             recruitments = recruitments.Where(r => !r.DeletedDate.HasValue);
@@ -185,7 +185,19 @@ namespace Services.Services
                 recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
             }
 
-            recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
+            if (sortOrder != null && sortOrder.Sort != null)
+            {
+                recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
+            }
+            else
+            {
+                sortOrder = new SortOrder();
+                sortOrder.Sort = new List<KeyValuePair<string, string>>();
+                sortOrder.Sort.Add(new KeyValuePair<string, string>("Id", ""));
+
+                recruitments = Sorter<Recruitment>.Sort(recruitments, sortOrder.Sort);
+            }
+
             RecruitmentListing recruitmentListing = new RecruitmentListing();
             recruitmentListing.TotalCount = recruitments.Count();
             recruitmentListing.RecruitmentFiltringDTO = recruitmentFiltringDTO;

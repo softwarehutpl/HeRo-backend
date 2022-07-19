@@ -164,7 +164,7 @@ namespace HeRoBackEnd.Controllers
         ///     ]
         /// </remarks>
         [HttpGet]
-        [Route("Skill/GetListFilteredByName{name}")]
+        [Route("Skill/GetListFilteredByName")]
         [Authorize(Policy = "AnyRoleRequirment")]
         [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetListFilteredByName(string name)

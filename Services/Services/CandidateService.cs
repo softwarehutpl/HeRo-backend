@@ -1,15 +1,12 @@
 ﻿using AutoMapper;
 using Common.Listing;
 using Common.ServiceRegistrationAttributes;
+using Data.DTOs.Candidate;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
 using Services.Listing;
-using Data.DTOs.Candidate;
-using System.ComponentModel.DataAnnotations;
-using Data.DTOs.Interview;
-using Common.Enums;
 
 namespace Services.Services
 {
@@ -43,17 +40,17 @@ namespace Services.Services
                 return -1;
             }
 
-            try 
+            try
             {
                 //candidate.Stage = StageNames.EVALUATION.ToString();
                 candidate.RecruiterId = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError("Error when getting recruiterId of recruitment which doesn't exist: " + ex);
                 return -2;
             }
-            
+
             try
             {
                 _candidateRepository.AddAndSaveChanges(candidate);
@@ -85,18 +82,18 @@ namespace Services.Services
                 }
                 return 1;
             }
-            else 
+            else
             {
                 _logger.LogError("Error getting candidate with given ID");
-                return -1; 
+                return -1;
             }
         }
 
         public int UpdateCandidate(int id, UpdateCandidateDTO dto)
         {
-            Candidate candidate = _candidateRepository.GetById(id); 
-            
-            if(candidate==null)
+            Candidate candidate = _candidateRepository.GetById(id);
+
+            if (candidate == null)
             {
                 _logger.LogError("Error getting candidate with given ID");
                 return -1;
@@ -157,7 +154,7 @@ namespace Services.Services
         public int AddHRNote(int candidateId, CandidateAddHRNoteDTO dto)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
-            if(candidate== null)
+            if (candidate == null)
             {
                 _logger.LogError("Error getting candidate with given ID");
                 return -1;
@@ -217,11 +214,11 @@ namespace Services.Services
             Candidate candidate;
             CandidateProfileDTO candidateProfileDTO;
 
-            try 
+            try
             {
                 candidate = _candidateRepository.GetById(id);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 _logger.LogError("Error getting candidate with given ID: " + ex);
                 return null;
@@ -245,25 +242,36 @@ namespace Services.Services
                 _logger.LogError("Error creating candidateProfileDTO (candidate == null ?): " + ex);
                 return null;
             }
-             
+
             return candidateProfileDTO;
         }
 
-        public CandidateListing GetCandidates(Paging paging, SortOrder sortOrder, CandidateFilteringDTO candidateFilteringDTO)
+        public CandidateListing GetCandidates(Paging paging, SortOrder? sortOrder, CandidateFilteringDTO candidateFilteringDTO)
         {
             IQueryable<Candidate> candidates = _candidateRepository.GetAll();
             candidates = candidates.Where(s => !s.DeletedById.HasValue);
 
-            if (candidateFilteringDTO.Status.Count > 0)
+            if ((candidateFilteringDTO.Status != null) && (candidateFilteringDTO.Status.Count > 0))
             {
                 candidates = candidates.Where(c => candidateFilteringDTO.Status.Contains(c.Status));
             }
-            if (candidateFilteringDTO.Stages.Count > 0)
+            if ((candidateFilteringDTO.Stages != null) && (candidateFilteringDTO.Stages.Count > 0))
             {
                 candidates = candidates.Where(c => candidateFilteringDTO.Stages.Contains(c.Stage));
             }
 
-            candidates = Sorter<Candidate>.Sort(candidates, sortOrder.Sort);
+            if (sortOrder != null && sortOrder.Sort != null)
+            {
+                candidates = Sorter<Candidate>.Sort(candidates, sortOrder.Sort);
+            }
+            else
+            {
+                sortOrder = new SortOrder();
+                sortOrder.Sort = new List<KeyValuePair<string, string>>();
+                sortOrder.Sort.Add(new KeyValuePair<string, string>("Id", ""));
+
+                candidates = Sorter<Candidate>.Sort(candidates, sortOrder.Sort);
+            }
 
             CandidateListing candidateListing = new();
             candidateListing.TotalCount = candidates.Count();
@@ -294,7 +302,7 @@ namespace Services.Services
             if (candidate != null)
             {
                 if (dto.TechId != 0)
-                { 
+                {
                     candidate.TechId = dto.TechId;
                 }
 

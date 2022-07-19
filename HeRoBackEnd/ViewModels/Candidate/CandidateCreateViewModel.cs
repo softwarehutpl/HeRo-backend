@@ -10,7 +10,6 @@ namespace HeRoBackEnd.ViewModels.Candidate
         [Required(ErrorMessage = "This field is required")]
         public string LastName { get; set; }
 
-
         [Required(ErrorMessage = "This field is required")]
         public string Email { get; set; }
 
@@ -18,12 +17,10 @@ namespace HeRoBackEnd.ViewModels.Candidate
         public string PhoneNumber { get; set; }
 
         [Required(ErrorMessage = "This field is required")]
-        public DateTime? AvailableFrom { get; set; }
+        public DateTime AvailableFrom { get; set; }
 
-        [Required(ErrorMessage = "This field is required")]
         public int? ExpectedMonthlySalary { get; set; }
 
-        [Required(ErrorMessage = "This field is required")]
         public string? OtherExpectations { get; set; }
 
         [Required(ErrorMessage = "This field is required")]
