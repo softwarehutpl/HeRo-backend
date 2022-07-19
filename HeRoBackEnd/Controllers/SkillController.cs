@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.ComponentModel.DataAnnotations;
-using Services.Services;
-using Data.DTOs.Skill;
+﻿using Data.DTOs.Skill;
 using Data.Entities;
+using HeRoBackEnd.ViewModels;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Services.Services;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -31,10 +31,16 @@ namespace HeRoBackEnd.Controllers
         {
             int result = _service.AddSkill(skillName);
 
-            if (result == 0) return BadRequest("Skill with that name already exists!");
-            if (result == -1) return BadRequest("Wrong data!");
+            if (result == 0)
+            {
+                return BadRequest(new ResponseViewModel("Skill with that name already exists!"));
+            }
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Wrong data!"));
+            }
 
-            return Ok("Skill added successfully");
+            return Ok(new ResponseViewModel("Skill added successfully"));
         }
 
         /// <summary>
@@ -53,13 +59,16 @@ namespace HeRoBackEnd.Controllers
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
             int result = _service.UpdateSkill(dto);
 
-            if (result == 0) 
-                return BadRequest("Skill with that name already exists!");
+            if (result == 0)
+            {
+                return BadRequest(new ResponseViewModel("Skill with that name already exists!"));
+            }
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Wrong data!"));
+            }
 
-            if (result == -1) 
-                return BadRequest("Wrong data!");
-
-            return Ok("Skill updated successfully");
+            return Ok(new ResponseViewModel("Skill updated successfully"));
         }
 
         /// <summary>
@@ -76,16 +85,22 @@ namespace HeRoBackEnd.Controllers
         {
             int result = _service.DeleteSkill(skillId);
 
-            if (result == 0) 
-                return BadRequest("This skill is currently used in one of the recruitments. You can't delete it.");
+            if (result == 0)
+            {
+                return BadRequest(new ResponseViewModel("This skill is currently used in one of the recruitments. You can't delete it."));
+            }
 
             if (result == -1)
-                return BadRequest("There is no such skill!");
+            {
+                return BadRequest(new ResponseViewModel("There is no such skill!"));
+            }
 
             if (result == -2)
-                return BadRequest("Error while deleting skill!");
+            {
+                return BadRequest(new ResponseViewModel("Error while deleting skill!"));
+            }
 
-            return Ok("Skill deleted successfully");
+            return Ok(new ResponseViewModel("Skill deleted successfully"));
         }
 
         /// <summary>
@@ -181,7 +196,10 @@ namespace HeRoBackEnd.Controllers
         {
             Skill skill = _service.GetSkill(skillId);
 
-            if (skill == null) return BadRequest("There is no such skill!");
+            if (skill == null)
+            {
+                return BadRequest(new ResponseViewModel("There is no such skill!"));
+            }
 
             return Ok(skill);
         }
