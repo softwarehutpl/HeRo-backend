@@ -177,6 +177,7 @@ namespace Services.Services
             {
                 recruitments = recruitments.Where(s => s.IsPublic == true);
             }
+
             if (recruitmentFiltringDTO.ShowOpen == false && recruitmentFiltringDTO.ShowClosed == true)
             {
                 recruitments = recruitments.Where(s => s.EndedDate.HasValue || s.EndingDate < DateTime.Now);
@@ -186,31 +187,22 @@ namespace Services.Services
                 recruitments = recruitments.Where(s => !s.EndedDate.HasValue &&
                 s.BeginningDate < DateTime.Now && s.EndingDate > DateTime.Now);
             }
-            else if(recruitmentFiltringDTO.ShowOpen==false && recruitmentFiltringDTO.ShowClosed==false)
-            {
-                recruitments = Enumerable.Empty<Recruitment>().AsQueryable();
 
-                RecruitmentListing result = new RecruitmentListing();
-                result.TotalCount = recruitments.Count();
-                result.RecruitmentFiltringDTO = recruitmentFiltringDTO;
-                result.Paging = paging;
-                result.SortOrder = sortOrder;
-                result.ReadRecruitmentDTOs = Enumerable.Empty<RecruitmentDetailsDTO>();
-
-                return result;
-            }
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Name))
             {
                 recruitments = recruitments.Where(s => s.Name.Contains(recruitmentFiltringDTO.Name));
             }
+
             if (!String.IsNullOrEmpty(recruitmentFiltringDTO.Description))
             {
                 recruitments = recruitments.Where(s => s.Description.Contains(recruitmentFiltringDTO.Description));
             }
+
             if (recruitmentFiltringDTO.BeginningDate.HasValue)
             {
                 recruitments = recruitments.Where(s => s.BeginningDate >= recruitmentFiltringDTO.BeginningDate);
             }
+
             if (recruitmentFiltringDTO.EndingDate.HasValue)
             {
                 recruitments = recruitments.Where(s => s.EndingDate <= recruitmentFiltringDTO.EndingDate);
