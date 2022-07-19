@@ -56,8 +56,7 @@ try
         build
         .WithOrigins("http://localhost:3000", "http://localhost:7210", "http://localhost:4200")
         .AllowAnyMethod()
-        .AllowAnyHeader()
-        .AllowCredentials();
+        .AllowAnyHeader();
     }));
 
     builder.Services.AddAuthorization(options =>

@@ -31,6 +31,9 @@ namespace HeRoBackEnd.ViewModels.Recruitment
         [Required(ErrorMessage = "This field is required")]
         public string Seniority { get; set; }
 
+        [Required(ErrorMessage = "This field is required")]
+        public bool IsPublic { get; set; }
+
         [NoDuplicates]
         [MinLength(1,ErrorMessage ="You have to specify at least one skill")]
         public IEnumerable<RecruitmentSkillDTO> Skills { get; set; }

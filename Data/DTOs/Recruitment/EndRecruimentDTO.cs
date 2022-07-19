@@ -13,13 +13,9 @@ namespace Data.DTOs.Recruitment
             Id = id;
         }
         public int Id { get; set; }
-
         public int? LastUpdatedById { get; set; }
-
         public DateTime? LastUpdatedDate { get; set; }
-
         public int? EndedById { get; set; }
-
         public DateTime? EndedDate { get; set; }
     }
 }
