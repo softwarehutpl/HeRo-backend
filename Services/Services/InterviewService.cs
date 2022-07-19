@@ -27,25 +27,22 @@ namespace Services.Services
 
         public InterviewDTO Get(int interviewId)
         {
-            Interview interview = _interviewRepository.GetById(interviewId);
+            Interview interview = _interviewRepository.GetInterview(interviewId);
             if (interview == null)
             {
                 return null;
             }
-
-            var candidateTemp = _candidateRepository.GetAll().Where(x => x.Id == interview.CandidateId).Select(x => new { x.Name, x.LastName, x.Email }).First();
-            string workerEmail = _userRepository.GetUserEmail(interview.WorkerId);
 
             InterviewDTO interviewDTO =
                 new InterviewDTO(
                     interview.Id,
                     interview.Date,
                     interview.CandidateId,
-                    candidateTemp.Name,
-                    candidateTemp.LastName,
-                    candidateTemp.Email,
-                    interview.WorkerId,
-                    workerEmail,
+                    interview.Candidate.Name,
+                    interview.Candidate.LastName,
+                    interview.Candidate.Email,
+                    interview.User.Id,
+                    interview.User.Email,
                     interview.Type);
 
             return interviewDTO;

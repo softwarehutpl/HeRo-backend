@@ -41,6 +41,7 @@ try
         options.Cookie.Name = "UserLoginCookie";
         options.SlidingExpiration = true;
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
+        options.Cookie.SameSite = SameSiteMode.None;
         options.ExpireTimeSpan = new TimeSpan(0, 20, 0);
         options.Events.OnRedirectToLogin = (context) =>
         {
@@ -53,8 +54,7 @@ try
     builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
     {
         build
-        .AllowAnyOrigin()
-        //.WithOrigins("http://localhost:3000", "http://localhost:7210")
+        .WithOrigins("http://localhost:3000", "http://localhost:7210", "http://localhost:4200")
         .AllowAnyMethod()
         .AllowAnyHeader();
     }));

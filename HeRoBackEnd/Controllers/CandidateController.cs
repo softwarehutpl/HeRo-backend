@@ -1,9 +1,10 @@
 using AutoMapper;
 using Common.Enums;
+using Data.DTOs.Candidate;
+using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.Candidate;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Data.DTOs.Candidate;
 using Services.Listing;
 using Services.Services;
 
@@ -41,7 +42,7 @@ namespace HeRoBackEnd.Controllers
 
             if (candDTO == null)
             {
-                return BadRequest("Error getting candidate (bad parameters or candidate doesn't exist)");
+                return BadRequest(new ResponseViewModel("Error getting candidate (bad parameters or candidate doesn't exist)"));
             }
 
             return new JsonResult(candDTO);
@@ -120,17 +121,18 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.CreateCandidate(dto);
             if (result == -1)
             {
-                return BadRequest("Error creating candidate (one or more invalid parameters)");
+                return BadRequest(new ResponseViewModel("Error creating candidate (one or more invalid parameters)"));
             }
             if (result == -2)
             {
-                return BadRequest("Error creating candidate (invalid recruitmentId)");
+                return BadRequest(new ResponseViewModel("Error creating candidate (invalid recruitmentId)"));
             }
             if (result == -3)
             {
-                return BadRequest("Error saving candidate to database");
+                return BadRequest(new ResponseViewModel("Error saving candidate to database"));
             }
-            return Ok("Candidate created successfully");
+
+            return Ok(new ResponseViewModel("Candidate created successfully"));
         }
 
         /// <summary>
@@ -173,14 +175,14 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.UpdateCandidate(candidateId, dto);
             if (result == -1)
             {
-                return BadRequest("User with given Id doesn't exist");
+                return BadRequest(new ResponseViewModel("User with given Id doesn't exist"));
             }
             if (result == -2)
             {
-                return BadRequest("Error updating candidate");
+                return BadRequest(new ResponseViewModel("Error updating candidate"));
             }
 
-            return Ok("Candidate updated successfully");
+            return Ok(new ResponseViewModel("Candidate updated successfully"));
         }
 
         /// <summary>
@@ -209,13 +211,14 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.DeleteCandidate(dto);
             if (result == -1)
             {
-                return BadRequest("Candidate with given ID doesn't exist");
+                return BadRequest(new ResponseViewModel("Candidate with given ID doesn't exist"));
             }
             if (result == -2)
             {
-                return BadRequest("Error deleting candidate");
+                return BadRequest(new ResponseViewModel("Error deleting candidate"));
             }
-            return Ok("Candidate deleted successfully");
+
+            return Ok(new ResponseViewModel("Candidate deleted successfully"));
         }
 
         /// <summary>
@@ -248,16 +251,14 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.AddHRNote(candidateId, dto);
             if (result == -1)
             {
-                return BadRequest("Candidate with given ID doesn't exist");
+                return BadRequest(new ResponseViewModel("Candidate with given ID doesn't exist"));
             }
             if (result == -2)
             {
-                return BadRequest("Error adding note to candidate");
+                return BadRequest(new ResponseViewModel("Error adding note to candidate"));
             }
-            else
-            {
-                return Ok("Interview note added correctly");
-            }
+
+            return Ok(new ResponseViewModel("Interview note added correctly"));
         }
 
         /// <summary>
@@ -290,16 +291,14 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.AddTechNote(candidateId, dto);
             if (result == -1)
             {
-                return BadRequest("Candidate with given ID doesn't exist");
+                return BadRequest(new ResponseViewModel("Candidate with given ID doesn't exist"));
             }
             if (result == -2)
             {
-                return BadRequest("Error adding tech note to candidate");
+                return BadRequest(new ResponseViewModel("Error adding tech note to candidate"));
             }
-            else
-            {
-                return Ok("Tech interview note added correctly");
-            }
+
+            return Ok(new ResponseViewModel("Tech interview note added correctly"));
         }
 
         /// <summary>
@@ -335,14 +334,15 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.AllocateRecruiterAndTech(candidateId, dto);
             if (result == -1)
             {
-                return BadRequest("Candidate with given ID doesn't exist");
+                return BadRequest(new ResponseViewModel("Candidate with given ID doesn't exist"));
             }
-           
+
             if (result == -2)
             {
-                return BadRequest("Error updating candidate when allocating recruiters");
+                return BadRequest(new ResponseViewModel("Error updating candidate when allocating recruiters"));
             }
-            return Ok("Employees assigned correctly");
+
+            return Ok(new ResponseViewModel("Employees assigned correctly"));
         }
 
         /// <summary>
@@ -375,16 +375,14 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.AllocateRecruitmentInterview(candidateId, dto);
             if (result == -1)
             {
-                return BadRequest("User with given ID doesn't exist");
+                return BadRequest(new ResponseViewModel("User with given ID doesn't exist"));
             }
             if (result == -2)
             {
-                return BadRequest("Error setting interview date");
+                return BadRequest(new ResponseViewModel("Error setting interview date"));
             }
-            else
-            {
-                return Ok("Interview date set correctly");
-            }
+
+            return Ok(new ResponseViewModel("Interview date set correctly"));
         }
 
         /// <summary>
@@ -416,12 +414,10 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.AllocateTechInterview(candidateId, dto);
             if (result == -1)
             {
-                return BadRequest("Error setting tech interview date");
+                return BadRequest(new ResponseViewModel("Error setting tech interview date"));
             }
-            else
-            {
-                return Ok("Tech interview date set correctly");
-            }
+
+            return Ok(new ResponseViewModel("Tech interview date set correctly"));
         }
 
         /// <summary>
@@ -429,8 +425,8 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         /// <returns>JSON list of existing stages of recruitment</returns>
 
-        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [Route("Candidate/GetStageList")]
         [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetStageList()
@@ -444,8 +440,8 @@ namespace HeRoBackEnd.Controllers
         /// Shows list of existing status values of recruitment.
         /// </summary>
         /// <returns>JSON list of existing status values of recruitment</returns>
-        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [HttpGet]
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [Route("Candidate/GetStatusList")]
         [Authorize(Policy = "AnyRoleRequirment")]
         public IActionResult GetStatusList()
