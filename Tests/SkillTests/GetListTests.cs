@@ -6,8 +6,11 @@ using System.Threading.Tasks;
 
 namespace Tests.SkillTests
 {
-    public class GetListTests
+    public class GetListTests : BaseSkillTests
     {
-
+        /*
+         * Czy wchodzi do metody?
+         * Czy zwraca wszystkie?
+         */
     }
 }

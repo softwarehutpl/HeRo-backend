@@ -6,8 +6,12 @@ using System.Threading.Tasks;
 
 namespace Tests.SkillTests
 {
-    public class GetTests
+    public class GetTests : BaseSkillTests 
     {
-
+        /*
+         * Czy wchodzi do metody?
+         * Czy zwraca prawidłowy obiekt dla prawidłowych danych?
+         * Czy zwraca złą wartość dla nieprawidłowego id?
+         */
     }
 }
