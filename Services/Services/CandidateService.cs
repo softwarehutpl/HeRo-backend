@@ -251,11 +251,11 @@ namespace Services.Services
             IQueryable<Candidate> candidates = _candidateRepository.GetAll();
             candidates = candidates.Where(s => !s.DeletedById.HasValue);
 
-            if ((candidateFilteringDTO.Status != null) && (candidateFilteringDTO.Status.Count > 0))
+            if (candidateFilteringDTO.Status != null && candidateFilteringDTO.Status.Count > 0)
             {
                 candidates = candidates.Where(c => candidateFilteringDTO.Status.Contains(c.Status));
             }
-            if ((candidateFilteringDTO.Stages != null) && (candidateFilteringDTO.Stages.Count > 0))
+            if (candidateFilteringDTO.Stages != null && candidateFilteringDTO.Stages.Count > 0)
             {
                 candidates = candidates.Where(c => candidateFilteringDTO.Stages.Contains(c.Stage));
             }

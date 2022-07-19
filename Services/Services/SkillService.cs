@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoMapper;
-using Common.ServiceRegistrationAttributes;
+﻿using Common.ServiceRegistrationAttributes;
+using Data.DTOs.Skill;
 using Data.Entities;
 using Data.Repositories;
 using Microsoft.Extensions.Logging;
-using Data.DTOs.Skill;
 
 namespace Services.Services
 {
@@ -18,12 +12,14 @@ namespace Services.Services
         private readonly ILogger<SkillService> _logger;
         private readonly SkillRepository _repo;
         private readonly RecruitmentSkillRepository _recruitmentSkillRepo;
+
         public SkillService(SkillRepository repo, ILogger<SkillService> logger, RecruitmentSkillRepository recruitmentSkillRepo)
         {
             _repo = repo;
             _logger = logger;
             _recruitmentSkillRepo = recruitmentSkillRepo;
         }
+
         public IEnumerable<Skill> GetSkills()
         {
             IEnumerable<Skill> result;
@@ -31,14 +27,15 @@ namespace Services.Services
             {
                 result = _repo.GetAll();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return null;
             }
-            
+
             return result;
         }
+
         public IEnumerable<Skill> GetSkillsFilteredByName(string name)
         {
             IEnumerable<Skill> result;
@@ -47,10 +44,10 @@ namespace Services.Services
                 result = _repo.GetAll();
                 result = result
                     .Where(e => e.Name.ToLower().Contains(name.ToLower()))
-                    .OrderBy(e=>e.Name)
+                    .OrderBy(e => e.Name)
                     .Take(5);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return null;
@@ -66,7 +63,7 @@ namespace Services.Services
             {
                 result = _repo.GetById(id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return null;
@@ -74,6 +71,7 @@ namespace Services.Services
 
             return result;
         }
+
         public int AddSkill(string skillName)
         {
             try
@@ -85,14 +83,15 @@ namespace Services.Services
                 Skill skill = new Skill(skillName);
                 _repo.AddAndSaveChanges(skill);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
             }
-            
+
             return 1;
         }
+
         public int UpdateSkill(UpdateSkillDTO dto)
         {
             try
@@ -105,7 +104,7 @@ namespace Services.Services
                 skill.Name = dto.Name;
                 _repo.UpdateAndSaveChanges(skill);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -1;
@@ -128,7 +127,7 @@ namespace Services.Services
 
                 _repo.RemoveByIdAndSaveChanges(id);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
                 return -2;
