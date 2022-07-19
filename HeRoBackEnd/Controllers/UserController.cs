@@ -3,7 +3,6 @@ using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.IServices;
 using Services.Listing;
 using Services.Services;
 
@@ -12,9 +11,9 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class UserController : BaseController
     {
-        private IUserService _userService;
+        private UserService _userService;
 
-        public UserController(IUserService userService)
+        public UserController(UserService userService)
         {
             _userService = userService;
         }

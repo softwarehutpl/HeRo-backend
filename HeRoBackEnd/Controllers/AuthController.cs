@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.IServices;
 using Services.Services;
 using System.Security.Claims;
 
@@ -13,11 +12,11 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class AuthController : BaseController
     {
-        private readonly IAuthService _authServices;
-        private readonly IEmailService _emailService;
-        private readonly IUserService _userService;
+        private readonly AuthService _authServices;
+        private readonly EmailService _emailService;
+        private readonly UserService _userService;
 
-        public AuthController(IAuthService authServices, IEmailService emailService, IUserService userService)
+        public AuthController(AuthService authServices, EmailService emailService, UserService userService)
         {
             _authServices = authServices;
             _emailService = emailService;

@@ -1,25 +1,22 @@
 using AutoMapper;
 using Common.Enums;
 using Common.ServiceRegistrationAttributes;
-using Data.DTOs;
-using Data.Entities;
-using Microsoft.Data.SqlClient;
-using Microsoft.EntityFrameworkCore;
 using Data.DTOs.Recruitment;
-using System.Security.Claims;
 using Data.DTOs.RecruitmentSkill;
+using Data.Entities;
+using Data.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
-    [ScopedRegistration]
-    public class RecruitmentRepository : BaseRepository<Recruitment>
+    [ScopedRegistrationWithInterface]
+    public class RecruitmentRepository : BaseRepository<Recruitment>, IRecruitmentRepository
     {
         private readonly IMapper _mapper;
+
         public RecruitmentRepository(DataContext context, IMapper mapper) : base(context)
         {
             _mapper = mapper;
-
         }
 
         public int GetRecruiterId(int id)

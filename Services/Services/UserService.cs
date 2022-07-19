@@ -4,21 +4,20 @@ using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.User;
 using Data.Entities;
-using Data.Repositories;
+using Data.IRepositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.IServices;
 using Services.Listing;
 
 namespace Services.Services
 {
-    [ScopedRegistrationWithInterface]
-    public class UserService : IUserService
+    [ScopedRegistration]
+    public class UserService
     {
-        private UserRepository _userRepository;
+        private IUserRepository _userRepository;
         private ILogger<UserService> _logger;
 
-        public UserService(ILogger<UserService> logger, UserRepository userRepository)
+        public UserService(ILogger<UserService> logger, IUserRepository userRepository)
         {
             _userRepository = userRepository;
             _logger = logger;

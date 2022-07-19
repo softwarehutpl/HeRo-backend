@@ -1,23 +1,19 @@
-﻿using System.Security.Claims;
-using System.Security.Cryptography;
+﻿using Common.Enums;
 using Common.Helpers;
-using System.Text;
-using Data.Entities;
-using Data.Repositories;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Common.Enums;
-using System;
 using Common.ServiceRegistrationAttributes;
-using Services.IServices;
+using Data.Entities;
+using Data.IRepositories;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using System.Security.Claims;
 
 namespace Services.Services
 {
-    [ScopedRegistrationWithInterface]
-    public class AuthService : IAuthService
+    [ScopedRegistration]
+    public class AuthService
     {
-        private UserRepository _userRepository;
+        private IUserRepository _userRepository;
 
-        public AuthService(UserRepository userRepository)
+        public AuthService(IUserRepository userRepository)
         {
             _userRepository = userRepository;
         }
