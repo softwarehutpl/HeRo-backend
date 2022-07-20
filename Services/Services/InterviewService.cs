@@ -176,6 +176,7 @@ namespace Services.Services
 
             interview.DeletedById = loginUserId;
             interview.DeletedDate = DateTime.UtcNow;
+
             try
             {
                 _interviewRepository.UpdateAndSaveChanges(interview);
@@ -185,6 +186,7 @@ namespace Services.Services
                 _logger.LogError(ex.Message);
                 return 0;
             }
+
             return interview.Id;
         }
     }

@@ -1,7 +1,6 @@
 ﻿using Common.Listing;
 using Data.DTOs.Interview;
 using Data.Entities;
-using PagedList;
 using Services.Listing;
 
 namespace Tests.InterviewTests
@@ -32,7 +31,7 @@ namespace Tests.InterviewTests
             };
 
             //Arrange
-            int ExpectedCount = 2;
+            int expectedCount = 2;
 
             // Act
             IQueryable<Interview> interviews = Interviews.AsQueryable();
@@ -40,7 +39,7 @@ namespace Tests.InterviewTests
             InterviewListing interviewListingActual = InterviewService.GetInterviews(paging, sortOrder, interviewFiltringDTO);
 
             //Assert
-            Assert.True(ExpectedCount == interviewListingActual.InterviewDTOs.Count());
+            Assert.True(expectedCount == interviewListingActual.InterviewDTOs.Count());
         }
     }
 }
