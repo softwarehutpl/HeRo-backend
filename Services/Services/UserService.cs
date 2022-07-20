@@ -23,9 +23,9 @@ namespace Services.Services
             _logger = logger;
         }
 
-        public Guid GetUserGuid(string email)
+        public Guid? GetUserGuid(string email)
         {
-            Guid result;
+            Guid? result;
             try
             {
                 result = _userRepository.GetUserGuidByEmail(email);
