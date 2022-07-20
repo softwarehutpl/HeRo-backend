@@ -72,7 +72,15 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(InterviewListing), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
-            InterviewFiltringDTO interviewFiltringDTO = new InterviewFiltringDTO(interview.FromDate, interview.ToDate, interview.CandidateId, interview.WorkerId, interview.Type);
+            InterviewFiltringDTO interviewFiltringDTO =
+                new InterviewFiltringDTO
+                {
+                    FromDate = interview.FromDate,
+                    ToDate = interview.ToDate,
+                    CandidateId = interview.CandidateId,
+                    WorkerId = interview.WorkerId,
+                    Type = interview.Type,
+                };
 
             var resutl = _interviewService.GetInterviews(interview.Paging, interview.SortOrder, interviewFiltringDTO);
 

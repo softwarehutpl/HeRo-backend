@@ -20,17 +20,18 @@
 
         public string Type { get; set; }
 
-        public InterviewDTO(int interviewId, DateTime date, int candidateId, string candidateName, string candidateLastName, string candidateEmail, int workerId, string workerEmail, string type)
+        public override bool Equals(object? obj)
         {
-            InterviewId = interviewId;
-            Date = date;
-            CandidateId = candidateId;
-            CandidateName = candidateName;
-            CandidateLastName = candidateLastName;
-            CandidateEmail = candidateEmail;
-            WorkerId = workerId;
-            WorkerEmail = workerEmail;
-            Type = type;
+            return obj is InterviewDTO dTO &&
+                   InterviewId == dTO.InterviewId &&
+                   Date == dTO.Date &&
+                   CandidateId == dTO.CandidateId &&
+                   CandidateName == dTO.CandidateName &&
+                   CandidateLastName == dTO.CandidateLastName &&
+                   CandidateEmail == dTO.CandidateEmail &&
+                   WorkerId == dTO.WorkerId &&
+                   WorkerEmail == dTO.WorkerEmail &&
+                   Type == dTO.Type;
         }
     }
 }

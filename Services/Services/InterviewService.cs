@@ -30,25 +30,20 @@ namespace Services.Services
             }
 
             InterviewDTO interviewDTO =
-                new InterviewDTO(
-                    interview.Id,
-                    interview.Date,
-                    interview.CandidateId,
-                    interview.Candidate.Name,
-                    interview.Candidate.LastName,
-                    interview.Candidate.Email,
-                    interview.User.Id,
-                    interview.User.Email,
-                    interview.Type);
+                new InterviewDTO
+                {
+                    InterviewId = interview.Id,
+                    Date = interview.Date,
+                    CandidateId = interview.CandidateId,
+                    CandidateName = interview.Candidate.Name,
+                    CandidateLastName = interview.Candidate.LastName,
+                    CandidateEmail = interview.Candidate.Email,
+                    WorkerId = interview.User.Id,
+                    WorkerEmail = interview.User.Email,
+                    Type = interview.Type
+                };
 
             return interviewDTO;
-        }
-
-        public int GetQuantity()
-        {
-            int result = _interviewRepository.GetAll().Count();
-
-            return result;
         }
 
         public InterviewListing GetInterviews(Paging paging, SortOrder? sortOrder, InterviewFiltringDTO interviewFiltringDTO)
@@ -105,17 +100,19 @@ namespace Services.Services
             interviewListing.InterviewFiltringDTO = interviewFiltringDTO;
             interviewListing.Paging = paging;
             interviewListing.SortOrder = sortOrder;
-            interviewListing.InterviewDTOs = interviews.Select(i => new InterviewDTO(
-                                                    i.Id,
-                                                    i.Date,
-                                                    i.CandidateId,
-                                                    i.Candidate.Name,
-                                                    i.Candidate.LastName,
-                                                    i.Candidate.Email,
-                                                    i.WorkerId,
-                                                    i.User.Email,
-                                                    i.Type
-                                                )).ToPagedList(paging.PageNumber, paging.PageSize);
+            interviewListing.InterviewDTOs = interviews
+                .Select(i => new InterviewDTO
+                {
+                    InterviewId = i.Id,
+                    Date = i.Date,
+                    CandidateId = i.CandidateId,
+                    CandidateName = i.Candidate.Name,
+                    CandidateLastName = i.Candidate.LastName,
+                    CandidateEmail = i.Candidate.Email,
+                    WorkerId = i.WorkerId,
+                    WorkerEmail = i.User.Email,
+                    Type = i.Type
+                }).ToPagedList(paging.PageNumber, paging.PageSize);
 
             return interviewListing;
         }

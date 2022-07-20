@@ -11,14 +11,5 @@
         public int? WorkerId { get; set; }
 
         public string? Type { get; set; }
-
-        public InterviewFiltringDTO(DateTime? fromDate, DateTime? toDate, int? candidateId, int? workerId, string? type)
-        {
-            FromDate = fromDate;
-            ToDate = toDate;
-            CandidateId = candidateId;
-            WorkerId = workerId;
-            Type = type;
-        }
     }
 }
