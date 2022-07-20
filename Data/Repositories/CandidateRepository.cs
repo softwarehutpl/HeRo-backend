@@ -1,10 +1,11 @@
 using Common.ServiceRegistrationAttributes;
 using Data.Entities;
+using Data.IRepositories;
 
 namespace Data.Repositories
 {
-    [ScopedRegistration]
-    public class CandidateRepository : BaseRepository<Candidate>
+    [ScopedRegistrationWithInterface]
+    public class CandidateRepository : BaseRepository<Candidate>, ICandidateRepository
     {
         private DataContext _dataContext;
 

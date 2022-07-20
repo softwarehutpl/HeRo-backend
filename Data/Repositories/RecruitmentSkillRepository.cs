@@ -2,14 +2,16 @@
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.RecruitmentSkill;
 using Data.Entities;
+using Data.IRepositories;
 
 namespace Data.Repositories
 {
-    [ScopedRegistration]
-    public class RecruitmentSkillRepository : BaseRepository<RecruitmentSkill>
+    [ScopedRegistrationWithInterface]
+    public class RecruitmentSkillRepository : BaseRepository<RecruitmentSkill>, IRecruitmentSkillRepository
     {
         private readonly DataContext _context;
         private readonly IMapper _mapper;
+
         public RecruitmentSkillRepository(DataContext context, IMapper mapper) : base(context)
         {
             _context = context;
@@ -18,11 +20,12 @@ namespace Data.Repositories
 
         public bool IsSkillUsed(int skillId)
         {
-            bool result=GetAll()
+            bool result = GetAll()
                 .Any(e => e.SkillId == skillId);
 
             return result;
         }
+
         public IEnumerable<RecruitmentSkillDTO> GetAllRecruitmentSkills(int recruitmentId)
         {
             IEnumerable<RecruitmentSkillDTO> result = GetAll()

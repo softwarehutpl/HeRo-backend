@@ -1,8 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Data.IRepositories;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Common.Enums;
-using Data.DTOs.RecruitmentSkill;
-using Data.Repositories;
 
 namespace Data.Entities
 {

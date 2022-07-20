@@ -1,12 +1,13 @@
 ﻿using System.Linq;
 using Common.ServiceRegistrationAttributes;
 using Data.Entities;
+using Data.IRepositories;
 using Microsoft.AspNetCore.Identity;
 
 namespace Data.Repositories
 {
-    [ScopedRegistration]
-    public class UserRepository : BaseRepository<User>
+    [ScopedRegistrationWithInterface]
+    public class UserRepository : BaseRepository<User>, IUserRepository
     {
         private DataContext _dataContext;
 
