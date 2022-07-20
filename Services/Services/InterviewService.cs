@@ -160,7 +160,8 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return 0;
+
+                return -1;
             }
 
             return interview.Id;
@@ -184,7 +185,8 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return 0;
+
+                return -1;
             }
 
             return interview.Id;

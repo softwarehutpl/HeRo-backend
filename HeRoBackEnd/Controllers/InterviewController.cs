@@ -138,6 +138,10 @@ namespace HeRoBackEnd.Controllers
             {
                 return BadRequest(new ResponseViewModel("No interview with this Id"));
             }
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Interview edited unsuccessfully"));
+            }
 
             return Ok(new ResponseViewModel("Interview edited successfully"));
         }
@@ -162,6 +166,10 @@ namespace HeRoBackEnd.Controllers
             if (result == 0)
             {
                 return BadRequest(new ResponseViewModel("No interview with this Id"));
+            }
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Interview deleted unsuccessfully"));
             }
 
             return Ok(new ResponseViewModel("Interview deleted successfully"));

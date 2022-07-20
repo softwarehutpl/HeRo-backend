@@ -57,5 +57,34 @@ namespace Tests.InterviewTests
             //Assert
             Assert.True(expectedResult == actualResult);
         }
+
+        [Fact]
+        public void Update_ShoudException()
+        {
+            Interview interview = Interviews[0];
+
+            InterviewEditDTO interviewDTOExpected = new InterviewEditDTO
+            (
+                interview.Id,
+                interview.Date,
+                interview.WorkerId,
+                interview.Type
+            );
+
+            Exception ex = new Exception();
+
+            //Arrange
+            int expectedResult = -1;
+
+            // Act
+            IQueryable<Interview> interviews = Interviews.AsQueryable();
+            InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
+            InterviewRepository.Setup(i => i.UpdateAndSaveChanges(interview)).Throws(ex);
+
+            int actualResult = InterviewService.Update(interviewDTOExpected, 1);
+
+            //Assert
+            Assert.True(expectedResult == actualResult);
+        }
     }
 }

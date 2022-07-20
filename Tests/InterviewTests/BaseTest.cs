@@ -10,14 +10,15 @@ namespace Tests.InterviewTests
     {
         public InterviewService InterviewService { get; set; }
         public Mock<IInterviewRepository> InterviewRepository { get; set; }
-        public ILogger<InterviewService> Logger { get; set; }
-
+        public Mock<ILogger<InterviewService>> Logger { get; set; }
         public List<Interview> Interviews { get; set; }
 
         public BaseTest()
         {
             InterviewRepository = new Mock<IInterviewRepository>();
-            InterviewService = new InterviewService(Logger, InterviewRepository.Object);
+            Logger = new Mock<ILogger<InterviewService>>();
+
+            InterviewService = new InterviewService(Logger.Object, InterviewRepository.Object);
 
             DateTime interviewDate = new DateTime(2022, 07, 20);
 

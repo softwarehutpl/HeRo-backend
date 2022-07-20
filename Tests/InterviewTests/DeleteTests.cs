@@ -44,5 +44,26 @@ namespace Tests.InterviewTests
             //Assert
             Assert.True(expectedResult == actualResult);
         }
+
+        [Fact]
+        public void Delete_ShoudException()
+        {
+            Interview interview = Interviews[0];
+
+            Exception ex = new Exception();
+
+            //Arrange
+            int expectedResult = -1;
+
+            // Act
+            IQueryable<Interview> interviews = Interviews.AsQueryable();
+            InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
+            InterviewRepository.Setup(i => i.UpdateAndSaveChanges(interview)).Throws(ex);
+
+            int actualResult = InterviewService.Delete(1, 1);
+
+            //Assert
+            Assert.True(expectedResult == actualResult);
+        }
     }
 }
