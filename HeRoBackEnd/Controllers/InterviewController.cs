@@ -106,7 +106,12 @@ namespace HeRoBackEnd.Controllers
                     interview.Type);
 
             int userCreatedId = GetUserId();
-            _interviewService.Create(interviewCreate, userCreatedId);
+
+            int result = _interviewService.Create(interviewCreate, userCreatedId);
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Interview created unsuccessfully"));
+            }
 
             return Ok(new ResponseViewModel("Interview created successfully"));
         }

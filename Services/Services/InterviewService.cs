@@ -119,7 +119,7 @@ namespace Services.Services
             return interviewListing;
         }
 
-        public void Create(InterviewCreateDTO interviewCreate, int userCreatedId)
+        public int Create(InterviewCreateDTO interviewCreate, int userCreatedId)
         {
             Interview interview = new Interview();
 
@@ -129,14 +129,19 @@ namespace Services.Services
             interview.Type = interviewCreate.Type;
             interview.CreatedById = userCreatedId;
             interview.CreatedDate = DateTime.UtcNow;
+
             try
             {
-                _interviewRepository.AddAndSaveChanges(interview);
+                interview = _interviewRepository.AddAndSaveChanges(interview);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+
+                return -1;
             }
+
+            return interview.Id;
         }
 
         public int Update(InterviewEditDTO interviewEdit, int userEditId)

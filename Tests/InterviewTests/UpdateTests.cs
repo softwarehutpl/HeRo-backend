@@ -22,7 +22,6 @@ namespace Tests.InterviewTests
             int expectedResult = 1;
 
             // Act
-            IQueryable<Interview> interviews = Interviews.AsQueryable();
             InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
 
             int actualResult = InterviewService.Update(interviewDTOExpected, 1);
@@ -49,7 +48,6 @@ namespace Tests.InterviewTests
             int expectedResult = 0;
 
             // Act
-            IQueryable<Interview> interviews = Interviews.AsQueryable();
             InterviewRepository.Setup(i => i.GetById(1)).Returns(interview2);
 
             int actualResult = InterviewService.Update(interviewDTOExpected, 1);
@@ -77,7 +75,6 @@ namespace Tests.InterviewTests
             int expectedResult = -1;
 
             // Act
-            IQueryable<Interview> interviews = Interviews.AsQueryable();
             InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
             InterviewRepository.Setup(i => i.UpdateAndSaveChanges(interview)).Throws(ex);
 
