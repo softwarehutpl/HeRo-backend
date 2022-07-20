@@ -45,12 +45,11 @@ namespace Services.Services
             int temp_result = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
             if (temp_result != 0)
                 candidate.RecruiterId = temp_result;
-            else 
+            else
             {
                 _logger.LogError("Error when getting recruiterId of recruitment which doesn't exist: ");
-                 return -2; 
+                return -2;
             }
-
 
             try
             {

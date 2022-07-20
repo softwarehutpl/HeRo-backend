@@ -17,9 +17,9 @@ namespace Data.DTOs.Candidate
         public int? TechId { get; set; }
         public string TechAssignee { get; set; }
         public int? RecruiterId { get; set; }
-        public string RecruiterAssignee { get; set; }
+        public string RecruiterEmail { get; set; }
 
-        public CandidateInfoForListDTO(int id, string name, string source, string recruitmentName, string status, string stage, int? techId, string techAssignee, int? recruiterId, string recruiterAssignee)
+        public CandidateInfoForListDTO(int id, string name, string source, string recruitmentName, string status, string stage, int? techId, string techAssignee, int? recruiterId, string recruiterEmail)
         {
             Id = id;
             Name = name;
@@ -30,7 +30,7 @@ namespace Data.DTOs.Candidate
             TechId = techId;
             TechAssignee = techAssignee;
             RecruiterId = recruiterId;
-            RecruiterAssignee = recruiterAssignee;
+            RecruiterEmail = recruiterEmail;
         }
     }
 }
