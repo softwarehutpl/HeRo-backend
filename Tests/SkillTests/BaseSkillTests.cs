@@ -1,8 +1,8 @@
-﻿using Data.Repositories;
+﻿using Data.IRepositories;
+using Data.Repositories;
 using HeRoBackEnd.Controllers;
 using Microsoft.Extensions.Logging;
 using Moq;
-using Services.IServices;
 using Services.Services;
 using System;
 using System.Collections.Generic;
@@ -14,17 +14,16 @@ namespace Tests.SkillTests
 {
     public class BaseSkillTests
     {
-        
-        private readonly SkillService _skillService;
+        protected readonly Mock<ILogger<SkillService>> _logger;
+        protected readonly Mock<ISkillRepository> _skillRepo;
+        protected readonly Mock<IRecruitmentSkillRepository> _recruitmentSkillRepo;
+        protected readonly SkillService _skillService;
         public BaseSkillTests()
         {
-            Mock<ILogger<SkillService>> logger;
-        Mock<ISkillRepository> skillRepo;
-        Mock<IRecruitmentSkillRepository> recruitmentSkillRepo;
-
-        Mock<ISkillService> _skillService = new Mock<ISkillService>();
-
-            _skillController = new SkillController(_skillService.Object);
+            _logger= new Mock<ILogger<SkillService>>();
+            _skillRepo = new Mock<ISkillRepository>();
+            _recruitmentSkillRepo = new Mock<IRecruitmentSkillRepository>();
+            _skillService = new SkillService(_skillRepo.Object, _logger.Object, _recruitmentSkillRepo.Object);
         }
     }
 }
