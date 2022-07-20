@@ -38,6 +38,7 @@ namespace Services.Services
                     CandidateName = interview.Candidate.Name,
                     CandidateLastName = interview.Candidate.LastName,
                     CandidateEmail = interview.Candidate.Email,
+                    CandidateStatus = interview.Candidate.Status,
                     WorkerId = interview.User.Id,
                     WorkerEmail = interview.User.Email,
                     Type = interview.Type
@@ -109,6 +110,7 @@ namespace Services.Services
                     CandidateName = i.Candidate.Name,
                     CandidateLastName = i.Candidate.LastName,
                     CandidateEmail = i.Candidate.Email,
+                    CandidateStatus = i.Candidate.Status,
                     WorkerId = i.WorkerId,
                     WorkerEmail = i.User.Email,
                     Type = i.Type

@@ -14,6 +14,8 @@
 
         public string CandidateEmail { get; set; }
 
+        public string CandidateStatus { get; set; }
+
         public int WorkerId { get; set; }
 
         public string WorkerEmail { get; set; }
