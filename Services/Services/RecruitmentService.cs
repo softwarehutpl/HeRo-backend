@@ -4,24 +4,23 @@ using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Recruitment;
 using Data.Entities;
-using Data.Repositories;
+using Data.IRepositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
-using Services.IServices;
 using Services.Listing;
 
 namespace Services.Services
 {
-    [ScopedRegistrationWithInterface]
-    public class RecruitmentService : IRecruitmentService
+    [ScopedRegistration]
+    public class RecruitmentService
     {
         private readonly IMapper _mapper;
-        private readonly RecruitmentRepository _recruitmentRepo;
-        private readonly RecruitmentSkillRepository _recruitmentSkillRepo;
-        private readonly UserRepository _userRepo;
+        private readonly IRecruitmentRepository _recruitmentRepo;
+        private readonly IRecruitmentSkillRepository _recruitmentSkillRepo;
+        private readonly IUserRepository _userRepo;
         private readonly ILogger<RecruitmentService> _logger;
 
-        public RecruitmentService(IMapper map, RecruitmentRepository repo, UserRepository userRepo, ILogger<RecruitmentService> logger, RecruitmentSkillRepository recruitmentSkillRepo)
+        public RecruitmentService(IMapper map, IRecruitmentRepository repo, IUserRepository userRepo, ILogger<RecruitmentService> logger, IRecruitmentSkillRepository recruitmentSkillRepo)
         {
             _mapper = map;
             _recruitmentRepo = repo;

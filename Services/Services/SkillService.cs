@@ -1,20 +1,19 @@
 ﻿using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Skill;
 using Data.Entities;
-using Data.Repositories;
+using Data.IRepositories;
 using Microsoft.Extensions.Logging;
-using Services.IServices;
 
 namespace Services.Services
 {
-    [ScopedRegistrationWithInterface]
-    public class SkillService : ISkillService
+    [ScopedRegistration]
+    public class SkillService
     {
         private readonly ILogger<SkillService> _logger;
-        private readonly SkillRepository _repo;
-        private readonly RecruitmentSkillRepository _recruitmentSkillRepo;
+        private readonly ISkillRepository _repo;
+        private readonly IRecruitmentSkillRepository _recruitmentSkillRepo;
 
-        public SkillService(SkillRepository repo, ILogger<SkillService> logger, RecruitmentSkillRepository recruitmentSkillRepo)
+        public SkillService(ISkillRepository repo, ILogger<SkillService> logger, IRecruitmentSkillRepository recruitmentSkillRepo)
         {
             _repo = repo;
             _logger = logger;

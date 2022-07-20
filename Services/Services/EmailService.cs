@@ -1,13 +1,11 @@
-﻿using System.Net.Mail;
-using Common.Helpers;
+﻿using Common.Helpers;
 using Common.ServiceRegistrationAttributes;
-using Data.Repositories;
-using Services.IServices;
+using System.Net.Mail;
 
 namespace Services.Services
 {
-    [ScopedRegistrationWithInterface]
-    public class EmailService : IEmailService
+    [ScopedRegistration]
+    public class EmailService
     {
         private readonly EmailHelper _emailHelper;
 

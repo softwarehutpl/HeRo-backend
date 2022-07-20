@@ -1,4 +1,4 @@
-﻿using Data.Repositories;
+﻿using Data.IRepositories;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -16,11 +16,12 @@ namespace Data.Entities
         public string Email { get; set; }
 
         public Guid PasswordRecoveryGuid { get; set; }
+
         public Guid ConfirmationGuid { get; set; }
+
         [Required]
         [DataType(DataType.Password)]
-        [MinLength(8)] 
-     
+        [MinLength(8)]
         public string Password { get; set; }
 
         [Required]

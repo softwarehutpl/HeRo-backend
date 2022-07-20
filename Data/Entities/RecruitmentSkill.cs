@@ -1,5 +1,4 @@
-﻿using Data.Repositories;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Data.Entities
@@ -20,7 +19,7 @@ namespace Data.Entities
         public int SkillLevel { get; set; }
 
         [ForeignKey("SkillId")]
-        public virtual Skill Skill { get; set; }  
+        public virtual Skill Skill { get; set; }
 
         [ForeignKey("RecruitmentId")]
         public virtual Recruitment Recruitment { get; set; }

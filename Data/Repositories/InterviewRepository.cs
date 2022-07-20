@@ -1,11 +1,12 @@
 ﻿using Common.ServiceRegistrationAttributes;
 using Data.Entities;
+using Data.IRepositories;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
-    [ScopedRegistration]
-    public class InterviewRepository : BaseRepository<Interview>
+    [ScopedRegistrationWithInterface]
+    public class InterviewRepository : BaseRepository<Interview>, IInterviewRepository
     {
         private DataContext _dataContext;
 
@@ -16,7 +17,7 @@ namespace Data.Repositories
 
         public Interview GetInterview(int id)
         {
-            Interview interview = _dataContext.Interviews.Where(i => i.Id == id)
+            Interview? interview = _dataContext.Interviews.Where(i => i.Id == id)
                 .Include(i => i.Candidate)
                 .Include(i => i.User)
                 .FirstOrDefault();

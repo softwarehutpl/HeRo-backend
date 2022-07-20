@@ -5,7 +5,6 @@ using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.Recruitment;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Services.IServices;
 using Services.Listing;
 using Services.Services;
 
@@ -14,10 +13,10 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class RecruitmentController : BaseController
     {
-        private readonly IRecruitmentService service;
+        private readonly RecruitmentService service;
         private readonly IMapper mapper;
 
-        public RecruitmentController(IRecruitmentService service, IMapper map)
+        public RecruitmentController(RecruitmentService service, IMapper map)
         {
             this.service = service;
             mapper = map;
