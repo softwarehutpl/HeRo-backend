@@ -23,6 +23,11 @@ namespace Data.Repositories
         {
             Recruitment recruitment = GetById(id);
 
+            if (recruitment == null)
+            {
+                return 0;
+            }
+
             int result = recruitment.RecruiterId;
 
             return result;

@@ -37,6 +37,7 @@ namespace Services.Services
                     interview.Candidate.Name,
                     interview.Candidate.LastName,
                     interview.Candidate.Email,
+                    interview.Candidate.Status,
                     interview.User.Id,
                     interview.User.Email,
                     interview.Type);
@@ -112,6 +113,7 @@ namespace Services.Services
                                                     i.Candidate.Name,
                                                     i.Candidate.LastName,
                                                     i.Candidate.Email,
+                                                    i.Candidate.Status,
                                                     i.WorkerId,
                                                     i.User.Email,
                                                     i.Type
