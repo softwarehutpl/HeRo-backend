@@ -1,6 +1,7 @@
 using AutoMapper;
 using Common.AttributeRoleVerification;
 using Common.Enums;
+using Common.Helpers;
 using Data.DTOs.Candidate;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.Candidate;
@@ -14,6 +15,7 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class CandidateController : BaseController
     {
+        private string _errorMessage;
         private CandidateService _candidateService;
         private ILogger<CandidateController> _logger;
         private readonly IMapper _mapper;
@@ -39,11 +41,11 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int candidateId)
         {
-            CandidateProfileDTO? candDTO = _candidateService.GetCandidateProfileById(candidateId);
+            CandidateProfileDTO? candDTO = _candidateService.GetCandidateProfileById(candidateId, out _errorMessage);
 
             if (candDTO == null)
             {
-                return BadRequest(new ResponseViewModel("Error getting candidate (bad parameters or candidate doesn't exist)"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
             return new JsonResult(candDTO);
@@ -129,21 +131,15 @@ namespace HeRoBackEnd.Controllers
 
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
-            int result = _candidateService.CreateCandidate(dto);
+            int result = _candidateService.CreateCandidate(dto, out _errorMessage);
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Error creating candidate (one or more invalid parameters)"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
-            if (result == -2)
-            {
-                return BadRequest(new ResponseViewModel("Error creating candidate (invalid recruitmentId)"));
+            else 
+            { 
+                return Ok(new ResponseViewModel(MessageHelper.CandidateCreatedSuccessfully));
             }
-            if (result == -3)
-            {
-                return BadRequest(new ResponseViewModel("Error saving candidate to database"));
-            }
-
-            return Ok(new ResponseViewModel("Candidate created successfully"));
         }
 
         /// <summary>
@@ -191,18 +187,13 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            //wyjątek przy złym id kandydata dodać
-            int result = _candidateService.UpdateCandidate(candidateId, dto);
+            int result = _candidateService.UpdateCandidate(candidateId, dto, out _errorMessage);
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("User with given Id doesn't exist"));
-            }
-            if (result == -2)
-            {
-                return BadRequest(new ResponseViewModel("Error updating candidate"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Candidate updated successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.CandidateUpdatedSuccessfully));
         }
 
         /// <summary>
@@ -228,17 +219,12 @@ namespace HeRoBackEnd.Controllers
             dto.DeletedById = id;
             dto.DeletedDate = DateTime.Now;
 
-            int result = _candidateService.DeleteCandidate(dto);
+            int result = _candidateService.DeleteCandidate(dto, out _errorMessage);
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Candidate with given ID doesn't exist"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
-            if (result == -2)
-            {
-                return BadRequest(new ResponseViewModel("Error deleting candidate"));
-            }
-
-            return Ok(new ResponseViewModel("Candidate deleted successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.CandidateDeletedSuccessfully));
         }
 
         /// <summary>
@@ -268,17 +254,13 @@ namespace HeRoBackEnd.Controllers
         {
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
             dto.RecruiterId = GetUserId();
-            int result = _candidateService.AddHRNote(candidateId, dto);
+            int result = _candidateService.AddHRNote(candidateId, dto, out _errorMessage);
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Candidate with given ID doesn't exist"));
-            }
-            if (result == -2)
-            {
-                return BadRequest(new ResponseViewModel("Error adding note to candidate"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Interview note added correctly"));
+            return Ok(new ResponseViewModel(MessageHelper.InterviewNoteAdded));
         }
 
         /// <summary>
@@ -308,17 +290,12 @@ namespace HeRoBackEnd.Controllers
         {
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
             dto.TechId = GetUserId();
-            int result = _candidateService.AddTechNote(candidateId, dto);
+            int result = _candidateService.AddTechNote(candidateId, dto, out _errorMessage);
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Candidate with given ID doesn't exist"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
-            if (result == -2)
-            {
-                return BadRequest(new ResponseViewModel("Error adding tech note to candidate"));
-            }
-
-            return Ok(new ResponseViewModel("Tech interview note added correctly"));
+            return Ok(new ResponseViewModel(MessageHelper.TechInterviewNoteAdded));
         }
 
         /// <summary>
@@ -351,18 +328,14 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            int result = _candidateService.AllocateRecruiterAndTech(candidateId, dto);
+            int result = _candidateService.AllocateRecruiterAndTech(candidateId, dto, out _errorMessage);
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Candidate with given ID doesn't exist"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            if (result == -2)
-            {
-                return BadRequest(new ResponseViewModel("Error updating candidate when allocating recruiters"));
-            }
 
-            return Ok(new ResponseViewModel("Employees assigned correctly"));
+            return Ok(new ResponseViewModel(MessageHelper.EmployeesAssigned));
         }
 
         /// <summary>
@@ -392,7 +365,7 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            int result = _candidateService.AllocateRecruitmentInterview(candidateId, dto);
+            int result = _candidateService.AllocateRecruitmentInterview(candidateId, dto, out _errorMessage);
             if (result == -1)
             {
                 return BadRequest(new ResponseViewModel("User with given ID doesn't exist"));
@@ -431,7 +404,7 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            int result = _candidateService.AllocateTechInterview(candidateId, dto);
+            int result = _candidateService.AllocateTechInterview(candidateId, dto, out _errorMessage);
             if (result == -1)
             {
                 return BadRequest(new ResponseViewModel("Error setting tech interview date"));
