@@ -1,4 +1,5 @@
-﻿using HeRoBackEnd.ViewModels;
+﻿using Common.Helpers;
+using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -12,6 +13,7 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class AuthController : BaseController
     {
+        private string _errorMessage;
         private readonly AuthService _authServices;
         private readonly EmailService _emailService;
         private readonly UserService _userService;
@@ -80,14 +82,14 @@ namespace HeRoBackEnd.Controllers
             bool check = _userService.CheckIfUserExist(newUser.Email);
 
             if (check)
-                return BadRequest(new ResponseViewModel("User already exist"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.UserExists));
 
             Guid confirmationGuid = await _userService.CreateUser(newUser.Password, newUser.Email);
 
             string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid }, protocol: "https");
             _emailService.SendConfirmationEmail(newUser.Email, url);
 
-            return Ok(new ResponseViewModel("User created successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.UserCreated));
         }
 
         /// <summary>
@@ -107,10 +109,10 @@ namespace HeRoBackEnd.Controllers
             if (check)
             {
                 _userService.ChangeUserPassword(user.Email, user.Password);
-                return Ok(new ResponseViewModel("Account confirmed. Your password has been changed"));
+                return Ok(new ResponseViewModel(MessageHelper.AccountConfirmed));
             }
 
-            return BadRequest(new ResponseViewModel("Confirmation Failed"));
+            return BadRequest(new ResponseViewModel(ErrorMessageHelper.ConfirmationFailed));
         }
 
         /// <summary>
@@ -127,7 +129,7 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> PasswordRecoveryMail(string email)
         {
             bool changedPassword = _userService.CheckIfUserExist(email);
-            if (!changedPassword) return BadRequest($"Account:{email} doesn't exist");
+            if (!changedPassword) return BadRequest(ErrorMessageHelper.AccountDoesntExist(email));
 
             var recoveryGuid = _userService.SetUserRecoveryGuid(email);
 
@@ -135,7 +137,7 @@ namespace HeRoBackEnd.Controllers
 
             _emailService.SendPasswordRecoveryEmail(email, fullUrl);
 
-            return Ok(new ResponseViewModel("Recovery e-mail sent"));
+            return Ok(new ResponseViewModel(MessageHelper.RecoveryEmailSent));
         }
 
         /// <summary>
@@ -152,11 +154,11 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> RecoverPassword(UserPasswordRecoveryViewModel user)
         {
             bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.Guid, user.Email);
-            if (!userGuid) return BadRequest("User and Guid don't have same owner");
+            if (!userGuid) return BadRequest(ErrorMessageHelper.UserAndGuidDifferentOwner);
 
             await _userService.ChangeUserPassword(user.Email, user.Password);
 
-            return Ok(new ResponseViewModel("Password Changed"));
+            return Ok(new ResponseViewModel(MessageHelper.PasswordChanged));
         }
     }
 }
