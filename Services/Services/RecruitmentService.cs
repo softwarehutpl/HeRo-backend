@@ -16,15 +16,12 @@ namespace Services.Services
     {
         private readonly IMapper _mapper;
         private readonly IRecruitmentRepository _recruitmentRepo;
-        private readonly IRecruitmentSkillRepository _recruitmentSkillRepo;
-        private readonly IUserRepository _userRepo;
         private readonly ILogger<RecruitmentService> _logger;
 
-        public RecruitmentService(IMapper map, IRecruitmentRepository repo, IUserRepository userRepo, ILogger<RecruitmentService> logger, IRecruitmentSkillRepository recruitmentSkillRepo)
+        public RecruitmentService(IMapper map, IRecruitmentRepository repo, ILogger<RecruitmentService> logger)
         {
             _mapper = map;
             _recruitmentRepo = repo;
-            _userRepo = userRepo;
             _logger = logger;
         }
 
