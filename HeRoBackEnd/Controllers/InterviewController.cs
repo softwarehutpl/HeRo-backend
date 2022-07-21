@@ -1,4 +1,5 @@
-﻿using Data.DTOs.Interview;
+﻿using Common.Helpers;
+using Data.DTOs.Interview;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.Interview;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ namespace HeRoBackEnd.Controllers
     public class InterviewController : BaseController
     {
         private InterviewService _interviewService;
+        private string _errorMessage;
 
         public InterviewController(InterviewService interviewService)
         {
@@ -36,7 +38,7 @@ namespace HeRoBackEnd.Controllers
 
             if (interview == null)
             {
-                return BadRequest(new ResponseViewModel("No Interview with this Id"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NoInterview));
             }
 
             return new JsonResult(interview);
@@ -109,10 +111,10 @@ namespace HeRoBackEnd.Controllers
             int result = _interviewService.Create(interviewCreate, userCreatedId);
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Interview created unsuccessfully"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.ErrorCreatingInterview));
             }
 
-            return Ok(new ResponseViewModel("Interview created successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.InterviewCreatedSuccessfully));
         }
 
         /// <summary>
@@ -136,18 +138,15 @@ namespace HeRoBackEnd.Controllers
                     interview.Type);
 
             int userEditId = GetUserId();
-            int result = _interviewService.Update(interviewEdit, userEditId);
+            int result = _interviewService.Update(interviewEdit, userEditId, out _errorMessage);
 
-            if (result == 0)
-            {
-                return BadRequest(new ResponseViewModel("No interview with this Id"));
-            }
+
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Interview edited unsuccessfully"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Interview edited successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.InterviewEditedSuccessfully));
         }
 
         /// <summary>
@@ -165,18 +164,14 @@ namespace HeRoBackEnd.Controllers
         {
             int loginUserId = GetUserId();
 
-            int result = _interviewService.Delete(interviewId, loginUserId);
+            int result = _interviewService.Delete(interviewId, loginUserId, out _errorMessage);
 
-            if (result == 0)
-            {
-                return BadRequest(new ResponseViewModel("No interview with this Id"));
-            }
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Interview deleted unsuccessfully"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Interview deleted successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.InterviewDeletedSuccessfully));
         }
     }
 }

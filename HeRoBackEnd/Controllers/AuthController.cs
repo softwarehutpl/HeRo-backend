@@ -47,7 +47,7 @@ namespace HeRoBackEnd.Controllers
 
                 return Ok(new ResponseViewModel(user.Email));
             }
-            return BadRequest(new ResponseViewModel("Wrong Credentials!"));
+            return BadRequest(new ResponseViewModel(ErrorMessageHelper.WrongCredentials));
         }
 
         /// <summary>

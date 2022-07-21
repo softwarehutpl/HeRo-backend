@@ -1,4 +1,5 @@
-﻿using Common.Listing;
+﻿using Common.Helpers;
+using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Interview;
 using Data.Entities;
@@ -144,12 +145,13 @@ namespace Services.Services
             return interview.Id;
         }
 
-        public int Update(InterviewEditDTO interviewEdit, int userEditId)
+        public int Update(InterviewEditDTO interviewEdit, int userEditId, out string ErrorMessage)
         {
             Interview interview = _interviewRepository.GetById(interviewEdit.InterviewId);
             if (interview == null)
             {
-                return 0;
+                ErrorMessage = ErrorMessageHelper.NoInterview;
+                return -1;
             }
 
             interview.Date = interviewEdit.Date;
@@ -165,19 +167,20 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-
+                ErrorMessage = ErrorMessageHelper.ErrorEditingInterview;
                 return -1;
             }
-
+            ErrorMessage = "";
             return interview.Id;
         }
 
-        public int Delete(int interviewId, int loginUserId)
+        public int Delete(int interviewId, int loginUserId, out string ErrorMessage)
         {
             Interview interview = _interviewRepository.GetById(interviewId);
             if (interview == null)
             {
-                return 0;
+                ErrorMessage = ErrorMessageHelper.NoInterview;
+                return -1;
             }
 
             interview.DeletedById = loginUserId;
@@ -190,10 +193,12 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                ErrorMessage = ErrorMessageHelper.ErrorDeletingInterview;
 
                 return -1;
             }
 
+            ErrorMessage = "";
             return interview.Id;
         }
     }

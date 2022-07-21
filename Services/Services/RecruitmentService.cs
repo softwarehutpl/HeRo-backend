@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.Enums;
+using Common.Helpers;
 using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Recruitment;
@@ -44,7 +45,7 @@ namespace Services.Services
             return 1;
         }
 
-        public int UpdateRecruitment(int recruitmentId, UpdateRecruitmentDTO dto)
+        public int UpdateRecruitment(int recruitmentId, UpdateRecruitmentDTO dto, out string errorMessage)
         {
             try
             {
@@ -52,7 +53,8 @@ namespace Services.Services
 
                 if (recruitment == null)
                 {
-                    return 0;
+                    errorMessage = ErrorMessageHelper.NoRecruitment;
+                    return -1;
                 }
 
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
@@ -111,19 +113,24 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                errorMessage = ErrorMessageHelper.ErrorUpdatingRecruitment;
                 return -1;
             }
-
+            errorMessage = "";
             return 1;
         }
 
-        public int EndRecruitment(EndRecruimentDTO dto)
+        public int EndRecruitment(EndRecruimentDTO dto, out string errorMessage)
         {
             try
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
 
-                if (recruitment == null) return 0;
+                if (recruitment == null) 
+                {
+                    errorMessage = ErrorMessageHelper.NoRecruitment;
+                    return -1; 
+                }
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
@@ -135,19 +142,24 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                errorMessage = ErrorMessageHelper.ErrorEndingRecruitment;
                 return -1;
             }
-
+            errorMessage = "";
             return 1;
         }
 
-        public int DeleteRecruitment(DeleteRecruitmentDTO dto)
+        public int DeleteRecruitment(DeleteRecruitmentDTO dto, out string errorMessage)
         {
             try
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
 
-                if (recruitment == null) return 0;
+                if (recruitment == null) 
+                {
+                    errorMessage = ErrorMessageHelper.NoRecruitment;
+                    return -1; 
+                }
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
@@ -159,9 +171,10 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                errorMessage = ErrorMessageHelper.ErrorDeletingRecruitment;
                 return -1;
             }
-
+            errorMessage = "";
             return 1;
         }
 
