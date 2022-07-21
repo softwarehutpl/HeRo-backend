@@ -13,7 +13,6 @@
         public string CandidateLastName { get; set; }
 
         public string CandidateEmail { get; set; }
-        public string CandidateStatus { get; set; }
 
         public string CandidateStatus { get; set; }
 
