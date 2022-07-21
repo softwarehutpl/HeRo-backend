@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Common.Enums;
 using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Candidate;
@@ -40,14 +41,13 @@ namespace Services.Services
                 return -1;
             }
 
-            try
+            candidate.Stage = StageNames.EVALUATION.ToString();
+            int temp_result = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
+            if (temp_result != 0)
+                candidate.RecruiterId = temp_result;
+            else
             {
-                //candidate.Stage = StageNames.EVALUATION.ToString();
-                candidate.RecruiterId = _recruitmentRepository.GetRecruiterId(candidate.RecruitmentId);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError("Error when getting recruiterId of recruitment which doesn't exist: " + ex);
+                _logger.LogError("Error when getting recruiterId of recruitment which doesn't exist: ");
                 return -2;
             }
 
