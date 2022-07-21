@@ -12,13 +12,13 @@ namespace Data.IRepositories
 
         IQueryable<User> GetAllUsers();
 
-        User GetUserByEmail(string mail);
+        User? GetUserByEmail(string mail);
 
         string GetUserEmail(int id);
 
-        Guid GetUserGuidByEmail(string email);
+        Guid? GetUserGuidByEmail(string email);
 
-        string GetUserPassword(string email);
+        string? GetUserPassword(string email);
 
         string GetUserRoleByEmail(string email);
     }

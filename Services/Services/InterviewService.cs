@@ -30,26 +30,21 @@ namespace Services.Services
             }
 
             InterviewDTO interviewDTO =
-                new InterviewDTO(
-                    interview.Id,
-                    interview.Date,
-                    interview.CandidateId,
-                    interview.Candidate.Name,
-                    interview.Candidate.LastName,
-                    interview.Candidate.Email,
-                    interview.Candidate.Status,
-                    interview.User.Id,
-                    interview.User.Email,
-                    interview.Type);
+                new InterviewDTO
+                {
+                    InterviewId = interview.Id,
+                    Date = interview.Date,
+                    CandidateId = interview.CandidateId,
+                    CandidateName = interview.Candidate.Name,
+                    CandidateLastName = interview.Candidate.LastName,
+                    CandidateEmail = interview.Candidate.Email,
+                    CandidateStatus = interview.Candidate.Status,
+                    WorkerId = interview.User.Id,
+                    WorkerEmail = interview.User.Email,
+                    Type = interview.Type
+                };
 
             return interviewDTO;
-        }
-
-        public int GetQuantity()
-        {
-            int result = _interviewRepository.GetAll().Count();
-
-            return result;
         }
 
         public InterviewListing GetInterviews(Paging paging, SortOrder? sortOrder, InterviewFiltringDTO interviewFiltringDTO)
@@ -106,23 +101,25 @@ namespace Services.Services
             interviewListing.InterviewFiltringDTO = interviewFiltringDTO;
             interviewListing.Paging = paging;
             interviewListing.SortOrder = sortOrder;
-            interviewListing.InterviewDTOs = interviews.Select(i => new InterviewDTO(
-                                                    i.Id,
-                                                    i.Date,
-                                                    i.CandidateId,
-                                                    i.Candidate.Name,
-                                                    i.Candidate.LastName,
-                                                    i.Candidate.Email,
-                                                    i.Candidate.Status,
-                                                    i.WorkerId,
-                                                    i.User.Email,
-                                                    i.Type
-                                                )).ToPagedList(paging.PageNumber, paging.PageSize);
+            interviewListing.InterviewDTOs = interviews
+                .Select(i => new InterviewDTO
+                {
+                    InterviewId = i.Id,
+                    Date = i.Date,
+                    CandidateId = i.CandidateId,
+                    CandidateName = i.Candidate.Name,
+                    CandidateLastName = i.Candidate.LastName,
+                    CandidateEmail = i.Candidate.Email,
+                    CandidateStatus = i.Candidate.Status,
+                    WorkerId = i.WorkerId,
+                    WorkerEmail = i.User.Email,
+                    Type = i.Type
+                }).ToPagedList(paging.PageNumber, paging.PageSize);
 
             return interviewListing;
         }
 
-        public void Create(InterviewCreateDTO interviewCreate, int userCreatedId)
+        public int Create(InterviewCreateDTO interviewCreate, int userCreatedId)
         {
             Interview interview = new Interview();
 
@@ -132,14 +129,19 @@ namespace Services.Services
             interview.Type = interviewCreate.Type;
             interview.CreatedById = userCreatedId;
             interview.CreatedDate = DateTime.UtcNow;
+
             try
             {
-                _interviewRepository.AddAndSaveChanges(interview);
+                interview = _interviewRepository.AddAndSaveChanges(interview);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+
+                return -1;
             }
+
+            return interview.Id;
         }
 
         public int Update(InterviewEditDTO interviewEdit, int userEditId)
@@ -163,7 +165,8 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return 0;
+
+                return -1;
             }
 
             return interview.Id;
@@ -179,6 +182,7 @@ namespace Services.Services
 
             interview.DeletedById = loginUserId;
             interview.DeletedDate = DateTime.UtcNow;
+
             try
             {
                 _interviewRepository.UpdateAndSaveChanges(interview);
@@ -186,8 +190,10 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return 0;
+
+                return -1;
             }
+
             return interview.Id;
         }
     }
