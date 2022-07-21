@@ -7,9 +7,16 @@ namespace Tests.InterviewTests
 {
     public class GetInterviewsTests : BaseTest
     {
-        [Fact]
-        public void GetInterviews_ShoudWork()
+        [Theory]
+        [InlineData(null, null, null, null, null, 5)]
+        [InlineData(null, null, null, null, "HR", 4)]
+        [InlineData(null, null, 4, null, null, 2)]
+        [InlineData(null, null, null, 2, "HR", 2)]
+        [InlineData(null, null, 4, 1, "HR", 1)]
+        public void GetInterviews_ShoudWork(DateTime fromDate, DateTime? toDate, int? candidateId,
+            int? workerId, string? type, int expectedCount)
         {
+            //Arrange
             Paging paging = new Paging
             {
                 PageNumber = 1,
@@ -26,12 +33,12 @@ namespace Tests.InterviewTests
 
             InterviewFiltringDTO interviewFiltringDTO = new InterviewFiltringDTO
             {
-                FromDate = new DateTime(2000, 1, 1),
-                ToDate = new DateTime(2030, 1, 1)
+                FromDate = fromDate,
+                ToDate = toDate,
+                CandidateId = candidateId,
+                WorkerId = workerId,
+                Type = type
             };
-
-            //Arrange
-            int expectedCount = 2;
 
             // Act
             IQueryable<Interview> interviews = Interviews.AsQueryable();
@@ -39,7 +46,7 @@ namespace Tests.InterviewTests
             InterviewListing interviewListingActual = InterviewService.GetInterviews(paging, sortOrder, interviewFiltringDTO);
 
             //Assert
-            Assert.True(expectedCount == interviewListingActual.InterviewDTOs.Count());
+            Assert.Equal(expectedCount, interviewListingActual.TotalCount);
         }
     }
 }
