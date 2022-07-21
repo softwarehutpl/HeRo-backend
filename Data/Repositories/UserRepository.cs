@@ -16,7 +16,7 @@ namespace Data.Repositories
             _dataContext = context;
         }
 
-        public User GetUserByEmail(string mail)
+        public User? GetUserByEmail(string mail)
         {
             var result = _dataContext.Users.Where(x => x.Email == mail).FirstOrDefault();
             return result;
@@ -35,7 +35,7 @@ namespace Data.Repositories
             return result;
         }
 
-        public string GetUserPassword(string email)
+        public string? GetUserPassword(string email)
         {
             var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.Password).FirstOrDefault();
             return result;
@@ -47,7 +47,7 @@ namespace Data.Repositories
             return result;
         }
 
-        public Guid GetUserGuidByEmail(string email)
+        public Guid? GetUserGuidByEmail(string email)
         {
             var result = _dataContext.Users.Where(x => x.Email == email).Select(x => x.PasswordRecoveryGuid).FirstOrDefault();
             return result;
