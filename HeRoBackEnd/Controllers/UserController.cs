@@ -98,7 +98,7 @@ namespace HeRoBackEnd.Controllers
 
             int result = _userService.Update(editUserDTO);
 
-            if (result == 0)
+            if (result == -1)
             {
                 return NotFound(new ResponseViewModel(ErrorMessageHelper.NoUser));
             }

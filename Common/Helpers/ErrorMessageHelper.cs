@@ -55,5 +55,6 @@ namespace Common.Helpers
         public const string NotFound = "Not found";
         public const string NoUser = "No user with given Id found";
         public const string ErrorDeletingUser = "Error while deleting the user";
+        public const string ErrorUpdatingUser = "Error while updating the user";
     }
 }

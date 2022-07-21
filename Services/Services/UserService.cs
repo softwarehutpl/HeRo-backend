@@ -96,12 +96,13 @@ namespace Services.Services
             return userListing;
         }
 
-        public int Update(UserEditDTO userEdit)
+        public int Update(UserEditDTO userEdit, out string error)
         {
             User user = _userRepository.GetById(userEdit.Id);
             if (user == null)
             {
-                return 0;
+                error = ErrorMessageHelper.NoUser;
+                return -1;
             }
 
             user.UserStatus = userEdit.UserStatus;
@@ -114,8 +115,11 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
+                error = ErrorMessageHelper.ErrorUpdatingUser;
                 _logger.LogError(ex.Message);
+                return -1;
             }
+            error = "";
             return user.Id;
         }
 
@@ -125,7 +129,7 @@ namespace Services.Services
             if (user == null)
             {
                 error = ErrorMessageHelper.NoUser;
-                return 0;
+                return -1;
             }
             user.UserStatus = UserStatuses.DELETED.ToString();
             user.DeletedById = loginUserId;
