@@ -132,6 +132,9 @@
   <data name="Confirmation failed" xml:space="preserve">
     <value>确认失败</value>
   </data>
+  <data name="Editing was successful" xml:space="preserve">
+    <value>编辑成功</value>
+  </data>
   <data name="Employees assigned correctly" xml:space="preserve">
     <value>正确分配的员工</value>
   </data>
@@ -189,6 +192,15 @@
   <data name="Error updating recruitment" xml:space="preserve">
     <value>更新招聘时出错</value>
   </data>
+  <data name="Error while deleting skill!" xml:space="preserve">
+    <value>删除技能时出错！</value>
+  </data>
+  <data name="Error while deleting the user" xml:space="preserve">
+    <value>删除用户时出错</value>
+  </data>
+  <data name="Error while updating the user" xml:space="preserve">
+    <value>更新用户时出错</value>
+  </data>
   <data name="Interview created successfully" xml:space="preserve">
     <value>面试创建成功</value>
   </data>
@@ -206,6 +218,12 @@
   </data>
   <data name="No Interview with this Id" xml:space="preserve">
     <value>没有采访这个ID</value>
+  </data>
+  <data name="No user with given Id found" xml:space="preserve">
+    <value>未找到具有给定 ID 的用户</value>
+  </data>
+  <data name="Not found" xml:space="preserve">
+    <value>未找到</value>
   </data>
   <data name="Password Changed" xml:space="preserve">
     <value>密码已更改</value>
@@ -246,6 +264,12 @@
   <data name="There is no recruitment with such Id" xml:space="preserve">
     <value>没有使用此 ID 的招聘</value>
   </data>
+  <data name="There is no such skill!" xml:space="preserve">
+    <value>没有这样的技能！</value>
+  </data>
+  <data name="This skill is currently used in one of the recruitments. You can't delete it." xml:space="preserve">
+    <value>该技能目前在其中一个招聘中使用。你不能删除它。</value>
+  </data>
   <data name="User already exists" xml:space="preserve">
     <value>用户已存在</value>
   </data>
@@ -254,6 +278,9 @@
   </data>
   <data name="User created successfully" xml:space="preserve">
     <value>用户创建成功</value>
+  </data>
+  <data name="User deleted successfully" xml:space="preserve">
+    <value>用户删除成功</value>
   </data>
   <data name="Wrong credentials!" xml:space="preserve">
     <value>证件错误</value>

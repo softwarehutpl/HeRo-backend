@@ -132,6 +132,9 @@
   <data name="Confirmation failed" xml:space="preserve">
     <value>Potwierdzenie nie powiodło się</value>
   </data>
+  <data name="Editing was successful" xml:space="preserve">
+    <value>Edycja się powiodła</value>
+  </data>
   <data name="Employees assigned correctly" xml:space="preserve">
     <value>Pracownicy przypisani prawidłowo</value>
   </data>
@@ -189,6 +192,15 @@
   <data name="Error updating recruitment" xml:space="preserve">
     <value>Błąd podczas aktualizowania rekrutacji</value>
   </data>
+  <data name="Error while deleting skill!" xml:space="preserve">
+    <value>Błąd podczas usuwania umiejętności!</value>
+  </data>
+  <data name="Error while deleting the user" xml:space="preserve">
+    <value>Błąd podczas usuwania użytkownika</value>
+  </data>
+  <data name="Error while updating the user" xml:space="preserve">
+    <value>Błąd podczas aktualizacji użytkownika</value>
+  </data>
   <data name="Interview created successfully" xml:space="preserve">
     <value>Wywiad utworzony pomyślnie</value>
   </data>
@@ -206,6 +218,12 @@
   </data>
   <data name="No Interview with this Id" xml:space="preserve">
     <value>Brak wywiadu z tym identyfikatorem</value>
+  </data>
+  <data name="No user with given Id found" xml:space="preserve">
+    <value>Nie znaleziono użytkownika o podanym identyfikatorze</value>
+  </data>
+  <data name="Not found" xml:space="preserve">
+    <value>Nie znaleziono</value>
   </data>
   <data name="Password Changed" xml:space="preserve">
     <value>Hasło zostało zmienione</value>
@@ -246,6 +264,12 @@
   <data name="There is no recruitment with such Id" xml:space="preserve">
     <value>Nie ma rekrutacji z takim identyfikatorem</value>
   </data>
+  <data name="There is no such skill!" xml:space="preserve">
+    <value>Nie ma takiej umiejętności!</value>
+  </data>
+  <data name="This skill is currently used in one of the recruitments. You can't delete it." xml:space="preserve">
+    <value>Umiejętność ta jest aktualnie wykorzystywana w jednej z rekrutacji. Nie możesz jej usunąć.</value>
+  </data>
   <data name="User already exists" xml:space="preserve">
     <value>Użytkownik już istnieje</value>
   </data>
@@ -254,6 +278,9 @@
   </data>
   <data name="User created successfully" xml:space="preserve">
     <value>Pomyślnie utworzono użytkownika</value>
+  </data>
+  <data name="User deleted successfully" xml:space="preserve">
+    <value>Użytkownik został pomyślnie usunięty</value>
   </data>
   <data name="Wrong credentials!" xml:space="preserve">
     <value>Błędne dane uwierzytelniające!</value>

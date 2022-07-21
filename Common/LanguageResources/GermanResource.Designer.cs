@@ -106,6 +106,15 @@ namespace Common.LanguageResources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Bearbeitung war erfolgreich.
+        /// </summary>
+        internal static string Editing_was_successful {
+            get {
+                return ResourceManager.GetString("Editing was successful", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Mitarbeiter richtig zugeordnet.
         /// </summary>
         internal static string Employees_assigned_correctly {
@@ -277,6 +286,33 @@ namespace Common.LanguageResources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Fehler beim Löschen des Skills!.
+        /// </summary>
+        internal static string Error_while_deleting_skill_ {
+            get {
+                return ResourceManager.GetString("Error while deleting skill!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Fehler beim Löschen des Benutzers.
+        /// </summary>
+        internal static string Error_while_deleting_the_user {
+            get {
+                return ResourceManager.GetString("Error while deleting the user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Fehler beim Aktualisieren des Benutzers.
+        /// </summary>
+        internal static string Error_while_updating_the_user {
+            get {
+                return ResourceManager.GetString("Error while updating the user", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Interview erfolgreich erstellt.
         /// </summary>
         internal static string Interview_created_successfully {
@@ -327,6 +363,24 @@ namespace Common.LanguageResources {
         internal static string No_Interview_with_this_Id {
             get {
                 return ResourceManager.GetString("No Interview with this Id", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Kein Benutzer mit der angegebenen ID gefunden.
+        /// </summary>
+        internal static string No_user_with_given_Id_found {
+            get {
+                return ResourceManager.GetString("No user with given Id found", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Nicht gefunden.
+        /// </summary>
+        internal static string Not_found {
+            get {
+                return ResourceManager.GetString("Not found", resourceCulture);
             }
         }
         
@@ -448,6 +502,24 @@ namespace Common.LanguageResources {
         }
         
         /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Es gibt keine solche Fähigkeit!.
+        /// </summary>
+        internal static string There_is_no_such_skill_ {
+            get {
+                return ResourceManager.GetString("There is no such skill!", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Diese Fertigkeit wird derzeit in einer der Rekrutierungen verwendet. Sie können es nicht löschen..
+        /// </summary>
+        internal static string This_skill_is_currently_used_in_one_of_the_recruitments__You_can_t_delete_it_ {
+            get {
+                return ResourceManager.GetString("This skill is currently used in one of the recruitments. You can\'t delete it.", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         /// Wyszukuje zlokalizowany ciąg podobny do ciągu Benutzer existiert bereits.
         /// </summary>
         internal static string User_already_exists {
@@ -471,6 +543,15 @@ namespace Common.LanguageResources {
         internal static string User_created_successfully {
             get {
                 return ResourceManager.GetString("User created successfully", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        /// Wyszukuje zlokalizowany ciąg podobny do ciągu Benutzer erfolgreich gelöscht.
+        /// </summary>
+        internal static string User_deleted_successfully {
+            get {
+                return ResourceManager.GetString("User deleted successfully", resourceCulture);
             }
         }
         

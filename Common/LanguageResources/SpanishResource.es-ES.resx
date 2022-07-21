@@ -132,6 +132,9 @@
   <data name="Confirmation failed" xml:space="preserve">
     <value>Error de confirmación</value>
   </data>
+  <data name="Editing was successful" xml:space="preserve">
+    <value>La edición fue exitosa</value>
+  </data>
   <data name="Employees assigned correctly" xml:space="preserve">
     <value>Empleados asignados correctamente</value>
   </data>
@@ -189,6 +192,15 @@
   <data name="Error updating recruitment" xml:space="preserve">
     <value>Error al actualizar el reclutamiento</value>
   </data>
+  <data name="Error while deleting skill!" xml:space="preserve">
+    <value>¡Error al eliminar la habilidad!</value>
+  </data>
+  <data name="Error while deleting the user" xml:space="preserve">
+    <value>Error al eliminar el usuario</value>
+  </data>
+  <data name="Error while updating the user" xml:space="preserve">
+    <value>Error al actualizar el usuario</value>
+  </data>
   <data name="Interview created successfully" xml:space="preserve">
     <value>Entrevista creada con éxito</value>
   </data>
@@ -206,6 +218,12 @@
   </data>
   <data name="No Interview with this Id" xml:space="preserve">
     <value>Sin entrevista con esta identificación</value>
+  </data>
+  <data name="No user with given Id found" xml:space="preserve">
+    <value>No se encontró ningún usuario con la identificación dada</value>
+  </data>
+  <data name="Not found" xml:space="preserve">
+    <value>Extraviado</value>
   </data>
   <data name="Password Changed" xml:space="preserve">
     <value>Contraseña cambiada</value>
@@ -249,6 +267,12 @@
   <data name="There is no recruitment with such Id" xml:space="preserve">
     <value>No hay contratación con tal id.</value>
   </data>
+  <data name="There is no such skill!" xml:space="preserve">
+    <value>¡No existe tal habilidad!</value>
+  </data>
+  <data name="This skill is currently used in one of the recruitments. You can't delete it." xml:space="preserve">
+    <value>Esta habilidad se utiliza actualmente en uno de los reclutamientos. No puedes eliminarlo.</value>
+  </data>
   <data name="User already exists" xml:space="preserve">
     <value>El usuario ya existe</value>
   </data>
@@ -257,6 +281,9 @@
   </data>
   <data name="User created successfully" xml:space="preserve">
     <value>Usuario creado con éxito</value>
+  </data>
+  <data name="User deleted successfully" xml:space="preserve">
+    <value>Usuario eliminado exitosamente</value>
   </data>
   <data name="Wrong credentials!" xml:space="preserve">
     <value>¡Credenciales incorrectas!</value>
