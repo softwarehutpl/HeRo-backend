@@ -14,7 +14,7 @@ namespace Tests.RecruitmentTests
         [InlineData("Pra", null, null, true, null, null, true, 1)]
         [InlineData("Pra", null, true, null, null, null, true, 2)]
         [InlineData("Pra", "Front", null, null, null, null, true, 2)]
-        [InlineData("Pra", "Front", null, null, null, null, true, 1)]
+        [InlineData("Pra", "Front", null, null, null, null, false, 1)]
         public void GetRecruitments_ShoudWork(string? name, string? description, bool showOpen,
             bool showClosed, DateTime? beginningDate, DateTime? endingDate, bool showPrivate, int expectedCount)
         {
