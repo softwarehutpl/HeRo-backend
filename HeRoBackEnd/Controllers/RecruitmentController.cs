@@ -143,7 +143,7 @@ namespace HeRoBackEnd.Controllers
 
             RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
-            if (recruitments == null) return BadRequest(ErrorMessageHelper.ErrorListRec);
+            if (recruitments == null) return BadRequest(ErrorMessageHelper.ErrorListRecruitment);
 
             return Ok(recruitments);
         }

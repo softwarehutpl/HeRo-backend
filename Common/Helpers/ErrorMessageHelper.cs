@@ -39,7 +39,6 @@ namespace Common.Helpers
 
         //Recruitment
         public const string NoRecruitment = "There is no recruitment with such Id";
-        public const string ErrorListRec = "Error getting list of recruitments";
         public const string ErrorDeletingRecruitment = "Error deleting recruitment";
         public const string ErrorEndingRecruitment = "Error ending recruitment";
         public const string ErrorUpdatingRecruitment = "Error updating recruitment";
