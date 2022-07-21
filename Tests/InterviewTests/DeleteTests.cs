@@ -21,25 +21,25 @@ namespace Tests.InterviewTests
             IQueryable<Interview> interviews = Interviews.AsQueryable();
             InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
 
-            int actualResult = InterviewService.Delete(1, 1);
+            int actualResult = InterviewService.Delete(1, 1, out errorMessage);
 
             //Assert
             Assert.True(expectedResult == actualResult);
         }
 
         [Fact]
-        public void Delete_ShoudFail()
+        public void Delete_ShouldFail()
         {
             Interview interview = null;
 
             //Arrange
-            int expectedResult = 0;
+            int expectedResult = -1;
 
             // Act
             IQueryable<Interview> interviews = Interviews.AsQueryable();
             InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
 
-            int actualResult = InterviewService.Delete(1, 1);
+            int actualResult = InterviewService.Delete(1, 1, out errorMessage);
 
             //Assert
             Assert.True(expectedResult == actualResult);
@@ -60,7 +60,7 @@ namespace Tests.InterviewTests
             InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
             InterviewRepository.Setup(i => i.UpdateAndSaveChanges(interview)).Throws(ex);
 
-            int actualResult = InterviewService.Delete(1, 1);
+            int actualResult = InterviewService.Delete(1, 1, out errorMessage);
 
             //Assert
             Assert.True(expectedResult == actualResult);

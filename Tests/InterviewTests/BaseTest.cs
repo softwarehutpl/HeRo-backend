@@ -12,6 +12,7 @@ namespace Tests.InterviewTests
         public Mock<IInterviewRepository> InterviewRepository { get; set; }
         public Mock<ILogger<InterviewService>> Logger { get; set; }
         public List<Interview> Interviews { get; set; }
+        protected string errorMessage;
 
         public BaseTest()
         {

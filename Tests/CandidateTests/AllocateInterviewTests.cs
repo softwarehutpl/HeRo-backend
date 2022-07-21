@@ -13,7 +13,7 @@ namespace Tests.CandidateTests
 {
     public class AllocateInterviewTests : BaseCandidateTests
     {
-
+      
 
         [Fact]
         public void EntersGetByIdAtLeastOnce()
@@ -32,7 +32,7 @@ namespace Tests.CandidateTests
             dto.RecruiterId = 1;
             dto.Date = DateTime.UtcNow;
 
-            int result = candidateService.AllocateRecruitmentInterview(id, dto);
+            int result = candidateService.AllocateRecruitmentInterview(id, dto, out errorMessage);
             candRepoMock.Verify(c => c.GetById(id), Times.AtLeastOnce);
         }
 
@@ -62,7 +62,7 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            int result = candidateService.AllocateRecruitmentInterview(id, dto);
+            int result = candidateService.AllocateRecruitmentInterview(id, dto, out errorMessage);
             Assert.Equal(1, result);
         }
 
@@ -88,7 +88,7 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Equals(candidate);
 
-            int result = candidateService.AllocateRecruitmentInterview(id, dto);
+            int result = candidateService.AllocateRecruitmentInterview(id, dto, out errorMessage);
             Assert.NotEqual(1, result);
         }
     }

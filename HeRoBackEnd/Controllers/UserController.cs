@@ -96,7 +96,7 @@ namespace HeRoBackEnd.Controllers
                     editUser.UserStatus,
                     editUser.RoleName);
 
-            int result = _userService.Update(editUserDTO);
+            int result = _userService.Update(editUserDTO, out _errorMessage);
 
             if (result == -1)
             {

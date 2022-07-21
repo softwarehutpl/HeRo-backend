@@ -35,7 +35,7 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            candidateService.DeleteCandidate(dto);
+            candidateService.DeleteCandidate(dto, out errorMessage);
 
             candRepoMock.Verify(v=>v.GetById(id), Times.AtLeastOnce);
         }
@@ -62,7 +62,7 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            Assert.Equal(1, candidateService.DeleteCandidate(dto));
+            Assert.Equal(1, candidateService.DeleteCandidate(dto, out errorMessage));
         }
 
         [Fact]
@@ -83,7 +83,7 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            Assert.NotEqual(1, candidateService.DeleteCandidate(dto));
+            Assert.NotEqual(1, candidateService.DeleteCandidate(dto, out errorMessage));
         }
 
     }
