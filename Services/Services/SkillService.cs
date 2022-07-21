@@ -1,4 +1,5 @@
-﻿using Common.ServiceRegistrationAttributes;
+﻿using Common.Helpers;
+using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Skill;
 using Data.Entities;
 using Data.IRepositories;
@@ -72,13 +73,17 @@ namespace Services.Services
             return result;
         }
 
-        public int AddSkill(string skillName)
+        public int AddSkill(string skillName, out string errorMessage)
         {
             try
             {
                 bool exists = _repo.Exists(skillName);
 
-                if (exists == true) return 0;
+                if (exists == true) 
+                {
+                    errorMessage = ErrorMessageHelper.SkillExists;
+                    return -1; 
+                }
 
                 Skill skill = new Skill(skillName);
                 _repo.AddAndSaveChanges(skill);
@@ -86,23 +91,32 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                errorMessage = ErrorMessageHelper.WrongData;
                 return -1;
             }
-
+            errorMessage = "";
             return 1;
         }
 
-        public int UpdateSkill(UpdateSkillDTO dto)
+        public int UpdateSkill(UpdateSkillDTO dto, out string errorMessage)
         {
             try
             {
                 Skill skill = _repo.GetById(dto.Id);
 
-                if (skill == null) return -2;
+                if (skill == null)
+                {
+                    errorMessage = ErrorMessageHelper.NoSkill;
+                    return -1;
+                }
 
                 bool exists = _repo.Exists(dto.Id, dto.Name);
 
-                if (exists == true) return 0;
+                if (exists == true)
+                {
+                    errorMessage = ErrorMessageHelper.SkillExists;
+                    return -1;
+                }
   
                 skill.Name = dto.Name;
                 _repo.UpdateAndSaveChanges(skill);
@@ -110,32 +124,44 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return -1;
+                {
+                    errorMessage = ErrorMessageHelper.WrongData;
+                    return -1;
+                }
             }
-
+            errorMessage = "";
             return 1;
         }
 
-        public int DeleteSkill(int id)
+        public int DeleteSkill(int id, out string error)
         {
             try
             {
                 Skill skill = _repo.GetById(id);
 
-                if (skill == null) return -1;
+                if (skill == null)
+                {   
+                    error = ErrorMessageHelper.NoSkill;
+                    return -1;
+                }
 
                 bool isUsed = _recruitmentSkillRepo.IsSkillUsed(id);
 
-                if (isUsed == true) return 0;
+                if (isUsed == true)
+                {
+                    error = ErrorMessageHelper.SkillIsUsed;
+                    return -1;
+                }
 
                 _repo.RemoveByIdAndSaveChanges(id);
             }
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return -2;
+                error = ErrorMessageHelper.ErrorDeletingSkill;
+                return -1;
             }
-
+            error = "";
             return 1;
         }
     }

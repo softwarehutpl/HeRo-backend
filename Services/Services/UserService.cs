@@ -119,11 +119,12 @@ namespace Services.Services
             return user.Id;
         }
 
-        public int Delete(int userId, int loginUserId)
+        public int Delete(int userId, int loginUserId, out string error)
         {
             User user = _userRepository.GetById(userId);
             if (user == null)
             {
+                error = ErrorMessageHelper.NoUser;
                 return 0;
             }
             user.UserStatus = UserStatuses.DELETED.ToString();
@@ -135,10 +136,11 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
+                error = ErrorMessageHelper.ErrorDeletingUser;
                 _logger.LogError("Error updating user while deleting");
                 return -1;
             }
-
+            error = "";
             return user.Id;
         }
 

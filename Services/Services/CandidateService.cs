@@ -51,7 +51,7 @@ namespace Services.Services
             {
                 _logger.LogError("Error when getting recruiterId of recruitment which doesn't exist: ");
                 
-                ErrorMessage = ErrorMessageHelper.InvalidCandidateId;
+                ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
                 return -1;
             }
 
@@ -139,7 +139,7 @@ namespace Services.Services
             if (candidate == null)
             {
                 _logger.LogError("Error removing candidate with given ID - candidate doesn't exist");
-                ErrorMessage = ErrorMessageHelper.InvalidCandidateId;
+                ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
                 return -1;
             }
 
@@ -166,7 +166,7 @@ namespace Services.Services
             if (candidate == null)
             {
                 _logger.LogError("Error getting candidate with given ID");
-                ErrorMessage = ErrorMessageHelper.InvalidCandidateId;
+                ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
                 return -1;
             }
             else
@@ -343,7 +343,7 @@ namespace Services.Services
             else
             {
                 _logger.LogError("Cannot get candidate with given Id");
-                ErrorMessage = ErrorMessageHelper.InvalidCandidateId;
+                ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
                 return -1;
             }
         }
@@ -366,7 +366,7 @@ namespace Services.Services
                 {
                     _logger.LogError("Error updating candidate when assigning interview date" + ex);
                     ErrorMessage = ErrorMessageHelper.ErrorAssigningInterviewDate;
-                    return -2;
+                    return -1;
                 }
 
                 ErrorMessage = "";
@@ -375,7 +375,7 @@ namespace Services.Services
             else
             {
                 _logger.LogError("Cannot get candidate with given Id");
-                ErrorMessage = ErrorMessageHelper.InvalidCandidateId;
+                ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
                 return -1;
             }
         }
@@ -406,7 +406,7 @@ namespace Services.Services
             else
             {
                 _logger.LogError("Cannot get candidate with given Id");
-                ErrorMessage = ErrorMessageHelper.InvalidCandidateId;
+                ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
                 return -1;
             }
         }

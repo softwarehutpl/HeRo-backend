@@ -1,4 +1,5 @@
-﻿using Data.DTOs.User;
+﻿using Common.Helpers;
+using Data.DTOs.User;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
@@ -12,6 +13,7 @@ namespace HeRoBackEnd.Controllers
     public class UserController : BaseController
     {
         private UserService _userService;
+        private string _errorMessage;
 
         public UserController(UserService userService)
         {
@@ -36,7 +38,7 @@ namespace HeRoBackEnd.Controllers
 
             if (user == null)
             {
-                return BadRequest(new ResponseViewModel("Not found"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NotFound));
             }
 
             return Ok(user);
@@ -98,10 +100,10 @@ namespace HeRoBackEnd.Controllers
 
             if (result == 0)
             {
-                return NotFound(new ResponseViewModel("No user with this UserId"));
+                return NotFound(new ResponseViewModel(ErrorMessageHelper.NoUser));
             }
 
-            return Ok(new ResponseViewModel("Editing was successful"));
+            return Ok(new ResponseViewModel(MessageHelper.UserEditSuccess));
         }
 
         /// <summary>
@@ -122,18 +124,13 @@ namespace HeRoBackEnd.Controllers
         {
             int loginUserId = GetUserId();
 
-            int result = _userService.Delete(userId, loginUserId);
+            int result = _userService.Delete(userId, loginUserId, out _errorMessage);
 
-            if (result == 0)
-            {
-                return NotFound(new ResponseViewModel("No user with this user id"));
-            }
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Error while deleting the user"));
+                return NotFound(new ResponseViewModel(_errorMessage));
             }
-
-            return Ok(new ResponseViewModel("User deleted successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.UserDeleteSuccess));
         }
     }
 }

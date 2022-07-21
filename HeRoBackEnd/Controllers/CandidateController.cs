@@ -349,14 +349,10 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.AllocateRecruitmentInterview(candidateId, dto, out _errorMessage);
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("User with given ID doesn't exist"));
-            }
-            if (result == -2)
-            {
-                return BadRequest(new ResponseViewModel("Error setting interview date"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Interview date set correctly"));
+            return Ok(new ResponseViewModel(MessageHelper.InterviewDateSet));
         }
 
         /// <summary>
@@ -388,10 +384,10 @@ namespace HeRoBackEnd.Controllers
             int result = _candidateService.AllocateTechInterview(candidateId, dto, out _errorMessage);
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Error setting tech interview date"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Tech interview date set correctly"));
+            return Ok(new ResponseViewModel(MessageHelper.TechInterviewDateSet));
         }
 
         /// <summary>

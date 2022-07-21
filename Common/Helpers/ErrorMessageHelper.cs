@@ -43,6 +43,18 @@ namespace Common.Helpers
         public const string ErrorDeletingRecruitment = "Error deleting recruitment";
         public const string ErrorEndingRecruitment = "Error ending recruitment";
         public const string ErrorUpdatingRecruitment = "Error updating recruitment";
+        public const string ErrorListRecruitment = "Error getting list of recruitments";
+        public const string WrongData = "Wrong data!";
 
+        //Skills
+        public const string SkillExists = "Skill with that name already exists!";
+        public const string NoSkill = "There is no such skill!";
+        public const string ErrorDeletingSkill = "Error while deleting skill!";
+        public const string SkillIsUsed = "This skill is currently used in one of the recruitments. You can't delete it.";
+
+        //Users
+        public const string NotFound = "Not found";
+        public const string NoUser = "No user with given Id found";
+        public const string ErrorDeletingUser = "Error while deleting the user";
     }
 }

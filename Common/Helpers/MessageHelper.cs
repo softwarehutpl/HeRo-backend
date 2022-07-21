@@ -34,6 +34,8 @@ namespace Common.Helpers
         public const string InterviewNoteAdded = "Interview note added successfully";
         public const string TechInterviewNoteAdded = "Tech interview note added correctly";
         public const string EmployeesAssigned = "Employees assigned correctly";
+        public const string InterviewDateSet = "Interview date set correctly";
+        public const string TechInterviewDateSet = "Tech interview date set correctly";
 
         //Interviews
         public const string InterviewCreatedSuccessfully = "Interview created successfully";
@@ -46,7 +48,13 @@ namespace Common.Helpers
         public const string RecruitmentEndedSuccessfully = "Recruitment ended successfully";
         public const string RecruitmentEditedSuccessfully = "Recruitment edited successfully";
 
+        //Skill
+        public const string SkillAdded = "Skill added successfully";
+        public const string SkillUpdated = "Skill updated successfully";
+        public const string SkillDeleted = "Skill deleted successfully";
 
-
+        //User
+        public static string UserEditSuccess = "Editing was successful";
+        public static string UserDeleteSuccess = "User deleted successfully";
     }
 }

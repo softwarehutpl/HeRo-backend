@@ -92,7 +92,7 @@ namespace HeRoBackEnd.Controllers
 
             RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
-            if (recruitments == null) return BadRequest();
+            if (recruitments == null) return BadRequest(ErrorMessageHelper.ErrorListRecruitment);
 
             return Ok(recruitments);
         }
@@ -174,10 +174,10 @@ namespace HeRoBackEnd.Controllers
 
             if (result == -1)
             {
-                return BadRequest(new ResponseViewModel("Wrong data!"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.WrongData));
             }
 
-            return Ok(new ResponseViewModel("Recruitment created successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.RecruitmentCreatedSuccessfully));
         }
 
         /// <summary>
