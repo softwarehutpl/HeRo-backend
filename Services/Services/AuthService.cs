@@ -28,7 +28,7 @@ namespace Services.Services
             return false;
         }
 
-        public async Task<ClaimsIdentity> ValidateAndCreateClaim(string password, string email)
+        public async Task<ClaimsIdentity?> ValidateAndCreateClaim(string password, string email)
         {
             if (ValidateUser(password, email))
             {

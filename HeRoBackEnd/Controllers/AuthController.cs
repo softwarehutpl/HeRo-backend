@@ -106,7 +106,7 @@ namespace HeRoBackEnd.Controllers
 
             if (check)
             {
-                _userService.ChangeUserPassword(user.Email, user.Password);
+                await _userService.ChangeUserPassword(user.Email, user.Password);
                 return Ok(new ResponseViewModel("Account confirmed. Your password has been changed"));
             }
 
@@ -127,7 +127,8 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> PasswordRecoveryMail(string email)
         {
             bool changedPassword = _userService.CheckIfUserExist(email);
-            if (!changedPassword) return BadRequest($"Account:{email} doesn't exist");
+            if (!changedPassword)
+                return BadRequest($"Account:{email} doesn't exist");
 
             var recoveryGuid = _userService.SetUserRecoveryGuid(email);
 
