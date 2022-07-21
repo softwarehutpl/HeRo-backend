@@ -59,6 +59,10 @@ namespace HeRoBackEnd.Controllers
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
             int result = _service.UpdateSkill(dto);
 
+            if(result==-2)
+            {
+                return BadRequest(new ResponseViewModel("There is no such skill!"));
+            }
             if (result == 0)
             {
                 return BadRequest(new ResponseViewModel("Skill with that name already exists!"));
