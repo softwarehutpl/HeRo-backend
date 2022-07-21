@@ -1,0 +1,264 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Account confirmed. Your password has been changed" xml:space="preserve">
+    <value>Konto bestätigt. Ihr Passwort wurde geändert</value>
+  </data>
+  <data name="Candidate created successfully" xml:space="preserve">
+    <value>Kandidat erfolgreich erstellt</value>
+  </data>
+  <data name="Candidate deleted successfully" xml:space="preserve">
+    <value>Kandidat erfolgreich gelöscht</value>
+  </data>
+  <data name="Candidate updated successfully" xml:space="preserve">
+    <value>Kandidat erfolgreich aktualisiert</value>
+  </data>
+  <data name="Confirmation failed" xml:space="preserve">
+    <value>Bestätigung fehlgeschlagen</value>
+  </data>
+  <data name="Employees assigned correctly" xml:space="preserve">
+    <value>Mitarbeiter richtig zugeordnet</value>
+  </data>
+  <data name="Error adding HR note to candidate" xml:space="preserve">
+    <value>Fehler beim Hinzufügen einer Personalnotiz zum Kandidaten</value>
+  </data>
+  <data name="Error adding tech note to candidate" xml:space="preserve">
+    <value>Fehler beim Hinzufügen des technischen Hinweises zum Kandidaten</value>
+  </data>
+  <data name="Error assigning interview date" xml:space="preserve">
+    <value>Fehler beim Zuweisen des Interviewdatums</value>
+  </data>
+  <data name="Error assigning tech interview date" xml:space="preserve">
+    <value>Fehler beim Zuweisen des Tech-Interview-Datums</value>
+  </data>
+  <data name="Error creating candidate (invalid recruitmentId)" xml:space="preserve">
+    <value>Fehler beim Erstellen des Kandidaten (ungültige Einstellungs-ID)</value>
+  </data>
+  <data name="Error creating candidate (one or more invalid parameters)" xml:space="preserve">
+    <value>Fehler beim Erstellen des Kandidaten (mindestens ein ungültiger Parameter)</value>
+  </data>
+  <data name="Error creating interview" xml:space="preserve">
+    <value>Fehler beim Erstellen des Interviews</value>
+  </data>
+  <data name="Error deleting candidate" xml:space="preserve">
+    <value>Fehler beim Löschen des Kandidaten</value>
+  </data>
+  <data name="Error deleting interview" xml:space="preserve">
+    <value>Fehler beim Löschen des Interviews</value>
+  </data>
+  <data name="Error deleting recruitment" xml:space="preserve">
+    <value>Fehler beim Löschen der Rekrutierung</value>
+  </data>
+  <data name="Error editing interview" xml:space="preserve">
+    <value>Fehler beim Bearbeiten des Interviews</value>
+  </data>
+  <data name="Error ending recruitment" xml:space="preserve">
+    <value>Fehler beim Beenden der Rekrutierung</value>
+  </data>
+  <data name="Error getting candidate (bad parameters or candidate doesn't exist)" xml:space="preserve">
+    <value>Fehler beim Abrufen des Kandidaten (falsche Parameter oder Kandidat existiert nicht)</value>
+  </data>
+  <data name="Error getting list of recruitments" xml:space="preserve">
+    <value>Fehler beim Abrufen der Liste der Rekrutierungen</value>
+  </data>
+  <data name="Error saving object to database" xml:space="preserve">
+    <value>Fehler beim Speichern des Objekts in der Datenbank</value>
+  </data>
+  <data name="Error updating candidate" xml:space="preserve">
+    <value>Fehler beim Aktualisieren des Kandidaten</value>
+  </data>
+  <data name="Error updating candidate when allocating recruiters" xml:space="preserve">
+    <value>Fehler beim Aktualisieren des Kandidaten bei der Zuweisung von Personalvermittlern</value>
+  </data>
+  <data name="Error updating recruitment" xml:space="preserve">
+    <value>Fehler beim Aktualisieren der Rekrutierung</value>
+  </data>
+  <data name="Interview created successfully" xml:space="preserve">
+    <value>Interview erfolgreich erstellt</value>
+  </data>
+  <data name="Interview date set correctly" xml:space="preserve">
+    <value>Interviewtermin richtig eingestellt</value>
+  </data>
+  <data name="Interview deleted successfully" xml:space="preserve">
+    <value>Interview erfolgreich gelöscht</value>
+  </data>
+  <data name="Interview edited successfully" xml:space="preserve">
+    <value>Interview erfolgreich bearbeitet</value>
+  </data>
+  <data name="Interview note added successfully" xml:space="preserve">
+    <value>Interviewnotiz erfolgreich hinzugefügt</value>
+  </data>
+  <data name="No Interview with this Id" xml:space="preserve">
+    <value>No Interview with this Id</value>
+  </data>
+  <data name="Password Changed" xml:space="preserve">
+    <value>Kein Interview mit dieser ID</value>
+  </data>
+  <data name="Recovery e-mail sent" xml:space="preserve">
+    <value>Wiederherstellungs-E-Mail gesendet</value>
+  </data>
+  <data name="Recruitment created successfully" xml:space="preserve">
+    <value>Rekrutierung erfolgreich erstellt</value>
+  </data>
+  <data name="Recruitment deleted successfully" xml:space="preserve">
+    <value>Einstellung erfolgreich gelöscht</value>
+  </data>
+  <data name="Recruitment edited successfully" xml:space="preserve">
+    <value>Rekrutierung erfolgreich bearbeitet</value>
+  </data>
+  <data name="Recruitment ended successfully" xml:space="preserve">
+    <value>Rekrutierung erfolgreich beendet</value>
+  </data>
+  <data name="Skill added successfully" xml:space="preserve">
+    <value>Fertigkeit erfolgreich hinzugefügt</value>
+  </data>
+  <data name="Skill deleted successfully" xml:space="preserve">
+    <value>Fertigkeit erfolgreich gelöscht</value>
+  </data>
+  <data name="Skill updated successfully" xml:space="preserve">
+    <value>Fertigkeit erfolgreich aktualisiert</value>
+  </data>
+  <data name="Skill with that name already exists!" xml:space="preserve">
+    <value>Fertigkeit mit diesem Namen existiert bereits!</value>
+  </data>
+  <data name="Tech interview date set correctly" xml:space="preserve">
+    <value>Tech-Interview-Datum richtig eingestellt</value>
+  </data>
+  <data name="Tech interview note added correctly" xml:space="preserve">
+    <value>Tech-Interview-Notiz korrekt hinzugefügt</value>
+  </data>
+  <data name="There is no recruitment with such Id" xml:space="preserve">
+    <value>Mit dieser ID findet keine Rekrutierung statt</value>
+  </data>
+  <data name="User already exists" xml:space="preserve">
+    <value>Benutzer existiert bereits</value>
+  </data>
+  <data name="User and Guid don't have the same owner" xml:space="preserve">
+    <value>Benutzer und Guid haben nicht denselben Eigentümer</value>
+  </data>
+  <data name="User created successfully" xml:space="preserve">
+    <value>Benutzer erfolgreich erstellt</value>
+  </data>
+  <data name="Wrong credentials!" xml:space="preserve">
+    <value>Falsche Anmeldeinformationen!</value>
+  </data>
+  <data name="Wrong data!" xml:space="preserve">
+    <value>Falschen Daten!</value>
+  </data>
+</root>
