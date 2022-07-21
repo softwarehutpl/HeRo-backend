@@ -23,21 +23,6 @@ namespace Services.Services
             _logger = logger;
         }
 
-        public Guid? GetUserGuid(string email)
-        {
-            Guid? result;
-            try
-            {
-                result = _userRepository.GetUserGuidByEmail(email);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex.Message);
-                return default;
-            }
-            return result;
-        }
-
         public Guid SetUserRecoveryGuid(string email)
         {
             var user = _userRepository.GetUserByEmail(email);
@@ -57,7 +42,7 @@ namespace Services.Services
 
         public UserDTO Get(int userId)
         {
-            User user = _userRepository.GetById(userId);
+            User? user = _userRepository.GetById(userId);
             if (user == null)
             {
                 return null;

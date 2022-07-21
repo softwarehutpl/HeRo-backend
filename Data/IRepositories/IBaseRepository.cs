@@ -18,7 +18,7 @@
 
         IQueryable<TEntity> GetAll();
 
-        TEntity GetById(int id);
+        TEntity? GetById(int id);
 
         void Remove(TEntity entity);
 
