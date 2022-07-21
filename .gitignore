@@ -353,3 +353,5 @@ MigrationBackup/
 
 # Ionide (cross platform F# VS Code tools) working folder
 .ionide/
+/HeRoBackEnd/Properties/ServiceDependencies/swh-t-praktyki2022-app - Zip Deploy/profile.arm.json
+/HeRoBackEnd/Properties/ServiceDependencies/swh-t-praktyki2022-app - Web Deploy/profile.arm.json
