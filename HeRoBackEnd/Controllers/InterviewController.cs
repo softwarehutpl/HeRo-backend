@@ -57,7 +57,6 @@ namespace HeRoBackEnd.Controllers
         /// <h2>Nullable:</h2>
         ///    "fromDate", "toDate", "candidateId", "workerId", "type", "sortOrder"
         /// <h2>Filtring:</h2>
-        ///    <h3>Contains:</h3> "name", "description" <br />
         ///    <h3>Equals:</h3> "type" <br />
         /// <h2>Sorting:</h2>
         ///     <h3>Possible keys:</h3> "Date", "Candidateid", "WorkerId", "Type" <br />
@@ -72,7 +71,15 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(InterviewListing), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
-            InterviewFiltringDTO interviewFiltringDTO = new InterviewFiltringDTO(interview.FromDate, interview.ToDate, interview.CandidateId, interview.WorkerId, interview.Type);
+            InterviewFiltringDTO interviewFiltringDTO =
+                new InterviewFiltringDTO
+                {
+                    FromDate = interview.FromDate,
+                    ToDate = interview.ToDate,
+                    CandidateId = interview.CandidateId,
+                    WorkerId = interview.WorkerId,
+                    Type = interview.Type,
+                };
 
             var resutl = _interviewService.GetInterviews(interview.Paging, interview.SortOrder, interviewFiltringDTO);
 
@@ -98,7 +105,12 @@ namespace HeRoBackEnd.Controllers
                     interview.Type);
 
             int userCreatedId = GetUserId();
-            _interviewService.Create(interviewCreate, userCreatedId);
+
+            int result = _interviewService.Create(interviewCreate, userCreatedId);
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Interview created unsuccessfully"));
+            }
 
             return Ok(new ResponseViewModel("Interview created successfully"));
         }
@@ -130,6 +142,10 @@ namespace HeRoBackEnd.Controllers
             {
                 return BadRequest(new ResponseViewModel("No interview with this Id"));
             }
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Interview edited unsuccessfully"));
+            }
 
             return Ok(new ResponseViewModel("Interview edited successfully"));
         }
@@ -154,6 +170,10 @@ namespace HeRoBackEnd.Controllers
             if (result == 0)
             {
                 return BadRequest(new ResponseViewModel("No interview with this Id"));
+            }
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Interview deleted unsuccessfully"));
             }
 
             return Ok(new ResponseViewModel("Interview deleted successfully"));

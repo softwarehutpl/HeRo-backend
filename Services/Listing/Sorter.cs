@@ -7,7 +7,6 @@ namespace Services.Listing
     {
         public static IQueryable<TEntity> Sort(IQueryable<TEntity> entities, List<KeyValuePair<string, string>> sort)
         {
-            List<KeyValuePair<string, string>> tempSort = new List<KeyValuePair<string, string>>();
             bool IsFirst = true;
             for (int i = 0; i < sort.Count; i++)
             {
@@ -25,12 +24,9 @@ namespace Services.Listing
                         {
                             entities = ThenBy((IOrderedQueryable<TEntity>)entities, sort[i]);
                         }
-                        tempSort.Add(sort[i]);
                     }
                 }
             }
-
-            sort = tempSort;
 
             return entities;
         }

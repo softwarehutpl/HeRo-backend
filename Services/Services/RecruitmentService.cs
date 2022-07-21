@@ -16,15 +16,12 @@ namespace Services.Services
     {
         private readonly IMapper _mapper;
         private readonly IRecruitmentRepository _recruitmentRepo;
-        private readonly IRecruitmentSkillRepository _recruitmentSkillRepo;
-        private readonly IUserRepository _userRepo;
         private readonly ILogger<RecruitmentService> _logger;
 
-        public RecruitmentService(IMapper map, IRecruitmentRepository repo, IUserRepository userRepo, ILogger<RecruitmentService> logger, IRecruitmentSkillRepository recruitmentSkillRepo)
+        public RecruitmentService(IMapper map, IRecruitmentRepository repo, ILogger<RecruitmentService> logger)
         {
             _mapper = map;
             _recruitmentRepo = repo;
-            _userRepo = userRepo;
             _logger = logger;
         }
 
@@ -55,7 +52,7 @@ namespace Services.Services
 
                 if (recruitment == null)
                 {
-                    return -1;
+                    return 0;
                 }
 
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
@@ -126,7 +123,7 @@ namespace Services.Services
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
 
-                if (recruitment == null) return -1;
+                if (recruitment == null) return 0;
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
@@ -150,7 +147,7 @@ namespace Services.Services
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
 
-                if (recruitment == null) return -1;
+                if (recruitment == null) return 0;
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;

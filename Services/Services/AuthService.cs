@@ -20,10 +20,11 @@ namespace Services.Services
 
         private bool ValidateUser(string password, string email)
         {
-            string passwordInDb = _userRepository.GetUserPassword(email);
+            string? passwordInDb = _userRepository.GetUserPassword(email);
             string passwordAfterHash = PasswordHashHelper.GetHash(password);
 
-            if (passwordAfterHash == passwordInDb) return true;
+            if (passwordAfterHash == passwordInDb)
+                return true;
 
             return false;
         }
@@ -52,8 +53,11 @@ namespace Services.Services
 
         public async Task<bool> CheckPasswordRecoveryGuid(Guid guid, string email)
         {
-            Guid userGuid = _userRepository.GetUserGuidByEmail(email);
-            if (guid == userGuid) return true;
+            Guid? userGuid = _userRepository.GetUserGuidByEmail(email);
+
+            if (guid == userGuid)
+                return true;
+
             return false;
         }
 

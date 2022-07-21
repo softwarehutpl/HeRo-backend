@@ -201,11 +201,16 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.UpdateRecruitment(recruitmentId, dto);
 
-            if (result == -1)
+            if (result == 0)
             {
                 return BadRequest(new ResponseViewModel("No recruitment with this Id"));
             }
 
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Wrong data!"));
+            }
+            
             return Ok(new ResponseViewModel("Recruitment updated successfully"));
         }
 
@@ -232,9 +237,14 @@ namespace HeRoBackEnd.Controllers
             dto.EndedDate = DateTime.Now;
             int result = service.EndRecruitment(dto);
 
-            if (result == -1)
+            if (result == 0)
             {
                 return BadRequest(new ResponseViewModel("No recruitment with this Id"));
+            }
+
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Something went wrong!"));
             }
 
             return Ok(new ResponseViewModel("Recruitment ended successfully"));
@@ -264,9 +274,14 @@ namespace HeRoBackEnd.Controllers
 
             int result = service.DeleteRecruitment(dto);
 
-            if (result == -1)
+            if (result == 0)
             {
                 return BadRequest(new ResponseViewModel("No recruitment with this Id"));
+            }
+
+            if (result == -1)
+            {
+                return BadRequest(new ResponseViewModel("Something went wrong!"));
             }
 
             return Ok(new ResponseViewModel("Recruitment deleted successfully"));

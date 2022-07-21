@@ -7,6 +7,11 @@ namespace Data.Entities
     [Table("Skill")]
     public class Skill : IEntity
     {
+        public Skill(int id, string name)
+        {
+            Id = id;
+            Name = name;
+        }
         public Skill(string name)
         {
             Name = name;

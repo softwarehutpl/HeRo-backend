@@ -96,11 +96,14 @@ namespace Services.Services
         {
             try
             {
+                Skill skill = _repo.GetById(dto.Id);
+
+                if (skill == null) return -2;
+
                 bool exists = _repo.Exists(dto.Id, dto.Name);
 
                 if (exists == true) return 0;
-
-                Skill skill = _repo.GetById(dto.Id);
+  
                 skill.Name = dto.Name;
                 _repo.UpdateAndSaveChanges(skill);
             }
