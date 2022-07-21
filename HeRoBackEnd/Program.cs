@@ -75,7 +75,7 @@ try
 
         options.AddPolicy("RecruiterRequirment",
             policy => policy
-            .RequireClaim("RoleName", "RECRUITER")
+            .RequireClaim("RoleName", "RECRUITER", "ADMIN")
             .RequireClaim("UserStatus", "ACTIVE"));
 
         options.AddPolicy("TechnicianRequirment",
