@@ -52,7 +52,7 @@ namespace Services.Services
 
                 if (recruitment == null)
                 {
-                    return -1;
+                    return 0;
                 }
 
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
@@ -123,7 +123,7 @@ namespace Services.Services
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
 
-                if (recruitment == null) return -1;
+                if (recruitment == null) return 0;
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
@@ -147,7 +147,7 @@ namespace Services.Services
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
 
-                if (recruitment == null) return -1;
+                if (recruitment == null) return 0;
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
