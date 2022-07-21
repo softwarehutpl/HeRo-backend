@@ -33,7 +33,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">Recruitment with given Id</response>
         [HttpGet]
         [Route("Recruitment/Get/{recruitmentId}")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [AllowAnonymous]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(RecruitmentDetailsDTO), StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)

@@ -108,7 +108,7 @@ namespace HeRoBackEnd.Controllers
 
             if (check)
             {
-                _userService.ChangeUserPassword(user.Email, user.Password);
+                await _userService.ChangeUserPassword(user.Email, user.Password);
                 return Ok(new ResponseViewModel(MessageHelper.AccountConfirmed));
             }
 
@@ -129,8 +129,10 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> PasswordRecoveryMail(string email)
         {
             bool changedPassword = _userService.CheckIfUserExist(email);
-            if (!changedPassword) return BadRequest(ErrorMessageHelper.AccountDoesntExist(email));
-
+            if (!changedPassword)
+            {
+                return BadRequest(ErrorMessageHelper.AccountDoesntExist(email));
+            }
             var recoveryGuid = _userService.SetUserRecoveryGuid(email);
 
             var fullUrl = this.Url.Action("RecoverPassword", "Auth", new { guid = recoveryGuid }, protocol: "https");
@@ -154,7 +156,10 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> RecoverPassword(UserPasswordRecoveryViewModel user)
         {
             bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.Guid, user.Email);
-            if (!userGuid) return BadRequest(ErrorMessageHelper.UserAndGuidDifferentOwner);
+            if (!userGuid) 
+            { 
+                return BadRequest(ErrorMessageHelper.UserAndGuidDifferentOwner); 
+            }
 
             await _userService.ChangeUserPassword(user.Email, user.Password);
 
