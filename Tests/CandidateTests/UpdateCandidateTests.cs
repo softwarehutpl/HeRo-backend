@@ -70,7 +70,7 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            Assert.Equal(1, candidateService.UpdateCandidate(id, dto, out errorMessage));
+            Assert.True(candidateService.UpdateCandidate(id, dto, out errorMessage));
         }
 
         [Fact]
@@ -95,7 +95,7 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            Assert.NotEqual(1, candidateService.UpdateCandidate(id, dto, out errorMessage));
+            Assert.False(candidateService.UpdateCandidate(id, dto, out errorMessage));
         }
 
     }

@@ -22,6 +22,7 @@ namespace Data
         public DbSet<RecruitmentSkill> RecruitmentSkills { get; set; }
         public DbSet<Skill> Skills { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<UserAction> UserActions { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

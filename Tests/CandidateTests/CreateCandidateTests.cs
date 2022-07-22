@@ -48,7 +48,7 @@ namespace Tests.CandidateTests
            
             Candidate candidate = mapper.Map<Candidate>(dto);
 
-            Assert.Equal(1, candidateService.CreateCandidate(dto, out _errorMessage));
+            Assert.True(candidateService.CreateCandidate(dto, out _errorMessage));
             //candidateRepositoryMock.Verify(g => g.AddAndSaveChanges(candidate), Times.Once);
         }
 
@@ -74,7 +74,7 @@ namespace Tests.CandidateTests
 
             Candidate candidate = mapper.Map<Candidate>(dto);
 
-            Assert.NotEqual(1, candidateService.CreateCandidate(dto, out _errorMessage));
+            Assert.False(candidateService.CreateCandidate(dto, out _errorMessage));
         }
     }
 }

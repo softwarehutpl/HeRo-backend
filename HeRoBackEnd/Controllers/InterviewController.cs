@@ -83,9 +83,9 @@ namespace HeRoBackEnd.Controllers
                     Type = interview.Type,
                 };
 
-            var resutl = _interviewService.GetInterviews(interview.Paging, interview.SortOrder, interviewFiltringDTO);
+            var result = _interviewService.GetInterviews(interview.Paging, interview.SortOrder, interviewFiltringDTO);
 
-            return new JsonResult(resutl);
+            return new JsonResult(result);
         }
 
         /// <summary>
@@ -108,8 +108,8 @@ namespace HeRoBackEnd.Controllers
 
             int userCreatedId = GetUserId();
 
-            int result = _interviewService.Create(interviewCreate, userCreatedId);
-            if (result == -1)
+            bool result = _interviewService.Create(interviewCreate, userCreatedId);
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(ErrorMessageHelper.ErrorCreatingInterview));
             }
@@ -138,10 +138,9 @@ namespace HeRoBackEnd.Controllers
                     interview.Type);
 
             int userEditId = GetUserId();
-            int result = _interviewService.Update(interviewEdit, userEditId, out _errorMessage);
+            bool result = _interviewService.Update(interviewEdit, userEditId, out _errorMessage);
 
-
-            if (result == -1)
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -164,9 +163,9 @@ namespace HeRoBackEnd.Controllers
         {
             int loginUserId = GetUserId();
 
-            int result = _interviewService.Delete(interviewId, loginUserId, out _errorMessage);
+            bool result = _interviewService.Delete(interviewId, loginUserId, out _errorMessage);
 
-            if (result == -1)
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }

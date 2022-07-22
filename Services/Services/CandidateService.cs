@@ -29,7 +29,7 @@ namespace Services.Services
             _logger = logger;
         }
 
-        public int CreateCandidate(CreateCandidateDTO dto, out string ErrorMessage)
+        public bool CreateCandidate(CreateCandidateDTO dto, out string ErrorMessage)
         {
             Candidate candidate;
             try
@@ -40,7 +40,7 @@ namespace Services.Services
             {
                 _logger.LogError("Error when mapping CreateCandidateDTO to Candidate: " + ex);
                 ErrorMessage = ErrorMessageHelper.InvalidCandidateParameters;
-                return -1;
+                return false;
             }
 
             candidate.Stage = StageNames.EVALUATION.ToString();
@@ -52,7 +52,7 @@ namespace Services.Services
                 _logger.LogError("Error when getting recruiterId of recruitment which doesn't exist: ");
                 
                 ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
-                return -1;
+                return false;
             }
 
             try
@@ -63,10 +63,10 @@ namespace Services.Services
             {
                 _logger.LogError("Error when adding and saving candidate: " + ex);
                 ErrorMessage = ErrorMessageHelper.ErrorSavingToDatabase;
-                return -1;
+                return false;
             }
             ErrorMessage = "";
-            return 1;
+            return true;
         }
 
         public int ChangeStatus(int id, string status)
@@ -94,7 +94,7 @@ namespace Services.Services
             }
         }
 
-        public int UpdateCandidate(int id, UpdateCandidateDTO dto, out string ErrorMessage)
+        public bool UpdateCandidate(int id, UpdateCandidateDTO dto, out string ErrorMessage)
         {
             Candidate candidate = _candidateRepository.GetById(id);
 
@@ -102,7 +102,7 @@ namespace Services.Services
             {
                 _logger.LogError("Error getting candidate with given ID");
                 ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
-                return -1;
+                return false;
             }
             else
             {
@@ -126,13 +126,13 @@ namespace Services.Services
             {
                 _logger.LogError("Error when updating candidate: " + ex);
                 ErrorMessage = ErrorMessageHelper.ErrorUpdatingCandidate;
-                return -1;
+                return false;
             }
             ErrorMessage = "";
-            return 1;
+            return true;
         }
 
-        public int DeleteCandidate(DeleteCandidateDTO dto, out string ErrorMessage)
+        public bool DeleteCandidate(DeleteCandidateDTO dto, out string ErrorMessage)
         {
             Candidate candidate = _candidateRepository.GetById(dto.Id);
 
@@ -140,7 +140,7 @@ namespace Services.Services
             {
                 _logger.LogError("Error removing candidate with given ID - candidate doesn't exist");
                 ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
-                return -1;
+                return false;
             }
 
             candidate.DeletedDate = dto.DeletedDate;
@@ -154,20 +154,20 @@ namespace Services.Services
             {
                 _logger.LogError("Error when deleting candidate: " + ex);
                 ErrorMessage = ErrorMessageHelper.ErrorDeletingCandidate;
-                return -2;
+                return false;
             }
             ErrorMessage = "";
-            return 1;
+            return true;
         }
 
-        public int AddHRNote(int candidateId, CandidateAddHRNoteDTO dto, out string ErrorMessage)
+        public bool AddHRNote(int candidateId, CandidateAddHRNoteDTO dto, out string ErrorMessage)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
             if (candidate == null)
             {
                 _logger.LogError("Error getting candidate with given ID");
                 ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
-                return -1;
+                return false;
             }
             else
             {
@@ -184,21 +184,21 @@ namespace Services.Services
                 {
                     _logger.LogError("Error when adding HR note to candidate: " + ex);
                     ErrorMessage = ErrorMessageHelper.ErrorAddingHRNoteToCandidate;
-                    return -1;
+                    return false;
                 }
                 ErrorMessage = "";
-                return 1;
+                return true;
             }
         }
 
-        public int AddTechNote(int candidateId, CandidateAddTechNoteDTO dto, out string ErrorMessage)
+        public bool AddTechNote(int candidateId, CandidateAddTechNoteDTO dto, out string ErrorMessage)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
             if (candidate == null)
             {
                 _logger.LogError("Error getting candidate with given ID");
                 ErrorMessage = ErrorMessageHelper.InvalidCandidateId;
-                return -1;
+                return false;
             }
             else
             {
@@ -215,10 +215,10 @@ namespace Services.Services
                 {
                     _logger.LogError("Error when adding tech note to candidate: " + ex);
                     ErrorMessage = ErrorMessageHelper.ErrorAddingTechNoteToCandidate;
-                    return -1;
+                    return false;
                 }
                 ErrorMessage = "";
-                return 1;
+                return true;
             }
         }
 
@@ -311,7 +311,7 @@ namespace Services.Services
             return candidateListing;
         }
 
-        public int AllocateRecruiterAndTech(int id, CandidateAssigneesDTO dto, out string ErrorMessage)
+        public bool AllocateRecruiterAndTech(int id, CandidateAssigneesDTO dto, out string ErrorMessage)
         {
             Candidate candidate = _candidateRepository.GetById(id);
             if (candidate != null)
@@ -334,21 +334,21 @@ namespace Services.Services
                 {
                     _logger.LogError("Error updating candidate when allocating recruiters: " + ex);
                     ErrorMessage = ErrorMessageHelper.ErrorAllocatingRecruiters;
-                    return -2;
+                    return false;
                 }
 
                 ErrorMessage = "";
-                return 1;
+                return true;
             }
             else
             {
-                _logger.LogError("Cannot get candidate with given Id");
+                _logger.LogError("Cannot get candidate with given Id: " + id);
                 ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
-                return -1;
+                return false;
             }
         }
 
-        public int AllocateRecruitmentInterview(int candidateId, CandidateAllocateInterviewDateDTO dto, out string ErrorMessage)
+        public bool AllocateRecruitmentInterview(int candidateId, CandidateAllocateInterviewDateDTO dto, out string ErrorMessage)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
 
@@ -366,21 +366,21 @@ namespace Services.Services
                 {
                     _logger.LogError("Error updating candidate when assigning interview date" + ex);
                     ErrorMessage = ErrorMessageHelper.ErrorAssigningInterviewDate;
-                    return -1;
+                    return false;
                 }
 
                 ErrorMessage = "";
-                return 1;
+                return true;
             }
             else
             {
                 _logger.LogError("Cannot get candidate with given Id");
                 ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
-                return -1;
+                return false;
             }
         }
 
-        public int AllocateTechInterview(int candidateId, CandidateAllocateInterviewDateDTO dto, out string ErrorMessage)
+        public bool AllocateTechInterview(int candidateId, CandidateAllocateInterviewDateDTO dto, out string ErrorMessage)
         {
             Candidate? candidate = _candidateRepository.GetById(candidateId);
 
@@ -398,16 +398,16 @@ namespace Services.Services
                 {
                     _logger.LogError("Error updating candidate when assigning tech interview date" + ex);
                     ErrorMessage = ErrorMessageHelper.ErrorAssigningTechInterviewDate;
-                    return -1;
+                    return false;
                 }
                 ErrorMessage = "";
-                return 1;
+                return true;
             }
             else
             {
                 _logger.LogError("Cannot get candidate with given Id");
                 ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
-                return -1;
+                return false;
             }
         }
     }

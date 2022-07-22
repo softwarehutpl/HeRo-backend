@@ -130,8 +130,8 @@ namespace HeRoBackEnd.Controllers
 
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
-            int result = _candidateService.CreateCandidate(dto, out _errorMessage);
-            if (result == -1)
+            bool result = _candidateService.CreateCandidate(dto, out _errorMessage);
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -186,8 +186,8 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            int result = _candidateService.UpdateCandidate(candidateId, dto, out _errorMessage);
-            if (result == -1)
+            bool result = _candidateService.UpdateCandidate(candidateId, dto, out _errorMessage);
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -218,8 +218,8 @@ namespace HeRoBackEnd.Controllers
             dto.DeletedById = id;
             dto.DeletedDate = DateTime.Now;
 
-            int result = _candidateService.DeleteCandidate(dto, out _errorMessage);
-            if (result == -1)
+            bool result = _candidateService.DeleteCandidate(dto, out _errorMessage);
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -253,8 +253,8 @@ namespace HeRoBackEnd.Controllers
         {
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
             dto.RecruiterId = GetUserId();
-            int result = _candidateService.AddHRNote(candidateId, dto, out _errorMessage);
-            if (result == -1)
+            bool result = _candidateService.AddHRNote(candidateId, dto, out _errorMessage);
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -289,8 +289,8 @@ namespace HeRoBackEnd.Controllers
         {
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
             dto.TechId = GetUserId();
-            int result = _candidateService.AddTechNote(candidateId, dto, out _errorMessage);
-            if (result == -1)
+            bool result = _candidateService.AddTechNote(candidateId, dto, out _errorMessage);
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -327,8 +327,8 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            int result = _candidateService.AllocateRecruiterAndTech(candidateId, dto, out _errorMessage);
-            if (result == -1)
+            bool result = _candidateService.AllocateRecruiterAndTech(candidateId, dto, out _errorMessage);
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -364,8 +364,8 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            int result = _candidateService.AllocateRecruitmentInterview(candidateId, dto, out _errorMessage);
-            if (result == -1)
+            bool result = _candidateService.AllocateRecruitmentInterview(candidateId, dto, out _errorMessage);
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -399,8 +399,8 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            int result = _candidateService.AllocateTechInterview(candidateId, dto, out _errorMessage);
-            if (result == -1)
+            bool result = _candidateService.AllocateTechInterview(candidateId, dto, out _errorMessage);
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
