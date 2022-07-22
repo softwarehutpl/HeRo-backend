@@ -24,11 +24,12 @@ namespace Common.AttributeRoleVerification
             foreach (var role in UserRoles)
             {
                 var hasClaim = context.HttpContext.User.Claims.Any(x => x.Type == "RoleName" && x.Value == role);
-                if (!hasClaim)
-                {
-                    context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Unauthorized);
-                }
+
+                if (hasClaim)
+                    return;
             }
+
+            context.Result = new StatusCodeResult((int)System.Net.HttpStatusCode.Unauthorized);
         }
     }
 }

@@ -1,4 +1,5 @@
 using AutoMapper;
+using Common.AttributeRoleVerification;
 using Common.Enums;
 using Data.DTOs.Candidate;
 using HeRoBackEnd.ViewModels;
@@ -33,7 +34,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">"Error getting candidate (bad parameters or candidate doesn't exist)"</response>
         [HttpGet]
         [Route("Candidate/Get/{candidateId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "RECRUITER" })]
         [ProducesResponseType(typeof(CandidateProfileDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int candidateId)
@@ -68,7 +69,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Candidates</response>
         [HttpPost]
         [Route("Candidate/GetList")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS" })]
         [ProducesResponseType(typeof(CandidateListing), StatusCodes.Status200OK)]
         public IActionResult GetList(CandidateListFilterViewModel candidate)
         {
@@ -163,7 +164,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error updating candidate"</response>
         [HttpPost]
         [Route("Candidate/Edit/{candidateId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "RECRUITER" })]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int candidateId, CandidateEditViewModel candidate)
@@ -196,7 +197,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error deleting candidate"</response>
         [HttpDelete]
         [Route("Candidate/Delete/{candidateId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "RECRUITER" })]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int candidateId)
@@ -242,7 +243,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error adding note to candidate"</response>
         [HttpPost]
         [Route("Candidate/AddHRNote/{candidateId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "RECRUITER" })]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AddHRNote(int candidateId, CandidateAddHRNoteViewModel AddHrNote)
@@ -282,7 +283,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error adding note to candidate"</response>
         [HttpPost]
         [Route("Candidate/AddTechInterviewNote/{candidateId}")]
-        [Authorize(Policy = "TechnicianRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "TECHNICIAN" })]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AddTechInterviewNote(int candidateId, CandidateAddTechNoteViewModel AddTechNote)
@@ -323,7 +324,7 @@ namespace HeRoBackEnd.Controllers
         /// </response>
         [HttpPost]
         [Route("Candidate/AssignTechAndRecruiter/{candidateId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "RECRUITER" })]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AssignTechAndRecruiter(int candidateId, CandidateAssigneesViewModel assignees)
@@ -364,7 +365,7 @@ namespace HeRoBackEnd.Controllers
         /// string "Error setting interview date"</response>
         [HttpPost]
         [Route("Candidate/SetInterviewDate/{candidateId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "RECRUITER" })]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult SetInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
@@ -403,7 +404,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">string "Error setting tech interview date"</response>
         [HttpPost]
         [Route("Candidate/SetTechInterviewDate/{candidateId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "RECRUITER" })]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult SetTechInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
@@ -429,7 +430,7 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [Route("Candidate/GetStageList")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS" })]
         public IActionResult GetStageList()
         {
             var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>().Select(v => v.ToString());
@@ -444,7 +445,7 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [Route("Candidate/GetStatusList")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS" })]
         public IActionResult GetStatusList()
         {
             var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>().Select(v => v.ToString());

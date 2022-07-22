@@ -1,4 +1,5 @@
-﻿using Data.DTOs.User;
+﻿using Common.AttributeRoleVerification;
+using Data.DTOs.User;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authorization;
@@ -27,7 +28,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No User with this UserId</response>
         [HttpGet]
         [Route("User/Get/{userId}")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "ADMIN" })]
         [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
@@ -62,7 +63,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Users</response>
         [HttpPost]
         [Route("User/GetList")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "ADMIN" })]
         [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
@@ -83,7 +84,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No user with this UserId</response>
         [HttpPost]
         [Route("User/Edit/{userId}")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "ADMIN" })]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Edit(int userId, EditUserViewModel editUser)
@@ -115,7 +116,7 @@ namespace HeRoBackEnd.Controllers
 
         [HttpDelete]
         [Route("User/Delete/{userId}")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole(UserRoles = new string[] { "ADMIN" })]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Delete(int userId)
