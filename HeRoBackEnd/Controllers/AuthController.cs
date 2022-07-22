@@ -1,4 +1,5 @@
-﻿using Common.Helpers;
+﻿using Common.AttributeRoleVerification;
+using Common.Helpers;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
@@ -74,7 +75,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Invalid email or password or user already exist</response>
         [HttpPost]
         [Route("Auth/CreateNewUser")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)

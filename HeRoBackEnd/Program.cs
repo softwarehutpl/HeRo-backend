@@ -61,39 +61,6 @@ try
         .Build();
     }));
 
-    builder.Services.AddAuthorization(options =>
-    {
-        options.AddPolicy("AdminRequirment",
-            policy => policy
-            .RequireClaim("RoleName", "ADMIN")
-            .RequireClaim("UserStatus", "ACTIVE"));
-
-        options.AddPolicy("HrManagerRequirment",
-            policy => policy
-            .RequireClaim("RoleName", "HR_MANAGER")
-            .RequireClaim("UserStatus", "ACTIVE"));
-
-        options.AddPolicy("RecruiterRequirment",
-            policy => policy
-            .RequireClaim("RoleName", "RECRUITER")
-            .RequireClaim("UserStatus", "ACTIVE"));
-
-        options.AddPolicy("TechnicianRequirment",
-            policy => policy
-            .RequireClaim("RoleName", "TECHNICIAN")
-            .RequireClaim("UserStatus", "ACTIVE"));
-
-        options.AddPolicy("AnyRoleRequirment",
-            policy => policy
-            .RequireClaim("RoleName", "INTERVIEWER", "RECRUITER", "HR_MANAGER", "ADMIN")
-            .RequireClaim("UserStatus", "ACTIVE"));
-
-        options.AddPolicy("HrRequirment",
-            policy => policy
-            .RequireClaim("RoleName", "RECRUITER", "HR_MANAGER", "ADMIN")
-            .RequireClaim("UserStatus", "ACTIVE"));
-    });
-
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
     var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();

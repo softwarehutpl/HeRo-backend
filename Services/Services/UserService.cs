@@ -96,7 +96,33 @@ namespace Services.Services
             return userListing;
         }
 
-        public int Update(UserEditDTO userEdit, out string error)
+        public IEnumerable<(int id, string email)> GetRecruiters(string? email)
+        {
+            IQueryable<User> users = _userRepository.GetAll();
+
+            users = users.Where(u => !u.DeletedDate.HasValue);
+            users = users.Where(u => u.RoleName.Equals("RECRUITER"));
+
+            if (String.IsNullOrEmpty(email))
+            {
+                users = users.OrderBy(e => e.Email).Take(5);
+            }
+            else
+            {
+                users = users.Where(e => e.Email.ToLower().Contains(email.ToLower()))
+                       .OrderBy(e => e.Email)
+                       .Take(5);
+            }
+
+            IEnumerable<(int id, string email)> values = users.
+                Select(u => new { u.Id, u.Email })
+                .ToList()
+                .Select(u => (u.Id, u.Email));
+
+            return values;
+        }
+
+        public int Update(UserEditDTO userEdit)
         {
             User user = _userRepository.GetById(userEdit.Id);
             if (user == null)

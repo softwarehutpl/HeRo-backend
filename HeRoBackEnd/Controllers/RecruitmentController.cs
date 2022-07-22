@@ -1,4 +1,5 @@
 using AutoMapper;
+using Common.AttributeRoleVerification;
 using Common.Helpers;
 using Common.Listing;
 using Data.DTOs.Recruitment;
@@ -124,7 +125,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of recruitments</response>
         [HttpPost]
         [Route("Recruitment/GetList")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(RecruitmentListing), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
@@ -157,7 +158,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Error creating recruitment</response>
         [HttpPost]
         [Route("Recruitment/Create")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
@@ -190,7 +191,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Error updating recruitment or there is no recruitment with such Id</response>
         [HttpPost]
         [Route("Recruitment/Edit/{recruitmentId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
@@ -220,7 +221,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Error ending recruitment or there is no recruitment with such Id</response>
         [HttpGet]
         [Route("Recruitment/End/{recruitmentId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult End(int recruitmentId)
@@ -251,7 +252,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Error deleting recruitment or there is no recruitment with such Id</response>
         [HttpGet]
         [Route("Recruitment/Delete/{recruitmentId}")]
-        [Authorize(Policy = "RecruiterRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int recruitmentId)

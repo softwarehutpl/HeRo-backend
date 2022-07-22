@@ -1,4 +1,5 @@
-﻿using Common.Helpers;
+﻿using Common.AttributeRoleVerification;
+using Common.Helpers;
 using Data.DTOs.User;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
@@ -29,7 +30,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No User with this UserId</response>
         [HttpGet]
         [Route("User/Get/{userId}")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(UserDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
@@ -64,13 +65,27 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Users</response>
         [HttpPost]
         [Route("User/GetList")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
             var result = _userService.GetUsers(userListFilterViewModel.Paging, userListFilterViewModel.SortOrder, userFiltringDTO);
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Returns 5 recruiters which email contain a string passed as an argument
+        /// </summary>
+        [HttpPost]
+        [Route("User/GetRecruiters")]
+        [Authorize(Policy = "RecruiterRequirment")]
+        [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
+        public IActionResult GetRecruiters(string? email)
+        {
+            var result = _userService.GetRecruiters(email);
 
             return Ok(result);
         }
@@ -85,7 +100,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No user with this UserId</response>
         [HttpPost]
         [Route("User/Edit/{userId}")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Edit(int userId, EditUserViewModel editUser)
@@ -117,7 +132,7 @@ namespace HeRoBackEnd.Controllers
 
         [HttpDelete]
         [Route("User/Delete/{userId}")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Delete(int userId)
