@@ -73,7 +73,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">Invalid email or password or user already exist</response>
         [HttpPost]
         [Route("Auth/CreateNewUser")]
-        [RequireUserRole(UserRoles = new string[] { "ADMIN" })]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)

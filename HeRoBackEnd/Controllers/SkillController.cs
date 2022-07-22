@@ -25,7 +25,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPut]
         [Route("Skill/Create")]
-        [RequireUserRole(UserRoles = new string[] { "ADMIN" })]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(string skillName)
@@ -52,7 +52,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPut]
         [Route("Skill/Update/{skillId}")]
-        [RequireUserRole(UserRoles = new string[] { "ADMIN" })]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Update(int skillId, string newSkillName)
@@ -83,7 +83,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpDelete]
         [Route("Skill/Delete/{skillId}")]
-        [RequireUserRole(UserRoles = new string[] { "ADMIN" })]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int skillId)
@@ -128,7 +128,7 @@ namespace HeRoBackEnd.Controllers
         /// </remarks>
         [HttpGet]
         [Route("Skill/GetList")]
-        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS" })]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetList()
         {
@@ -170,7 +170,7 @@ namespace HeRoBackEnd.Controllers
         /// </remarks>
         [HttpGet]
         [Route("Skill/GetListFilteredByName")]
-        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS" })]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetListFilteredByName(string name)
         {
@@ -194,7 +194,7 @@ namespace HeRoBackEnd.Controllers
         /// </remarks>
         [HttpGet]
         [Route("Skill/Get/{skillId}")]
-        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS" })]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(Skill), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int skillId)

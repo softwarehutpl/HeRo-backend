@@ -28,7 +28,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">string "No Interview with this InterviewId"</response>
         [HttpGet]
         [Route("Interview/Get/{interviewId}")]
-        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS" })]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(InterviewDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int interviewId)
@@ -68,7 +68,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Interviews</response>
         [HttpPost]
         [Route("Interview/GetList")]
-        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS" })]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(InterviewListing), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
@@ -94,7 +94,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">string "Interview created successfully"</response>
         [HttpPost]
         [Route("Interview/Create")]
-        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER" })]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult Create(InterviewCreateViewModel interview)
         {
@@ -124,7 +124,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No interview with this InterviewId</response>
         [HttpPost]
         [Route("Interview/Edit/{interviewId}")]
-        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER" })]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int interviewId, InterviewEditViewModel interview)
@@ -159,7 +159,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">No interview with this interviewId</response>
         [HttpDelete]
         [Route("Interview/Delete/{interviewId}")]
-        [RequireUserRole(UserRoles = new string[] { "HR_MANAGER", "RECRUITER" })]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int interviewId)
