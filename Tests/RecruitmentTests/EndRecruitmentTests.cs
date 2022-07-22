@@ -21,10 +21,10 @@ namespace Tests.RecruitmentTests
             _recruitmentRepo.Setup(e => e.GetById(dto.Id)).Returns(recruitment);
 
             //act
-            int result = _recruitmentService.EndRecruitment(dto, out errorMessage);
+            bool result = _recruitmentService.EndRecruitment(dto, out errorMessage);
 
             //assert
-            Assert.Equal(result, -1);
+            Assert.False(result);
             _recruitmentRepo.Verify(e => e.GetById(dto.Id), Times.Once);
             _recruitmentRepo.Verify(e => e.UpdateAndSaveChanges(It.IsAny<Recruitment>()), Times.Never());
         }
@@ -45,10 +45,10 @@ namespace Tests.RecruitmentTests
             _recruitmentRepo.Setup(e => e.GetById(dto.Id)).Returns(recruitment);
 
             //act
-            int result = _recruitmentService.EndRecruitment(dto, out errorMessage);
+            bool result = _recruitmentService.EndRecruitment(dto, out errorMessage);
 
             //assert
-            Assert.Equal(result, 1);
+            Assert.True(result);
             _recruitmentRepo.Verify(e => e.GetById(dto.Id), Times.Once());
             _recruitmentRepo.Verify(e => e.UpdateAndSaveChanges(recruitment), Times.Once);
         }

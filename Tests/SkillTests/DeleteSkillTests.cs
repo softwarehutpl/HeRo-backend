@@ -23,10 +23,10 @@ namespace Tests.SkillTests
             _skillRepo.Setup(e => e.GetById(id)).Returns(skill);
 
             //act
-            int result=_skillService.DeleteSkill(id, out errorMessage);
+            bool result =_skillService.DeleteSkill(id, out errorMessage);
 
             //assert
-            Assert.Equal(result, -1);
+            Assert.False(result);
             _skillRepo.Verify(e => e.GetById(id), Times.Once);
             _recruitmentSkillRepo.Verify(e => e.IsSkillUsed(id), Times.Never());
             _skillRepo.Verify(e => e.RemoveByIdAndSaveChanges(id), Times.Never());
@@ -40,10 +40,10 @@ namespace Tests.SkillTests
             _recruitmentSkillRepo.Setup(e => e.IsSkillUsed(id)).Returns(true);
 
             //act
-            int result=_skillService.DeleteSkill(id, out errorMessage);
+            bool result =_skillService.DeleteSkill(id, out errorMessage);
 
             //assert
-            Assert.Equal(result, -1);
+            Assert.False(result);
             _skillRepo.Verify(e => e.GetById(id), Times.Once);
             _recruitmentSkillRepo.Verify(e => e.IsSkillUsed(id), Times.Once);
             _skillRepo.Verify(e => e.RemoveByIdAndSaveChanges(id), Times.Never());
@@ -57,10 +57,10 @@ namespace Tests.SkillTests
             _recruitmentSkillRepo.Setup(e => e.IsSkillUsed(id)).Returns(false);
 
             //act
-            int result=_skillService.DeleteSkill(id, out errorMessage);
+            bool result =_skillService.DeleteSkill(id, out errorMessage);
 
             //assert
-            Assert.Equal(result, 1);
+            Assert.True(result);
             _skillRepo.Verify(e => e.GetById(id), Times.Once);
             _recruitmentSkillRepo.Verify(e => e.IsSkillUsed(id), Times.Once);
             _skillRepo.Verify(e => e.RemoveByIdAndSaveChanges(id), Times.Once);
