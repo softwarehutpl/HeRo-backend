@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Listing;
 using Services.Services;
+using System.Text.Json;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -15,10 +16,13 @@ namespace HeRoBackEnd.Controllers
     {
         private InterviewService _interviewService;
         private string _errorMessage;
-
-        public InterviewController(InterviewService interviewService)
+        private UserService _userService;
+        private UserActionService _userActionService;
+        public InterviewController(InterviewService interviewService, UserActionService userActionService, UserService userService)
         {
             _interviewService = interviewService;
+            _userActionService = userActionService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -35,6 +39,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int interviewId)
         {
+            LogUserAction($"InterviewController.Get({interviewId})", _userService, _userActionService);
             InterviewDTO interview = _interviewService.Get(interviewId);
 
             if (interview == null)
@@ -74,6 +79,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(InterviewListing), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
+            LogUserAction($"InterviewController.GetList({JsonSerializer.Serialize(interview)})", _userService, _userActionService);
             InterviewFiltringDTO interviewFiltringDTO =
                 new InterviewFiltringDTO
                 {
@@ -100,6 +106,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult Create(InterviewCreateViewModel interview)
         {
+            LogUserAction($"InterviewController.Create({JsonSerializer.Serialize(interview)})", _userService, _userActionService);
             InterviewCreateDTO interviewCreate =
                 new InterviewCreateDTO(
                     interview.Date,
@@ -131,6 +138,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int interviewId, InterviewEditViewModel interview)
         {
+            LogUserAction($"InterviewController.Edit({interviewId}, {JsonSerializer.Serialize(interview)})", _userService, _userActionService);
             InterviewEditDTO interviewEdit =
                 new InterviewEditDTO(
                     interviewId,
@@ -162,6 +170,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int interviewId)
         {
+            LogUserAction($"InterviewController.Delete({interviewId})", _userService, _userActionService);
             int loginUserId = GetUserId();
 
             bool result = _interviewService.Delete(interviewId, loginUserId, out _errorMessage);
