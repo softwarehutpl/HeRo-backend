@@ -73,7 +73,7 @@ namespace Services.Services
             return result;
         }
 
-        public int AddSkill(string skillName, out string errorMessage)
+        public bool AddSkill(string skillName, out string errorMessage)
         {
             try
             {
@@ -82,7 +82,7 @@ namespace Services.Services
                 if (exists == true) 
                 {
                     errorMessage = ErrorMessageHelper.SkillExists;
-                    return -1; 
+                    return false; 
                 }
 
                 Skill skill = new Skill(skillName);
@@ -92,13 +92,13 @@ namespace Services.Services
             {
                 _logger.LogError(ex.Message);
                 errorMessage = ErrorMessageHelper.WrongData;
-                return -1;
+                return false;
             }
             errorMessage = "";
-            return 1;
+            return true;
         }
 
-        public int UpdateSkill(UpdateSkillDTO dto, out string errorMessage)
+        public bool UpdateSkill(UpdateSkillDTO dto, out string errorMessage)
         {
             try
             {
@@ -107,7 +107,7 @@ namespace Services.Services
                 if (skill == null)
                 {
                     errorMessage = ErrorMessageHelper.NoSkill;
-                    return -1;
+                    return false;
                 }
 
                 bool exists = _repo.Exists(dto.Id, dto.Name);
@@ -115,7 +115,7 @@ namespace Services.Services
                 if (exists == true)
                 {
                     errorMessage = ErrorMessageHelper.SkillExists;
-                    return -1;
+                    return false;
                 }
   
                 skill.Name = dto.Name;
@@ -126,14 +126,14 @@ namespace Services.Services
                 _logger.LogError(ex.Message);
                 {
                     errorMessage = ErrorMessageHelper.WrongData;
-                    return -1;
+                    return false;
                 }
             }
             errorMessage = "";
-            return 1;
+            return true;
         }
 
-        public int DeleteSkill(int id, out string error)
+        public bool DeleteSkill(int id, out string error)
         {
             try
             {
@@ -142,7 +142,7 @@ namespace Services.Services
                 if (skill == null)
                 {   
                     error = ErrorMessageHelper.NoSkill;
-                    return -1;
+                    return false;
                 }
 
                 bool isUsed = _recruitmentSkillRepo.IsSkillUsed(id);
@@ -150,7 +150,7 @@ namespace Services.Services
                 if (isUsed == true)
                 {
                     error = ErrorMessageHelper.SkillIsUsed;
-                    return -1;
+                    return false;
                 }
 
                 _repo.RemoveByIdAndSaveChanges(id);
@@ -159,10 +159,10 @@ namespace Services.Services
             {
                 _logger.LogError(ex.Message);
                 error = ErrorMessageHelper.ErrorDeletingSkill;
-                return -1;
+                return false;
             }
             error = "";
-            return 1;
+            return true;
         }
     }
 }

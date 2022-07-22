@@ -111,9 +111,9 @@ namespace HeRoBackEnd.Controllers
                     editUser.UserStatus,
                     editUser.RoleName);
 
-            int result = _userService.Update(editUserDTO, out _errorMessage);
+            bool result = _userService.Update(editUserDTO, out _errorMessage);
 
-            if (result == -1)
+            if (result == false)
             {
                 return NotFound(new ResponseViewModel(ErrorMessageHelper.NoUser));
             }
@@ -139,9 +139,9 @@ namespace HeRoBackEnd.Controllers
         {
             int loginUserId = GetUserId();
 
-            int result = _userService.Delete(userId, loginUserId, out _errorMessage);
+            bool result = _userService.Delete(userId, loginUserId, out _errorMessage);
 
-            if (result == -1)
+            if (result == false)
             {
                 return NotFound(new ResponseViewModel(_errorMessage));
             }

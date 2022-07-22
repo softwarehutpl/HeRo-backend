@@ -26,7 +26,7 @@ namespace Services.Services
             _logger = logger;
         }
 
-        public int AddRecruitment(CreateRecruitmentDTO dto)
+        public bool AddRecruitment(CreateRecruitmentDTO dto)
         {
             try
             {
@@ -39,13 +39,13 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-                return -1;
+                return false;
             }
 
-            return 1;
+            return true;
         }
 
-        public int UpdateRecruitment(int recruitmentId, UpdateRecruitmentDTO dto, out string errorMessage)
+        public bool UpdateRecruitment(int recruitmentId, UpdateRecruitmentDTO dto, out string errorMessage)
         {
             try
             {
@@ -54,7 +54,7 @@ namespace Services.Services
                 if (recruitment == null)
                 {
                     errorMessage = ErrorMessageHelper.NoRecruitment;
-                    return -1;
+                    return false;
                 }
 
                 recruitment.LastUpdatedById = dto.LastUpdatedById;
@@ -114,13 +114,13 @@ namespace Services.Services
             {
                 _logger.LogError(ex.Message);
                 errorMessage = ErrorMessageHelper.ErrorUpdatingRecruitment;
-                return -1;
+                return false;
             }
             errorMessage = "";
-            return 1;
+            return true;
         }
 
-        public int EndRecruitment(EndRecruimentDTO dto, out string errorMessage)
+        public bool EndRecruitment(EndRecruimentDTO dto, out string errorMessage)
         {
             try
             {
@@ -129,7 +129,7 @@ namespace Services.Services
                 if (recruitment == null) 
                 {
                     errorMessage = ErrorMessageHelper.NoRecruitment;
-                    return -1; 
+                    return false; 
                 }
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
@@ -143,13 +143,13 @@ namespace Services.Services
             {
                 _logger.LogError(ex.Message);
                 errorMessage = ErrorMessageHelper.ErrorEndingRecruitment;
-                return -1;
+                return false;
             }
             errorMessage = "";
-            return 1;
+            return true;
         }
 
-        public int DeleteRecruitment(DeleteRecruitmentDTO dto, out string errorMessage)
+        public bool DeleteRecruitment(DeleteRecruitmentDTO dto, out string errorMessage)
         {
             try
             {
@@ -158,7 +158,7 @@ namespace Services.Services
                 if (recruitment == null) 
                 {
                     errorMessage = ErrorMessageHelper.NoRecruitment;
-                    return -1; 
+                    return false; 
                 }
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
@@ -172,10 +172,10 @@ namespace Services.Services
             {
                 _logger.LogError(ex.Message);
                 errorMessage = ErrorMessageHelper.ErrorDeletingRecruitment;
-                return -1;
+                return false;
             }
             errorMessage = "";
-            return 1;
+            return true;
         }
 
         public RecruitmentListing GetRecruitments(Paging paging, SortOrder? sortOrder, RecruitmentFiltringDTO recruitmentFiltringDTO)

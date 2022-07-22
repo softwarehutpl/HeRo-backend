@@ -122,13 +122,13 @@ namespace Services.Services
             return values;
         }
 
-        public int Update(UserEditDTO userEdit)
+        public bool Update(UserEditDTO userEdit, out string error)
         {
             User user = _userRepository.GetById(userEdit.Id);
             if (user == null)
             {
                 error = ErrorMessageHelper.NoUser;
-                return -1;
+                return false;
             }
 
             user.UserStatus = userEdit.UserStatus;
@@ -143,19 +143,19 @@ namespace Services.Services
             {
                 error = ErrorMessageHelper.ErrorUpdatingUser;
                 _logger.LogError(ex.Message);
-                return -1;
+                return false;
             }
             error = "";
-            return user.Id;
+            return true;
         }
 
-        public int Delete(int userId, int loginUserId, out string error)
+        public bool Delete(int userId, int loginUserId, out string error)
         {
             User user = _userRepository.GetById(userId);
             if (user == null)
             {
                 error = ErrorMessageHelper.NoUser;
-                return -1;
+                return false;
             }
             user.UserStatus = UserStatuses.DELETED.ToString();
             user.DeletedById = loginUserId;
@@ -168,10 +168,10 @@ namespace Services.Services
             {
                 error = ErrorMessageHelper.ErrorDeletingUser;
                 _logger.LogError("Error updating user while deleting");
-                return -1;
+                return false;
             }
             error = "";
-            return user.Id;
+            return true;
         }
 
         public bool CheckIfUserExist(string email)

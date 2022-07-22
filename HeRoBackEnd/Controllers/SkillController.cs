@@ -32,9 +32,9 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(string skillName)
         {
-            int result = _service.AddSkill(skillName, out _errorMessage);
+            bool result = _service.AddSkill(skillName, out _errorMessage);
 
-            if (result == -1)
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -56,9 +56,9 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Update(int skillId, string newSkillName)
         {
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
-            int result = _service.UpdateSkill(dto, out _errorMessage);
+            bool result = _service.UpdateSkill(dto, out _errorMessage);
 
-            if(result==-1)
+            if(result==false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -78,9 +78,9 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int skillId)
         {
-            int result = _service.DeleteSkill(skillId, out _errorMessage);
+            bool result = _service.DeleteSkill(skillId, out _errorMessage);
 
-            if (result == -1)
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }

@@ -171,9 +171,9 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedById = id;
             dto.LastUpdatedDate = DateTime.Now;
 
-            int result = service.AddRecruitment(dto);
+            bool result = service.AddRecruitment(dto);
 
-            if (result == -1)
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(ErrorMessageHelper.WrongData));
             }
@@ -202,9 +202,9 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedById = id;
             dto.LastUpdatedDate = DateTime.Now;
 
-            int result = service.UpdateRecruitment(recruitmentId, dto, out _errorMessage);
+            bool result = service.UpdateRecruitment(recruitmentId, dto, out _errorMessage);
 
-            if (result == -1)
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -233,9 +233,9 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.EndedById = id;
             dto.EndedDate = DateTime.Now;
-            int result = service.EndRecruitment(dto, out _errorMessage);
+            bool result = service.EndRecruitment(dto, out _errorMessage);
 
-            if (result == -1)
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -265,9 +265,9 @@ namespace HeRoBackEnd.Controllers
             dto.DeletedById = id;
             dto.DeletedDate = DateTime.Now;
 
-            int result = service.DeleteRecruitment(dto, out _errorMessage);
+            bool result = service.DeleteRecruitment(dto, out _errorMessage);
 
-            if (result == -1)
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
