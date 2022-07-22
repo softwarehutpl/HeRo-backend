@@ -79,10 +79,10 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("User/GetRecruiters")]
         [Authorize(Policy = "RecruiterRequirment")]
-        [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
-        public IActionResult GetRecruiters(string? email)
+        [ProducesResponseType(typeof(IEnumerable<RecruterDTO>), StatusCodes.Status200OK)]
+        public IActionResult GetRecruiters(string? fullName)
         {
-            var result = _userService.GetRecruiters(email);
+            var result = _userService.GetRecruiters(fullName);
 
             return Ok(result);
         }
@@ -105,6 +105,8 @@ namespace HeRoBackEnd.Controllers
             UserEditDTO editUserDTO =
                 new UserEditDTO(
                     userId,
+                    editUser.Name,
+                    editUser.Surname,
                     editUser.UserStatus,
                     editUser.RoleName);
 
