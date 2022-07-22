@@ -42,7 +42,7 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">"Error getting candidate (bad parameters or candidate doesn't exist)"</response>
         [HttpGet]
         [Route("Candidate/Get/{candidateId}")]
-        [RequireUserRole(UserRoles = new string[] { "RECRUITER" })]
+        [RequireUserRole("RECRUITER")]
         [ProducesResponseType(typeof(CandidateProfileDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int candidateId)
