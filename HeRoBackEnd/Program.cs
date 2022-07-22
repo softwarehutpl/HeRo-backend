@@ -43,7 +43,7 @@ try
         options.Cookie.SecurePolicy = CookieSecurePolicy.Always;
         options.Cookie.SameSite = SameSiteMode.None;
         options.Cookie.IsEssential = true;
-        options.ExpireTimeSpan = new TimeSpan(0, 20, 0);
+        options.ExpireTimeSpan = new TimeSpan(14, 0, 0, 0);
         options.Events.OnRedirectToLogin = (context) =>
         {
             context.Response.StatusCode = StatusCodes.Status401Unauthorized;

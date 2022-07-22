@@ -104,6 +104,15 @@ namespace HeRoBackEnd.Controllers
         ///       "cvPath": "CVPathString",
         ///       "recruitmentId": 1
         ///     }
+        ///
+        ///<h2>Format:</h2>
+        ///    <h3>Date:</h3>
+        ///    yyyy-MM-dd <br />
+        ///    yyyy-MM-ddTHH:mm <br />
+        ///    yyyy-MM-ddTHH:mm:ss <br />
+        ///    yyyy-MM-ddTHH:mm:ss.fff <br /><br />
+        /// <h2>Nullable:</h2>
+        ///    "expectedMonthlySalary", "otherExpectations"" <br /><br />
         /// </remarks>
         /// <response code="200">string "Candidate created successfully"</response>
         /// <response code="400">string "Error creating candidate (check parameters)<br />
@@ -158,6 +167,15 @@ namespace HeRoBackEnd.Controllers
         ///       "status": "IN_PROCESSING",
         ///       "stage": "PHONE_INTERVIEW"
         ///     }
+        ///
+        /// <h2>Format:</h2>
+        ///    <h3>Date:</h3>
+        ///    yyyy-MM-dd <br />
+        ///    yyyy-MM-ddTHH:mm <br />
+        ///    yyyy-MM-ddTHH:mm:ss <br />
+        ///    yyyy-MM-ddTHH:mm:ss.fff <br /><br />
+        /// <h2>Nullable:</h2>
+        ///    "expectedMonthlySalary", "otherExpectations"" <br /><br />
         /// </remarks>
         /// <response code="200">string "Candidate updated successfully"</response>
         /// <response code="400">string "User with given Id doesn't exist"<br />

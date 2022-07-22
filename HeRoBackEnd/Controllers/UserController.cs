@@ -75,6 +75,20 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
+        /// Returns 5 recruiters which email contain a string passed as an argument
+        /// </summary>
+        [HttpPost]
+        [Route("User/GetRecruiters")]
+        [Authorize(Policy = "RecruiterRequirment")]
+        [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
+        public IActionResult GetRecruiters(string? email)
+        {
+            var result = _userService.GetRecruiters(email);
+
+            return Ok(result);
+        }
+
+        /// <summary>
         /// Updates information about a user represented by an id
         /// </summary>
         /// <param name="userId" example="1">Id of a user</param>
