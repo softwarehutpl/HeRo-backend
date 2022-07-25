@@ -166,7 +166,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RecoverPassword(UserPasswordRecoveryViewModel user)
         {
-            LogUserAction($"AuthController.RecoverPassword({JsonSerializer.Serialize(user)})", _userService, _userActionService);
+            //LogUserAction($"AuthController.RecoverPassword({JsonSerializer.Serialize(user)})", _userService, _userActionService);
             bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.Guid, user.Email);
             if (!userGuid)
             {
