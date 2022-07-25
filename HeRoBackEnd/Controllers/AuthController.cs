@@ -16,7 +16,6 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class AuthController : BaseController
     {
-        private string _errorMessage;
         private readonly AuthService _authServices;
         private readonly EmailService _emailService;
         private readonly UserService _userService;
@@ -93,7 +92,7 @@ namespace HeRoBackEnd.Controllers
 
             if (!Regex.IsMatch(newUser.Name, @"^[a-zA-Z]+$") || !Regex.IsMatch(newUser.Surname, @"^[a-zA-Z]+$"))
             {
-                return BadRequest(new ResponseViewModel("Name and Surname must only contain letters"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.ForbiddenSymbol));
             }
 
             Guid confirmationGuid = await _userService.CreateUser(newUser.Name, newUser.Surname, newUser.Password, newUser.Email);
@@ -169,9 +168,9 @@ namespace HeRoBackEnd.Controllers
         {
             LogUserAction($"AuthController.RecoverPassword({JsonSerializer.Serialize(user)})", _userService, _userActionService);
             bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.Guid, user.Email);
-            if (!userGuid) 
-            { 
-                return BadRequest(ErrorMessageHelper.UserAndGuidDifferentOwner); 
+            if (!userGuid)
+            {
+                return BadRequest(ErrorMessageHelper.UserAndGuidDifferentOwner);
             }
 
             await _userService.ChangeUserPassword(user.Email, user.Password);

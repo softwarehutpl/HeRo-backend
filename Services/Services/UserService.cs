@@ -142,7 +142,8 @@ namespace Services.Services
 
             if (!Regex.IsMatch(userEdit.Name, @"^[a-zA-Z]+$") || !Regex.IsMatch(userEdit.Surname, @"^[a-zA-Z]+$"))
             {
-                return -1;
+                error = ErrorMessageHelper.ForbiddenSymbol;
+                return false;
             }
 
             user.Name = userEdit.Name;
