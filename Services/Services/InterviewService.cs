@@ -1,4 +1,5 @@
-﻿using Common.Listing;
+﻿using Common.Helpers;
+using Common.Listing;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Interview;
 using Data.Entities;
@@ -119,7 +120,7 @@ namespace Services.Services
             return interviewListing;
         }
 
-        public int Create(InterviewCreateDTO interviewCreate, int userCreatedId)
+        public bool Create(InterviewCreateDTO interviewCreate, int userCreatedId)
         {
             Interview interview = new Interview();
 
@@ -137,19 +138,19 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-
-                return -1;
+                return false;
             }
 
-            return interview.Id;
+            return true;
         }
 
-        public int Update(InterviewEditDTO interviewEdit, int userEditId)
+        public bool Update(InterviewEditDTO interviewEdit, int userEditId, out string ErrorMessage)
         {
             Interview interview = _interviewRepository.GetById(interviewEdit.InterviewId);
             if (interview == null)
             {
-                return 0;
+                ErrorMessage = ErrorMessageHelper.NoInterview;
+                return false;
             }
 
             interview.Date = interviewEdit.Date;
@@ -165,19 +166,20 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
-
-                return -1;
+                ErrorMessage = ErrorMessageHelper.ErrorEditingInterview;
+                return false;
             }
-
-            return interview.Id;
+            ErrorMessage = "";
+            return true;
         }
 
-        public int Delete(int interviewId, int loginUserId)
+        public bool Delete(int interviewId, int loginUserId, out string ErrorMessage)
         {
             Interview interview = _interviewRepository.GetById(interviewId);
             if (interview == null)
             {
-                return 0;
+                ErrorMessage = ErrorMessageHelper.NoInterview;
+                return false;
             }
 
             interview.DeletedById = loginUserId;
@@ -190,11 +192,13 @@ namespace Services.Services
             catch (Exception ex)
             {
                 _logger.LogError(ex.Message);
+                ErrorMessage = ErrorMessageHelper.ErrorDeletingInterview;
 
-                return -1;
+                return false;
             }
 
-            return interview.Id;
+            ErrorMessage = "";
+            return true;
         }
     }
 }

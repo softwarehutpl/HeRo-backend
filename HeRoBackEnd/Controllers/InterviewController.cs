@@ -1,10 +1,13 @@
-﻿using Data.DTOs.Interview;
+﻿using Common.AttributeRoleVerification;
+using Common.Helpers;
+using Data.DTOs.Interview;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.Interview;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Listing;
 using Services.Services;
+using System.Text.Json;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -12,10 +15,14 @@ namespace HeRoBackEnd.Controllers
     public class InterviewController : BaseController
     {
         private InterviewService _interviewService;
-
-        public InterviewController(InterviewService interviewService)
+        private string _errorMessage;
+        private UserService _userService;
+        private UserActionService _userActionService;
+        public InterviewController(InterviewService interviewService, UserActionService userActionService, UserService userService)
         {
             _interviewService = interviewService;
+            _userActionService = userActionService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -27,16 +34,17 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">string "No Interview with this InterviewId"</response>
         [HttpGet]
         [Route("Interview/Get/{interviewId}")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(InterviewDTO), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int interviewId)
         {
+            LogUserAction($"InterviewController.Get({interviewId})", _userService, _userActionService);
             InterviewDTO interview = _interviewService.Get(interviewId);
 
             if (interview == null)
             {
-                return BadRequest(new ResponseViewModel("No Interview with this Id"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NoInterview));
             }
 
             return new JsonResult(interview);
@@ -59,7 +67,7 @@ namespace HeRoBackEnd.Controllers
         /// <h2>Filtring:</h2>
         ///    <h3>Equals:</h3> "type" <br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "Date", "Candidateid", "WorkerId", "Type" <br />
+        ///     <h3>Possible keys:</h3> "Id", "Date", "Candidateid", "WorkerId", "Type" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -67,10 +75,11 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Interviews</response>
         [HttpPost]
         [Route("Interview/GetList")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(InterviewListing), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
+            LogUserAction($"InterviewController.GetList({JsonSerializer.Serialize(interview)})", _userService, _userActionService);
             InterviewFiltringDTO interviewFiltringDTO =
                 new InterviewFiltringDTO
                 {
@@ -81,9 +90,9 @@ namespace HeRoBackEnd.Controllers
                     Type = interview.Type,
                 };
 
-            var resutl = _interviewService.GetInterviews(interview.Paging, interview.SortOrder, interviewFiltringDTO);
+            var result = _interviewService.GetInterviews(interview.Paging, interview.SortOrder, interviewFiltringDTO);
 
-            return new JsonResult(resutl);
+            return new JsonResult(result);
         }
 
         /// <summary>
@@ -93,10 +102,11 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">string "Interview created successfully"</response>
         [HttpPost]
         [Route("Interview/Create")]
-        [Authorize(Policy = "HrRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult Create(InterviewCreateViewModel interview)
         {
+            LogUserAction($"InterviewController.Create({JsonSerializer.Serialize(interview)})", _userService, _userActionService);
             InterviewCreateDTO interviewCreate =
                 new InterviewCreateDTO(
                     interview.Date,
@@ -106,13 +116,13 @@ namespace HeRoBackEnd.Controllers
 
             int userCreatedId = GetUserId();
 
-            int result = _interviewService.Create(interviewCreate, userCreatedId);
-            if (result == -1)
+            bool result = _interviewService.Create(interviewCreate, userCreatedId);
+            if (result == false)
             {
-                return BadRequest(new ResponseViewModel("Interview created unsuccessfully"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.ErrorCreatingInterview));
             }
 
-            return Ok(new ResponseViewModel("Interview created successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.InterviewCreatedSuccessfully));
         }
 
         /// <summary>
@@ -123,11 +133,12 @@ namespace HeRoBackEnd.Controllers
         /// <response code="404">No interview with this InterviewId</response>
         [HttpPost]
         [Route("Interview/Edit/{interviewId}")]
-        [Authorize(Policy = "HrRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int interviewId, InterviewEditViewModel interview)
         {
+            LogUserAction($"InterviewController.Edit({interviewId}, {JsonSerializer.Serialize(interview)})", _userService, _userActionService);
             InterviewEditDTO interviewEdit =
                 new InterviewEditDTO(
                     interviewId,
@@ -136,18 +147,14 @@ namespace HeRoBackEnd.Controllers
                     interview.Type);
 
             int userEditId = GetUserId();
-            int result = _interviewService.Update(interviewEdit, userEditId);
+            bool result = _interviewService.Update(interviewEdit, userEditId, out _errorMessage);
 
-            if (result == 0)
+            if (result == false)
             {
-                return BadRequest(new ResponseViewModel("No interview with this Id"));
-            }
-            if (result == -1)
-            {
-                return BadRequest(new ResponseViewModel("Interview edited unsuccessfully"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Interview edited successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.InterviewEditedSuccessfully));
         }
 
         /// <summary>
@@ -158,25 +165,22 @@ namespace HeRoBackEnd.Controllers
         /// <response code="400">No interview with this interviewId</response>
         [HttpDelete]
         [Route("Interview/Delete/{interviewId}")]
-        [Authorize(Policy = "HrRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int interviewId)
         {
+            LogUserAction($"InterviewController.Delete({interviewId})", _userService, _userActionService);
             int loginUserId = GetUserId();
 
-            int result = _interviewService.Delete(interviewId, loginUserId);
+            bool result = _interviewService.Delete(interviewId, loginUserId, out _errorMessage);
 
-            if (result == 0)
+            if (result == false)
             {
-                return BadRequest(new ResponseViewModel("No interview with this Id"));
-            }
-            if (result == -1)
-            {
-                return BadRequest(new ResponseViewModel("Interview deleted unsuccessfully"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Interview deleted successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.InterviewDeletedSuccessfully));
         }
     }
 }

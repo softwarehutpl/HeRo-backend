@@ -15,31 +15,31 @@ namespace Tests.InterviewTests
             Interview interview = Interviews[0];
 
             //Arrange
-            int expectedResult = 1;
+            bool expectedResult = true;
 
             // Act
             IQueryable<Interview> interviews = Interviews.AsQueryable();
             InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
 
-            int actualResult = InterviewService.Delete(1, 1);
+            bool actualResult = InterviewService.Delete(1, 1, out errorMessage);
 
             //Assert
             Assert.True(expectedResult == actualResult);
         }
 
         [Fact]
-        public void Delete_ShoudFail()
+        public void Delete_ShouldFail()
         {
             Interview interview = null;
 
             //Arrange
-            int expectedResult = 0;
+            bool expectedResult = false;
 
             // Act
             IQueryable<Interview> interviews = Interviews.AsQueryable();
             InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
 
-            int actualResult = InterviewService.Delete(1, 1);
+            bool actualResult = InterviewService.Delete(1, 1, out errorMessage);
 
             //Assert
             Assert.True(expectedResult == actualResult);
@@ -53,14 +53,14 @@ namespace Tests.InterviewTests
             Exception ex = new Exception();
 
             //Arrange
-            int expectedResult = -1;
+            bool expectedResult = false;
 
             // Act
             IQueryable<Interview> interviews = Interviews.AsQueryable();
             InterviewRepository.Setup(i => i.GetById(1)).Returns(interview);
             InterviewRepository.Setup(i => i.UpdateAndSaveChanges(interview)).Throws(ex);
 
-            int actualResult = InterviewService.Delete(1, 1);
+            bool actualResult = InterviewService.Delete(1, 1, out errorMessage);
 
             //Assert
             Assert.True(expectedResult == actualResult);

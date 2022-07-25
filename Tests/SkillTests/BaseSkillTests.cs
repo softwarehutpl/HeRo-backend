@@ -18,6 +18,7 @@ namespace Tests.SkillTests
         protected readonly Mock<ISkillRepository> _skillRepo;
         protected readonly Mock<IRecruitmentSkillRepository> _recruitmentSkillRepo;
         protected readonly SkillService _skillService;
+        protected string errorMessage;
         public BaseSkillTests()
         {
             _logger= new Mock<ILogger<SkillService>>();

@@ -8,6 +8,7 @@ using Data.IRepositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
 using Services.Listing;
+using System.Text.RegularExpressions;
 
 namespace Services.Services
 {
@@ -48,7 +49,7 @@ namespace Services.Services
                 return null;
             }
 
-            UserDTO userDTO = new UserDTO(user.Id, user.Email, user.UserStatus, user.RoleName);
+            UserDTO userDTO = new UserDTO(user.Id, user.FullName, user.Email, user.UserStatus, user.RoleName);
 
             return userDTO;
         }
@@ -90,20 +91,63 @@ namespace Services.Services
             userListing.Paging = paging;
             userListing.SortOrder = sortOrder;
             userListing.UserDTOs = users
-                .Select(x => new UserDTO(x.Id, x.Email, x.UserStatus, x.RoleName))
+                .Select(x => new UserDTO(x.Id, $"{x.Name} {x.Surname}", x.Email, x.UserStatus, x.RoleName))
                 .ToPagedList(paging.PageNumber, paging.PageSize);
 
             return userListing;
         }
 
-        public int Update(UserEditDTO userEdit)
+        public IEnumerable<RecruterDTO> GetRecruiters(string? fullName)
+        {
+            IQueryable<User> users = _userRepository.GetAll();
+
+            users = users.Where(u => !u.DeletedDate.HasValue);
+            users = users.Where(u => u.RoleName.Equals("RECRUITER"));
+
+            if (String.IsNullOrEmpty(fullName))
+            {
+                users = users.OrderBy(u => u.Name)
+                    .ThenBy(u => u.Surname)
+                    .Take(5);
+            }
+            else
+            {
+                users = users
+                    .Where(u => u.Name.ToLower().Contains(fullName.ToLower()) ||
+                    u.Surname.ToLower().Contains(fullName.ToLower()))
+                    .OrderBy(u => u.Name)
+                    .ThenBy(u => u.Surname)
+                    .Take(5);
+            }
+
+            IEnumerable<RecruterDTO> values = users
+                .Select(u =>
+                new RecruterDTO
+                {
+                    Id = u.Id,
+                    FullName = $"{u.Name} {u.Surname}"
+                });
+
+            return values;
+        }
+
+        public bool Update(UserEditDTO userEdit, out string error)
         {
             User user = _userRepository.GetById(userEdit.Id);
             if (user == null)
             {
-                return 0;
+                error = ErrorMessageHelper.NoUser;
+                return false;
             }
 
+            if (!Regex.IsMatch(userEdit.Name, @"^[a-zA-Z]+$") || !Regex.IsMatch(userEdit.Surname, @"^[a-zA-Z]+$"))
+            {
+                error = ErrorMessageHelper.ForbiddenSymbol;
+                return false;
+            }
+
+            user.Name = userEdit.Name;
+            user.Surname = userEdit.Surname;
             user.UserStatus = userEdit.UserStatus;
             user.RoleName = userEdit.RoleName;
             user.LastUpdatedDate = DateTime.UtcNow;
@@ -114,32 +158,39 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
+                error = ErrorMessageHelper.ErrorUpdatingUser;
                 _logger.LogError(ex.Message);
+                return false;
             }
-            return user.Id;
+            error = "";
+            return true;
         }
 
-        public int Delete(int userId, int loginUserId)
+        public bool Delete(int userId, int loginUserId, out string error)
         {
             User user = _userRepository.GetById(userId);
             if (user == null)
             {
-                return 0;
+                error = ErrorMessageHelper.NoUser;
+                return false;
             }
+
             user.UserStatus = UserStatuses.DELETED.ToString();
             user.DeletedById = loginUserId;
             user.DeletedDate = DateTime.UtcNow;
+
             try
             {
                 _userRepository.UpdateAndSaveChanges(user);
             }
             catch (Exception ex)
             {
+                error = ErrorMessageHelper.ErrorDeletingUser;
                 _logger.LogError("Error updating user while deleting");
-                return -1;
+                return false;
             }
-
-            return user.Id;
+            error = "";
+            return true;
         }
 
         public bool CheckIfUserExist(string email)
@@ -149,10 +200,12 @@ namespace Services.Services
             return check;
         }
 
-        public async Task<Guid> CreateUser(string password, string email)
+        public async Task<Guid> CreateUser(string name, string surname, string password, string email)
         {
             User newUser = new()
             {
+                Name = name,
+                Surname = surname,
                 Email = email,
                 Password = PasswordHashHelper.GetHash(password),
                 CreatedDate = DateTime.Now,

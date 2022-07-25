@@ -13,6 +13,7 @@ namespace Tests.RecruitmentTests
 {
     public class BaseRecruitmentTests
     {
+        protected string errorMessage;
         protected readonly Mock<IMapper> _mapper;
         protected readonly Mock<IRecruitmentRepository> _recruitmentRepo;
         protected readonly Mock<ILogger<RecruitmentService>> _logger;

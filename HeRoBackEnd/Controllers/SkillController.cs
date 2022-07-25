@@ -1,4 +1,6 @@
-﻿using Data.DTOs.Skill;
+﻿using Common.AttributeRoleVerification;
+using Common.Helpers;
+using Data.DTOs.Skill;
 using Data.Entities;
 using HeRoBackEnd.ViewModels;
 using Microsoft.AspNetCore.Authorization;
@@ -8,13 +10,17 @@ using Services.Services;
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
-    public class SkillController : Controller
+    public class SkillController : BaseController
     {
-        private readonly SkillService _service;
-
-        public SkillController(SkillService service)
+        private readonly SkillService _skillService;
+        private string _errorMessage;
+        private UserService _userService;
+        private UserActionService _userActionService;
+        public SkillController(SkillService service, UserActionService userActionService, UserService userService)
         {
-            _service = service;
+            _skillService = service;
+            _userActionService = userActionService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -24,23 +30,20 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPut]
         [Route("Skill/Create")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(string skillName)
         {
-            int result = _service.AddSkill(skillName);
+            LogUserAction($"SkillController.Create({skillName})", _userService, _userActionService);
+            bool result = _skillService.AddSkill(skillName, out _errorMessage);
 
-            if (result == 0)
+            if (result == false)
             {
-                return BadRequest(new ResponseViewModel("Skill with that name already exists!"));
-            }
-            if (result == -1)
-            {
-                return BadRequest(new ResponseViewModel("Wrong data!"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Skill added successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.SkillAdded));
         }
 
         /// <summary>
@@ -51,28 +54,21 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPut]
         [Route("Skill/Update/{skillId}")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Update(int skillId, string newSkillName)
         {
+            LogUserAction($"SkillController.Update({skillId}, {newSkillName})", _userService, _userActionService);
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
-            int result = _service.UpdateSkill(dto);
+            bool result = _skillService.UpdateSkill(dto, out _errorMessage);
 
-            if(result==-2)
+            if(result==false)
             {
-                return BadRequest(new ResponseViewModel("There is no such skill!"));
-            }
-            if (result == 0)
-            {
-                return BadRequest(new ResponseViewModel("Skill with that name already exists!"));
-            }
-            if (result == -1)
-            {
-                return BadRequest(new ResponseViewModel("Wrong data!"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            return Ok(new ResponseViewModel("Skill updated successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.SkillUpdated));
         }
 
         /// <summary>
@@ -82,29 +78,21 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpDelete]
         [Route("Skill/Delete/{skillId}")]
-        [Authorize(Policy = "AdminRequirment")]
+        [RequireUserRole("ADMIN")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int skillId)
         {
-            int result = _service.DeleteSkill(skillId);
+            LogUserAction($"SkillController.Delete({skillId})", _userService, _userActionService);
 
-            if (result == 0)
+            bool result = _skillService.DeleteSkill(skillId, out _errorMessage);
+
+            if (result == false)
             {
-                return BadRequest(new ResponseViewModel("This skill is currently used in one of the recruitments. You can't delete it."));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            if (result == -1)
-            {
-                return BadRequest(new ResponseViewModel("There is no such skill!"));
-            }
-
-            if (result == -2)
-            {
-                return BadRequest(new ResponseViewModel("Error while deleting skill!"));
-            }
-
-            return Ok(new ResponseViewModel("Skill deleted successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.SkillDeleted));
         }
 
         /// <summary>
@@ -127,11 +115,12 @@ namespace HeRoBackEnd.Controllers
         /// </remarks>
         [HttpGet]
         [Route("Skill/GetList")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetList()
         {
-            IEnumerable<Skill> skills = _service.GetSkills();
+            LogUserAction($"SkillController.GetList()", _userService, _userActionService);
+            IEnumerable<Skill> skills = _skillService.GetSkills();
 
             return Ok(skills);
         }
@@ -169,11 +158,12 @@ namespace HeRoBackEnd.Controllers
         /// </remarks>
         [HttpGet]
         [Route("Skill/GetListFilteredByName")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetListFilteredByName(string name)
         {
-            IEnumerable<Skill> skills = _service.GetSkillsFilteredByName(name);
+            LogUserAction($"SkillController.GetFiltredByName({name})", _userService, _userActionService);
+            IEnumerable<Skill> skills = _skillService.GetSkillsFilteredByName(name);
 
             return Ok(skills);
         }
@@ -193,16 +183,17 @@ namespace HeRoBackEnd.Controllers
         /// </remarks>
         [HttpGet]
         [Route("Skill/Get/{skillId}")]
-        [Authorize(Policy = "AnyRoleRequirment")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         [ProducesResponseType(typeof(Skill), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int skillId)
         {
-            Skill skill = _service.GetSkill(skillId);
+            LogUserAction($"SkillController.Get({skillId})", _userService, _userActionService);
+            Skill skill = _skillService.GetSkill(skillId);
 
             if (skill == null)
             {
-                return BadRequest(new ResponseViewModel("There is no such skill!"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NoSkill));
             }
 
             return Ok(skill);

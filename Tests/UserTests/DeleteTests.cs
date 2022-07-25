@@ -28,7 +28,7 @@ namespace Tests.UserTests
             UserRepositoryMock.Setup(x => x.GetById(userId)).Returns(userToDelete);
             UserRepositoryMock.Setup(x => x.UpdateAndSaveChanges(It.IsAny<User>())).Verifiable();
 
-            sut.Delete(userId, loginUserId);
+            sut.Delete(userId, loginUserId, out errorMessage);
 
             UserRepositoryMock.Verify(x => x.GetById(userId), Times.Once);
             UserRepositoryMock.Verify(x => x.UpdateAndSaveChanges(It.IsAny<User>()), Times.Once);
@@ -42,17 +42,16 @@ namespace Tests.UserTests
         {
             int userId = 5;
             int loginUserId = 1;
-            int expectedId = 0;
             User user = null;
 
             UserRepositoryMock.Setup(x => x.GetById(userId)).Returns(user);
 
-            int actualId = sut.Delete(userId, loginUserId);
+            bool result = sut.Delete(userId, loginUserId, out errorMessage);
 
             UserRepositoryMock.Verify(x => x.GetById(userId), Times.Once);
             UserRepositoryMock.Verify(x => x.UpdateAndSaveChanges(It.IsAny<User>()), Times.Never);
 
-            Assert.True(actualId == expectedId);
+            Assert.False(result);
         }
     }
 }

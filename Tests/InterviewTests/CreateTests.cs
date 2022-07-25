@@ -20,11 +20,11 @@ namespace Tests.InterviewTests
             );
 
             //Arrange
-            int expectedResult = 1;
+            bool expectedResult = true;
 
             // Act
             InterviewRepository.Setup(i => i.AddAndSaveChanges(It.IsAny<Interview>())).Returns(interview);
-            int actualResult = InterviewService.Create(interviewDTOExpected, 1);
+            bool actualResult = InterviewService.Create(interviewDTOExpected, 1);
 
             //Assert
             Assert.True(expectedResult == actualResult);
@@ -46,12 +46,12 @@ namespace Tests.InterviewTests
             Exception ex = new Exception();
 
             //Arrange
-            int expectedResult = -1;
+            bool expectedResult = false;
 
             // Act
             InterviewRepository.Setup(i => i.AddAndSaveChanges(It.IsAny<Interview>())).Throws(ex);
 
-            int actualResult = InterviewService.Create(interviewDTOExpected, 1);
+            bool actualResult = InterviewService.Create(interviewDTOExpected, 1);
 
             //Assert
 
