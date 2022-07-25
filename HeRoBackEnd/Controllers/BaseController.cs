@@ -1,6 +1,4 @@
-﻿using AutoMapper;
-using Data.Entities;
-using Microsoft.AspNetCore.Cors;
+﻿using Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using System.Globalization;
@@ -36,19 +34,28 @@ namespace HeRoBackEnd.Controllers
             UserAction userAction = new()
             {
                 UserId = userId,
-                //User = _mapper.Map<User>(userService.Get(userId)),
                 ControllerAction = controller,
                 Date = DateTime.Now
             };
+
             userActionService.CreateUserAction(userAction);
         }
 
         protected int GetUserId()
         {
             List<Claim> claims = HttpContext.User.Claims.ToList();
-            Claim idClaim = claims.FirstOrDefault(e => e.Type == "Id");
-            int.TryParse(idClaim.Value, out int id);
+            Claim? idClaim = claims.FirstOrDefault(e => e.Type == "Id");
 
+            int id;
+            if (idClaim == null)
+            {
+                id = 0;
+            }
+            else
+            {
+                int.TryParse(idClaim.Value, out id);
+            }
+            
             return id;
         }
         protected string Translate(string message)

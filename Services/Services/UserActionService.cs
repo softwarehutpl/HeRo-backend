@@ -1,34 +1,22 @@
-﻿using AutoMapper;
-using Common.Enums;
-using Common.Helpers;
-using Common.Listing;
-using Common.ServiceRegistrationAttributes;
-using Data.DTOs.Candidate;
+﻿using Common.ServiceRegistrationAttributes;
 using Data.Entities;
-using Data.IRepositories;
-using Microsoft.Extensions.Logging;
-using PagedList;
-using Services.Listing;
+using Data.Repositories;
 
 namespace Services.Services
 {
     [ScopedRegistration]
     public class UserActionService
     {
-        private readonly IUserActionRepository _userActionRepository;
-        private readonly IMapper _mapper;
+        private readonly UserActionRepository _userActionRepository;
 
-        public UserActionService(IMapper map, IUserActionRepository userActionRepository)
+        public UserActionService(UserActionRepository userActionRepository)
         {
-            _mapper = map;
             _userActionRepository = userActionRepository;
         }
 
-        public bool CreateUserAction(UserAction userAction)
+        public void CreateUserAction(UserAction userAction)
         {
-            _userActionRepository.AddUserAction(userAction);
-            
-            return true;
+            _userActionRepository.AddAndSaveChanges(userAction);
         }
     }
 }
