@@ -10,7 +10,7 @@ namespace Data.Entities
         [Key]
         public int Id { get; set; }
 
-        public int UserId { get; set; }
+        public int UserId { get; set; } 
 
         [Required]
         public DateTime Date { get; set; }

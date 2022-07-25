@@ -34,7 +34,7 @@ namespace HeRoBackEnd.Controllers
             {
                 int.TryParse(idClaim.Value, out id);
             }
-
+            
             return id;
         }
     }
