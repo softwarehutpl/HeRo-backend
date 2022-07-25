@@ -85,6 +85,8 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetPublicList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
+            culture = System.Globalization.CultureInfo.CurrentCulture;
+
             LogUserAction($"RecruitmentController.GetPublicList({JsonSerializer.Serialize(recruitmentListFilterViewModel)})", _userService, _userActionService);
 
             Paging paging = recruitmentListFilterViewModel.Paging;
@@ -101,7 +103,12 @@ namespace HeRoBackEnd.Controllers
 
             RecruitmentListing recruitments = _recruitmentService.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
-            if (recruitments == null) return BadRequest(ErrorMessageHelper.ErrorListRecruitment);
+            if (recruitments == null)
+            {
+                string message = Translate(ErrorMessageHelper.ErrorListRecruitment);
+
+                return BadRequest(new ResponseViewModel(message));
+            }
 
             return Ok(recruitments);
         }
