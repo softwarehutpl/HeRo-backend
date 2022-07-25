@@ -10,10 +10,12 @@ namespace Tests.UserTests
         public void Update_ShouldReturnUserId_UserExists()
         {
             int userId = 10;
+            string name = "John";
+            string surname = "Teslaw";
             string newStatus = "NOTACTIVE";
             string newRoleName = "NEWROLE";
 
-            UserEditDTO dto = new(userId, newStatus, newRoleName);
+            UserEditDTO dto = new(userId, name, surname, newStatus, newRoleName);
 
             User userToUpdate = new()
             {
@@ -37,10 +39,14 @@ namespace Tests.UserTests
         public void Update_ShouldReturn0_UserNotInDb()
         {
             int userId = 10;
+
+            int expected = 0;
+            string name = "John";
+            string surname = "Teslaw";
             string newStatus = "NOTACTIVE";
             string newRoleName = "NEWROLE";
 
-            UserEditDTO dto = new(userId, newStatus, newRoleName);
+            UserEditDTO dto = new(userId, name, surname, newStatus, newRoleName);
 
             User userToUpdate = null;
 

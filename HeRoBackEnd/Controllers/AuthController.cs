@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using System.Security.Claims;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -90,7 +91,12 @@ namespace HeRoBackEnd.Controllers
             if (check)
                 return BadRequest(new ResponseViewModel(ErrorMessageHelper.UserExists));
 
-            Guid confirmationGuid = await _userService.CreateUser(newUser.Password, newUser.Email);
+            if (!Regex.IsMatch(newUser.Name, @"^[a-zA-Z]+$") || !Regex.IsMatch(newUser.Surname, @"^[a-zA-Z]+$"))
+            {
+                return BadRequest(new ResponseViewModel("Name and Surname must only contain letters"));
+            }
+
+            Guid confirmationGuid = await _userService.CreateUser(newUser.Name, newUser.Surname, newUser.Password, newUser.Email);
 
             string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid }, protocol: "https");
             _emailService.SendConfirmationEmail(newUser.Email, url);

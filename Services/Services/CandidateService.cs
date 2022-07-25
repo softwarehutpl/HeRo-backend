@@ -303,9 +303,9 @@ namespace Services.Services
                             c.Status,
                             c.Stage,
                             c.TechId,
-                            c.Tech.Email,
+                            $"{c.Tech.Name} {c.Tech.Surname}",
                             c.RecruiterId,
-                            c.Recruiter.Email
+                            $"{c.Recruiter.Name} {c.Recruiter.Surname}"
                             )).ToPagedList(paging.PageNumber, paging.PageSize);
 
             return candidateListing;

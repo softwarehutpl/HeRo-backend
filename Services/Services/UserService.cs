@@ -8,6 +8,7 @@ using Data.IRepositories;
 using Microsoft.Extensions.Logging;
 using PagedList;
 using Services.Listing;
+using System.Text.RegularExpressions;
 
 namespace Services.Services
 {
@@ -48,7 +49,7 @@ namespace Services.Services
                 return null;
             }
 
-            UserDTO userDTO = new UserDTO(user.Id, user.Email, user.UserStatus, user.RoleName);
+            UserDTO userDTO = new UserDTO(user.Id, user.FullName, user.Email, user.UserStatus, user.RoleName);
 
             return userDTO;
         }
@@ -90,34 +91,42 @@ namespace Services.Services
             userListing.Paging = paging;
             userListing.SortOrder = sortOrder;
             userListing.UserDTOs = users
-                .Select(x => new UserDTO(x.Id, x.Email, x.UserStatus, x.RoleName))
+                .Select(x => new UserDTO(x.Id, $"{x.Name} {x.Surname}", x.Email, x.UserStatus, x.RoleName))
                 .ToPagedList(paging.PageNumber, paging.PageSize);
 
             return userListing;
         }
 
-        public IEnumerable<(int id, string email)> GetRecruiters(string? email)
+        public IEnumerable<RecruterDTO> GetRecruiters(string? fullName)
         {
             IQueryable<User> users = _userRepository.GetAll();
 
             users = users.Where(u => !u.DeletedDate.HasValue);
             users = users.Where(u => u.RoleName.Equals("RECRUITER"));
 
-            if (String.IsNullOrEmpty(email))
+            if (String.IsNullOrEmpty(fullName))
             {
-                users = users.OrderBy(e => e.Email).Take(5);
+                users = users.OrderBy(u => u.Name)
+                    .ThenBy(u => u.Surname)
+                    .Take(5);
             }
             else
             {
-                users = users.Where(e => e.Email.ToLower().Contains(email.ToLower()))
-                       .OrderBy(e => e.Email)
-                       .Take(5);
+                users = users
+                    .Where(u => u.Name.ToLower().Contains(fullName.ToLower()) ||
+                    u.Surname.ToLower().Contains(fullName.ToLower()))
+                    .OrderBy(u => u.Name)
+                    .ThenBy(u => u.Surname)
+                    .Take(5);
             }
 
-            IEnumerable<(int id, string email)> values = users.
-                Select(u => new { u.Id, u.Email })
-                .ToList()
-                .Select(u => (u.Id, u.Email));
+            IEnumerable<RecruterDTO> values = users
+                .Select(u =>
+                new RecruterDTO
+                {
+                    Id = u.Id,
+                    FullName = $"{u.Name} {u.Surname}"
+                });
 
             return values;
         }
@@ -131,6 +140,13 @@ namespace Services.Services
                 return false;
             }
 
+            if (!Regex.IsMatch(userEdit.Name, @"^[a-zA-Z]+$") || !Regex.IsMatch(userEdit.Surname, @"^[a-zA-Z]+$"))
+            {
+                return -1;
+            }
+
+            user.Name = userEdit.Name;
+            user.Surname = userEdit.Surname;
             user.UserStatus = userEdit.UserStatus;
             user.RoleName = userEdit.RoleName;
             user.LastUpdatedDate = DateTime.UtcNow;
@@ -157,9 +173,11 @@ namespace Services.Services
                 error = ErrorMessageHelper.NoUser;
                 return false;
             }
+
             user.UserStatus = UserStatuses.DELETED.ToString();
             user.DeletedById = loginUserId;
             user.DeletedDate = DateTime.UtcNow;
+
             try
             {
                 _userRepository.UpdateAndSaveChanges(user);
@@ -181,10 +199,12 @@ namespace Services.Services
             return check;
         }
 
-        public async Task<Guid> CreateUser(string password, string email)
+        public async Task<Guid> CreateUser(string name, string surname, string password, string email)
         {
             User newUser = new()
             {
+                Name = name,
+                Surname = surname,
                 Email = email,
                 Password = PasswordHashHelper.GetHash(password),
                 CreatedDate = DateTime.Now,

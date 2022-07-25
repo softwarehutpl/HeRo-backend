@@ -11,6 +11,28 @@ namespace Data.Entities
         public int Id { get; set; }
 
         [Required]
+        [MaxLength(20)]
+        public string Name { get; set; }
+
+        [Required]
+        [MaxLength(30)]
+        public string Surname { get; set; }
+
+        [MaxLength(50)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public string FullName
+        {
+            get
+            {
+                return $"{Name} {Surname}";
+            }
+
+            private set
+            {
+            }
+        }
+
+        [Required]
         [EmailAddress]
         [MaxLength(40)]
         public string Email { get; set; }

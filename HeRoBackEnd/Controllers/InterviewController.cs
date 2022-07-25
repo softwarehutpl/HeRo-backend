@@ -67,7 +67,7 @@ namespace HeRoBackEnd.Controllers
         /// <h2>Filtring:</h2>
         ///    <h3>Equals:</h3> "type" <br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "Date", "Candidateid", "WorkerId", "Type" <br />
+        ///     <h3>Possible keys:</h3> "Id", "Date", "Candidateid", "WorkerId", "Type" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
