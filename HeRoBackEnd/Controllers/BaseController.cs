@@ -16,6 +16,7 @@ namespace HeRoBackEnd.Controllers
                 ControllerAction = controller,
                 Date = DateTime.Now
             };
+
             userActionService.CreateUserAction(userAction);
         }
 
