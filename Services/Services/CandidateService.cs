@@ -50,7 +50,7 @@ namespace Services.Services
             else
             {
                 _logger.LogError("Error when getting recruiterId of recruitment which doesn't exist: ");
-                
+
                 ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
                 return false;
             }
@@ -240,16 +240,22 @@ namespace Services.Services
 
             try
             {
-                candidateProfileDTO = new CandidateProfileDTO(
-                                                    candidate.Id,
-                                                    (candidate.Name + " " + candidate.LastName),
-                                                    candidate.Email,
-                                                    candidate.PhoneNumber,
-                                                    candidate.AvailableFrom,
-                                                    candidate.ExpectedMonthlySalary,
-                                                    candidate.OtherExpectations,
-                                                    candidate.CvPath
-                                                );
+                candidateProfileDTO =
+                    new CandidateProfileDTO
+                    {
+                        Id = candidate.Id,
+                        FullName = (candidate.Name + " " + candidate.LastName),
+                        Email = candidate.Email,
+                        PhoneNumber = candidate.PhoneNumber,
+                        AvailableFrom = candidate.AvailableFrom,
+                        ExpectedMonthlySalary = candidate.ExpectedMonthlySalary,
+                        OtherExpectations = candidate.OtherExpectations,
+                        CvPath = candidate.CvPath,
+                        InterviewOpinionScore = candidate.InterviewOpinionScore,
+                        InterviewOpinionText = candidate.InterviewOpinionText,
+                        HROpinionScore = candidate.HROpinionScore,
+                        HROpinionText = candidate.HROpinionText
+                    };
             }
             catch (Exception ex)
             {
