@@ -9,7 +9,6 @@ namespace HeRoBackEnd.Controllers
 {
     public class BaseController : Controller
     {
-        private readonly IMapper _mapper;
         private readonly ResourceManager _resourceManager;
         private readonly List<CultureInfo> _supportedLanguages;
         protected CultureInfo culture;
