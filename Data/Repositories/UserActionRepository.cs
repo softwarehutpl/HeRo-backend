@@ -3,7 +3,7 @@ using Data.Entities;
 
 namespace Data.Repositories
 {
-    [ScopedRegistrationWithInterface]
+    [ScopedRegistration]
     public class UserActionRepository : BaseRepository<UserAction>
     {
         public UserActionRepository(DataContext context) : base(context)
