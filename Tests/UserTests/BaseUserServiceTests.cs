@@ -10,6 +10,7 @@ namespace Tests.UserTests
         protected UserService sut;
         protected Mock<IUserRepository> UserRepositoryMock = new();
         protected Mock<ILogger<UserService>> LoggerMock = new();
+        protected string errorMessage;
 
         protected BaseUserServiceTests()
         {

@@ -14,6 +14,7 @@ namespace Tests.CandidateTests
 {
     public class BaseCandidateTests
     {
+        protected string errorMessage;
         protected static Mock<ICandidateRepository> candidateRepositoryMock = new Mock<ICandidateRepository>();
         protected static IMapper mapper = new Mapper(new MapperConfiguration(cfg => cfg.AddProfile(new CandidateProfile())));
         protected static Mock<ILogger<RecruitmentService>> loggerMock = new Mock<ILogger<RecruitmentService>>();

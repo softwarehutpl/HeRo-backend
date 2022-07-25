@@ -21,10 +21,10 @@ namespace Tests.SkillTests
             _skillRepo.Setup(e => e.Exists(skillName)).Returns(true);
 
             //act
-            int result=_skillService.AddSkill(skillName);
+            bool result =_skillService.AddSkill(skillName, out errorMessage);
 
             //assert
-            Assert.Equal(result, 0);
+            Assert.False(result);
             _skillRepo.Verify(e => e.Exists(skillName), Times.Once);
             _skillRepo.Verify(e=>e.AddAndSaveChanges(skill), Times.Never());
         }
@@ -39,10 +39,10 @@ namespace Tests.SkillTests
             _skillRepo.Setup(e => e.AddAndSaveChanges(skill)).Returns(skill);
 
             //act
-            int result=_skillService.AddSkill(skillName);
+            bool result =_skillService.AddSkill(skillName, out errorMessage);
 
             //assert
-            Assert.Equal(result, 1);
+            Assert.True(result);
             _skillRepo.Verify(e => e.Exists(skillName), Times.Once);
             _skillRepo.Verify(e => e.AddAndSaveChanges(It.IsAny<Skill>()), Times.Once);
         }

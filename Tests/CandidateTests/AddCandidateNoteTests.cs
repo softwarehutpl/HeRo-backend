@@ -35,8 +35,8 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            int result = candidateService.AddHRNote(id, dto);
-            Assert.NotEqual(1, result);
+            bool result = candidateService.AddHRNote(id, dto, out errorMessage);
+            Assert.False(result);
         }
 
         [Fact]
@@ -60,8 +60,8 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            int result = candidateService.AddHRNote(id, dto);
-            Assert.Equal(1, result);
+            bool result = candidateService.AddHRNote(id, dto, out errorMessage);
+            Assert.True(result);
         }
 
         [Fact]
@@ -87,8 +87,8 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            int result = candidateService.AddTechNote(id, dto);
-            Assert.NotEqual(1, result);
+            bool result = candidateService.AddTechNote(id, dto, out errorMessage);
+            Assert.False(result);
         }
 
         [Fact]
@@ -114,8 +114,8 @@ namespace Tests.CandidateTests
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            int result = candidateService.AddTechNote(id, dto);
-            Assert.Equal(1, result);
+            bool result = candidateService.AddTechNote(id, dto, out errorMessage);
+            Assert.True(result);
         }
     }
 }

@@ -61,10 +61,10 @@ namespace Tests.RecruitmentTests
             _mapper.Setup(e => e.Map<IEnumerable<RecruitmentSkill>>(dto.Skills)).Returns(skills);
 
             //act
-            int result = _recruitmentService.AddRecruitment(dto);
+            bool result = _recruitmentService.AddRecruitment(dto);
 
             //assert
-            Assert.Equal(result, 1);
+            Assert.True(result);
             _recruitmentRepo.Verify(e => e.AddAndSaveChanges(It.IsAny<Recruitment>()), Times.Once);
         }
     }

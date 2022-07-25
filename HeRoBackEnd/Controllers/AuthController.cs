@@ -1,4 +1,5 @@
 ﻿using Common.AttributeRoleVerification;
+using Common.Helpers;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
 using Microsoft.AspNetCore.Authentication;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using System.Security.Claims;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace HeRoBackEnd.Controllers
@@ -14,15 +16,18 @@ namespace HeRoBackEnd.Controllers
     [ApiController]
     public class AuthController : BaseController
     {
+        private string _errorMessage;
         private readonly AuthService _authServices;
         private readonly EmailService _emailService;
         private readonly UserService _userService;
+        private readonly UserActionService _userActionService;
 
-        public AuthController(AuthService authServices, EmailService emailService, UserService userService)
+        public AuthController(AuthService authServices, EmailService emailService, UserService userService, UserActionService userActionService)
         {
             _authServices = authServices;
             _emailService = emailService;
             _userService = userService;
+            _userActionService = userActionService;
         }
 
         /// <summary>
@@ -39,6 +44,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SignIn(SignInViewModel user)
         {
+            LogUserAction($"AuthController.SignIn({JsonSerializer.Serialize(user)})", _userService, _userActionService);
             ClaimsIdentity? claimsIdentity = await _authServices.ValidateAndCreateClaim(user.Password, user.Email);
 
             if (claimsIdentity != null)
@@ -47,7 +53,7 @@ namespace HeRoBackEnd.Controllers
 
                 return Ok(new ResponseViewModel(user.Email));
             }
-            return BadRequest(new ResponseViewModel("Wrong Credentials!"));
+            return BadRequest(new ResponseViewModel(ErrorMessageHelper.WrongCredentials));
         }
 
         /// <summary>
@@ -79,10 +85,11 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)
         {
+            LogUserAction($"AuthController.CreateNewUser({JsonSerializer.Serialize(newUser)})", _userService, _userActionService);
             bool check = _userService.CheckIfUserExist(newUser.Email);
 
             if (check)
-                return BadRequest(new ResponseViewModel("User already exist"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.UserExists));
 
             if (!Regex.IsMatch(newUser.Name, @"^[a-zA-Z]+$") || !Regex.IsMatch(newUser.Surname, @"^[a-zA-Z]+$"))
             {
@@ -94,7 +101,7 @@ namespace HeRoBackEnd.Controllers
             string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid }, protocol: "https");
             _emailService.SendConfirmationEmail(newUser.Email, url);
 
-            return Ok(new ResponseViewModel("User created successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.UserCreated));
         }
 
         /// <summary>
@@ -114,10 +121,10 @@ namespace HeRoBackEnd.Controllers
             if (check)
             {
                 await _userService.ChangeUserPassword(user.Email, user.Password);
-                return Ok(new ResponseViewModel("Account confirmed. Your password has been changed"));
+                return Ok(new ResponseViewModel(MessageHelper.AccountConfirmed));
             }
 
-            return BadRequest(new ResponseViewModel("Confirmation Failed"));
+            return BadRequest(new ResponseViewModel(ErrorMessageHelper.ConfirmationFailed));
         }
 
         /// <summary>
@@ -135,15 +142,16 @@ namespace HeRoBackEnd.Controllers
         {
             bool changedPassword = _userService.CheckIfUserExist(email);
             if (!changedPassword)
-                return BadRequest($"Account:{email} doesn't exist");
-
+            {
+                return BadRequest(ErrorMessageHelper.AccountDoesntExist(email));
+            }
             var recoveryGuid = _userService.SetUserRecoveryGuid(email);
 
             var fullUrl = this.Url.Action("RecoverPassword", "Auth", new { guid = recoveryGuid }, protocol: "https");
 
             _emailService.SendPasswordRecoveryEmail(email, fullUrl);
 
-            return Ok(new ResponseViewModel("Recovery e-mail sent"));
+            return Ok(new ResponseViewModel(MessageHelper.RecoveryEmailSent));
         }
 
         /// <summary>
@@ -159,12 +167,16 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RecoverPassword(UserPasswordRecoveryViewModel user)
         {
+            LogUserAction($"AuthController.RecoverPassword({JsonSerializer.Serialize(user)})", _userService, _userActionService);
             bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.Guid, user.Email);
-            if (!userGuid) return BadRequest("User and Guid don't have same owner");
+            if (!userGuid) 
+            { 
+                return BadRequest(ErrorMessageHelper.UserAndGuidDifferentOwner); 
+            }
 
             await _userService.ChangeUserPassword(user.Email, user.Password);
 
-            return Ok(new ResponseViewModel("Password Changed"));
+            return Ok(new ResponseViewModel(MessageHelper.PasswordChanged));
         }
     }
 }

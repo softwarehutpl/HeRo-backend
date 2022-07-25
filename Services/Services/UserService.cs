@@ -131,12 +131,13 @@ namespace Services.Services
             return values;
         }
 
-        public int Update(UserEditDTO userEdit)
+        public bool Update(UserEditDTO userEdit, out string error)
         {
             User user = _userRepository.GetById(userEdit.Id);
             if (user == null)
             {
-                return 0;
+                error = ErrorMessageHelper.NoUser;
+                return false;
             }
 
             if (!Regex.IsMatch(userEdit.Name, @"^[a-zA-Z]+$") || !Regex.IsMatch(userEdit.Surname, @"^[a-zA-Z]+$"))
@@ -156,18 +157,21 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
+                error = ErrorMessageHelper.ErrorUpdatingUser;
                 _logger.LogError(ex.Message);
+                return false;
             }
-
-            return user.Id;
+            error = "";
+            return true;
         }
 
-        public int Delete(int userId, int loginUserId)
+        public bool Delete(int userId, int loginUserId, out string error)
         {
             User user = _userRepository.GetById(userId);
             if (user == null)
             {
-                return 0;
+                error = ErrorMessageHelper.NoUser;
+                return false;
             }
 
             user.UserStatus = UserStatuses.DELETED.ToString();
@@ -180,11 +184,12 @@ namespace Services.Services
             }
             catch (Exception ex)
             {
+                error = ErrorMessageHelper.ErrorDeletingUser;
                 _logger.LogError("Error updating user while deleting");
-                return -1;
+                return false;
             }
-
-            return user.Id;
+            error = "";
+            return true;
         }
 
         public bool CheckIfUserExist(string email)

@@ -21,10 +21,10 @@ namespace Tests.SkillTests
             _skillRepo.Setup(e => e.GetById(dto.Id)).Returns(skill);
 
             //act
-            int result = _skillService.UpdateSkill(dto);
+            bool result = _skillService.UpdateSkill(dto, out errorMessage);
 
             //assert
-            Assert.Equal(result, -2);
+            Assert.False(result);
             _skillRepo.Verify(e => e.GetById(dto.Id), Times.Once);
             _skillRepo.Verify(e => e.Exists(dto.Id, dto.Name), Times.Never());
             _skillRepo.Verify(e => e.UpdateAndSaveChanges(It.IsAny<Skill>()), Times.Never());
@@ -39,10 +39,10 @@ namespace Tests.SkillTests
             _skillRepo.Setup(e => e.Exists(dto.Id, dto.Name)).Returns(true);
 
             //act
-            int result = _skillService.UpdateSkill(dto);
+            bool result = _skillService.UpdateSkill(dto, out errorMessage);
 
             //assert
-            Assert.Equal(result, 0);
+            Assert.False(result);
             _skillRepo.Verify(e => e.GetById(dto.Id), Times.Once);
             _skillRepo.Verify(e => e.Exists(dto.Id, dto.Name), Times.Once);
             _skillRepo.Verify(e => e.UpdateAndSaveChanges(It.IsAny<Skill>()), Times.Never());
@@ -57,10 +57,10 @@ namespace Tests.SkillTests
             _skillRepo.Setup(e => e.Exists(dto.Id, dto.Name)).Returns(false);
 
             //act
-            int result = _skillService.UpdateSkill(dto);
+            bool result = _skillService.UpdateSkill(dto, out errorMessage);
 
             //assert
-            Assert.Equal(result, 1);
+            Assert.True(result);
             _skillRepo.Verify(e => e.GetById(dto.Id), Times.Once);
             _skillRepo.Verify(e => e.Exists(dto.Id, dto.Name), Times.Once);
             _skillRepo.Verify(e => e.UpdateAndSaveChanges(It.IsAny<Skill>()), Times.Once);

@@ -16,16 +16,16 @@ namespace Services.Services
 
         public void SendConfirmationEmail(string email, string url)
         {
-            string subject = "Registration";
-            string body = $"Registration successfull. Click confirmation link to complete the process. \n {url}";
+            string subject = MessageHelper.RegistrationSubject;
+            string body = MessageHelper.RegistrationBody(url);
             MailMessage mail = _emailHelper.CreateEmail(email, subject, body);
             _emailHelper.SendEmail(mail);
         }
 
         public void SendPasswordRecoveryEmail(string email, string url)
         {
-            string subject = "PasswordRecovery";
-            string body = $"Password recovery link: {url}";
+            string subject = MessageHelper.PasswordRecoverySubject;
+            string body = MessageHelper.PasswordRecoveryBody(url);
 
             MailMessage mail = _emailHelper.CreateEmail(email, subject, body);
             _emailHelper.SendEmail(mail);

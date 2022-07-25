@@ -1,5 +1,6 @@
 using AutoMapper;
 using Common.AttributeRoleVerification;
+using Common.Helpers;
 using Common.Listing;
 using Data.DTOs.Recruitment;
 using HeRoBackEnd.ViewModels;
@@ -8,19 +9,25 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Listing;
 using Services.Services;
+using System.Text.Json;
 
 namespace HeRoBackEnd.Controllers
 {
     [ApiController]
     public class RecruitmentController : BaseController
     {
-        private readonly RecruitmentService service;
-        private readonly IMapper mapper;
+        private readonly RecruitmentService _recruitmentService;
+        private readonly IMapper _mapper;
+        private string _errorMessage;
+        private UserService _userService;
+        private UserActionService _userActionService;
 
-        public RecruitmentController(RecruitmentService service, IMapper map)
+        public RecruitmentController(RecruitmentService service, IMapper map, UserActionService userActionService, UserService userService)
         {
-            this.service = service;
-            mapper = map;
+            this._recruitmentService = service;
+            _mapper = map;
+            _userActionService = userActionService;
+            _userService = userService;
         }
 
         /// <summary>
@@ -37,11 +44,12 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(RecruitmentDetailsDTO), StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
-            RecruitmentDetailsDTO recruitment = service.GetRecruitment(recruitmentId);
+            LogUserAction($"RecruitmentController.Get({recruitmentId})", _userService, _userActionService);
+            RecruitmentDetailsDTO recruitment = _recruitmentService.GetRecruitment(recruitmentId);
 
             if (recruitment == null)
             {
-                return BadRequest(new ResponseViewModel("There is no recruitment with such Id"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NoRecruitment));
             }
 
             return Ok(recruitment);
@@ -77,6 +85,8 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetPublicList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
+            LogUserAction($"RecruitmentController.GetPublicList({JsonSerializer.Serialize(recruitmentListFilterViewModel)})", _userService, _userActionService);
+
             Paging paging = recruitmentListFilterViewModel.Paging;
             SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
             RecruitmentFiltringDTO recruitmentFiltringDTO
@@ -89,9 +99,9 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.ShowOpen,
                     recruitmentListFilterViewModel.ShowClosed);
 
-            RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            RecruitmentListing recruitments = _recruitmentService.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
-            if (recruitments == null) return BadRequest();
+            if (recruitments == null) return BadRequest(ErrorMessageHelper.ErrorListRecruitment);
 
             return Ok(recruitments);
         }
@@ -128,6 +138,8 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
+            LogUserAction($"RecruitmentController.GetList({JsonSerializer.Serialize(recruitmentListFilterViewModel)})", _userService, _userActionService);
+
             Paging paging = recruitmentListFilterViewModel.Paging;
             SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
             RecruitmentFiltringDTO recruitmentFiltringDTO
@@ -140,9 +152,9 @@ namespace HeRoBackEnd.Controllers
                     recruitmentListFilterViewModel.ShowOpen,
                     recruitmentListFilterViewModel.ShowClosed);
 
-            RecruitmentListing recruitments = service.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
+            RecruitmentListing recruitments = _recruitmentService.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
-            if (recruitments == null) return BadRequest("Error getting list of recruitments");
+            if (recruitments == null) return BadRequest(ErrorMessageHelper.ErrorListRecruitment);
 
             return Ok(recruitments);
         }
@@ -161,7 +173,9 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
         {
-            CreateRecruitmentDTO dto = mapper.Map<CreateRecruitmentDTO>(newRecruitment);
+            LogUserAction($"RecruitmentController.Create({JsonSerializer.Serialize(newRecruitment)})", _userService, _userActionService);
+
+            CreateRecruitmentDTO dto = _mapper.Map<CreateRecruitmentDTO>(newRecruitment);
             int id = GetUserId();
 
             dto.CreatedById = id;
@@ -169,14 +183,14 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedById = id;
             dto.LastUpdatedDate = DateTime.Now;
 
-            int result = service.AddRecruitment(dto);
+            bool result = _recruitmentService.AddRecruitment(dto);
 
-            if (result == -1)
+            if (result == false)
             {
-                return BadRequest(new ResponseViewModel("Wrong data!"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.WrongData));
             }
 
-            return Ok(new ResponseViewModel("Recruitment created successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.RecruitmentCreatedSuccessfully));
         }
 
         /// <summary>
@@ -194,25 +208,22 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
         {
-            UpdateRecruitmentDTO dto = mapper.Map<UpdateRecruitmentDTO>(recruitment);
+            LogUserAction($"RecruitmentController.Edit({recruitmentId}, {JsonSerializer.Serialize(recruitment)})", _userService, _userActionService);
+
+            UpdateRecruitmentDTO dto = _mapper.Map<UpdateRecruitmentDTO>(recruitment);
             int id = GetUserId();
 
             dto.LastUpdatedById = id;
             dto.LastUpdatedDate = DateTime.Now;
 
-            int result = service.UpdateRecruitment(recruitmentId, dto);
+            bool result = _recruitmentService.UpdateRecruitment(recruitmentId, dto, out _errorMessage);
 
-            if (result == 0)
+            if (result == false)
             {
-                return BadRequest(new ResponseViewModel("No recruitment with this Id"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
-
-            if (result == -1)
-            {
-                return BadRequest(new ResponseViewModel("Wrong data!"));
-            }
-
-            return Ok(new ResponseViewModel("Recruitment updated successfully"));
+            
+            return Ok(new ResponseViewModel(MessageHelper.RecruitmentEditedSuccessfully));
         }
 
         /// <summary>
@@ -229,6 +240,8 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult End(int recruitmentId)
         {
+            LogUserAction($"RecruitmentController.End({recruitmentId})", _userService, _userActionService);
+
             EndRecruimentDTO dto = new EndRecruimentDTO(recruitmentId);
             int id = GetUserId();
 
@@ -236,19 +249,14 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.EndedById = id;
             dto.EndedDate = DateTime.Now;
-            int result = service.EndRecruitment(dto);
+            bool result = _recruitmentService.EndRecruitment(dto, out _errorMessage);
 
-            if (result == 0)
+            if (result == false)
             {
-                return BadRequest(new ResponseViewModel("No recruitment with this Id"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            if (result == -1)
-            {
-                return BadRequest(new ResponseViewModel("Something went wrong!"));
-            }
-
-            return Ok(new ResponseViewModel("Recruitment ended successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.RecruitmentEndedSuccessfully));
         }
 
         /// <summary>
@@ -265,6 +273,8 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int recruitmentId)
         {
+            LogUserAction($"RecruitmentController.Delete({recruitmentId})", _userService, _userActionService);
+
             DeleteRecruitmentDTO dto = new DeleteRecruitmentDTO(recruitmentId);
             int id = GetUserId();
 
@@ -273,19 +283,14 @@ namespace HeRoBackEnd.Controllers
             dto.DeletedById = id;
             dto.DeletedDate = DateTime.Now;
 
-            int result = service.DeleteRecruitment(dto);
+            bool result = _recruitmentService.DeleteRecruitment(dto, out _errorMessage);
 
-            if (result == 0)
+            if (result == false)
             {
-                return BadRequest(new ResponseViewModel("No recruitment with this Id"));
+                return BadRequest(new ResponseViewModel(_errorMessage));
             }
 
-            if (result == -1)
-            {
-                return BadRequest(new ResponseViewModel("Something went wrong!"));
-            }
-
-            return Ok(new ResponseViewModel("Recruitment deleted successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.RecruitmentDeletedSuccessfully));
         }
     }
 }

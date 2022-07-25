@@ -1,4 +1,5 @@
 ﻿using Common.AttributeRoleVerification;
+using Common.Helpers;
 using Data.DTOs.User;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Listing;
 using Services.Services;
+using System.Text.Json;
 
 namespace HeRoBackEnd.Controllers
 {
@@ -13,10 +15,13 @@ namespace HeRoBackEnd.Controllers
     public class UserController : BaseController
     {
         private UserService _userService;
+        private UserActionService _userActionService;
+        private string _errorMessage;
 
-        public UserController(UserService userService)
+        public UserController(UserService userService, UserActionService userActionService)
         {
             _userService = userService;
+            _userActionService = userActionService;
         }
 
         /// <summary>
@@ -33,11 +38,12 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
         {
+            LogUserAction($"UserController.Get({userId})", _userService, _userActionService);
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
             {
-                return BadRequest(new ResponseViewModel("Not found"));
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NotFound));
             }
 
             return Ok(user);
@@ -67,6 +73,8 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
+            LogUserAction($"UserController.GetList({JsonSerializer.Serialize(userListFilterViewModel)})", _userService, _userActionService);
+
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
             var result = _userService.GetUsers(userListFilterViewModel.Paging, userListFilterViewModel.SortOrder, userFiltringDTO);
@@ -83,6 +91,8 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(IEnumerable<RecruterDTO>), StatusCodes.Status200OK)]
         public IActionResult GetRecruiters(string? fullName)
         {
+
+            LogUserAction($"UserController.GetRecruiters({email})", _userService, _userActionService);
             var result = _userService.GetRecruiters(fullName);
 
             return Ok(result);
@@ -103,6 +113,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Edit(int userId, EditUserViewModel editUser)
         {
+            LogUserAction($"UserController.Edit({userId}, {editUser})", _userService, _userActionService);
             UserEditDTO editUserDTO =
                 new UserEditDTO(
                     userId,
@@ -111,14 +122,14 @@ namespace HeRoBackEnd.Controllers
                     editUser.UserStatus,
                     editUser.RoleName);
 
-            int result = _userService.Update(editUserDTO);
+            bool result = _userService.Update(editUserDTO, out _errorMessage);
 
-            if (result == 0)
+            if (result == false)
             {
-                return NotFound(new ResponseViewModel("No user with this UserId"));
+                return NotFound(new ResponseViewModel(ErrorMessageHelper.NoUser));
             }
 
-            return Ok(new ResponseViewModel("Editing was successful"));
+            return Ok(new ResponseViewModel(MessageHelper.UserEditSuccess));
         }
 
         /// <summary>
@@ -137,20 +148,16 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Delete(int userId)
         {
+            LogUserAction($"UserController.Delete({userId})", _userService, _userActionService);
             int loginUserId = GetUserId();
 
-            int result = _userService.Delete(userId, loginUserId);
+            bool result = _userService.Delete(userId, loginUserId, out _errorMessage);
 
-            if (result == 0)
+            if (result == false)
             {
-                return NotFound(new ResponseViewModel("No user with this user id"));
+                return NotFound(new ResponseViewModel(_errorMessage));
             }
-            if (result == -1)
-            {
-                return BadRequest(new ResponseViewModel("Error while deleting the user"));
-            }
-
-            return Ok(new ResponseViewModel("User deleted successfully"));
+            return Ok(new ResponseViewModel(MessageHelper.UserDeleteSuccess));
         }
     }
 }
