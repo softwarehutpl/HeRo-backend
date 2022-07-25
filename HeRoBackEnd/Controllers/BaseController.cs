@@ -23,8 +23,17 @@ namespace HeRoBackEnd.Controllers
         protected int GetUserId()
         {
             List<Claim> claims = HttpContext.User.Claims.ToList();
-            Claim idClaim = claims.FirstOrDefault(e => e.Type == "Id");
-            int.TryParse(idClaim.Value, out int id);
+            Claim? idClaim = claims.FirstOrDefault(e => e.Type == "Id");
+
+            int id;
+            if (idClaim == null)
+            {
+                id = 0;
+            }
+            else
+            {
+                int.TryParse(idClaim.Value, out id);
+            }
 
             return id;
         }
