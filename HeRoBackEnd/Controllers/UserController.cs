@@ -54,7 +54,7 @@ namespace HeRoBackEnd.Controllers
         ///    <h3>Contains:</h3> "email" <br />
         ///    <h3>Equals:</h3> "userStatus" or "roleName" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "Email", "UserStatus", "RoleName" <br />
+        ///     <h3>Possible keys:</h3> "Id", "Email", "UserStatus", "RoleName" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
