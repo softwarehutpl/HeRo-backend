@@ -16,8 +16,10 @@ namespace Data.DTOs.Candidate
         public int? ExpectedMonthlySalary { get; set; }
         public string? OtherExpectations { get; set; }
         public string CvPath { get; set; }
+        public string InterviewName { get; set; }
         public int? InterviewOpinionScore { get; set; }
         public string? InterviewOpinionText { get; set; }
+        public string HRName { get; set; }
         public int? HROpinionScore { get; set; }
         public string? HROpinionText { get; set; }
     }

@@ -229,7 +229,11 @@ namespace Services.Services
 
             try
             {
-                candidate = _candidateRepository.GetById(id);
+                candidate = _candidateRepository.GetCandidate(id);
+                if (candidate.Tech == null)
+                {
+                    candidate.Tech = new User();
+                }
             }
             catch (Exception ex)
             {
@@ -251,8 +255,10 @@ namespace Services.Services
                         ExpectedMonthlySalary = candidate.ExpectedMonthlySalary,
                         OtherExpectations = candidate.OtherExpectations,
                         CvPath = candidate.CvPath,
+                        InterviewName = candidate.Tech.FullName,
                         InterviewOpinionScore = candidate.InterviewOpinionScore,
                         InterviewOpinionText = candidate.InterviewOpinionText,
+                        HRName = candidate.Recruiter.FullName,
                         HROpinionScore = candidate.HROpinionScore,
                         HROpinionText = candidate.HROpinionText
                     };
