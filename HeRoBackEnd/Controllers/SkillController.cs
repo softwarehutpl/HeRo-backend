@@ -3,7 +3,6 @@ using Common.Helpers;
 using Data.DTOs.Skill;
 using Data.Entities;
 using HeRoBackEnd.ViewModels;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 
@@ -14,13 +13,12 @@ namespace HeRoBackEnd.Controllers
     {
         private readonly SkillService _skillService;
         private string _errorMessage;
-        private UserService _userService;
         private UserActionService _userActionService;
-        public SkillController(SkillService service, UserActionService userActionService, UserService userService)
+
+        public SkillController(SkillService service, UserActionService userActionService)
         {
             _skillService = service;
             _userActionService = userActionService;
-            _userService = userService;
         }
 
         /// <summary>
@@ -35,7 +33,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(string skillName)
         {
-            LogUserAction($"SkillController.Create({skillName})", _userService, _userActionService);
+            LogUserAction($"SkillController.Create({skillName})", _userActionService);
             bool result = _skillService.AddSkill(skillName, out _errorMessage);
 
             if (result == false)
@@ -59,11 +57,11 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Update(int skillId, string newSkillName)
         {
-            LogUserAction($"SkillController.Update({skillId}, {newSkillName})", _userService, _userActionService);
+            LogUserAction($"SkillController.Update({skillId}, {newSkillName})", _userActionService);
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
             bool result = _skillService.UpdateSkill(dto, out _errorMessage);
 
-            if(result==false)
+            if (result == false)
             {
                 return BadRequest(new ResponseViewModel(_errorMessage));
             }
@@ -83,7 +81,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int skillId)
         {
-            LogUserAction($"SkillController.Delete({skillId})", _userService, _userActionService);
+            LogUserAction($"SkillController.Delete({skillId})", _userActionService);
 
             bool result = _skillService.DeleteSkill(skillId, out _errorMessage);
 
@@ -119,7 +117,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetList()
         {
-            LogUserAction($"SkillController.GetList()", _userService, _userActionService);
+            LogUserAction($"SkillController.GetList()", _userActionService);
             IEnumerable<Skill> skills = _skillService.GetSkills();
 
             return Ok(skills);
@@ -162,7 +160,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(IEnumerable<Skill>), StatusCodes.Status200OK)]
         public IActionResult GetListFilteredByName(string name)
         {
-            LogUserAction($"SkillController.GetFiltredByName({name})", _userService, _userActionService);
+            LogUserAction($"SkillController.GetFiltredByName({name})", _userActionService);
             IEnumerable<Skill> skills = _skillService.GetSkillsFilteredByName(name);
 
             return Ok(skills);
@@ -188,7 +186,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int skillId)
         {
-            LogUserAction($"SkillController.Get({skillId})", _userService, _userActionService);
+            LogUserAction($"SkillController.Get({skillId})", _userActionService);
             Skill skill = _skillService.GetSkill(skillId);
 
             if (skill == null)

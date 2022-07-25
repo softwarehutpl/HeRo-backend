@@ -38,7 +38,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
         {
-            LogUserAction($"UserController.Get({userId})", _userService, _userActionService);
+            LogUserAction($"UserController.Get({userId})", _userActionService);
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
@@ -73,7 +73,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
-            LogUserAction($"UserController.GetList({JsonSerializer.Serialize(userListFilterViewModel)})", _userService, _userActionService);
+            LogUserAction($"UserController.GetList({JsonSerializer.Serialize(userListFilterViewModel)})", _userActionService);
 
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
@@ -91,7 +91,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(IEnumerable<RecruterDTO>), StatusCodes.Status200OK)]
         public IActionResult GetRecruiters(string? fullName)
         {
-            LogUserAction($"UserController.GetRecruiters({fullName})", _userService, _userActionService);
+            LogUserAction($"UserController.GetRecruiters({fullName})", _userActionService);
             var result = _userService.GetRecruiters(fullName);
 
             return Ok(result);
@@ -112,7 +112,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Edit(int userId, EditUserViewModel editUser)
         {
-            LogUserAction($"UserController.Edit({userId}, {editUser})", _userService, _userActionService);
+            LogUserAction($"UserController.Edit({userId}, {editUser})", _userActionService);
             UserEditDTO editUserDTO =
                 new UserEditDTO(
                     userId,
@@ -147,7 +147,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Delete(int userId)
         {
-            LogUserAction($"UserController.Delete({userId})", _userService, _userActionService);
+            LogUserAction($"UserController.Delete({userId})", _userActionService);
             int loginUserId = GetUserId();
 
             bool result = _userService.Delete(userId, loginUserId, out _errorMessage);

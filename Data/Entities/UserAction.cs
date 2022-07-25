@@ -13,9 +13,9 @@ namespace Data.Entities
         public int UserId { get; set; } 
 
         [Required]
-        public DateTime Date { get; set; } 
+        public DateTime Date { get; set; }
 
         [Required]
-        public string ControllerAction{ get; set; }
+        public string ControllerAction { get; set; }
     }
 }
