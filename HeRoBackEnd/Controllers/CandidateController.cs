@@ -61,7 +61,7 @@ namespace HeRoBackEnd.Controllers
         ///    <h3>Possible statuses:</h3> "NEW" , "IN_PROCESSING", "DROPPED_OUT", "HIRED" <br />
         ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "Name", "Source", "Status", "Stage" <br />
+        ///     <h3>Possible keys:</h3> "Id", "Name", "Source", "Status", "Stage" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///

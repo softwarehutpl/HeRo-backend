@@ -55,7 +55,7 @@ namespace HeRoBackEnd.Controllers
         ///    <h3>Contains:</h3> "email" <br />
         ///    <h3>Equals:</h3> "userStatus" or "roleName" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "Email", "UserStatus", "RoleName" <br />
+        ///     <h3>Possible keys:</h3> "Id", "Email", "UserStatus", "RoleName" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         ///
@@ -80,10 +80,10 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("User/GetRecruiters")]
         [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
-        [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
-        public IActionResult GetRecruiters(string? email)
+        [ProducesResponseType(typeof(IEnumerable<RecruterDTO>), StatusCodes.Status200OK)]
+        public IActionResult GetRecruiters(string? fullName)
         {
-            var result = _userService.GetRecruiters(email);
+            var result = _userService.GetRecruiters(fullName);
 
             return Ok(result);
         }
@@ -106,6 +106,8 @@ namespace HeRoBackEnd.Controllers
             UserEditDTO editUserDTO =
                 new UserEditDTO(
                     userId,
+                    editUser.Name,
+                    editUser.Surname,
                     editUser.UserStatus,
                     editUser.RoleName);
 

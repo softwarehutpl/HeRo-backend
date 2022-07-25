@@ -65,7 +65,7 @@ namespace HeRoBackEnd.Controllers
         ///    <h3>Contains:</h3> "name", "description" <br />
         ///    <h3>Bool:</h3> "showOpen", "showClosed" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "Name" <br />
+        ///     <h3>Possible keys:</h3> "Id", "Name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         /// </remarks>
@@ -114,7 +114,7 @@ namespace HeRoBackEnd.Controllers
         ///    <h3>Contains:</h3> "name", "description" <br />
         ///    <h3>Bool:</h3> "showOpen", "showClosed" <br /><br />
         /// <h2>Sorting:</h2>
-        ///     <h3>Possible keys:</h3> "Name" <br />
+        ///     <h3>Possible keys:</h3> "Id", "Name" <br />
         ///     <h3>Value:</h3> "DESC" - sort the result in descending order <br />
         ///                      Another value - sort the result in ascending order <br />
         /// </remarks>
