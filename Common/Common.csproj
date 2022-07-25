@@ -32,10 +32,10 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>LangResource.zh-CN.resx</DependentUpon>
     </Compile>
-    <Compile Update="LanguageResources\LangResource.Designer.cs">
+    <Compile Update="LanguageResources\LangResource.de-DE.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>LangResource.resx</DependentUpon>
+      <DependentUpon>LangResource.de-DE.resx</DependentUpon>
     </Compile>
   </ItemGroup>
 
@@ -44,9 +44,9 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>LangResource.zh-CN.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <EmbeddedResource Update="LanguageResources\LangResource.resx">
+    <EmbeddedResource Update="LanguageResources\LangResource.de-DE.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>LangResource.Designer.cs</LastGenOutput>
+      <LastGenOutput>LangResource.de-DE.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 
