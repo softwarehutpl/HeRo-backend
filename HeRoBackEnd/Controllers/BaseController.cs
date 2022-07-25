@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 using System.Globalization;
+using System.Reflection;
 using System.Resources;
 using System.Security.Claims;
 
@@ -16,7 +17,7 @@ namespace HeRoBackEnd.Controllers
         public BaseController()
         {
             culture = new CultureInfo("en-US");
-            _resourceManager = new ResourceManager("Common.LanguageResources.LangResource", typeof(BaseController).Assembly);
+            _resourceManager = new ResourceManager("HeRoBackEnd.LanguageResources.LangResource", Assembly.GetExecutingAssembly());
             _supportedLanguages = new List<CultureInfo>()
             {
                 new CultureInfo("de-DE"),
@@ -27,7 +28,7 @@ namespace HeRoBackEnd.Controllers
             };
         }
 
-        protected void LogUserAction(string controller, UserService userService, UserActionService userActionService)
+        protected void LogUserAction(string controller, UserActionService userActionService)
         {
             int userId = GetUserId();
             UserAction userAction = new()

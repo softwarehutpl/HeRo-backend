@@ -85,7 +85,7 @@ namespace HeRoBackEnd.Controllers
         {
             culture = System.Globalization.CultureInfo.CurrentCulture;
 
-            LogUserAction($"RecruitmentController.GetPublicList({JsonSerializer.Serialize(recruitmentListFilterViewModel)})", _userService, _userActionService);
+            LogUserAction($"RecruitmentController.GetPublicList({JsonSerializer.Serialize(recruitmentListFilterViewModel)})", _userActionService);
 
             Paging paging = recruitmentListFilterViewModel.Paging;
             SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
