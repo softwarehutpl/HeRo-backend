@@ -42,7 +42,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int candidateId)
         {
-            LogUserAction($"CandidateController.Get({candidateId})", _userActionService);
+            LogUserAction("CandidateController", "Get", candidateId.ToString(), _userActionService);
             CandidateProfileDTO? candDTO = _candidateService.GetCandidateProfileById(candidateId, out _errorMessage);
 
             if (candDTO == null)
@@ -77,7 +77,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(CandidateListing), StatusCodes.Status200OK)]
         public IActionResult GetList(CandidateListFilterViewModel candidate)
         {
-            LogUserAction($"CandidateController.GetList({JsonSerializer.Serialize(candidate)})", _userActionService);
+            LogUserAction("CandidateController", "GetList", JsonSerializer.Serialize(candidate), _userActionService);
             CandidateFilteringDTO candidateFilteringDTO
                 = new CandidateFilteringDTO(
                     candidate.Status,
@@ -130,7 +130,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(CandidateCreateViewModel newCandidate)
         {
-            LogUserAction($"CandidateController.Create({JsonSerializer.Serialize(newCandidate)})", _userActionService);
+            LogUserAction("CandidateController", "Create", JsonSerializer.Serialize(newCandidate), _userActionService);
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
 
             dto.Status = CandidateStatuses.NEW.ToString();
@@ -187,7 +187,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int candidateId, CandidateEditViewModel candidate)
         {
-            LogUserAction($"CandidateController.Edit({candidateId}, {JsonSerializer.Serialize(candidate)})", _userActionService);
+            LogUserAction("CandidateController", "Edit", $"{candidateId}, {JsonSerializer.Serialize(candidate)}", _userActionService);
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
@@ -216,7 +216,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int candidateId)
         {
-            LogUserAction($"CandidateController.Delete({candidateId})", _userActionService);
+            LogUserAction("CandidateController", "Delete", candidateId.ToString(), _userActionService);
             DeleteCandidateDTO dto = new DeleteCandidateDTO(candidateId);
 
             int id = GetUserId();
@@ -258,7 +258,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AddHRNote(int candidateId, CandidateAddHRNoteViewModel AddHrNote)
         {
-            LogUserAction($"CandidateController.AddHRNote({candidateId}, {JsonSerializer.Serialize(AddHrNote)})", _userActionService);
+            LogUserAction("CandidateController", "AddHRNote", $"{candidateId}, {JsonSerializer.Serialize(AddHrNote)}", _userActionService);
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
             dto.RecruiterId = GetUserId();
             bool result = _candidateService.AddHRNote(candidateId, dto, out _errorMessage);
@@ -295,7 +295,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AddTechInterviewNote(int candidateId, CandidateAddTechNoteViewModel AddTechNote)
         {
-            LogUserAction($"CandidateController.AddTechInterviewNote({candidateId}, {JsonSerializer.Serialize(AddTechNote)})", _userActionService);
+            LogUserAction("CandidateController", "AddTechInterviewNote", $"{candidateId}, {JsonSerializer.Serialize(AddTechNote)}", _userActionService);
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
             dto.TechId = GetUserId();
             bool result = _candidateService.AddTechNote(candidateId, dto, out _errorMessage);
@@ -332,7 +332,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AssignTechAndRecruiter(int candidateId, CandidateAssigneesViewModel assignees)
         {
-            LogUserAction($"CandidateController.AssignTechAndRecruiter({candidateId}, {JsonSerializer.Serialize(assignees)})", _userActionService);
+            LogUserAction("CandidateController", "AssignTechAndRecruiter", $"{candidateId}, {JsonSerializer.Serialize(assignees)}", _userActionService);
             CandidateAssigneesDTO dto = _mapper.Map<CandidateAssigneesDTO>(assignees);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
@@ -369,7 +369,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult SetInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
         {
-            LogUserAction($"CandidateController.SetInterviewData({candidateId}, {JsonSerializer.Serialize(interviewDateViewModel)})", _userActionService);
+            LogUserAction("CandidateController", "SetInterviewData", $"{candidateId}, {JsonSerializer.Serialize(interviewDateViewModel)}", _userActionService);
             CandidateAllocateInterviewDateDTO dto = _mapper.Map<CandidateAllocateInterviewDateDTO>(interviewDateViewModel);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
@@ -405,7 +405,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult SetTechInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
         {
-            LogUserAction($"CandidateController.SetTechInterviewDate({candidateId}, {JsonSerializer.Serialize(interviewDateViewModel)})", _userActionService);
+            LogUserAction("CandidateController", "SetTechInterviewDate", $"{candidateId}, {JsonSerializer.Serialize(interviewDateViewModel)}", _userActionService);
             CandidateAllocateInterviewDateDTO dto = _mapper.Map<CandidateAllocateInterviewDateDTO>(interviewDateViewModel);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
@@ -430,7 +430,7 @@ namespace HeRoBackEnd.Controllers
         [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         public IActionResult GetStageList()
         {
-            LogUserAction($"CandidateController.GetStageList()", _userActionService);
+            LogUserAction("CandidateController", "GetStageList", "", _userActionService);
             var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>().Select(v => v.ToString());
 
             return new JsonResult(listOfStages);
@@ -446,7 +446,7 @@ namespace HeRoBackEnd.Controllers
         [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
         public IActionResult GetStatusList()
         {
-            LogUserAction($"CandidateController.GetStatusList()", _userActionService);
+            LogUserAction("CandidateController", "GetStatusList()", "", _userActionService);
             var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>().Select(v => v.ToString());
 
             return new JsonResult(listOfStatus);
