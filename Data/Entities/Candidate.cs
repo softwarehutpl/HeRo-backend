@@ -62,10 +62,6 @@ namespace Data.Entities
 
         public int? TechId { get; set; }
 
-        public DateTime? InterviewDate { get; set; }
-
-        public DateTime? TechInterviewDate { get; set; }
-
         [Required]
         public string CvPath { get; set; }
 
