@@ -85,15 +85,23 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Returns 5 recruiters which email contain a string passed as an argument
+        /// Returns 5 recruiters which fullName contain a string passed as an argument
         /// </summary>
         [HttpPost]
         [Route("User/GetRecruiters")]
-        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
         [ProducesResponseType(typeof(IEnumerable<RecruterDTO>), StatusCodes.Status200OK)]
         public IActionResult GetRecruiters(string? fullName)
         {
-            LogUserAction("UserController", "GetRecruiters", fullName, _userActionService);
+            if (fullName == null)
+            {
+                LogUserAction("UserController", "GetRecruiters", "", _userActionService);
+            }
+            else
+            {
+                LogUserAction("UserController", "GetRecruiters", fullName, _userActionService);
+            }
+
             var result = _userService.GetRecruiters(fullName);
 
             return Ok(result);
