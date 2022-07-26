@@ -1,8 +1,4 @@
-﻿using MailKit;
-using MailKit.Net.Smtp;
-using MailKit.Net.Imap;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
+﻿using MailKit.Net.Smtp;
 using Common.ConfigClasses;
 using Common.ServiceRegistrationAttributes;
 using MimeKit;
@@ -14,14 +10,18 @@ namespace Common.Helpers
     [ScopedRegistration]
     public class EmailHelper
     {
-        private EmailConfiguration _config;
+        private readonly EmailConfiguration _config;
 
         public EmailHelper(EmailConfiguration config)
         {
             _config = config;
         }
 
-        public bool CheckIfMailBoxDomainIsValid(string userEmail, out string smtp, out int port)
+        public EmailHelper()
+        {
+        }
+
+        public bool CheckIfMailBoxDomainIsValid(string userEmail, out string smtp, out int port, out int imapPort, out string imap)
         {
             System.Net.Mail.MailAddress address = new(userEmail);
             string host = address.Host;
@@ -37,6 +37,8 @@ namespace Common.Helpers
                 {
                     smtp = "smtp.gmail.com";
                     port = (int)PossibleMailBoxDomains.GMAIL;
+                    imap = "imap.gmail.com";
+                    imapPort = (int)ImapPorts.Gmail;
 
                     return true;
                 }
@@ -46,12 +48,16 @@ namespace Common.Helpers
                 {
                     smtp = "smtp.office365.com";
                     port = (int)PossibleMailBoxDomains.MICROSOFT;
+                    imap = "outlook.office365.com";
+                    imapPort = (int)ImapPorts.Microsoft;
 
                     return true;
                 }
             }
 
             smtp = string.Empty;
+            imap = string.Empty;
+            imapPort = 0;
             port = 0;
 
             return false;
@@ -90,16 +96,16 @@ namespace Common.Helpers
             }
         }
 
-        public void SendCustomEmail(MimeMessage mailMessage, CustomEmailConfig config)
+        public void SendCustomEmail(MimeMessage mailMessage, SmtpServerConfig config)
         {
-            mailMessage.From.Add(new MailboxAddress(config.FullName, config.Email));
+            mailMessage.From.Add(new MailboxAddress(config.FullName, config.MailBoxLogin));
 
             using (SmtpClient smtp = new())
             {
                 try
                 {
-                    smtp.Connect(config.Smtp, config.Port, true);
-                    smtp.Authenticate(config.Email, config.Password);
+                    smtp.Connect(config.Smtp, config.SmptPort, true);
+                    smtp.Authenticate(config.MailBoxLogin, config.MailBoxPassword);
                     smtp.Send(mailMessage);
                 }
                 catch (Exception ex)

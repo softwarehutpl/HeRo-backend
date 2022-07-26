@@ -64,5 +64,14 @@ namespace Common.Helpers
         public const string ErrorDeletingUser = "Error while deleting the user";
         public const string ErrorUpdatingUser = "Error while updating the user";
         public const string ForbiddenSymbol = "Name and Surname must only contain letters";
+
+        //Email
+        public const string EmailFailed = "Email delivery failed";
+
+        public const string FailedToAddMailBox = "Adding mailbox to account failed";
+        public const string FolderIsEmpty = "Folder is empty!";
+        public const string FoldersListIsEmpty = "Folders list is empty!";
+        public const string UserHasMailBox = "User has mail box";
+        public const string MailNotFound = "Mail not found";
     }
 }

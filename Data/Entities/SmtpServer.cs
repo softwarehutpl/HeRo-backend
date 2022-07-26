@@ -16,8 +16,15 @@ namespace Data.Entities
         public string Smtp { get; set; }
 
         [Required]
-        public int Port { get; set; }
+        public int SmptPort { get; set; }
 
+        [Required]
+        public string Imap { get; set; }
+
+        [Required]
+        public int ImapPort { get; set; }
+
+        [Required]
         public string MailBoxLogin { get; set; }
 
         [Required]

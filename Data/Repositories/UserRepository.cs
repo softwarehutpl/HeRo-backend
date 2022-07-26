@@ -68,7 +68,7 @@ namespace Data.Repositories
             _dataContext.SaveChanges();
         }
 
-        public EmailServiceDTO? GetUserEmailServiceCredentials(int id)
+        public EmailServiceDTO? GetUserEmailServiceData(int id)
         {
             EmailServiceDTO? result = DataContext.Users.Where(x => x.Id == id).Include(x => x.SmtpServers).Select(x => new EmailServiceDTO
             {
@@ -84,6 +84,13 @@ namespace Data.Repositories
             SmtpServer smtp = dto.userSmtpData;
             DataContext.SmtpServers.Add(smtp);
             DataContext.SaveChanges();
+        }
+
+        public bool CheckIfUserHasMailBox(int id)
+        {
+            bool result = DataContext.SmtpServers.Any(x => x.UserId == id);
+
+            return result;
         }
     }
 }

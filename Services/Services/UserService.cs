@@ -15,9 +15,9 @@ namespace Services.Services
     [ScopedRegistration]
     public class UserService
     {
-        private EmailHelper _emailHelper;
-        private IUserRepository _userRepository;
-        private ILogger<UserService> _logger;
+        private readonly EmailHelper _emailHelper;
+        private readonly IUserRepository _userRepository;
+        private readonly ILogger<UserService> _logger;
 
         public UserService(ILogger<UserService> logger, IUserRepository userRepository, EmailHelper emailHelper)
         {
@@ -29,6 +29,7 @@ namespace Services.Services
         public Guid SetUserRecoveryGuid(string email)
         {
             var user = _userRepository.GetUserByEmail(email);
+
             user.PasswordRecoveryGuid = Guid.NewGuid();
 
             try
@@ -56,18 +57,31 @@ namespace Services.Services
             return userDTO;
         }
 
-        public EmailServiceDTO? GetUserEmailServicePassword(int id)
+        public EmailServiceDTO? GetUserEmailServiceData(int id)
         {
-            EmailServiceDTO? emailServiceDTO = _userRepository.GetUserEmailServiceCredentials(id);
+            EmailServiceDTO? emailServiceDTO = _userRepository.GetUserEmailServiceData(id);
 
             return emailServiceDTO;
         }
 
         public void SetUserMailBox(int id, string userEmail, string mailBoxPassword, out string errorMessage)
         {
+            bool userHasMailBox = _userRepository.CheckIfUserHasMailBox(id);
+
+            if (userHasMailBox)
+            {
+                errorMessage = ErrorMessageHelper.UserHasMailBox;
+
+                return;
+            }
+
             string encodedPassword = PasswordHashHelper.EncodePasswordToBase64(mailBoxPassword);
 
-            bool check = _emailHelper.CheckIfMailBoxDomainIsValid(userEmail, out string smtp, out int port);
+            bool check = _emailHelper.CheckIfMailBoxDomainIsValid(userEmail,
+                                                                  out string smtp,
+                                                                  out int port,
+                                                                  out int imapPort,
+                                                                  out string imap);
 
             if (check)
             {
@@ -77,9 +91,11 @@ namespace Services.Services
                     {
                         UserId = id,
                         Smtp = smtp,
-                        Port = port,
+                        SmptPort = port,
                         MailBoxLogin = userEmail,
                         MailBoxPassword = encodedPassword,
+                        ImapPort = imapPort,
+                        Imap = imap
                     }
                 };
 
@@ -88,7 +104,7 @@ namespace Services.Services
             }
             else
             {
-                errorMessage = ErrorMessageHelper.ConfirmationFailed;
+                errorMessage = ErrorMessageHelper.FailedToAddMailBox;
             }
         }
 
