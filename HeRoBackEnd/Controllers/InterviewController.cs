@@ -42,7 +42,9 @@ namespace HeRoBackEnd.Controllers
 
             if (interview == null)
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NoInterview));
+                string message = Translate(ErrorMessageHelper.NoInterview);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             return new JsonResult(interview);
@@ -115,12 +117,18 @@ namespace HeRoBackEnd.Controllers
             int userCreatedId = GetUserId();
 
             bool result = _interviewService.Create(interviewCreate, userCreatedId);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.ErrorCreatingInterview));
+                message = Translate(ErrorMessageHelper.ErrorCreatingInterview);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewCreatedSuccessfully));
+            message = Translate(MessageHelper.InterviewCreatedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -146,13 +154,18 @@ namespace HeRoBackEnd.Controllers
 
             int userEditId = GetUserId();
             bool result = _interviewService.Update(interviewEdit, userEditId, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewEditedSuccessfully));
+            message = Translate(MessageHelper.InterviewEditedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -172,13 +185,18 @@ namespace HeRoBackEnd.Controllers
             int loginUserId = GetUserId();
 
             bool result = _interviewService.Delete(interviewId, loginUserId, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewDeletedSuccessfully));
+            message = Translate(MessageHelper.InterviewDeletedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
     }
 }

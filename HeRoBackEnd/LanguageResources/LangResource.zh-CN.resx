@@ -120,6 +120,9 @@
   <data name="Account confirmed. Your password has been changed" xml:space="preserve">
     <value>账户确认。您的密码已被更改</value>
   </data>
+  <data name="Account doesn't exist" xml:space="preserve">
+    <value>帳號不存在</value>
+  </data>
   <data name="Candidate created successfully" xml:space="preserve">
     <value>候选人创建成功</value>
   </data>

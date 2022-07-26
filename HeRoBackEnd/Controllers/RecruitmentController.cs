@@ -47,7 +47,9 @@ namespace HeRoBackEnd.Controllers
 
             if (recruitment == null)
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NoRecruitment));
+                string message = Translate(ErrorMessageHelper.NoRecruitment);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             return Ok(recruitment);
@@ -83,8 +85,6 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetPublicList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
-            culture = System.Globalization.CultureInfo.CurrentCulture;
-
             LogUserAction($"RecruitmentController.GetPublicList({JsonSerializer.Serialize(recruitmentListFilterViewModel)})", _userActionService);
 
             Paging paging = recruitmentListFilterViewModel.Paging;
@@ -159,7 +159,12 @@ namespace HeRoBackEnd.Controllers
 
             RecruitmentListing recruitments = _recruitmentService.GetRecruitments(paging, sortOrder, recruitmentFiltringDTO);
 
-            if (recruitments == null) return BadRequest(ErrorMessageHelper.ErrorListRecruitment);
+            if (recruitments == null)
+            {
+                string message = Translate(ErrorMessageHelper.ErrorListRecruitment);
+
+                return BadRequest(new ResponseViewModel(message));
+            }
 
             return Ok(recruitments);
         }
@@ -189,13 +194,18 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
 
             bool result = _recruitmentService.AddRecruitment(dto);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.WrongData));
+                message = Translate(ErrorMessageHelper.WrongData);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.RecruitmentCreatedSuccessfully));
+            message = Translate(MessageHelper.RecruitmentCreatedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -222,13 +232,18 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
 
             bool result = _recruitmentService.UpdateRecruitment(recruitmentId, dto, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.RecruitmentEditedSuccessfully));
+            message = Translate(MessageHelper.RecruitmentEditedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -255,13 +270,18 @@ namespace HeRoBackEnd.Controllers
             dto.EndedById = id;
             dto.EndedDate = DateTime.Now;
             bool result = _recruitmentService.EndRecruitment(dto, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.RecruitmentEndedSuccessfully));
+            message = Translate(MessageHelper.RecruitmentEndedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -289,13 +309,18 @@ namespace HeRoBackEnd.Controllers
             dto.DeletedDate = DateTime.Now;
 
             bool result = _recruitmentService.DeleteRecruitment(dto, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message=Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.RecruitmentDeletedSuccessfully));
+            message = Translate(MessageHelper.RecruitmentDeletedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
     }
 }

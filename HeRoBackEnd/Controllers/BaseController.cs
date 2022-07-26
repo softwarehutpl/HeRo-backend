@@ -12,11 +12,9 @@ namespace HeRoBackEnd.Controllers
     {
         private readonly ResourceManager _resourceManager;
         private readonly List<CultureInfo> _supportedLanguages;
-        protected CultureInfo culture;
 
         public BaseController()
         {
-            culture = new CultureInfo("en-US");
             _resourceManager = new ResourceManager("HeRoBackEnd.LanguageResources.LangResource", Assembly.GetExecutingAssembly());
             _supportedLanguages = new List<CultureInfo>()
             {
@@ -60,7 +58,9 @@ namespace HeRoBackEnd.Controllers
         }
         protected string Translate(string message)
         {
-            if(_supportedLanguages.Contains(culture)==false)
+            CultureInfo culture = CultureInfo.CurrentCulture;
+
+            if (_supportedLanguages.Contains(culture)==false)
             {
                 return message;
             }

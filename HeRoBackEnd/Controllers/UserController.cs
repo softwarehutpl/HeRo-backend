@@ -43,7 +43,9 @@ namespace HeRoBackEnd.Controllers
 
             if (user == null)
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NotFound));
+                string message = Translate(ErrorMessageHelper.NotFound);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             return Ok(user);
@@ -122,13 +124,18 @@ namespace HeRoBackEnd.Controllers
                     editUser.RoleName);
 
             bool result = _userService.Update(editUserDTO, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return NotFound(new ResponseViewModel(ErrorMessageHelper.NoUser));
+                message = Translate(ErrorMessageHelper.NoUser);
+
+                return NotFound(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.UserEditSuccess));
+            message = Translate(MessageHelper.UserEditSuccess);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -151,12 +158,18 @@ namespace HeRoBackEnd.Controllers
             int loginUserId = GetUserId();
 
             bool result = _userService.Delete(userId, loginUserId, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return NotFound(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return NotFound(new ResponseViewModel(message));
             }
-            return Ok(new ResponseViewModel(MessageHelper.UserDeleteSuccess));
+
+            message = Translate(MessageHelper.UserDeleteSuccess);
+
+            return Ok(new ResponseViewModel(message));
         }
     }
 }

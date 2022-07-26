@@ -120,6 +120,9 @@
   <data name="Account confirmed. Your password has been changed" xml:space="preserve">
     <value>Konto potwierdzone. Twoje hasło zostało zmienione</value>
   </data>
+  <data name="Account doesn't exist" xml:space="preserve">
+    <value>Konto nie istnieje</value>
+  </data>
   <data name="Candidate created successfully" xml:space="preserve">
     <value>Kandydat został pomyślnie utworzony</value>
   </data>

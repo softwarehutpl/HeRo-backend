@@ -14,11 +14,7 @@ namespace Common.Helpers
         public const string ConfirmationFailed = "Confirmation failed";
         public const string UserAndGuidDifferentOwner = "User and Guid don't have the same owner";
         public const string WrongCredentials = "Wrong credentials!";
-
-        public static string AccountDoesntExist(string email)
-        {
-            return $"Account:{email} doesn't exist";
-        }
+        public const string AccountDoesntExist = "Account doesn't exist";
 
         //Candidate
         public const string InvalidCandidateParameters = "Error creating candidate (one or more invalid parameters)";

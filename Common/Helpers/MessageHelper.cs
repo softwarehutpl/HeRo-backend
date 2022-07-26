@@ -16,12 +16,12 @@ namespace Common.Helpers
 
         //Email
         public const string RegistrationSubject = "Registration";
+        public const string PasswordRecoverySubject = "Password Recovery";
+
         public static string RegistrationBody(string url)
         {
             return $"Registration successful. Click confirmation link to complete the process. \n {url}";
         }
-
-        public const string PasswordRecoverySubject = "Password Recovery";
         public static string PasswordRecoveryBody(string url)
         {
             return $"Password recovery link: {url}";
