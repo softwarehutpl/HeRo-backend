@@ -219,8 +219,14 @@
   <data name="Interview note added successfully" xml:space="preserve">
     <value>Interviewnotiz erfolgreich hinzugefügt</value>
   </data>
+  <data name="Language changed successfully" xml:space="preserve">
+    <value>Sprache erfolgreich geändert</value>
+  </data>
   <data name="No Interview with this Id" xml:space="preserve">
     <value>No Interview with this Id</value>
+  </data>
+  <data name="No language specified" xml:space="preserve">
+    <value>Keine Sprache angegeben</value>
   </data>
   <data name="No user with given Id found" xml:space="preserve">
     <value>Kein Benutzer mit der angegebenen ID gefunden</value>

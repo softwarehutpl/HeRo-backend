@@ -56,5 +56,8 @@ namespace Common.Helpers
         //User
         public static string UserEditSuccess = "Editing was successful";
         public static string UserDeleteSuccess = "User deleted successfully";
+
+        //Language
+        public const string LanguageChangeSuccess = "Language changed successfully";
     }
 }

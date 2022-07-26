@@ -11,20 +11,12 @@ namespace HeRoBackEnd.Controllers
     public class BaseController : Controller
     {
         private readonly ResourceManager _resourceManager;
-        private readonly List<CultureInfo> _supportedLanguages;
         protected CultureInfo culture;
 
         public BaseController()
         {
+            culture = new CultureInfo("en-GB");
             _resourceManager = new ResourceManager("HeRoBackEnd.LanguageResources.LangResource", Assembly.GetExecutingAssembly());
-            _supportedLanguages = new List<CultureInfo>()
-            {
-                new CultureInfo("de-DE"),
-                new CultureInfo("es-ES"),
-                new CultureInfo("fr-FR"),
-                new CultureInfo("pl-PL"),
-                new CultureInfo("zh-CN")
-            };
         }
 
         protected void LogUserAction(string controller, string controllerAction, string actionParameters, UserActionService userActionService)
@@ -61,8 +53,7 @@ namespace HeRoBackEnd.Controllers
         }
         protected string Translate(string message)
         {
-
-            if (_supportedLanguages.Contains(culture)==false)
+            if(culture.Equals(new CultureInfo("en-GB")))
             {
                 return message;
             }

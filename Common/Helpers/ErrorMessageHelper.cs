@@ -60,5 +60,8 @@ namespace Common.Helpers
         public const string ErrorDeletingUser = "Error while deleting the user";
         public const string ErrorUpdatingUser = "Error while updating the user";
         public const string ForbiddenSymbol = "Name and Surname must only contain letters";
+
+        //Language
+        public const string NoLanguage = "No language specified";
     }
 }

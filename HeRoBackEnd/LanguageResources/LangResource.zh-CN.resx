@@ -219,8 +219,14 @@
   <data name="Interview note added successfully" xml:space="preserve">
     <value>面试笔记添加成功</value>
   </data>
+  <data name="Language changed successfully" xml:space="preserve">
+    <value>語言更改成功</value>
+  </data>
   <data name="No Interview with this Id" xml:space="preserve">
     <value>没有采访这个ID</value>
+  </data>
+  <data name="No language specified" xml:space="preserve">
+    <value>未指定語言</value>
   </data>
   <data name="No user with given Id found" xml:space="preserve">
     <value>未找到具有给定 ID 的用户</value>

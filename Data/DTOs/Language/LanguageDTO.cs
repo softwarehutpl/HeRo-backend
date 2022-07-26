@@ -12,9 +12,9 @@ namespace Data.DTOs.Language
         public LanguageDTO(string name, string language)
         {
             Name = name;
-            Language = new CultureInfo(language);
+            Language = language;
         }
         public string Name { get; set; }
-        public CultureInfo Language { get; set; }
+        public string Language { get; set; }
     }
 }
