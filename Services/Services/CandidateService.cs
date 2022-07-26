@@ -234,6 +234,10 @@ namespace Services.Services
                 {
                     candidate.Tech = new User();
                 }
+                if (candidate.Recruiter == null)
+                {
+                    candidate.Recruiter = new User();
+                }
             }
             catch (Exception ex)
             {
@@ -355,69 +359,6 @@ namespace Services.Services
             else
             {
                 _logger.LogError("Cannot get candidate with given Id: " + id);
-                ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
-                return false;
-            }
-        }
-
-        public bool AllocateRecruitmentInterview(int candidateId, CandidateAllocateInterviewDateDTO dto, out string ErrorMessage)
-        {
-            Candidate? candidate = _candidateRepository.GetById(candidateId);
-
-            if (candidate != null)
-            {
-                candidate.LastUpdatedDate = DateTime.Now;
-                candidate.LastUpdatedById = dto.LastUpdatedBy;
-                candidate.InterviewDate = dto.Date;
-
-                try
-                {
-                    _candidateRepository.UpdateAndSaveChanges(candidate);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Error updating candidate when assigning interview date" + ex);
-                    ErrorMessage = ErrorMessageHelper.ErrorAssigningInterviewDate;
-                    return false;
-                }
-
-                ErrorMessage = "";
-                return true;
-            }
-            else
-            {
-                _logger.LogError("Cannot get candidate with given Id");
-                ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
-                return false;
-            }
-        }
-
-        public bool AllocateTechInterview(int candidateId, CandidateAllocateInterviewDateDTO dto, out string ErrorMessage)
-        {
-            Candidate? candidate = _candidateRepository.GetById(candidateId);
-
-            if (candidate != null)
-            {
-                candidate.LastUpdatedDate = DateTime.Now;
-                candidate.LastUpdatedById = dto.LastUpdatedBy;
-                candidate.TechInterviewDate = dto.Date;
-
-                try
-                {
-                    _candidateRepository.UpdateAndSaveChanges(candidate);
-                }
-                catch (Exception ex)
-                {
-                    _logger.LogError("Error updating candidate when assigning tech interview date" + ex);
-                    ErrorMessage = ErrorMessageHelper.ErrorAssigningTechInterviewDate;
-                    return false;
-                }
-                ErrorMessage = "";
-                return true;
-            }
-            else
-            {
-                _logger.LogError("Cannot get candidate with given Id");
                 ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
                 return false;
             }
