@@ -86,16 +86,21 @@ namespace Services.Services
         public IEnumerable<ReportRequestedSkillDTO> GetRequestedSkills()
         {
             IQueryable<Recruitment> recruitments = _recruitmentRepository.GetAll();
-            IQueryable<int>? idsOfActiveRecruitments = recruitments.Where(r => !r.DeletedDate.HasValue).Select(r => r.Id);
+            IQueryable<int>? idsOfActiveRecruitments = recruitments
+                .Where(r => r.EndingDate > DateTime.UtcNow)
+                .Where(r => !r.EndedDate.HasValue)
+                .Where(r => !r.DeletedDate.HasValue)
+                .Select(r => r.Id);
 
             IQueryable<RecruitmentSkill> recruitmentSkills = _recruitmentSkillRepository.GetAll();
 
             recruitmentSkills = recruitmentSkills.Where(s => idsOfActiveRecruitments.Contains(s.RecruitmentId));
 
             var requestedSkill = recruitmentSkills
+                .GroupBy(s => s.SkillId)
                 .Select(s => new ReportRequestedSkillDTO
                 {
-                    SkillId = s.SkillId
+                    SkillId = s.Key
                 });
 
             return requestedSkill;
