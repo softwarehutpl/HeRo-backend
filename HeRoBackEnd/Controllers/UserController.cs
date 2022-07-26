@@ -87,7 +87,7 @@ namespace HeRoBackEnd.Controllers
         /// </summary>
         [HttpPost]
         [Route("User/GetRecruiters")]
-        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
         [ProducesResponseType(typeof(IEnumerable<RecruterDTO>), StatusCodes.Status200OK)]
         public IActionResult GetRecruiters(string? fullName)
         {
