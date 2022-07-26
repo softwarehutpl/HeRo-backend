@@ -12,6 +12,7 @@ namespace HeRoBackEnd.Controllers
     {
         private readonly ResourceManager _resourceManager;
         private readonly List<CultureInfo> _supportedLanguages;
+        protected CultureInfo culture;
 
         public BaseController()
         {
@@ -60,7 +61,6 @@ namespace HeRoBackEnd.Controllers
         }
         protected string Translate(string message)
         {
-            CultureInfo culture = CultureInfo.CurrentCulture;
 
             if (_supportedLanguages.Contains(culture)==false)
             {
