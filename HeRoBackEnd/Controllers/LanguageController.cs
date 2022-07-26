@@ -72,7 +72,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>IActionResult</returns>
         [HttpPost]
         [Route("Language/ChooseLanguage")]
-        public IActionResult ChooseLanuage(string? language)
+        public IActionResult ChooseLanguage(string? language)
         {
             string message;
 
@@ -83,7 +83,8 @@ namespace HeRoBackEnd.Controllers
                 return BadRequest(new ResponseViewModel(message));
             }
 
-            culture = new CultureInfo(language);
+            HttpContext.Session.SetString("Language", language);
+
             message = Translate(MessageHelper.LanguageChangeSuccess);
 
             return Ok(new ResponseViewModel(message));

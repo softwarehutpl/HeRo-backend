@@ -53,10 +53,13 @@ namespace HeRoBackEnd.Controllers
         }
         protected string Translate(string message)
         {
-            if(culture.Equals(new CultureInfo("en-GB")))
+            if(HttpContext.Session.GetString("Language")==null || HttpContext.Session.GetString("Language")=="en-GB")
             {
                 return message;
             }
+
+            string language = HttpContext.Session.GetString("Language");
+            CultureInfo culture = new CultureInfo(language);
 
             string result = _resourceManager.GetString(message, culture);
 

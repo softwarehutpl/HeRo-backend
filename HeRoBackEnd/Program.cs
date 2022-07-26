@@ -33,6 +33,15 @@ try
     // Add services to the container.
     builder.Services.AddControllersWithViews();
 
+    builder.Services.AddDistributedMemoryCache();
+
+    builder.Services.AddSession(options =>
+    {
+        options.IdleTimeout = TimeSpan.FromSeconds(10);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
+
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
     builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
@@ -132,6 +141,8 @@ try
     app.UseHangfireDashboard();
     app.UseHangfireServer();
     app.UseRouting();
+
+    app.UseSession();
 
     app.UseCors("corspolicy");
 
