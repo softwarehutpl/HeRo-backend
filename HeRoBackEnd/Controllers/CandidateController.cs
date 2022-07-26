@@ -47,7 +47,9 @@ namespace HeRoBackEnd.Controllers
 
             if (candDTO == null)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                string message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             return new JsonResult(candDTO);
@@ -136,13 +138,19 @@ namespace HeRoBackEnd.Controllers
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
             bool result = _candidateService.CreateCandidate(dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
             else
             {
-                return Ok(new ResponseViewModel(MessageHelper.CandidateCreatedSuccessfully));
+                message = Translate(MessageHelper.CandidateCreatedSuccessfully);
+
+                return Ok(new ResponseViewModel(message));
             }
         }
 
@@ -193,12 +201,18 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedBy = GetUserId();
 
             bool result = _candidateService.UpdateCandidate(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.CandidateUpdatedSuccessfully));
+            message = Translate(MessageHelper.CandidateUpdatedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -226,11 +240,18 @@ namespace HeRoBackEnd.Controllers
             dto.DeletedDate = DateTime.Now;
 
             bool result = _candidateService.DeleteCandidate(dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message=Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
-            return Ok(new ResponseViewModel(MessageHelper.CandidateDeletedSuccessfully));
+
+            message = Translate(MessageHelper.CandidateDeletedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -262,12 +283,18 @@ namespace HeRoBackEnd.Controllers
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
             dto.RecruiterId = GetUserId();
             bool result = _candidateService.AddHRNote(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewNoteAdded));
+            message = Translate(MessageHelper.InterviewNoteAdded);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -299,11 +326,18 @@ namespace HeRoBackEnd.Controllers
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
             dto.TechId = GetUserId();
             bool result = _candidateService.AddTechNote(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message= Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
-            return Ok(new ResponseViewModel(MessageHelper.TechInterviewNoteAdded));
+
+            message = Translate(MessageHelper.TechInterviewNoteAdded);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -338,12 +372,18 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedBy = GetUserId();
 
             bool result = _candidateService.AllocateRecruiterAndTech(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.EmployeesAssigned));
+            message = Translate(MessageHelper.EmployeesAssigned);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -375,12 +415,18 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedBy = GetUserId();
 
             bool result = _candidateService.AllocateRecruitmentInterview(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message=Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewDateSet));
+            message = Translate(MessageHelper.InterviewDateSet);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -411,12 +457,18 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedBy = GetUserId();
 
             bool result = _candidateService.AllocateTechInterview(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.TechInterviewDateSet));
+            message = Translate(MessageHelper.TechInterviewDateSet);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
