@@ -83,7 +83,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Returns 5 recruiters which email contain a string passed as an argument
+        /// Returns 5 recruiters which fullName contain a string passed as an argument
         /// </summary>
         [HttpPost]
         [Route("User/GetRecruiters")]
