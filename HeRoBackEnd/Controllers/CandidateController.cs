@@ -47,7 +47,9 @@ namespace HeRoBackEnd.Controllers
 
             if (candDTO == null)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                string message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             return new JsonResult(candDTO);
@@ -136,13 +138,19 @@ namespace HeRoBackEnd.Controllers
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
             bool result = _candidateService.CreateCandidate(dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
             else
             {
-                return Ok(new ResponseViewModel(MessageHelper.CandidateCreatedSuccessfully));
+                message = Translate(MessageHelper.CandidateCreatedSuccessfully);
+
+                return Ok(new ResponseViewModel(message));
             }
         }
 
@@ -193,12 +201,18 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedBy = GetUserId();
 
             bool result = _candidateService.UpdateCandidate(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.CandidateUpdatedSuccessfully));
+            message = Translate(MessageHelper.CandidateUpdatedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -226,11 +240,18 @@ namespace HeRoBackEnd.Controllers
             dto.DeletedDate = DateTime.Now;
 
             bool result = _candidateService.DeleteCandidate(dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message=Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
-            return Ok(new ResponseViewModel(MessageHelper.CandidateDeletedSuccessfully));
+
+            message = Translate(MessageHelper.CandidateDeletedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -262,12 +283,18 @@ namespace HeRoBackEnd.Controllers
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
             dto.RecruiterId = GetUserId();
             bool result = _candidateService.AddHRNote(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewNoteAdded));
+            message = Translate(MessageHelper.InterviewNoteAdded);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -299,11 +326,18 @@ namespace HeRoBackEnd.Controllers
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
             dto.TechId = GetUserId();
             bool result = _candidateService.AddTechNote(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message= Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
-            return Ok(new ResponseViewModel(MessageHelper.TechInterviewNoteAdded));
+
+            message = Translate(MessageHelper.TechInterviewNoteAdded);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -338,92 +372,21 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedBy = GetUserId();
 
             bool result = _candidateService.AllocateRecruiterAndTech(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.EmployeesAssigned));
+            message = Translate(MessageHelper.EmployeesAssigned);
+
+            return Ok(new ResponseViewModel(message));
         }
 
-        /// <summary>
-        /// Assigns dates of interviews for the candidate.
-        /// </summary>
-        /// <param name="candidateId">Id of the candidate</param>
-        /// <param name="interviewDateViewModel">Object of CandidateAllocateInterviewDateViewModel class used to set candidate interview date to given date</param>
-        /// <returns>IActionResult</returns>
-        ///  <remarks>
-        /// Example request (set candidate interview date to date):
-        ///
-        ///     {
-        ///        "date": "2022-09-23T12:35:00.217Z"
-        ///     }
-        /// </remarks>
-        /// <response code="200">string "Interview date set correctly"</response>
-        /// <response code="400">string "User with given ID doesn't exist"<br />
-        /// string "Error setting interview date"</response>
-        [HttpPost]
-        [Route("Candidate/SetInterviewDate/{candidateId}")]
-        [RequireUserRole("RECRUITER")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult SetInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
-        {
-            LogUserAction("CandidateController", "SetInterviewData", $"{candidateId}, {JsonSerializer.Serialize(interviewDateViewModel)}", _userActionService);
-            CandidateAllocateInterviewDateDTO dto = _mapper.Map<CandidateAllocateInterviewDateDTO>(interviewDateViewModel);
-            dto.LastUpdatedDate = DateTime.Now;
-            dto.LastUpdatedBy = GetUserId();
-
-            bool result = _candidateService.AllocateRecruitmentInterview(candidateId, dto, out _errorMessage);
-            if (result == false)
-            {
-                return BadRequest(new ResponseViewModel(_errorMessage));
-            }
-
-            return Ok(new ResponseViewModel(MessageHelper.InterviewDateSet));
-        }
-
-        /// <summary>
-        /// Assigns dates of tech interviews for the candidate.
-        /// </summary>
-        /// <param name="candidateId">Id of the candidate</param>
-        /// <param name="interviewDateViewModel">Object of CandidateAllocateInterviewDateViewModel class used to set candidate tech interview date to given date</param>
-        /// <returns>IActionResult</returns>
-        ///  <remarks>
-        /// Example request (set candidate tech interview date to date):
-        ///
-        ///     {
-        ///        "date": "2022-09-23T12:35:00.217Z"
-        ///     }
-        /// </remarks>
-        /// <response code="200">string "Tech interview date set correctly"</response>
-        /// <response code="400">string "Error setting tech interview date"</response>
-        [HttpPost]
-        [Route("Candidate/SetTechInterviewDate/{candidateId}")]
-        [RequireUserRole("RECRUITER")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult SetTechInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
-        {
-            LogUserAction("CandidateController", "SetTechInterviewDate", $"{candidateId}, {JsonSerializer.Serialize(interviewDateViewModel)}", _userActionService);
-            CandidateAllocateInterviewDateDTO dto = _mapper.Map<CandidateAllocateInterviewDateDTO>(interviewDateViewModel);
-            dto.LastUpdatedDate = DateTime.Now;
-            dto.LastUpdatedBy = GetUserId();
-
-            bool result = _candidateService.AllocateTechInterview(candidateId, dto, out _errorMessage);
-            if (result == false)
-            {
-                return BadRequest(new ResponseViewModel(_errorMessage));
-            }
-
-            return Ok(new ResponseViewModel(MessageHelper.TechInterviewDateSet));
-        }
-
-        /// <summary>
-        /// Shows list of existing stages of recruitment.
-        /// </summary>
-        /// <returns>JSON list of existing stages of recruitment</returns>
-
+       
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [Route("Candidate/GetStageList")]

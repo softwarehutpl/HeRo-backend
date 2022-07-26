@@ -1,12 +1,24 @@
 ﻿using Data.Entities;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
+using System.Globalization;
+using System.Reflection;
+using System.Resources;
 using System.Security.Claims;
 
 namespace HeRoBackEnd.Controllers
 {
     public class BaseController : Controller
     {
+        private readonly ResourceManager _resourceManager;
+        protected CultureInfo culture;
+
+        public BaseController()
+        {
+            culture = new CultureInfo("en-GB");
+            _resourceManager = new ResourceManager("HeRoBackEnd.LanguageResources.LangResource", Assembly.GetExecutingAssembly());
+        }
+
         protected void LogUserAction(string controller, string controllerAction, string actionParameters, UserActionService userActionService)
         {
             int userId = GetUserId();
@@ -38,6 +50,20 @@ namespace HeRoBackEnd.Controllers
             }
             
             return id;
+        }
+        protected string Translate(string message)
+        {
+            if(HttpContext.Session.GetString("Language")==null || HttpContext.Session.GetString("Language")=="en-GB")
+            {
+                return message;
+            }
+
+            string language = HttpContext.Session.GetString("Language");
+            CultureInfo culture = new CultureInfo(language);
+
+            string result = _resourceManager.GetString(message, culture);
+
+            return result;
         }
     }
 }

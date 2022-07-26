@@ -35,13 +35,18 @@ namespace HeRoBackEnd.Controllers
         {
             LogUserAction("SkillController", "Create", skillName, _userActionService);
             bool result = _skillService.AddSkill(skillName, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.SkillAdded));
+            message = Translate(MessageHelper.SkillAdded);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -60,13 +65,18 @@ namespace HeRoBackEnd.Controllers
             LogUserAction("SkillController", "Update", $"{skillId}, {newSkillName}", _userActionService);
             UpdateSkillDTO dto = new UpdateSkillDTO(skillId, newSkillName);
             bool result = _skillService.UpdateSkill(dto, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message=Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.SkillUpdated));
+            message = Translate(MessageHelper.SkillUpdated);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -84,13 +94,18 @@ namespace HeRoBackEnd.Controllers
             LogUserAction("SkillController", "Delete", skillId.ToString(), _userActionService);
 
             bool result = _skillService.DeleteSkill(skillId, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.SkillDeleted));
+            message = Translate(MessageHelper.SkillDeleted);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -191,7 +206,9 @@ namespace HeRoBackEnd.Controllers
 
             if (skill == null)
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NoSkill));
+                string message = Translate(ErrorMessageHelper.NoSkill);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             return Ok(skill);
