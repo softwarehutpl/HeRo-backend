@@ -24,26 +24,56 @@ namespace Services.Services
             _recruitmentSkillRepository = recruitmentSkillRepository;
         }
 
-        public int CountNewCandidates(ReportCountDTO reportDTO)
+        public List<ReportDailyNewCandidatesDTO> CountNewCandidates(ReportCountDTO reportDTO)
         {
             IQueryable<Candidate> candidates = _candidateRepository.GetAll();
 
-            candidates = candidates.Where(c => c.RecruitmentId == reportDTO.Id);
-            candidates = candidates.Where(c => c.ApplicationDate >= reportDTO.FromDate);
-            candidates = candidates.Where(c => c.ApplicationDate <= reportDTO.ToDate);
+            DateTime currentDayTemp = new DateTime(reportDTO.FromDate.Year, reportDTO.FromDate.Month, reportDTO.FromDate.Day);
+            List<ReportDailyNewCandidatesDTO> reportDailies = new List<ReportDailyNewCandidatesDTO>();
 
-            int totalCount = candidates.Count();
+            if (reportDTO.Ids != null && reportDTO.Ids.Count > 0)
+            {
+                while (currentDayTemp <= reportDTO.ToDate)
+                {
+                    List<RaportRecruitmentDTO> raportRecruitments = new List<RaportRecruitmentDTO>();
 
-            return totalCount;
+                    foreach (var id in reportDTO.Ids)
+                    {
+                        IQueryable<Candidate> tempCandidates = candidates;
+
+                        tempCandidates = tempCandidates.Where(c => c.RecruitmentId == id);
+                        tempCandidates = tempCandidates.Where(c => c.ApplicationDate >= currentDayTemp);
+                        tempCandidates = tempCandidates.Where(c => c.ApplicationDate <= currentDayTemp.AddDays(1));
+
+                        RaportRecruitmentDTO raportRecruitment = new RaportRecruitmentDTO
+                        {
+                            RecruitmentId = id,
+                            RecruitmentName = _recruitmentRepository.GetById(id).Name,
+                            NumberOfCandidate = tempCandidates.Count()
+                        };
+                        raportRecruitments.Add(raportRecruitment);
+                    }
+
+                    reportDailies.Add(new ReportDailyNewCandidatesDTO
+                    {
+                        Date = currentDayTemp,
+                        raportPopularRecruitmentDTOs = raportRecruitments
+                    });
+
+                    currentDayTemp = currentDayTemp.AddDays(1);
+                }
+            }
+
+            return reportDailies;
         }
 
-        public IEnumerable<RaportPopularRecruitmentDTO> GetPopularRecruitments()
+        public IEnumerable<RaportRecruitmentDTO> GetPopularRecruitments()
         {
             IQueryable<Recruitment> recruitments = _recruitmentRepository.GetAll();
 
-            recruitments = recruitments.OrderByDescending(r => r.Candidates.Count);
+            recruitments = recruitments.Where(r => r.Candidates.Count > 0).OrderByDescending(r => r.Candidates.Count);
 
-            var popularRecruitments = recruitments.Select(r => new RaportPopularRecruitmentDTO
+            var popularRecruitments = recruitments.Select(r => new RaportRecruitmentDTO
             {
                 RecruitmentId = r.Id,
                 RecruitmentName = r.Name,

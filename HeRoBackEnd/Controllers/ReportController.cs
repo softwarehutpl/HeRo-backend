@@ -34,13 +34,13 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Report/CountNewCandidates")]
         [RequireUserRole("RECRUITER", "TECHNICIAN")]
-        [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ReportDailyNewCandidatesDTO), StatusCodes.Status200OK)]
         public IActionResult CountNewCandidates(ReportCountViewModel reportViewModel)
         {
             LogUserAction("ReportController", "CountNewCandidates", JsonSerializer.Serialize(reportViewModel), _userActionService);
             ReportCountDTO reportDTO = new ReportCountDTO
             {
-                Id = reportViewModel.Id,
+                Ids = reportViewModel.Ids,
                 FromDate = reportViewModel.FromDate,
                 ToDate = reportViewModel.ToDate
             };
@@ -57,7 +57,7 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [Route("Report/GetPopularRecruitments")]
         [RequireUserRole("RECRUITER", "TECHNICIAN")]
-        [ProducesResponseType(typeof(IEnumerable<RaportPopularRecruitmentDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<RaportRecruitmentDTO>), StatusCodes.Status200OK)]
         public IActionResult GetPopularRecruitments()
         {
             LogUserAction("ReportController", "GetPopularRecruitments", "", _userActionService);
