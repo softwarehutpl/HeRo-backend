@@ -7,13 +7,15 @@ namespace HeRoBackEnd.Controllers
 {
     public class BaseController : Controller
     {
-        protected void LogUserAction(string controller, UserActionService userActionService)
+        protected void LogUserAction(string controller, string controllerAction, string actionParameters, UserActionService userActionService)
         {
             int userId = GetUserId();
             UserAction userAction = new()
             {
                 UserId = userId,
-                ControllerAction = controller,
+                Controller = controller,
+                ControllerAction = controllerAction,
+                ActionParameters = actionParameters,
                 Date = DateTime.Now
             };
 

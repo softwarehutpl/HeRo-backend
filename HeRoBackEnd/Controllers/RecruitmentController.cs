@@ -42,7 +42,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(RecruitmentDetailsDTO), StatusCodes.Status200OK)]
         public IActionResult Get(int recruitmentId)
         {
-            LogUserAction($"RecruitmentController.Get({recruitmentId})", _userActionService);
+            LogUserAction("RecruitmentController", "Get", recruitmentId.ToString(), _userActionService);
             RecruitmentDetailsDTO recruitment = _recruitmentService.GetRecruitment(recruitmentId);
 
             if (recruitment == null)
@@ -83,7 +83,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetPublicList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
-            LogUserAction($"RecruitmentController.GetPublicList({JsonSerializer.Serialize(recruitmentListFilterViewModel)})", _userActionService);
+            LogUserAction("RecruitmentController", "GetPublicList", JsonSerializer.Serialize(recruitmentListFilterViewModel), _userActionService);
 
             Paging paging = recruitmentListFilterViewModel.Paging;
             SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
@@ -136,7 +136,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult GetList(RecruitmentListFilterViewModel recruitmentListFilterViewModel)
         {
-            LogUserAction($"RecruitmentController.GetList({JsonSerializer.Serialize(recruitmentListFilterViewModel)})", _userActionService);
+            LogUserAction("RecruitmentController", "GetList", JsonSerializer.Serialize(recruitmentListFilterViewModel), _userActionService);
 
             Paging paging = recruitmentListFilterViewModel.Paging;
             SortOrder sortOrder = recruitmentListFilterViewModel.SortOrder;
@@ -171,7 +171,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Create(RecruitmentCreateViewModel newRecruitment)
         {
-            LogUserAction($"RecruitmentController.Create({JsonSerializer.Serialize(newRecruitment)})", _userActionService);
+            LogUserAction("RecruitmentController", "Create", JsonSerializer.Serialize(newRecruitment), _userActionService);
 
             CreateRecruitmentDTO dto = _mapper.Map<CreateRecruitmentDTO>(newRecruitment);
             int id = GetUserId();
@@ -206,7 +206,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int recruitmentId, RecruitmentEditViewModel recruitment)
         {
-            LogUserAction($"RecruitmentController.Edit({recruitmentId}, {JsonSerializer.Serialize(recruitment)})", _userActionService);
+            LogUserAction("RecruitmentController", "Edit", $"{recruitmentId}, {JsonSerializer.Serialize(recruitment)}", _userActionService);
 
             UpdateRecruitmentDTO dto = _mapper.Map<UpdateRecruitmentDTO>(recruitment);
             int id = GetUserId();
@@ -238,7 +238,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult End(int recruitmentId)
         {
-            LogUserAction($"RecruitmentController.End({recruitmentId})", _userActionService);
+            LogUserAction("RecruitmentController", "End", recruitmentId.ToString(), _userActionService);
 
             EndRecruimentDTO dto = new EndRecruimentDTO(recruitmentId);
             int id = GetUserId();
@@ -271,7 +271,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int recruitmentId)
         {
-            LogUserAction($"RecruitmentController.Delete({recruitmentId})", _userActionService);
+            LogUserAction("RecruitmentController", "Delete", recruitmentId.ToString(), _userActionService);
 
             DeleteRecruitmentDTO dto = new DeleteRecruitmentDTO(recruitmentId);
             int id = GetUserId();

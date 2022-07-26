@@ -43,7 +43,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SignIn(SignInViewModel user)
         {
-            LogUserAction($"AuthController.SignIn({JsonSerializer.Serialize(user.Email)})", _userActionService);
+            LogUserAction("AuthController", "SignIn", JsonSerializer.Serialize(user.Email), _userActionService);
             ClaimsIdentity? claimsIdentity = await _authServices.ValidateAndCreateClaim(user.Password, user.Email);
 
             if (claimsIdentity != null)
@@ -84,7 +84,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)
         {
-            LogUserAction($"AuthController.CreateNewUser({JsonSerializer.Serialize(newUser)})", _userActionService);
+            LogUserAction("AuthController", "CreateNewUser", JsonSerializer.Serialize(newUser), _userActionService);
             bool check = _userService.CheckIfUserExist(newUser.Email);
 
             if (check)
@@ -166,7 +166,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RecoverPassword(UserPasswordRecoveryViewModel user)
         {
-            LogUserAction($"AuthController.RecoverPassword({JsonSerializer.Serialize(user)})", _userActionService);
+            LogUserAction("AuthController", "RecoverPassword", JsonSerializer.Serialize(user.Email), _userActionService);
             bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.Guid, user.Email);
             if (!userGuid)
             {

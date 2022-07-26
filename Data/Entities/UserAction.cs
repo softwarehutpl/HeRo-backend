@@ -16,6 +16,12 @@ namespace Data.Entities
         public DateTime Date { get; set; }
 
         [Required]
+        public string Controller { get; set; }
+
+        [Required]
         public string ControllerAction { get; set; }
+
+        [Required]
+        public string ActionParameters { get; set; }
     }
 }
