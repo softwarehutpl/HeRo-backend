@@ -12,13 +12,16 @@ namespace Services.Services
         private ILogger<ReportService> _logger;
         private ICandidateRepository _candidateRepository;
         private IRecruitmentRepository _recruitmentRepository;
+        private IRecruitmentSkillRepository _recruitmentSkillRepository;
 
         public ReportService(ILogger<ReportService> logger, ICandidateRepository candidateRepository,
-            IRecruitmentRepository recruitmentRepository)
+            IRecruitmentRepository recruitmentRepository,
+            IRecruitmentSkillRepository recruitmentSkillRepository)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
             _recruitmentRepository = recruitmentRepository;
+            _recruitmentSkillRepository = recruitmentSkillRepository;
         }
 
         public int CountNewCandidates(ReportCountDTO reportDTO)
@@ -48,6 +51,24 @@ namespace Services.Services
             }).Take(10);
 
             return popularRecruitments;
+        }
+
+        public IEnumerable<ReportRequestedSkillDTO> GetRequestedSkills()
+        {
+            IQueryable<Recruitment> recruitments = _recruitmentRepository.GetAll();
+            IQueryable<int>? idsOfActiveRecruitments = recruitments.Where(r => !r.DeletedDate.HasValue).Select(r => r.Id);
+
+            IQueryable<RecruitmentSkill> recruitmentSkills = _recruitmentSkillRepository.GetAll();
+
+            recruitmentSkills = recruitmentSkills.Where(s => idsOfActiveRecruitments.Contains(s.RecruitmentId));
+
+            var requestedSkill = recruitmentSkills
+                .Select(s => new ReportRequestedSkillDTO
+                {
+                    SkillId = s.SkillId
+                });
+
+            return requestedSkill;
         }
     }
 }

@@ -51,7 +51,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Returns 10 most popular recruitments
+        /// Returns the 10 most popular recruitments
         /// </summary>
         /// <response code="200">List of most popular recruitments</response>
         [HttpGet]
@@ -63,6 +63,23 @@ namespace HeRoBackEnd.Controllers
             LogUserAction("ReportController", "GetPopularRecruitments", "", _userActionService);
 
             var result = _reportService.GetPopularRecruitments();
+
+            return new JsonResult(result);
+        }
+
+        /// <summary>
+        /// Returns the 5 most requested skills
+        /// </summary>
+        /// <response code="200">List of most requested skills</response>
+        [HttpGet]
+        [Route("Report/GetRequestedSkills")]
+        [RequireUserRole("RECRUITER", "TECHNICIAN")]
+        [ProducesResponseType(typeof(IEnumerable<ReportRequestedSkillDTO>), StatusCodes.Status200OK)]
+        public IActionResult GetRequestedSkills()
+        {
+            LogUserAction("ReportController", "GetPopularRecruitments", "", _userActionService);
+
+            var result = _reportService.GetRequestedSkills();
 
             return new JsonResult(result);
         }
