@@ -116,6 +116,8 @@ namespace Services.Services
                 candidate.ExpectedMonthlySalary = dto.ExpectedMonthlySalary;
                 candidate.OtherExpectations = dto.OtherExpectations;
                 candidate.CvPath = dto.CvPath;
+                candidate.LastUpdatedById = dto.LastUpdatedBy;
+                candidate.LastUpdatedDate = dto.LastUpdatedDate;
             }
 
             try
