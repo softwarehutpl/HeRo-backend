@@ -54,6 +54,21 @@ namespace HeRoBackEnd.Controllers
 
             return new JsonResult(candDTO);
         }
+        [HttpGet]
+        [Route("Candidate/GetCV/{candidateId}")]
+        public IActionResult GetCV(int candidateId)
+        {
+            MemoryStream CVstream = _candidateService.GetCandidateCV(candidateId);
+
+            if (CVstream == null)
+            {
+                return BadRequest(new ResponseViewModel("Error getting candidate (bad parameters or candidate doesn't exist)"));
+            }
+
+            OkObjectResult result = new OkObjectResult(CVstream);
+
+            return result;
+        }
 
         /// <summary>
         /// Returns a Json result object representing a list of candidates
@@ -135,6 +150,14 @@ namespace HeRoBackEnd.Controllers
             LogUserAction("CandidateController", "Create", JsonSerializer.Serialize(newCandidate), _userActionService);
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
 
+            using (Stream stream = newCandidate.CV.OpenReadStream())
+            {
+                byte[] content = new byte[stream.Length];
+                stream.Read(content, 0, content.Length);
+                dto.CV = content;
+
+                stream.Close();
+            }
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
             bool result = _candidateService.CreateCandidate(dto, out _errorMessage);
@@ -199,6 +222,15 @@ namespace HeRoBackEnd.Controllers
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
+
+            using (Stream stream = candidate.CV.OpenReadStream())
+            {
+                byte[] content = new byte[stream.Length];
+                stream.Read(content, 0, content.Length);
+                dto.CV = content;
+
+                stream.Close();
+            }
 
             bool result = _candidateService.UpdateCandidate(candidateId, dto, out _errorMessage);
             string message;

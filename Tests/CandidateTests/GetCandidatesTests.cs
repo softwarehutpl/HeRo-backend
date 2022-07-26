@@ -56,7 +56,7 @@ namespace Tests.CandidateTests
                 RecruiterId = 1,
                 Status = "NEW",
                 Stage = "EVALUATION",
-                CvPath = "CvPath",
+                //CvPath = "CvPath",
                 Recruiter = new User()
                 {
                     Id = 1,
@@ -95,7 +95,7 @@ namespace Tests.CandidateTests
                 RecruiterId = 2,
                 Status = "NEW",
                 Stage = "EVALUATION",
-                CvPath = "CvPath",
+                //CvPath = "CvPath",
                 Recruiter = new User()
                 {
                     Id = 4,

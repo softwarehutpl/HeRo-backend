@@ -63,7 +63,7 @@ namespace Data.Entities
         public int? TechId { get; set; }
 
         [Required]
-        public string CvPath { get; set; }
+        public byte[] CV { get; set; }
 
         public int? LastUpdatedById { get; set; }
 

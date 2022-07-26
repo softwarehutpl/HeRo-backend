@@ -115,7 +115,7 @@ namespace Services.Services
                 candidate.AvailableFrom = dto.AvailableFrom;
                 candidate.ExpectedMonthlySalary = dto.ExpectedMonthlySalary;
                 candidate.OtherExpectations = dto.OtherExpectations;
-                candidate.CvPath = dto.CvPath;
+                candidate.CV = dto.CV;
             }
 
             try
@@ -258,7 +258,6 @@ namespace Services.Services
                         AvailableFrom = candidate.AvailableFrom,
                         ExpectedMonthlySalary = candidate.ExpectedMonthlySalary,
                         OtherExpectations = candidate.OtherExpectations,
-                        CvPath = candidate.CvPath,
                         InterviewName = candidate.Tech.FullName,
                         InterviewOpinionScore = candidate.InterviewOpinionScore,
                         InterviewOpinionText = candidate.InterviewOpinionText,
@@ -275,6 +274,23 @@ namespace Services.Services
             }
             ErrorMessage = "";
             return candidateProfileDTO;
+        }
+        public MemoryStream GetCandidateCV(int candidateId)
+        {
+            byte[] result;
+            try
+            {
+                result = _candidateRepository.GetById(candidateId).CV;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError("Error getting candidate with given ID: " + ex);
+                return null;
+            }
+
+            var dataStream = new MemoryStream(result);
+
+            return dataStream;
         }
 
         public CandidateListing GetCandidates(Paging paging, SortOrder? sortOrder, CandidateFilteringDTO candidateFilteringDTO)

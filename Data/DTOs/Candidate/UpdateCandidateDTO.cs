@@ -19,6 +19,6 @@ namespace Data.DTOs.Candidate
         public int LastUpdatedBy { get; set; }
         public int? ExpectedMonthlySalary { get; set; }
         public string? OtherExpectations { get; set; }
-        public string CvPath { get; set; }
+        public byte[] CV { get; set; }
     }
 }
