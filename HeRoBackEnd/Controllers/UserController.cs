@@ -91,7 +91,15 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(IEnumerable<RecruterDTO>), StatusCodes.Status200OK)]
         public IActionResult GetRecruiters(string? fullName)
         {
-            LogUserAction("UserController", "GetRecruiters", fullName, _userActionService);
+            if (fullName == null)
+            {
+                LogUserAction("UserController", "GetRecruiters", "", _userActionService);
+            }
+            else
+            {
+                LogUserAction("UserController", "GetRecruiters", fullName, _userActionService);
+            }
+
             var result = _userService.GetRecruiters(fullName);
 
             return Ok(result);
