@@ -65,6 +65,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         public async Task<IActionResult> LogOut()
         {
+            LogUserAction("AuthController", "LogOut", "", _userActionService);
             await HttpContext.SignOutAsync("Cookies");
 
             return Ok();
