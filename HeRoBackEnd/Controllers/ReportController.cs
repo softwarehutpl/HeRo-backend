@@ -51,9 +51,9 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Returns 10 most popular Recruitments
+        /// Returns 10 most popular recruitments
         /// </summary>
-        /// <response code="200">Number of new candidates</response>
+        /// <response code="200">List of most popular recruitments</response>
         [HttpGet]
         [Route("Report/GetPopularRecruitments")]
         [RequireUserRole("RECRUITER", "TECHNICIAN")]
