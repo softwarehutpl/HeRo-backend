@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NLog.Web;
 using AutoMapper;
 using Services.Services;
+using Hangfire;
 
 var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 logger.Debug("Initializing web application");
@@ -51,6 +52,14 @@ try
         };
         options.Cookie.HttpOnly = false;
     });
+
+    //Hangfire
+    builder.Services.AddHangfire(x => x
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(connectionString)
+        );
+    builder.Services.AddHangfireServer();
+
 
     builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
     {
@@ -120,7 +129,8 @@ try
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();
-
+    app.UseHangfireDashboard();
+    app.UseHangfireServer();
     app.UseRouting();
 
     app.UseCors("corspolicy");
