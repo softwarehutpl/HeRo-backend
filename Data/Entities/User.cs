@@ -1,6 +1,7 @@
 ﻿using Data.IRepositories;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Security;
 
 namespace Data.Entities
 {
@@ -61,5 +62,7 @@ namespace Data.Entities
 
         [ForeignKey("DeletedById")]
         public virtual User? DeletedBy { get; set; }
+
+        public ICollection<SmtpServer> SmtpServers { get; set; }
     }
 }

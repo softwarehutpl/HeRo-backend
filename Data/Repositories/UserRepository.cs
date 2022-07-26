@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using Common.ServiceRegistrationAttributes;
+﻿using Common.ServiceRegistrationAttributes;
+using Data.DTOs.User;
 using Data.Entities;
 using Data.IRepositories;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {
@@ -66,6 +66,24 @@ namespace Data.Repositories
 
             _dataContext.Users.Update(user);
             _dataContext.SaveChanges();
+        }
+
+        public EmailServiceDTO? GetUserEmailServiceCredentials(int id)
+        {
+            EmailServiceDTO? result = DataContext.Users.Where(x => x.Id == id).Include(x => x.SmtpServers).Select(x => new EmailServiceDTO
+            {
+                FullName = x.FullName,
+                userSmtpData = x.SmtpServers.Where(x => x.UserId == id).FirstOrDefault()
+            }).FirstOrDefault();
+
+            return result;
+        }
+
+        public void SetUserMailBoxData(EmailServiceDTO dto)
+        {
+            SmtpServer smtp = dto.userSmtpData;
+            DataContext.SmtpServers.Add(smtp);
+            DataContext.SaveChanges();
         }
     }
 }

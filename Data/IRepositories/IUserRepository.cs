@@ -1,4 +1,5 @@
 ﻿using Common.ServiceRegistrationAttributes;
+using Data.DTOs.User;
 using Data.Entities;
 
 namespace Data.IRepositories
@@ -21,5 +22,9 @@ namespace Data.IRepositories
         string? GetUserPassword(string email);
 
         string GetUserRoleByEmail(string email);
+
+        EmailServiceDTO GetUserEmailServiceCredentials(int id);
+
+        public void SetUserMailBoxData(EmailServiceDTO dto);
     }
 }

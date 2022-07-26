@@ -10,9 +10,9 @@ namespace Common.ConfigClasses
     {
         public string CompanyEmail { get; set; }
         public string CompanyEmailPassword { get; set; }
-        public string Smpt { get; set; }
-        public int Port { get; set; }
-        public string Subject { get; set; }
-        public string Body { get; set; }
+        public string SmptGmail { get; set; }
+        public int SmptPortGmail { get; set; }
+        public string SmptPortOutlook { get; set; }
+        public string SmptOutlook { get; set; }
     }
 }

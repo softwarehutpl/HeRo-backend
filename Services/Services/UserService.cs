@@ -15,13 +15,15 @@ namespace Services.Services
     [ScopedRegistration]
     public class UserService
     {
+        private EmailHelper _emailHelper;
         private IUserRepository _userRepository;
         private ILogger<UserService> _logger;
 
-        public UserService(ILogger<UserService> logger, IUserRepository userRepository)
+        public UserService(ILogger<UserService> logger, IUserRepository userRepository, EmailHelper emailHelper)
         {
             _userRepository = userRepository;
             _logger = logger;
+            _emailHelper = emailHelper;
         }
 
         public Guid SetUserRecoveryGuid(string email)
@@ -52,6 +54,42 @@ namespace Services.Services
             UserDTO userDTO = new UserDTO(user.Id, user.FullName, user.Email, user.UserStatus, user.RoleName);
 
             return userDTO;
+        }
+
+        public EmailServiceDTO? GetUserEmailServicePassword(int id)
+        {
+            EmailServiceDTO? emailServiceDTO = _userRepository.GetUserEmailServiceCredentials(id);
+
+            return emailServiceDTO;
+        }
+
+        public void SetUserMailBox(int id, string userEmail, string mailBoxPassword, out string errorMessage)
+        {
+            string encodedPassword = PasswordHashHelper.EncodePasswordToBase64(mailBoxPassword);
+
+            bool check = _emailHelper.CheckIfMailBoxDomainIsValid(userEmail, out string smtp, out int port);
+
+            if (check)
+            {
+                EmailServiceDTO dto = new()
+                {
+                    userSmtpData = new()
+                    {
+                        UserId = id,
+                        Smtp = smtp,
+                        Port = port,
+                        MailBoxLogin = userEmail,
+                        MailBoxPassword = encodedPassword,
+                    }
+                };
+
+                errorMessage = String.Empty;
+                _userRepository.SetUserMailBoxData(dto);
+            }
+            else
+            {
+                errorMessage = ErrorMessageHelper.ConfirmationFailed;
+            }
         }
 
         public UserListing GetUsers(Paging paging, SortOrder? sortOrder, UserFiltringDTO userFiltringDTO)
@@ -133,7 +171,8 @@ namespace Services.Services
 
         public bool Update(UserEditDTO userEdit, out string error)
         {
-            User user = _userRepository.GetById(userEdit.Id);
+            User? user = _userRepository.GetById(userEdit.Id);
+
             if (user == null)
             {
                 error = ErrorMessageHelper.NoUser;

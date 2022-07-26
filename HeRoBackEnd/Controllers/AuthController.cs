@@ -84,7 +84,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)
         {
-            LogUserAction($"AuthController.CreateNewUser({JsonSerializer.Serialize(newUser)})", _userActionService);
+            LogUserAction($"AuthController.CreateNewUser({JsonSerializer.Serialize(newUser.Email)})", _userActionService);
             bool check = _userService.CheckIfUserExist(newUser.Email);
 
             if (check)
