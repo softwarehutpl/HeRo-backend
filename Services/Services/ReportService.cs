@@ -11,14 +11,17 @@ namespace Services.Services
     {
         private ILogger<ReportService> _logger;
         private ICandidateRepository _candidateRepository;
+        private IRecruitmentRepository _recruitmentRepository;
 
-        public ReportService(ILogger<ReportService> logger, ICandidateRepository candidateRepository)
+        public ReportService(ILogger<ReportService> logger, ICandidateRepository candidateRepository,
+            IRecruitmentRepository recruitmentRepository)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
+            _recruitmentRepository = recruitmentRepository;
         }
 
-        public int CountNewCandidates(ReportDTO reportDTO)
+        public int CountNewCandidates(ReportCountDTO reportDTO)
         {
             IQueryable<Candidate> candidates = _candidateRepository.GetAll();
 
@@ -29,6 +32,22 @@ namespace Services.Services
             int totalCount = candidates.Count();
 
             return totalCount;
+        }
+
+        public IEnumerable<RaportPopularRecruitmentDTO> GetPopularRecruitments()
+        {
+            IQueryable<Recruitment> recruitments = _recruitmentRepository.GetAll();
+
+            recruitments = recruitments.OrderByDescending(r => r.Candidates.Count);
+
+            var popularRecruitments = recruitments.Select(r => new RaportPopularRecruitmentDTO
+            {
+                RecruitmentId = r.Id,
+                RecruitmentName = r.Name,
+                NumberOfCandidate = r.Candidates.Count
+            }).Take(10);
+
+            return popularRecruitments;
         }
     }
 }

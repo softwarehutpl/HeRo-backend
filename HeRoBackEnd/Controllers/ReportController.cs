@@ -20,7 +20,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Gets number of new candidates
+        /// Returns the number of new candidates
         /// </summary>
         /// <remarks>
         /// <h2>Format:</h2>
@@ -35,10 +35,10 @@ namespace HeRoBackEnd.Controllers
         [Route("Report/CountNewCandidates")]
         [RequireUserRole("RECRUITER", "TECHNICIAN")]
         [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
-        public IActionResult CountNewCandidates(ReportViewModel reportViewModel)
+        public IActionResult CountNewCandidates(ReportCountViewModel reportViewModel)
         {
             LogUserAction("ReportController", "CountNewCandidates", JsonSerializer.Serialize(reportViewModel), _userActionService);
-            ReportDTO reportDTO = new ReportDTO
+            ReportCountDTO reportDTO = new ReportCountDTO
             {
                 Id = reportViewModel.Id,
                 FromDate = reportViewModel.FromDate,
@@ -46,6 +46,23 @@ namespace HeRoBackEnd.Controllers
             };
 
             var result = _reportService.CountNewCandidates(reportDTO);
+
+            return new JsonResult(result);
+        }
+
+        /// <summary>
+        /// Returns 10 most popular Recruitments
+        /// </summary>
+        /// <response code="200">Number of new candidates</response>
+        [HttpGet]
+        [Route("Report/GetPopularRecruitments")]
+        [RequireUserRole("RECRUITER", "TECHNICIAN")]
+        [ProducesResponseType(typeof(IEnumerable<RaportPopularRecruitmentDTO>), StatusCodes.Status200OK)]
+        public IActionResult GetPopularRecruitments()
+        {
+            LogUserAction("ReportController", "GetPopularRecruitments", "", _userActionService);
+
+            var result = _reportService.GetPopularRecruitments();
 
             return new JsonResult(result);
         }

@@ -1,6 +1,6 @@
 ﻿namespace Data.DTOs.Report
 {
-    public class ReportDTO
+    public class ReportCountDTO
     {
         public int Id { get; set; }
         public DateTime FromDate { get; set; }

@@ -2,7 +2,7 @@
 
 namespace HeRoBackEnd.ViewModels.Report
 {
-    public class ReportViewModel
+    public class ReportCountViewModel
     {
         public int Id { get; set; }
         public DateTime FromDate { get; set; }
