@@ -13,15 +13,17 @@ namespace Services.Services
         private ICandidateRepository _candidateRepository;
         private IRecruitmentRepository _recruitmentRepository;
         private IRecruitmentSkillRepository _recruitmentSkillRepository;
+        private ISkillRepository _skillRepository;
 
         public ReportService(ILogger<ReportService> logger, ICandidateRepository candidateRepository,
             IRecruitmentRepository recruitmentRepository,
-            IRecruitmentSkillRepository recruitmentSkillRepository)
+            IRecruitmentSkillRepository recruitmentSkillRepository, ISkillRepository skillRepository)
         {
             _logger = logger;
             _candidateRepository = candidateRepository;
             _recruitmentRepository = recruitmentRepository;
             _recruitmentSkillRepository = recruitmentSkillRepository;
+            _skillRepository = skillRepository;
         }
 
         public List<ReportDailyNewCandidatesDTO> CountNewCandidates(ReportCountDTO reportDTO)
@@ -86,22 +88,26 @@ namespace Services.Services
         public IEnumerable<ReportRequestedSkillDTO> GetRequestedSkills()
         {
             IQueryable<Recruitment> recruitments = _recruitmentRepository.GetAll();
-            IQueryable<int>? idsOfActiveRecruitments = recruitments
-                .Where(r => r.EndingDate > DateTime.UtcNow)
-                .Where(r => !r.EndedDate.HasValue)
-                .Where(r => !r.DeletedDate.HasValue)
-                .Select(r => r.Id);
 
+            recruitments = recruitments.Where(r => r.EndingDate > DateTime.UtcNow)
+                .Where(r => !r.EndedDate.HasValue)
+                .Where(r => !r.DeletedDate.HasValue);
+
+            IQueryable<int>? idsOfActiveRecruitments = recruitments.Select(r => r.Id);
             IQueryable<RecruitmentSkill> recruitmentSkills = _recruitmentSkillRepository.GetAll();
+            IQueryable<Skill> skills = _skillRepository.GetAll();
 
             recruitmentSkills = recruitmentSkills.Where(s => idsOfActiveRecruitments.Contains(s.RecruitmentId));
 
             var requestedSkill = recruitmentSkills
-                .GroupBy(s => s.SkillId)
-                .Select(s => new ReportRequestedSkillDTO
+                .GroupBy(rs => rs.SkillId)
+                .OrderByDescending(rs => rs.Count())
+                .Select(rs => new ReportRequestedSkillDTO
                 {
-                    SkillId = s.Key
-                });
+                    SkillId = rs.Key,
+                    SkillName = skills.Where(s => s.Id == rs.Key).Select(s => s.Name).FirstOrDefault(),
+                    Quantity = rs.Count(),
+                }).Take(5);
 
             return requestedSkill;
         }
