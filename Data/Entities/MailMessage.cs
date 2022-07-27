@@ -1,13 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+using Data.IRepositories;
 
-namespace Data.DTOs.Email
+namespace Data.Entities
 {
-    public class EmailDetailsDTO
+    public class MailMessage : IEntity
     {
+        [Key]
+        public int Id { get; set; }
+
         public string MessageId { get; set; }
         public string? Subject { get; set; }
         public string To { get; set; }
