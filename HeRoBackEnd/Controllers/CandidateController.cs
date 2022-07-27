@@ -55,15 +55,23 @@ namespace HeRoBackEnd.Controllers
 
             return new JsonResult(candDTO);
         }
+        /// <summary>
+        /// Redirects user to the CV file
+        /// </summary>
+        /// <param name="candidateId">Id of the candidate whose CV you want to see</param>
+        /// <returns>IActionResult</returns>
         [HttpGet]
         [Route("Candidate/GetCV/{candidateId}")]
+        [RequireUserRole("RECRUITER")]
         public IActionResult GetCV(int candidateId)
         {
             MemoryStream CVstream = _candidateService.GetCandidateCV(candidateId);
 
             if (CVstream == null)
             {
-                return BadRequest(new ResponseViewModel("Error getting candidate (bad parameters or candidate doesn't exist)"));
+                string message = Translate(ErrorMessageHelper.ErrorGettingCandidate);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             OkObjectResult result = new OkObjectResult(CVstream);
@@ -128,7 +136,7 @@ namespace HeRoBackEnd.Controllers
         ///       "availableFrom": "2022-07-23T10:37:01.988Z",
         ///       "expectedMonthlySalary": 5000,
         ///       "otherExpectations": "otherExpectationsString",
-        ///       "cvPath": "CVPathString",
+        ///       "CV": CV.pdf,
         ///       "recruitmentId": 1
         ///     }
         ///
@@ -148,22 +156,31 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Candidate/Create")]
         [AllowAnonymous]
+        [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Create(CandidateCreateViewModel newCandidate, IFormFile CV)
+        public IActionResult Create([FromForm]CandidateCreateViewModel newCandidate)
         {
             LogUserAction("CandidateController", "Create", JsonSerializer.Serialize(newCandidate), _userActionService);
 
-            CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
+            CreateCandidateDTO dto = new CreateCandidateDTO();
+            dto.Name = newCandidate.Name;
+            dto.LastName = newCandidate.LastName;
+            dto.PhoneNumber= newCandidate.PhoneNumber;
+            dto.Email = newCandidate.Email;
+            dto.AvailableFrom = newCandidate.AvailableFrom;
+            dto.ExpectedMonthlySalary = newCandidate.ExpectedMonthlySalary;
+            dto.OtherExpectations=newCandidate.OtherExpectations;
+            dto.RecruitmentId = newCandidate.RecruitmentId;
 
-            /*using (Stream stream = newCandidate.CV.OpenReadStream())
+            using (Stream stream = newCandidate.CV.OpenReadStream())
             {
                 byte[] content = new byte[stream.Length];
                 stream.Read(content, 0, content.Length);
                 dto.CV = content;
 
                 stream.Close();
-            }*/
+            }
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
             bool result = _candidateService.CreateCandidate(dto, out _errorMessage);
@@ -196,7 +213,7 @@ namespace HeRoBackEnd.Controllers
         ///    yyyy-MM-ddTHH:mm:ss <br />
         ///    yyyy-MM-ddTHH:mm:ss.fff <br /><br />
         /// <h2>Nullable:</h2>
-        ///    Everything without "candidateId" <br />
+        ///    Everything without "candidateId" and "CV" <br />
         /// </remarks>
         /// <response code="200">string "Candidate updated successfully"</response>
         /// <response code="400">string "User with given Id doesn't exist"<br />
@@ -204,17 +221,28 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Candidate/Edit")]
         [RequireUserRole("RECRUITER")]
+        [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Edit(CandidateEditViewModel candidate, IFormFile CV)
+        public IActionResult Edit([FromForm] CandidateEditViewModel candidate)
         {
             LogUserAction("CandidateController", "Edit", $"{JsonSerializer.Serialize(candidate)}", _userActionService);
 
-            UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
+            UpdateCandidateDTO dto = new UpdateCandidateDTO();
+            dto.CandidateId=candidate.CandidateId;
+            dto.Name=candidate.Name;
+            dto.LastName=candidate.LastName;
+            dto.Status=candidate.Status;
+            dto.Stage=candidate.Stage;
+            dto.Email=candidate.Email;
+            dto.PhoneNumber=candidate.PhoneNumber;
+            dto.AvailableFrom=candidate.AvailableFrom;
+            dto.ExpectedMonthlySalary=candidate.ExpectedMonthlySalary;
+            dto.OtherExpectations=candidate.OtherExpectations;
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            using (Stream stream = CV.OpenReadStream())
+            using (Stream stream = candidate.CV.OpenReadStream())
             {
                 byte[] content = new byte[stream.Length];
                 stream.Read(content, 0, content.Length);

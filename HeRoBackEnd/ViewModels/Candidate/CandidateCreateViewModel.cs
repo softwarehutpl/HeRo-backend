@@ -22,7 +22,7 @@ namespace HeRoBackEnd.ViewModels.Candidate
         public int? ExpectedMonthlySalary { get; set; }
 
         public string? OtherExpectations { get; set; }
-
+        
         [Required(ErrorMessage = "This field is required")]
         public IFormFile CV { get; set; }
 
