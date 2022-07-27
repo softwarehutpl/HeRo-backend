@@ -55,19 +55,58 @@ namespace Data.Repositories
             return dto;
         }
 
-        public ImapAccountDTO? GetImapAccount(string login)
+        public List<ImapAccountDTO>? GetImapAccounts()
         {
-            ImapAccountDTO? dto = DataContext.ImapAccounts
-                .Where(x => x.Login == login)
-                .Select(x => new ImapAccountDTO()
+            List<ImapAccountDTO>? result = DataContext.ImapAccounts.Select(x => new ImapAccountDTO
+            {
+                Host = x.Host,
+                Port = x.Port,
+                Login = x.Login,
+                Password = x.Password
+            }).ToList();
+
+            return result;
+        }
+
+        public List<string> GetAllMessagedId()
+        {
+            var result = DataContext.MailMessages.Select(x => x.MessageId).ToList();
+
+            return result;
+        }
+
+        public EmailDetailsDTO? GetEmailDetailsDTO(string messageId)
+        {
+            EmailDetailsDTO? dto = DataContext.MailMessages
+                .Where(x => x.MessageId == messageId)
+                .Select(x => new EmailDetailsDTO()
                 {
-                    Login = x.Login,
-                    Password = x.Password,
-                    Port = x.Port,
-                    Host = x.Host
+                    MessageId = x.MessageId,
+                    Bcc = x.Bcc,
+                    Cc = x.Cc,
+                    Body = x.Body,
+                    HtmlBody = x.HtmlBody,
+                    Date = x.Date,
+                    Subject = x.Subject,
+                    InReplyTo = x.InReplyTo,
+                    To = x.To,
+                    From = x.From
                 }).FirstOrDefault();
 
             return dto;
+        }
+
+        public List<EmailListDataDTO> GetAllEmailList()
+        {
+            var result = DataContext.MailMessages.Select(x => new EmailListDataDTO()
+            {
+                Date = x.Date,
+                MessageId = x.MessageId,
+                Subject = x.Subject,
+                To = x.To
+            }).ToList();
+
+            return result;
         }
     }
 }

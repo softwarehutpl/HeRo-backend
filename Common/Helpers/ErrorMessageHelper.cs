@@ -68,10 +68,8 @@ namespace Common.Helpers
         //Email
         public const string EmailFailed = "Email delivery failed";
 
-        public const string FailedToAddMailBox = "Adding mailbox to account failed";
-        public const string FolderIsEmpty = "Folder is empty!";
-        public const string FoldersListIsEmpty = "Folders list is empty!";
-        public const string UserHasMailBox = "User has mail box";
         public const string MailNotFound = "Mail not found";
+        public const string EmailDataBaseEmpty = "Mail database is empty";
+        public const string AccountInDatabase = "Account already in Database";
     }
 }

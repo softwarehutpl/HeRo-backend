@@ -14,12 +14,10 @@ namespace HeRoBackEnd.Controllers
     {
         private readonly EmailService _emailService;
         private string _errorMessage;
-        private readonly UserService _userService;
 
-        public EmailController(EmailService emailService, UserService userService)
+        public EmailController(EmailService emailService)
         {
             _emailService = emailService;
-            _userService = userService;
         }
 
         //<summary>
@@ -45,10 +43,10 @@ namespace HeRoBackEnd.Controllers
                 Name = accountViewModel.Name
             };
 
-            bool check = _emailService.AddSmtpAccountToDb(dto, out string _errorMessage);
+            bool check = _emailService.AddSmtpAccountToDb(dto, out _errorMessage);
 
             if (check)
-                return Ok(new ResponseViewModel("nie zrobione ale się powiodło"));
+                return Ok(new ResponseViewModel(MessageHelper.SMTPAccountAdded));
 
             return BadRequest(new ResponseViewModel(_errorMessage));
         }
@@ -74,10 +72,10 @@ namespace HeRoBackEnd.Controllers
                 Port = accountViewModel.Port
             };
 
-            bool check = _emailService.AddImapAccountToDb(dto, out string _errorMessage);
+            bool check = _emailService.AddImapAccountToDb(dto, out _errorMessage);
 
             if (check)
-                return Ok(new ResponseViewModel("nie zrobione"));
+                return Ok(new ResponseViewModel(MessageHelper.IMAPAccountAdded));
 
             return BadRequest(new ResponseViewModel(_errorMessage));
         }
@@ -99,72 +97,46 @@ namespace HeRoBackEnd.Controllers
             return Ok(listOfStatus);
         }
 
-        ///// <summary>
-        ///// Get all email folder names
-        ///// </summary>
-        ///// <returns>AddUserMailBox</returns>
-        ///// <response code="400">"</response>
-        ///// <response code="200"></response>
-        //[HttpPost]
-        //[Route("Email/GetAllEmailFolders")]
-        //[RequireUserRole("Admin")]
-        //[ProducesResponseType(typeof(List<string>), StatusCodes.Status200OK)]
-        //[ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status400BadRequest)]
-        //public IActionResult GetAllEmailFolders()
-        //{
-        //    int userId = GetUserId();
-        //    //var folders = _emailService.GetAllFolderNamesList(userId);
+        //<summary>
+        //Get one mail form list
+        //</summary>
+        //<returns>Get one mail form list</returns>
+        //<response code="400">"</response>
+        //<response code="200"></response>
+        [HttpPost]
+        [Route("Email/GetSingleMail")]
+        [RequireUserRole("Admin")]
+        [ProducesResponseType(typeof(EmailDetailsDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status400BadRequest)]
+        public IActionResult GetSingleMail(string messageId)
+        {
+            EmailDetailsDTO? dto = _emailService.GetEmailDetails(messageId);
 
-        //    if (folders == null)
-        //        return BadRequest(new ResponseViewModel(ErrorMessageHelper.FoldersListIsEmpty));
+            if (dto == null)
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.MailNotFound));
 
-        //    return Ok(folders);
-        //}
+            return Ok(dto);
+        }
 
-        ///// <summary>
-        ///// Get all emails in folder
-        ///// </summary>
-        ///// <returns>GetEmailsInFolderList</returns>
-        ///// <response code="400">"</response>
-        ///// <response code="200"></response>
-        //[HttpPost]
-        //[Route("Email/GetEmailsInFolderList")]
-        //[RequireUserRole("Admin")]
-        //[ProducesResponseType(typeof(List<EmailListDataDTO>), StatusCodes.Status200OK)]
-        //[ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status400BadRequest)]
-        //public IActionResult GetEmailsInFolderList(string folderName)
-        //{
-        //    int userId = GetUserId();
+        //<summary>
+        //Return email list
+        //</summary>
+        //<returns>Get mail list</returns>
+        //<response code="400">"</response>
+        //<response code="200"></response>
+        [HttpPost]
+        [Route("Email/GetSingleMail")]
+        [RequireUserRole("Admin")]
+        [ProducesResponseType(typeof(List<EmailListDataDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status400BadRequest)]
+        public IActionResult GetAllMails()
+        {
+            List<EmailListDataDTO>? dtoList = _emailService.GetAllEmailsList();
 
-        //    List<EmailListDataDTO>? emails = _emailService.GetAllEmailsInFolder(userId, folderName);
+            if (dtoList == null)
+                return BadRequest(new ResponseViewModel(ErrorMessageHelper.EmailDataBaseEmpty));
 
-        //    if (emails == null)
-        //        return BadRequest(new ResponseViewModel(ErrorMessageHelper.FolderIsEmpty));
-
-        //    return Ok(emails);
-        //}
-
-        ///// <summary>
-        ///// ReadEmail
-        ///// </summary>
-        ///// <returns>ReadEmail</returns>
-        ///// <response code="400">"</response>
-        ///// <response code="200"></response>
-        //[HttpPost]
-        //[Route("Email/ReadEmail")]
-        //[RequireUserRole("Admin")]
-        //[ProducesResponseType(typeof(EmailDetailsDTO), StatusCodes.Status200OK)]
-        //[ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status400BadRequest)]
-        //public IActionResult ReadEmail(string messageId, string folderName)
-        //{
-        //    int userId = GetUserId();
-
-        //    EmailDetailsDTO? email = _emailService.ReadEmailDetails(userId, messageId, folderName);
-
-        //    if (email == null)
-        //        return BadRequest(new ResponseViewModel(ErrorMessageHelper.MailNotFound));
-
-        //    return Ok(email);
-        //}
+            return Ok(dtoList);
+        }
     }
 }

@@ -17,6 +17,12 @@ namespace Data.IRepositories
 
         public SmtpAccountDTO? GetSmtpAccount(string name);
 
-        public ImapAccountDTO? GetImapAccount(string login);
+        public List<ImapAccountDTO>? GetImapAccounts();
+
+        public List<string> GetAllMessagedId();
+
+        public EmailDetailsDTO GetEmailDetailsDTO(string messageId);
+
+        public List<EmailListDataDTO> GetAllEmailList();
     }
 }

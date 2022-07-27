@@ -18,6 +18,9 @@ namespace Common.Helpers
         //Email
         public const string RegistrationSubject = "Registration";
 
+        public const string SMTPAccountAdded = "SMTP Account Added";
+        public const string IMAPAccountAdded = "IMAP Account Added";
+
         public static string RegistrationBody(string url)
         {
             return $"Registration successful. Click confirmation link to complete the process. \n {url}";
