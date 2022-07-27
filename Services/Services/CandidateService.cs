@@ -280,8 +280,12 @@ namespace Services.Services
         public CandidateListing GetCandidates(Paging paging, SortOrder? sortOrder, CandidateFilteringDTO candidateFilteringDTO)
         {
             IQueryable<Candidate> candidates = _candidateRepository.GetAll();
-            candidates = candidates.Where(s => !s.DeletedById.HasValue);
+            candidates = candidates.Where(c => !c.DeletedById.HasValue);
 
+            if (candidateFilteringDTO.RecruitmentId.HasValue && candidateFilteringDTO.RecruitmentId > 0)
+            {
+                candidates = candidates.Where(c => c.RecruitmentId == candidateFilteringDTO.RecruitmentId);
+            }
             if (candidateFilteringDTO.Status != null && candidateFilteringDTO.Status.Count > 0)
             {
                 candidates = candidates.Where(c => candidateFilteringDTO.Status.Contains(c.Status));
