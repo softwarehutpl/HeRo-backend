@@ -163,25 +163,9 @@ namespace HeRoBackEnd.Controllers
         /// <summary>
         /// Updates information about a candidate
         /// </summary>
-        /// <param name="candidateId">Id of the candidate</param>
         /// <param name="candidate">Object of the CandidateEditViewModel class containing fields used to update informations about the candidate</param>
         /// <returns>IActionResult</returns>
         /// <remarks>
-        /// Example request:
-        ///
-        ///     {
-        ///       "name": "Grzegorz",
-        ///       "lastName": "Brzęczyszczykiewicz",
-        ///       "email": "grzesiu@example.com",
-        ///       "phoneNumber": "123123123",
-        ///       "availableFrom": "2022-07-23T10:37:01.988Z",
-        ///       "expectedMonthlySalary": 5000,
-        ///       "otherExpectations": "otherExpectationsString",
-        ///       "cvPath": "CVPathString",
-        ///       "status": "IN_PROCESSING",
-        ///       "stage": "PHONE_INTERVIEW"
-        ///     }
-        ///
         /// <h2>Format:</h2>
         ///    <h3>Date:</h3>
         ///    yyyy-MM-dd <br />
@@ -189,25 +173,25 @@ namespace HeRoBackEnd.Controllers
         ///    yyyy-MM-ddTHH:mm:ss <br />
         ///    yyyy-MM-ddTHH:mm:ss.fff <br /><br />
         /// <h2>Nullable:</h2>
-        ///    "expectedMonthlySalary", "otherExpectations"" <br /><br />
+        ///    Everything without "candidateId" <br />
         /// </remarks>
         /// <response code="200">string "Candidate updated successfully"</response>
         /// <response code="400">string "User with given Id doesn't exist"<br />
         /// string "Error updating candidate"</response>
         [HttpPost]
-        [Route("Candidate/Edit/{candidateId}")]
+        [Route("Candidate/Edit")]
         [RequireUserRole("RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Edit(int candidateId, CandidateEditViewModel candidate)
+        public IActionResult Edit(CandidateEditViewModel candidate)
         {
-            LogUserAction("CandidateController", "Edit", $"{candidateId}, {JsonSerializer.Serialize(candidate)}", _userActionService);
+            LogUserAction("CandidateController", "Edit", $"{JsonSerializer.Serialize(candidate)}", _userActionService);
 
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            bool result = _candidateService.UpdateCandidate(candidateId, dto, out _errorMessage);
+            bool result = _candidateService.UpdateCandidate(dto, out _errorMessage);
             string message;
 
             if (result == false)
