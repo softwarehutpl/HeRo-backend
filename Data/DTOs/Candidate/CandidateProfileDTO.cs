@@ -15,7 +15,6 @@ namespace Data.DTOs.Candidate
         public DateTime? AvailableFrom { get; set; }
         public int? ExpectedMonthlySalary { get; set; }
         public string? OtherExpectations { get; set; }
-        public string CvPath { get; set; }
         public string InterviewName { get; set; }
         public int? InterviewOpinionScore { get; set; }
         public string? InterviewOpinionText { get; set; }

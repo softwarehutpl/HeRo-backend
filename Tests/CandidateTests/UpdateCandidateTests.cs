@@ -64,12 +64,12 @@ namespace Tests.CandidateTests
 
             var dto = new UpdateCandidateDTO()
             {
-                CandidateId = id,
+                CandidateId = 1,
                 Email = "email@gmail.com",
                 PhoneNumber = "321321321"
             };
 
-            candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
+            candRepoMock.Setup(x => x.GetById(dto.CandidateId)).Returns(candidate);
 
             Assert.True(candidateService.UpdateCandidate(dto, out errorMessage));
         }

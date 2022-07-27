@@ -51,6 +51,11 @@ namespace Tests.RecruitmentTests
                     {
                         new Candidate(),
                         new Candidate(),
+                    },
+                    CreatedBy=new User()
+                    {
+                        Name="Kacper",
+                        Surname="Kowalski"
                     }
                 },
                 new Recruitment
@@ -64,6 +69,11 @@ namespace Tests.RecruitmentTests
                     {
                         new Candidate(),
                         new Candidate(),
+                    },
+                    CreatedBy=new User()
+                    {
+                        Name="Kacper",
+                        Surname="Kowalski"
                     }
                 },
                 new Recruitment
@@ -77,6 +87,11 @@ namespace Tests.RecruitmentTests
                     {
                         new Candidate(),
                         new Candidate(),
+                    },
+                    CreatedBy=new User()
+                    {
+                        Name="Kacper",
+                        Surname="Kowalski"
                     }
                 },
                 new Recruitment
@@ -90,6 +105,11 @@ namespace Tests.RecruitmentTests
                     {
                         new Candidate(),
                         new Candidate(),
+                    },
+                    CreatedBy=new User()
+                    {
+                        Name="Kacper",
+                        Surname="Kowalski"
                     }
                 },
             };
