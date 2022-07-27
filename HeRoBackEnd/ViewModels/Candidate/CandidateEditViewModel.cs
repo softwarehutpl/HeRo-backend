@@ -24,9 +24,6 @@ namespace HeRoBackEnd.ViewModels.Candidate
         public string? OtherExpectations { get; set; }
 
         [Required(ErrorMessage = "This field is required")]
-        public IFormFile CV { get; set; }
-
-        [Required(ErrorMessage = "This field is required")]
         public string Status { get; set; }
 
         [Required(ErrorMessage = "This field is required")]

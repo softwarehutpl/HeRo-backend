@@ -145,19 +145,19 @@ namespace HeRoBackEnd.Controllers
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Create(CandidateCreateViewModel newCandidate)
+        public IActionResult Create(CandidateCreateViewModel newCandidate, IFormFile CV)
         {
             LogUserAction("CandidateController", "Create", JsonSerializer.Serialize(newCandidate), _userActionService);
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
 
-            using (Stream stream = newCandidate.CV.OpenReadStream())
+            /*using (Stream stream = newCandidate.CV.OpenReadStream())
             {
                 byte[] content = new byte[stream.Length];
                 stream.Read(content, 0, content.Length);
                 dto.CV = content;
 
                 stream.Close();
-            }
+            }*/
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
             bool result = _candidateService.CreateCandidate(dto, out _errorMessage);
@@ -216,14 +216,14 @@ namespace HeRoBackEnd.Controllers
         [RequireUserRole("RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Edit(int candidateId, CandidateEditViewModel candidate)
+        public IActionResult Edit(int candidateId, CandidateEditViewModel candidate, IFormFile CV)
         {
             LogUserAction("CandidateController", "Edit", $"{candidateId}, {JsonSerializer.Serialize(candidate)}", _userActionService);
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            using (Stream stream = candidate.CV.OpenReadStream())
+            using (Stream stream = CV.OpenReadStream())
             {
                 byte[] content = new byte[stream.Length];
                 stream.Read(content, 0, content.Length);
