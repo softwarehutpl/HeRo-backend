@@ -1,7 +1,10 @@
-﻿using Common.Helpers;
+﻿using Common.Enums;
+using Common.Helpers;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Email;
 using Data.DTOs.User;
+using Data.Entities;
+using Data.IRepositories;
 using MailKit;
 using MailKit.Net.Imap;
 using MimeKit;
@@ -12,55 +15,98 @@ namespace Services.Services
     public class EmailService
     {
         private readonly EmailHelper _emailHelper;
-        private readonly UserService _userService;
+        private readonly IEmailRepository _emailRepository;
 
-        public EmailService(EmailHelper emailHelper, UserService userService)
+        public EmailService(EmailHelper emailHelper, IEmailRepository emailRepository)
         {
             _emailHelper = emailHelper;
-            _userService = userService;
+            _emailRepository = emailRepository;
         }
 
-        public void SendConfirmationEmail(string email, string url)
+        public bool AddSmtpAccountToDb(SmtpAccountDTO dto, out string errorMessage)
+        {
+            bool check = _emailRepository.CheckIfSmtpServerExists(dto.Login);
+
+            if (check)
+            {
+                errorMessage = "Account already in Database";
+                return false;
+            }
+
+            string password = PasswordHashHelper.EncodePasswordToBase64(dto.Password);
+
+            SmtpAccount smtpAccount = new()
+            {
+                Login = dto.Login,
+                Password = password,
+                Name = dto.Name,
+                Port = dto.Port,
+                Sender = dto.Sender,
+                Host = dto.Host,
+            };
+
+            _emailRepository.AddSmtpServer(smtpAccount);
+            errorMessage = "";
+            return true;
+        }
+
+        public bool AddImapAccountToDb(ImapAccountDTO dto, out string errorMessage)
+        {
+            bool check = _emailRepository.CheckIfImapServerExists(dto.Login);
+
+            if (check)
+            {
+                errorMessage = "Account already in Database";
+                return false;
+            }
+
+            string password = PasswordHashHelper.EncodePasswordToBase64(dto.Password);
+
+            ImapAccount imapAccount = new()
+            {
+                Login = dto.Login,
+                Password = password,
+                Host = dto.Host,
+                Port = dto.Port
+            };
+
+            _emailRepository.AddImapServer(imapAccount);
+            errorMessage = "";
+            return true;
+        }
+
+        public void SendConfirmationEmail(string reciver, string url)
         {
             string subject = MessageHelper.RegistrationSubject;
             string body = MessageHelper.RegistrationBody(url);
-            MimeMessage mail = _emailHelper.CreateEmail(email, subject, body);
-            //_emailHelper.SendPredefinedEmail(mail);
+            MimeMessage mail = _emailHelper.CreateEmail(reciver, subject, body);
+
+            SmtpAccountDTO? dto = _emailRepository.GetSmtpAccount(SmptAccountNames.CONFIRMATION.ToString());
+
+            if (dto == null)
+                return;
+
+            _emailHelper.SendPredefinedEmail(mail, dto.Login, dto.Password, dto.Sender, dto.Host, dto.Port);
         }
 
-        public void SendPasswordRecoveryEmail(string email, string url)
+        public bool SendPasswordRecoveryEmail(string email, string url)
         {
             string subject = MessageHelper.PasswordRecoverySubject;
             string body = MessageHelper.PasswordRecoveryBody(url);
 
             MimeMessage mail = _emailHelper.CreateEmail(email, subject, body);
-            //_emailHelper.SendPredefinedEmail(mail);
+
+            SmtpAccountDTO? dto = _emailRepository.GetSmtpAccount(SmptAccountNames.RECOVERY.ToString());
+
+            if (dto == null)
+                return false;
+
+            string password = PasswordHashHelper.DecodeFrom64(dto.Password);
+
+            _emailHelper.SendPredefinedEmail(mail, dto.Login, password, dto.Sender, dto.Host, dto.Port);
+
+            return true;
         }
-
-        //public bool SendCustomEmail(int id, string to, string subject, string body, out string emailError)
-        //{
-        //    emailError = string.Empty;
-        //    return true;
-        //}
-
-        //public List<string>? GetAllFolderNamesList(int id)
-        //{
-        //    EmailServiceDTO? dto = _userService.GetUserEmailServiceData(id);
-
-        //    string password = PasswordHashHelper.DecodeFrom64(dto.userSmtpData.MailBoxPassword);
-
-        //    ImapServerConfig config = new()
-        //    {
-        //        Imap = dto.userSmtpData.Imap,
-        //        ImapPort = dto.userSmtpData.ImapPort,
-        //        MailBoxLogin = dto.userSmtpData.MailBoxLogin,
-        //        MailBoxPassword = password
-        //    };
-
-        //    List<string>? folderNames = GetFolderNames(config);
-
-        //    return folderNames;
-        //}
 
         //public List<EmailListDataDTO>? GetAllEmailsInFolder(int id, string folderName)
         //{

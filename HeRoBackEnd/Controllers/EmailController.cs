@@ -1,7 +1,9 @@
 ﻿using Common.AttributeRoleVerification;
+using Common.Enums;
 using Common.Helpers;
 using Data.DTOs.Email;
 using HeRoBackEnd.ViewModels;
+using HeRoBackEnd.ViewModels.Email;
 using Microsoft.AspNetCore.Mvc;
 using Services.Services;
 
@@ -20,30 +22,81 @@ namespace HeRoBackEnd.Controllers
             _userService = userService;
         }
 
-        /// <summary>
-        /// Send Custom Email
-        /// </summary>
-        /// <param name="to">Reciver</param>
-        /// <param name="subject">Mail subject</param>
-        /// <param name="body">Mail Body</param>
-        /// <returns>AddUserMailBox</returns>
-        /// <response code="400">"</response>
-        /// <response code="200"></response>
+        //<summary>
+        //Adds SMTP account to database
+        //</summary>
+        //<returns>Adds SMTP account to database</returns>
+        //<response code="400">"</response>
+        //<response code="200"></response>
         [HttpPost]
-        [Route("Email/SendCustomEmail")]
+        [Route("Email/AddSmtpAccount")]
         [RequireUserRole("Admin")]
         [ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status400BadRequest)]
-        public IActionResult SendCustomEmail(string to, string subject, string body)
+        public IActionResult AddSmtpAccount(SmtpAccountViewModel accountViewModel)
         {
-            int userId = GetUserId();
+            SmtpAccountDTO dto = new()
+            {
+                Login = accountViewModel.Login,
+                Password = accountViewModel.Password,
+                Port = accountViewModel.Port,
+                Host = accountViewModel.Host,
+                Sender = accountViewModel.Sender,
+                Name = accountViewModel.Name
+            };
 
-            // _emailService.SendCustomEmail(userId, to, subject, body, out _errorMessage);
+            bool check = _emailService.AddSmtpAccountToDb(dto, out string _errorMessage);
 
-            if (_errorMessage != String.Empty)
-                return BadRequest(new ResponseViewModel(_errorMessage));
+            if (check)
+                return Ok(new ResponseViewModel("nie zrobione ale się powiodło"));
 
-            return Ok(new ResponseViewModel(MessageHelper.EmailSent));
+            return BadRequest(new ResponseViewModel(_errorMessage));
+        }
+
+        //<summary>
+        //Adds IMAP account to database
+        //</summary>
+        //<returns>Adds IMAP account to database</returns>
+        //<response code="400">"</response>
+        //<response code="200"></response>
+        [HttpPost]
+        [Route("Email/AddImapAccount")]
+        [RequireUserRole("Admin")]
+        [ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status400BadRequest)]
+        public IActionResult AddImapAccount(ImapAccountViewModel accountViewModel)
+        {
+            ImapAccountDTO dto = new()
+            {
+                Host = accountViewModel.Host,
+                Login = accountViewModel.Login,
+                Password = accountViewModel.Password,
+                Port = accountViewModel.Port
+            };
+
+            bool check = _emailService.AddImapAccountToDb(dto, out string _errorMessage);
+
+            if (check)
+                return Ok(new ResponseViewModel("nie zrobione"));
+
+            return BadRequest(new ResponseViewModel(_errorMessage));
+        }
+
+        //<summary>
+        //Displays SMTP account names
+        //</summary>
+        //<returns>Displays SMTP account names</returns>
+        //<response code="400">"</response>
+        //<response code="200"></response>
+        [HttpPost]
+        [Route("Email/GetAllPossibleSmtpAccountNames")]
+        [RequireUserRole("Admin")]
+        [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
+        public IActionResult GetAllPossibleSmtpAccountNames()
+        {
+            var listOfStatus = Enum.GetValues(typeof(SmptAccountNames)).Cast<SmptAccountNames>().Select(v => v.ToString());
+
+            return Ok(listOfStatus);
         }
 
         ///// <summary>

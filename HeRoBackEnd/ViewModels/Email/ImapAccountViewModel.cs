@@ -1,9 +1,9 @@
-﻿namespace Data.DTOs.Email
+﻿namespace HeRoBackEnd.ViewModels.Email
 {
-    public class ImapAccountDTO
+    public class ImapAccountViewModel
     {
-        public string Host { get; set; }
         public int Port { get; set; }
+        public string Host { get; set; }
         public string Login { get; set; }
         public string Password { get; set; }
     }
