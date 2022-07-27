@@ -115,6 +115,8 @@ namespace Services.Services
                 candidate.AvailableFrom = dto.AvailableFrom;
                 candidate.ExpectedMonthlySalary = dto.ExpectedMonthlySalary;
                 candidate.OtherExpectations = dto.OtherExpectations;
+                candidate.LastUpdatedById = dto.LastUpdatedBy;
+                candidate.LastUpdatedDate = dto.LastUpdatedDate;
                 candidate.CV = dto.CV;
             }
 
