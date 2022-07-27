@@ -37,7 +37,7 @@ try
 
     builder.Services.AddSession(options =>
     {
-        options.IdleTimeout = TimeSpan.FromSeconds(10);
+        options.IdleTimeout = new TimeSpan(14, 0, 0, 0);
         options.Cookie.HttpOnly = true;
         options.Cookie.IsEssential = true;
     });
