@@ -94,9 +94,9 @@ namespace Services.Services
             }
         }
 
-        public bool UpdateCandidate(int id, UpdateCandidateDTO dto, out string ErrorMessage)
+        public bool UpdateCandidate(UpdateCandidateDTO updateCandidate, out string ErrorMessage)
         {
-            Candidate candidate = _candidateRepository.GetById(id);
+            Candidate? candidate = _candidateRepository.GetById(updateCandidate.CandidateId);
 
             if (candidate == null)
             {
@@ -106,18 +106,45 @@ namespace Services.Services
             }
             else
             {
-                candidate.Name = dto.Name;
-                candidate.LastName = dto.LastName;
-                candidate.Status = dto.Status;
-                candidate.Stage = dto.Stage;
-                candidate.Email = dto.Email;
-                candidate.PhoneNumber = dto.PhoneNumber;
-                candidate.AvailableFrom = dto.AvailableFrom;
-                candidate.ExpectedMonthlySalary = dto.ExpectedMonthlySalary;
-                candidate.OtherExpectations = dto.OtherExpectations;
-                candidate.LastUpdatedById = dto.LastUpdatedBy;
-                candidate.LastUpdatedDate = dto.LastUpdatedDate;
-                candidate.CV = dto.CV;
+                if (updateCandidate.Name != null)
+                {
+                    candidate.Name = updateCandidate.Name;
+                }
+                if (updateCandidate.LastName != null)
+                {
+                    candidate.LastName = updateCandidate.LastName;
+                }
+                if (updateCandidate.Status != null)
+                {
+                    candidate.Status = updateCandidate.Status;
+                }
+                if (updateCandidate.Stage != null)
+                {
+                    candidate.Stage = updateCandidate.Stage;
+                }
+                if (updateCandidate.Email != null)
+                {
+                    candidate.Email = updateCandidate.Email;
+                }
+                if (updateCandidate.PhoneNumber != null)
+                {
+                    candidate.PhoneNumber = updateCandidate.PhoneNumber;
+                }
+                if (updateCandidate.ExpectedMonthlySalary != null)
+                {
+                    candidate.ExpectedMonthlySalary = updateCandidate.ExpectedMonthlySalary;
+                }
+                if (updateCandidate.OtherExpectations != null)
+                {
+                    candidate.OtherExpectations = updateCandidate.OtherExpectations;
+                }
+                if (updateCandidate.CV != null)
+                {
+                    candidate.CV = updateCandidate.CV;
+                }
+
+                candidate.LastUpdatedById = updateCandidate.LastUpdatedBy;
+                candidate.LastUpdatedDate = updateCandidate.LastUpdatedDate;
             }
 
             try
@@ -232,13 +259,11 @@ namespace Services.Services
             try
             {
                 candidate = _candidateRepository.GetCandidate(id);
-                if (candidate.Tech == null)
+                if (candidate == null)
                 {
-                    candidate.Tech = new User();
-                }
-                if (candidate.Recruiter == null)
-                {
-                    candidate.Recruiter = new User();
+                    _logger.LogError("Error getting candidate with given ID");
+                    ErrorMessage = ErrorMessageHelper.ErrorGettingCandidate;
+                    return null;
                 }
             }
             catch (Exception ex)
@@ -250,6 +275,15 @@ namespace Services.Services
 
             try
             {
+                if (candidate.Tech == null)
+                {
+                    candidate.Tech = new User();
+                }
+                if (candidate.Recruiter == null)
+                {
+                    candidate.Recruiter = new User();
+                }
+
                 candidateProfileDTO =
                     new CandidateProfileDTO
                     {
@@ -298,8 +332,12 @@ namespace Services.Services
         public CandidateListing GetCandidates(Paging paging, SortOrder? sortOrder, CandidateFilteringDTO candidateFilteringDTO)
         {
             IQueryable<Candidate> candidates = _candidateRepository.GetAll();
-            candidates = candidates.Where(s => !s.DeletedById.HasValue);
+            candidates = candidates.Where(c => !c.DeletedById.HasValue);
 
+            if (candidateFilteringDTO.RecruitmentId.HasValue && candidateFilteringDTO.RecruitmentId > 0)
+            {
+                candidates = candidates.Where(c => c.RecruitmentId == candidateFilteringDTO.RecruitmentId);
+            }
             if (candidateFilteringDTO.Status != null && candidateFilteringDTO.Status.Count > 0)
             {
                 candidates = candidates.Where(c => candidateFilteringDTO.Status.Contains(c.Status));

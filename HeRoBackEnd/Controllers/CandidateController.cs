@@ -43,6 +43,7 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Get(int candidateId)
         {
             LogUserAction("CandidateController", "Get", candidateId.ToString(), _userActionService);
+
             CandidateProfileDTO? candDTO = _candidateService.GetCandidateProfileById(candidateId, out _errorMessage);
 
             if (candDTO == null)
@@ -77,7 +78,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Json result object representing a list of Candidates</returns>
         /// <remarks>
         /// <h2>Nullable:</h2>
-        ///    "statuses", "stages", "sortOrder" <br /><br />
+        ///    "recruitmentId", "statuses", "stages", "sortOrder" <br />
         /// <h2>Filtring:</h2>
         ///    <h3>Possible statuses:</h3> "NEW" , "IN_PROCESSING", "DROPPED_OUT", "HIRED" <br />
         ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br />
@@ -90,15 +91,19 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Candidates</response>
         [HttpPost]
         [Route("Candidate/GetList")]
-        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
         [ProducesResponseType(typeof(CandidateListing), StatusCodes.Status200OK)]
         public IActionResult GetList(CandidateListFilterViewModel candidate)
         {
             LogUserAction("CandidateController", "GetList", JsonSerializer.Serialize(candidate), _userActionService);
+
             CandidateFilteringDTO candidateFilteringDTO
-                = new CandidateFilteringDTO(
-                    candidate.Status,
-                    candidate.Stage);
+                = new CandidateFilteringDTO
+                {
+                    RecruitmentId = candidate.RecruitmentId,
+                    Status = candidate.Status,
+                    Stages = candidate.Stage
+                };
 
             var result = _candidateService
                 .GetCandidates(
@@ -148,6 +153,7 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Create(CandidateCreateViewModel newCandidate, IFormFile CV)
         {
             LogUserAction("CandidateController", "Create", JsonSerializer.Serialize(newCandidate), _userActionService);
+
             CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
 
             /*using (Stream stream = newCandidate.CV.OpenReadStream())
@@ -180,25 +186,9 @@ namespace HeRoBackEnd.Controllers
         /// <summary>
         /// Updates information about a candidate
         /// </summary>
-        /// <param name="candidateId">Id of the candidate</param>
         /// <param name="candidate">Object of the CandidateEditViewModel class containing fields used to update informations about the candidate</param>
         /// <returns>IActionResult</returns>
         /// <remarks>
-        /// Example request:
-        ///
-        ///     {
-        ///       "name": "Grzegorz",
-        ///       "lastName": "Brzęczyszczykiewicz",
-        ///       "email": "grzesiu@example.com",
-        ///       "phoneNumber": "123123123",
-        ///       "availableFrom": "2022-07-23T10:37:01.988Z",
-        ///       "expectedMonthlySalary": 5000,
-        ///       "otherExpectations": "otherExpectationsString",
-        ///       "cvPath": "CVPathString",
-        ///       "status": "IN_PROCESSING",
-        ///       "stage": "PHONE_INTERVIEW"
-        ///     }
-        ///
         /// <h2>Format:</h2>
         ///    <h3>Date:</h3>
         ///    yyyy-MM-dd <br />
@@ -206,19 +196,20 @@ namespace HeRoBackEnd.Controllers
         ///    yyyy-MM-ddTHH:mm:ss <br />
         ///    yyyy-MM-ddTHH:mm:ss.fff <br /><br />
         /// <h2>Nullable:</h2>
-        ///    "expectedMonthlySalary", "otherExpectations"" <br /><br />
+        ///    Everything without "candidateId" <br />
         /// </remarks>
         /// <response code="200">string "Candidate updated successfully"</response>
         /// <response code="400">string "User with given Id doesn't exist"<br />
         /// string "Error updating candidate"</response>
         [HttpPost]
-        [Route("Candidate/Edit/{candidateId}")]
+        [Route("Candidate/Edit")]
         [RequireUserRole("RECRUITER")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Edit(int candidateId, CandidateEditViewModel candidate, IFormFile CV)
+        public IActionResult Edit(CandidateEditViewModel candidate, IFormFile CV)
         {
-            LogUserAction("CandidateController", "Edit", $"{candidateId}, {JsonSerializer.Serialize(candidate)}", _userActionService);
+            LogUserAction("CandidateController", "Edit", $"{JsonSerializer.Serialize(candidate)}", _userActionService);
+
             UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
@@ -232,7 +223,7 @@ namespace HeRoBackEnd.Controllers
                 stream.Close();
             }
 
-            bool result = _candidateService.UpdateCandidate(candidateId, dto, out _errorMessage);
+            bool result = _candidateService.UpdateCandidate(dto, out _errorMessage);
             string message;
 
             if (result == false)
@@ -263,6 +254,7 @@ namespace HeRoBackEnd.Controllers
         public IActionResult Delete(int candidateId)
         {
             LogUserAction("CandidateController", "Delete", candidateId.ToString(), _userActionService);
+
             DeleteCandidateDTO dto = new DeleteCandidateDTO(candidateId);
 
             int id = GetUserId();
@@ -276,7 +268,7 @@ namespace HeRoBackEnd.Controllers
 
             if (result == false)
             {
-                message=Translate(_errorMessage);
+                message = Translate(_errorMessage);
 
                 return BadRequest(new ResponseViewModel(message));
             }
@@ -312,6 +304,7 @@ namespace HeRoBackEnd.Controllers
         public IActionResult AddHRNote(int candidateId, CandidateAddHRNoteViewModel AddHrNote)
         {
             LogUserAction("CandidateController", "AddHRNote", $"{candidateId}, {JsonSerializer.Serialize(AddHrNote)}", _userActionService);
+
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
             dto.RecruiterId = GetUserId();
             bool result = _candidateService.AddHRNote(candidateId, dto, out _errorMessage);
@@ -355,6 +348,7 @@ namespace HeRoBackEnd.Controllers
         public IActionResult AddTechInterviewNote(int candidateId, CandidateAddTechNoteViewModel AddTechNote)
         {
             LogUserAction("CandidateController", "AddTechInterviewNote", $"{candidateId}, {JsonSerializer.Serialize(AddTechNote)}", _userActionService);
+
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
             dto.TechId = GetUserId();
             bool result = _candidateService.AddTechNote(candidateId, dto, out _errorMessage);
@@ -362,7 +356,7 @@ namespace HeRoBackEnd.Controllers
 
             if (result == false)
             {
-                message= Translate(_errorMessage);
+                message = Translate(_errorMessage);
 
                 return BadRequest(new ResponseViewModel(message));
             }
@@ -399,6 +393,7 @@ namespace HeRoBackEnd.Controllers
         public IActionResult AssignTechAndRecruiter(int candidateId, CandidateAssigneesViewModel assignees)
         {
             LogUserAction("CandidateController", "AssignTechAndRecruiter", $"{candidateId}, {JsonSerializer.Serialize(assignees)}", _userActionService);
+
             CandidateAssigneesDTO dto = _mapper.Map<CandidateAssigneesDTO>(assignees);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
@@ -418,14 +413,14 @@ namespace HeRoBackEnd.Controllers
             return Ok(new ResponseViewModel(message));
         }
 
-       
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [Route("Candidate/GetStageList")]
-        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
         public IActionResult GetStageList()
         {
             LogUserAction("CandidateController", "GetStageList", "", _userActionService);
+
             var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>().Select(v => v.ToString());
 
             return new JsonResult(listOfStages);
@@ -438,10 +433,11 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [Route("Candidate/GetStatusList")]
-        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
         public IActionResult GetStatusList()
         {
             LogUserAction("CandidateController", "GetStatusList()", "", _userActionService);
+
             var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>().Select(v => v.ToString());
 
             return new JsonResult(listOfStatus);
