@@ -1,115 +1,65 @@
 ﻿using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Report;
-using Data.Entities;
-using Data.IRepositories;
-using Microsoft.Extensions.Logging;
+using Data.Entities.Report;
+using Data.Repositories;
 
 namespace Services.Services
 {
     [ScopedRegistration]
     public class ReportService
     {
-        private ILogger<ReportService> _logger;
-        private ICandidateRepository _candidateRepository;
-        private IRecruitmentRepository _recruitmentRepository;
-        private IRecruitmentSkillRepository _recruitmentSkillRepository;
-        private ISkillRepository _skillRepository;
+        private ReportRepository _reportRepository;
 
-        public ReportService(ILogger<ReportService> logger, ICandidateRepository candidateRepository,
-            IRecruitmentRepository recruitmentRepository,
-            IRecruitmentSkillRepository recruitmentSkillRepository, ISkillRepository skillRepository)
+        public ReportService(ReportRepository reportRepository)
         {
-            _logger = logger;
-            _candidateRepository = candidateRepository;
-            _recruitmentRepository = recruitmentRepository;
-            _recruitmentSkillRepository = recruitmentSkillRepository;
-            _skillRepository = skillRepository;
+            _reportRepository = reportRepository;
         }
 
         public List<ReportDailyNewCandidatesDTO> CountNewCandidates(ReportCountDTO reportDTO)
         {
-            IQueryable<Candidate> candidates = _candidateRepository.GetAll();
+            IQueryable<DailyRecruitment> newCandidates = _reportRepository.CountNewCandidates(reportDTO);
 
-            DateTime currentDayTemp = new DateTime(reportDTO.FromDate.Year, reportDTO.FromDate.Month, reportDTO.FromDate.Day);
             List<ReportDailyNewCandidatesDTO> reportDailies = new List<ReportDailyNewCandidatesDTO>();
 
-            if (reportDTO.Ids != null && reportDTO.Ids.Count > 0)
+            IEnumerable<IGrouping<DateTime, DailyRecruitment>>? days = newCandidates.ToList().GroupBy(c => c.Date);
+
+            foreach (var day in days)
             {
-                while (currentDayTemp <= reportDTO.ToDate)
+                List<RaportRecruitmentDTO> raportRecruitments = new List<RaportRecruitmentDTO>();
+                foreach (var recruitment in day)
                 {
-                    List<RaportRecruitmentDTO> raportRecruitments = new List<RaportRecruitmentDTO>();
-
-                    foreach (var id in reportDTO.Ids)
+                    RaportRecruitmentDTO raportRecruitment = new RaportRecruitmentDTO
                     {
-                        IQueryable<Candidate> tempCandidates = candidates;
+                        RecruitmentId = recruitment.RecruitmentId,
+                        RecruitmentName = recruitment.RecruitmentName,
+                        NumberOfCandidate = recruitment.NumberOfCandidate
+                    };
 
-                        tempCandidates = tempCandidates.Where(c => c.RecruitmentId == id);
-                        tempCandidates = tempCandidates.Where(c => c.ApplicationDate >= currentDayTemp);
-                        tempCandidates = tempCandidates.Where(c => c.ApplicationDate <= currentDayTemp.AddDays(1));
-
-                        RaportRecruitmentDTO raportRecruitment = new RaportRecruitmentDTO
-                        {
-                            RecruitmentId = id,
-                            RecruitmentName = _recruitmentRepository.GetById(id).Name,
-                            NumberOfCandidate = tempCandidates.Count()
-                        };
-                        raportRecruitments.Add(raportRecruitment);
-                    }
-
-                    reportDailies.Add(new ReportDailyNewCandidatesDTO
-                    {
-                        Date = currentDayTemp,
-                        raportPopularRecruitmentDTOs = raportRecruitments
-                    });
-
-                    currentDayTemp = currentDayTemp.AddDays(1);
+                    raportRecruitments.Add(raportRecruitment);
                 }
+
+                reportDailies.Add(new ReportDailyNewCandidatesDTO
+                {
+                    Date = day.Key,
+                    raportPopularRecruitmentDTOs = raportRecruitments
+                });
             }
 
             return reportDailies;
         }
 
-        public IEnumerable<RaportRecruitmentDTO> GetPopularRecruitments()
+        public IEnumerable<PopularRecruitment> GetPopularRecruitments()
         {
-            IQueryable<Recruitment> recruitments = _recruitmentRepository.GetAll();
-
-            recruitments = recruitments.Where(r => r.Candidates.Count > 0).OrderByDescending(r => r.Candidates.Count);
-
-            var popularRecruitments = recruitments.Select(r => new RaportRecruitmentDTO
-            {
-                RecruitmentId = r.Id,
-                RecruitmentName = r.Name,
-                NumberOfCandidate = r.Candidates.Count
-            }).Take(10);
+            IQueryable<PopularRecruitment> popularRecruitments = _reportRepository.GetPopularRecruitments();
 
             return popularRecruitments;
         }
 
-        public IEnumerable<ReportRequestedSkillDTO> GetRequestedSkills()
+        public IEnumerable<RequestedSkill> GetRequestedSkills()
         {
-            IQueryable<Recruitment> recruitments = _recruitmentRepository.GetAll();
+            IQueryable<RequestedSkill> requestedSkills = _reportRepository.GetRequestedSkills();
 
-            recruitments = recruitments.Where(r => r.EndingDate > DateTime.UtcNow)
-                .Where(r => !r.EndedDate.HasValue)
-                .Where(r => !r.DeletedDate.HasValue);
-
-            IQueryable<int>? idsOfActiveRecruitments = recruitments.Select(r => r.Id);
-            IQueryable<RecruitmentSkill> recruitmentSkills = _recruitmentSkillRepository.GetAll();
-            IQueryable<Skill> skills = _skillRepository.GetAll();
-
-            recruitmentSkills = recruitmentSkills.Where(s => idsOfActiveRecruitments.Contains(s.RecruitmentId));
-
-            var requestedSkill = recruitmentSkills
-                .GroupBy(rs => rs.SkillId)
-                .OrderByDescending(rs => rs.Count())
-                .Select(rs => new ReportRequestedSkillDTO
-                {
-                    SkillId = rs.Key,
-                    SkillName = skills.Where(s => s.Id == rs.Key).Select(s => s.Name).FirstOrDefault(),
-                    Quantity = rs.Count(),
-                }).Take(5);
-
-            return requestedSkill;
+            return requestedSkills;
         }
     }
 }

@@ -13,7 +13,6 @@ namespace Tests.CandidateTests
 {
     public class UpdateCandidateTests : BaseCandidateTests
     {
-        
         [Fact]
         public void EntersGetByIdOnce()
         {
@@ -33,15 +32,16 @@ namespace Tests.CandidateTests
 
             var dto = new UpdateCandidateDTO()
             {
+                CandidateId = id,
                 Email = "email@gmail.com",
                 PhoneNumber = "321321321"
             };
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            candidateService.UpdateCandidate(id, dto, out errorMessage);
+            candidateService.UpdateCandidate(dto, out errorMessage);
 
-            candRepoMock.Verify(v=>v.GetById(id), Times.AtLeastOnce);
+            candRepoMock.Verify(v => v.GetById(id), Times.AtLeastOnce);
         }
 
         [Fact]
@@ -64,13 +64,14 @@ namespace Tests.CandidateTests
 
             var dto = new UpdateCandidateDTO()
             {
+                CandidateId = id,
                 Email = "email@gmail.com",
                 PhoneNumber = "321321321"
             };
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            Assert.True(candidateService.UpdateCandidate(id, dto, out errorMessage));
+            Assert.True(candidateService.UpdateCandidate(dto, out errorMessage));
         }
 
         [Fact]
@@ -89,14 +90,14 @@ namespace Tests.CandidateTests
 
             var dto = new UpdateCandidateDTO()
             {
+                CandidateId = id,
                 Email = "email@gmail.com",
                 PhoneNumber = "321321321"
             };
 
             candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
 
-            Assert.False(candidateService.UpdateCandidate(id, dto, out errorMessage));
+            Assert.False(candidateService.UpdateCandidate(dto, out errorMessage));
         }
-
     }
 }

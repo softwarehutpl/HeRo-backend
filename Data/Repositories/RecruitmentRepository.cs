@@ -3,8 +3,11 @@ using Common.Enums;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Recruitment;
 using Data.DTOs.RecruitmentSkill;
+using Data.DTOs.Report;
 using Data.Entities;
+using Data.Entities.Report;
 using Data.IRepositories;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
@@ -12,11 +15,8 @@ namespace Data.Repositories
     [ScopedRegistrationWithInterface]
     public class RecruitmentRepository : BaseRepository<Recruitment>, IRecruitmentRepository
     {
-        private readonly IMapper _mapper;
-
-        public RecruitmentRepository(DataContext context, IMapper mapper) : base(context)
+        public RecruitmentRepository(DataContext context) : base(context)
         {
-            _mapper = mapper;
         }
 
         public int GetRecruiterId(int id)

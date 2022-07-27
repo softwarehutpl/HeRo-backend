@@ -8,16 +8,13 @@ namespace Data.Repositories
     [ScopedRegistrationWithInterface]
     public class CandidateRepository : BaseRepository<Candidate>, ICandidateRepository
     {
-        private DataContext _dataContext;
-
         public CandidateRepository(DataContext context) : base(context)
         {
-            _dataContext = context;
         }
 
         public Candidate GetCandidate(int id)
         {
-            Candidate? candidate = _dataContext.Candidates.Where(c => c.Id == id)
+            Candidate? candidate = DataContext.Candidates.Where(c => c.Id == id)
                 .Include(c => c.Tech)
                 .Include(c => c.Recruiter)
                 .FirstOrDefault();

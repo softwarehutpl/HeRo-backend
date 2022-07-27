@@ -3,6 +3,6 @@
     public class ReportDailyNewCandidatesDTO
     {
         public DateTime Date { get; set; }
-        public IEnumerable<RaportRecruitmentDTO> raportPopularRecruitmentDTOs { get; set; }
+        public List<RaportRecruitmentDTO> raportPopularRecruitmentDTOs { get; set; }
     }
 }

@@ -51,7 +51,7 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Returns the 10 most popular recruitments
+        /// Returns the 5 most popular recruitments
         /// </summary>
         /// <response code="200">List of most popular recruitments</response>
         [HttpGet]
