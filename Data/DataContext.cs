@@ -21,7 +21,6 @@ namespace Data
         public DbSet<Skill> Skills { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserAction> UserActions { get; set; }
-        public DbSet<SmtpServer> SmtpServers { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

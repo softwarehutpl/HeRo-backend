@@ -67,30 +67,5 @@ namespace Data.Repositories
             _dataContext.Users.Update(user);
             _dataContext.SaveChanges();
         }
-
-        public EmailServiceDTO? GetUserEmailServiceData(int id)
-        {
-            EmailServiceDTO? result = DataContext.Users.Where(x => x.Id == id).Include(x => x.SmtpServers).Select(x => new EmailServiceDTO
-            {
-                FullName = x.FullName,
-                userSmtpData = x.SmtpServers.Where(x => x.UserId == id).FirstOrDefault()
-            }).FirstOrDefault();
-
-            return result;
-        }
-
-        public void SetUserMailBoxData(EmailServiceDTO dto)
-        {
-            SmtpServer smtp = dto.userSmtpData;
-            DataContext.SmtpServers.Add(smtp);
-            DataContext.SaveChanges();
-        }
-
-        public bool CheckIfUserHasMailBox(int id)
-        {
-            bool result = DataContext.SmtpServers.Any(x => x.UserId == id);
-
-            return result;
-        }
     }
 }

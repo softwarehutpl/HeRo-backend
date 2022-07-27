@@ -10,6 +10,5 @@ namespace Data.DTOs.User
     public class EmailServiceDTO
     {
         public string FullName { get; set; }
-        public SmtpServer userSmtpData { get; set; }
     }
 }

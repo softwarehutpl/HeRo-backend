@@ -22,11 +22,5 @@ namespace Data.IRepositories
         string? GetUserPassword(string email);
 
         string GetUserRoleByEmail(string email);
-
-        EmailServiceDTO GetUserEmailServiceData(int id);
-
-        public void SetUserMailBoxData(EmailServiceDTO dto);
-
-        public bool CheckIfUserHasMailBox(int id);
     }
 }

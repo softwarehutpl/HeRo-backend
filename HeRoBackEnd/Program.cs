@@ -1,4 +1,3 @@
-using Common.ConfigClasses;
 using Data;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
@@ -59,10 +58,6 @@ try
     }));
 
     builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-
-    var config = builder.Configuration.GetSection("CompanyEmailData").Get<EmailConfiguration>();
-
-    builder.Services.AddSingleton(config);
 
     builder.Services.RegisterServices(builder.Configuration);
 

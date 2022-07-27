@@ -62,7 +62,5 @@ namespace Data.Entities
 
         [ForeignKey("DeletedById")]
         public virtual User? DeletedBy { get; set; }
-
-        public ICollection<SmtpServer> SmtpServers { get; set; }
     }
 }

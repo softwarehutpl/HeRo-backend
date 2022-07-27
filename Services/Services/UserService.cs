@@ -57,57 +57,6 @@ namespace Services.Services
             return userDTO;
         }
 
-        public EmailServiceDTO? GetUserEmailServiceData(int id)
-        {
-            EmailServiceDTO? emailServiceDTO = _userRepository.GetUserEmailServiceData(id);
-
-            return emailServiceDTO;
-        }
-
-        public void SetUserMailBox(int id, string userEmail, string mailBoxPassword, out string errorMessage)
-        {
-            bool userHasMailBox = _userRepository.CheckIfUserHasMailBox(id);
-
-            if (userHasMailBox)
-            {
-                errorMessage = ErrorMessageHelper.UserHasMailBox;
-
-                return;
-            }
-
-            string encodedPassword = PasswordHashHelper.EncodePasswordToBase64(mailBoxPassword);
-
-            bool check = _emailHelper.CheckIfMailBoxDomainIsValid(userEmail,
-                                                                  out string smtp,
-                                                                  out int port,
-                                                                  out int imapPort,
-                                                                  out string imap);
-
-            if (check)
-            {
-                EmailServiceDTO dto = new()
-                {
-                    userSmtpData = new()
-                    {
-                        UserId = id,
-                        Smtp = smtp,
-                        SmptPort = port,
-                        MailBoxLogin = userEmail,
-                        MailBoxPassword = encodedPassword,
-                        ImapPort = imapPort,
-                        Imap = imap
-                    }
-                };
-
-                errorMessage = String.Empty;
-                _userRepository.SetUserMailBoxData(dto);
-            }
-            else
-            {
-                errorMessage = ErrorMessageHelper.FailedToAddMailBox;
-            }
-        }
-
         public UserListing GetUsers(Paging paging, SortOrder? sortOrder, UserFiltringDTO userFiltringDTO)
         {
             IQueryable<User> users = _userRepository.GetAllUsers();

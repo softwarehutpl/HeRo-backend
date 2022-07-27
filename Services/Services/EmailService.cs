@@ -1,5 +1,4 @@
-﻿using Common.ConfigClasses;
-using Common.Helpers;
+﻿using Common.Helpers;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Email;
 using Data.DTOs.User;
@@ -26,7 +25,7 @@ namespace Services.Services
             string subject = MessageHelper.RegistrationSubject;
             string body = MessageHelper.RegistrationBody(url);
             MimeMessage mail = _emailHelper.CreateEmail(email, subject, body);
-            _emailHelper.SendPredefinedEmail(mail);
+            //_emailHelper.SendPredefinedEmail(mail);
         }
 
         public void SendPasswordRecoveryEmail(string email, string url)
@@ -35,177 +34,154 @@ namespace Services.Services
             string body = MessageHelper.PasswordRecoveryBody(url);
 
             MimeMessage mail = _emailHelper.CreateEmail(email, subject, body);
-            _emailHelper.SendPredefinedEmail(mail);
+            //_emailHelper.SendPredefinedEmail(mail);
         }
 
-        public bool SendCustomEmail(int id, string to, string subject, string body, out string emailError)
-        {
-            EmailServiceDTO? dto = _userService.GetUserEmailServiceData(id);
+        //public bool SendCustomEmail(int id, string to, string subject, string body, out string emailError)
+        //{
+        //    emailError = string.Empty;
+        //    return true;
+        //}
 
-            if (dto == null)
-            {
-                emailError = ErrorMessageHelper.EmailFailed;
-                return false;
-            }
+        //public List<string>? GetAllFolderNamesList(int id)
+        //{
+        //    EmailServiceDTO? dto = _userService.GetUserEmailServiceData(id);
 
-            string password = PasswordHashHelper.DecodeFrom64(dto.userSmtpData.MailBoxPassword);
+        //    string password = PasswordHashHelper.DecodeFrom64(dto.userSmtpData.MailBoxPassword);
 
-            SmtpServerConfig config = new()
-            {
-                Smtp = dto.userSmtpData.Smtp,
-                MailBoxLogin = dto.userSmtpData.MailBoxLogin,
-                MailBoxPassword = password,
-                SmptPort = dto.userSmtpData.SmptPort,
-                FullName = dto.FullName
-            };
+        //    ImapServerConfig config = new()
+        //    {
+        //        Imap = dto.userSmtpData.Imap,
+        //        ImapPort = dto.userSmtpData.ImapPort,
+        //        MailBoxLogin = dto.userSmtpData.MailBoxLogin,
+        //        MailBoxPassword = password
+        //    };
 
-            MimeMessage mail = _emailHelper.CreateEmail(to, subject, body);
+        //    List<string>? folderNames = GetFolderNames(config);
 
-            _emailHelper.SendCustomEmail(mail, config);
+        //    return folderNames;
+        //}
 
-            emailError = "";
-            return true;
-        }
+        //public List<EmailListDataDTO>? GetAllEmailsInFolder(int id, string folderName)
+        //{
+        //    EmailServiceDTO? dto = _userService.GetUserEmailServiceData(id);
+        //    string password = PasswordHashHelper.DecodeFrom64(dto.userSmtpData.MailBoxPassword);
 
-        public List<string>? GetAllFolderNamesList(int id)
-        {
-            EmailServiceDTO? dto = _userService.GetUserEmailServiceData(id);
+        //    ImapServerConfig config = new()
+        //    {
+        //        Imap = dto.userSmtpData.Imap,
+        //        MailBoxLogin = dto.userSmtpData.MailBoxLogin,
+        //        MailBoxPassword = password,
+        //        ImapPort = dto.userSmtpData.ImapPort,
+        //    };
 
-            string password = PasswordHashHelper.DecodeFrom64(dto.userSmtpData.MailBoxPassword);
+        //    List<EmailListDataDTO>? list = GetAllEmailListInFolder(config, folderName);
 
-            ImapServerConfig config = new()
-            {
-                Imap = dto.userSmtpData.Imap,
-                ImapPort = dto.userSmtpData.ImapPort,
-                MailBoxLogin = dto.userSmtpData.MailBoxLogin,
-                MailBoxPassword = password
-            };
+        //    return list;
+        //}
 
-            List<string>? folderNames = GetFolderNames(config);
+        //public EmailDetailsDTO? ReadEmailDetails(int id, string messageId, string folderName)
+        //{
+        //    EmailServiceDTO? dto = _userService.GetUserEmailServiceData(id);
+        //    if (dto == null) return null;
 
-            return folderNames;
-        }
+        //    string password = PasswordHashHelper.DecodeFrom64(dto.userSmtpData.MailBoxPassword);
 
-        public List<EmailListDataDTO>? GetAllEmailsInFolder(int id, string folderName)
-        {
-            EmailServiceDTO? dto = _userService.GetUserEmailServiceData(id);
-            string password = PasswordHashHelper.DecodeFrom64(dto.userSmtpData.MailBoxPassword);
+        //    ImapServerConfig config = new()
+        //    {
+        //        Imap = dto.userSmtpData.Imap,
+        //        MailBoxLogin = dto.userSmtpData.MailBoxLogin,
+        //        MailBoxPassword = password,
+        //        ImapPort = dto.userSmtpData.ImapPort,
+        //    };
 
-            ImapServerConfig config = new()
-            {
-                Imap = dto.userSmtpData.Imap,
-                MailBoxLogin = dto.userSmtpData.MailBoxLogin,
-                MailBoxPassword = password,
-                ImapPort = dto.userSmtpData.ImapPort,
-            };
+        //    EmailDetailsDTO? email = ReadEmail(config, messageId, folderName);
 
-            List<EmailListDataDTO>? list = GetAllEmailListInFolder(config, folderName);
+        //    if (email == null)
+        //        return null;
 
-            return list;
-        }
+        //    return email;
+        //}
 
-        public EmailDetailsDTO? ReadEmailDetails(int id, string messageId, string folderName)
-        {
-            EmailServiceDTO? dto = _userService.GetUserEmailServiceData(id);
-            if (dto == null) return null;
+        //private EmailDetailsDTO? ReadEmail(ImapServerConfig config, string messageId, string folderName)
+        //{
+        //    using (ImapClient imap = new())
+        //    {
+        //        imap.Connect(config.Imap, config.ImapPort, true);
+        //        imap.Authenticate(config.MailBoxLogin, config.MailBoxPassword);
 
-            string password = PasswordHashHelper.DecodeFrom64(dto.userSmtpData.MailBoxPassword);
+        //        var folder = imap.GetFolder(folderName);
+        //        folder.Open(FolderAccess.ReadOnly);
 
-            ImapServerConfig config = new()
-            {
-                Imap = dto.userSmtpData.Imap,
-                MailBoxLogin = dto.userSmtpData.MailBoxLogin,
-                MailBoxPassword = password,
-                ImapPort = dto.userSmtpData.ImapPort,
-            };
+        //        MimeMessage? email = folder.FirstOrDefault(m => m.MessageId == messageId);
 
-            EmailDetailsDTO? email = ReadEmail(config, messageId, folderName);
+        //        if (email == null) return null;
 
-            if (email == null)
-                return null;
+        //        EmailDetailsDTO emailDetails = new()
+        //        {
+        //            From = email.From.ToString(),
+        //            To = email.To.ToString(),
+        //            Subject = email.Subject,
+        //            Body = email.HtmlBody,
+        //            Date = email.Date
+        //        };
 
-            return email;
-        }
+        //        imap.Disconnect(true);
 
-        private EmailDetailsDTO? ReadEmail(ImapServerConfig config, string messageId, string folderName)
-        {
-            using (ImapClient imap = new())
-            {
-                imap.Connect(config.Imap, config.ImapPort, true);
-                imap.Authenticate(config.MailBoxLogin, config.MailBoxPassword);
+        //        return emailDetails;
+        //    }
+        //}
 
-                var folder = imap.GetFolder(folderName);
-                folder.Open(FolderAccess.ReadOnly);
+        //private List<EmailListDataDTO>? GetAllEmailListInFolder(ImapServerConfig config, string folderName)
+        //{
+        //    using (ImapClient imap = new())
+        //    {
+        //        imap.Connect(config.Imap, config.ImapPort, true);
+        //        imap.Authenticate(config.MailBoxLogin, config.MailBoxPassword);
 
-                MimeMessage? email = folder.FirstOrDefault(m => m.MessageId == messageId);
+        //        var folder = imap.GetFolder(folderName);
 
-                if (email == null) return null;
+        //        folder.Open(FolderAccess.ReadOnly);
 
-                EmailDetailsDTO emailDetails = new()
-                {
-                    From = email.From.ToString(),
-                    To = email.To.ToString(),
-                    Subject = email.Subject,
-                    Body = email.HtmlBody,
-                    Date = email.Date
-                };
+        //        List<EmailListDataDTO>? emails = new();
 
-                imap.Disconnect(true);
+        //        foreach (var item in folder)
+        //        {
+        //            emails.Add(new EmailListDataDTO()
+        //            {
+        //                Id = item.MessageId,
+        //                From = item.From.ToString(),
+        //                Subject = item.Subject,
+        //                Date = item.Date.ToLocalTime()
+        //            });
+        //        }
 
-                return emailDetails;
-            }
-        }
+        //        imap.Disconnect(true);
 
-        private List<EmailListDataDTO>? GetAllEmailListInFolder(ImapServerConfig config, string folderName)
-        {
-            using (ImapClient imap = new())
-            {
-                imap.Connect(config.Imap, config.ImapPort, true);
-                imap.Authenticate(config.MailBoxLogin, config.MailBoxPassword);
+        //        return emails;
+        //    }
+        //}
 
-                var folder = imap.GetFolder(folderName);
+        //private List<string>? GetFolderNames(ImapServerConfig config)
+        //{
+        //    using (ImapClient imap = new())
+        //    {
+        //        imap.Connect(config.Imap, config.ImapPort, true);
+        //        imap.Authenticate(config.MailBoxLogin, config.MailBoxPassword);
 
-                folder.Open(FolderAccess.ReadOnly);
+        //        IList<IMailFolder>? folders = imap.GetFolders(imap.PersonalNamespaces[0]);
 
-                List<EmailListDataDTO>? emails = new();
+        //        List<string> folderNames = new();
 
-                foreach (var item in folder)
-                {
-                    emails.Add(new EmailListDataDTO()
-                    {
-                        Id = item.MessageId,
-                        From = item.From.ToString(),
-                        Subject = item.Subject,
-                        Date = item.Date.ToLocalTime()
-                    });
-                }
+        //        foreach (var folder in folders)
+        //        {
+        //            folderNames.Add(folder.FullName);
+        //        }
 
-                imap.Disconnect(true);
+        //        imap.Disconnect(true);
 
-                return emails;
-            }
-        }
-
-        private List<string>? GetFolderNames(ImapServerConfig config)
-        {
-            using (ImapClient imap = new())
-            {
-                imap.Connect(config.Imap, config.ImapPort, true);
-                imap.Authenticate(config.MailBoxLogin, config.MailBoxPassword);
-
-                IList<IMailFolder>? folders = imap.GetFolders(imap.PersonalNamespaces[0]);
-
-                List<string> folderNames = new();
-
-                foreach (var folder in folders)
-                {
-                    folderNames.Add(folder.FullName);
-                }
-
-                imap.Disconnect(true);
-
-                return folderNames;
-            }
-        }
+        //        return folderNames;
+        //    }
+        //}
     }
 }
