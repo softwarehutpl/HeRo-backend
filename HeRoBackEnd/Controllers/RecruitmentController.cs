@@ -313,7 +313,7 @@ namespace HeRoBackEnd.Controllers
 
             if (result == false)
             {
-                message=Translate(_errorMessage);
+                message = Translate(_errorMessage);
 
                 return BadRequest(new ResponseViewModel(message));
             }
