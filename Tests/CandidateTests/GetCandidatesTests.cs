@@ -1,23 +1,15 @@
 ﻿using Common.Listing;
 using Data.DTOs.Candidate;
-using Data.DTOs.Interview;
 using Data.Entities;
 using Data.IRepositories;
 using Moq;
 using Services.Listing;
 using Services.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Tests.CandidateTests
 {
     public class GetCandidatesTests : BaseCandidateTests
     {
-        
-
         [Fact]
         public void GetCandidates_ShouldWork()
         {
@@ -64,7 +56,6 @@ namespace Tests.CandidateTests
                     Password = "xxxxxx",
                     UserStatus = "ACTIVE",
                     RoleName = "RECRUITER",
-
                 },
                 Tech = new User()
                 {
@@ -73,7 +64,6 @@ namespace Tests.CandidateTests
                     Password = "xxxxxx",
                     UserStatus = "ACTIVE",
                     RoleName = "TECHNICIAN",
-
                 },
                 Recruitment = new Recruitment()
                 {
@@ -103,7 +93,6 @@ namespace Tests.CandidateTests
                     Password = "xxxxxx",
                     UserStatus = "ACTIVE",
                     RoleName = "RECRUITER",
-
                 },
                 Tech = new User()
                 {
@@ -112,7 +101,6 @@ namespace Tests.CandidateTests
                     Password = "xxxxxx",
                     UserStatus = "ACTIVE",
                     RoleName = "TECHNICIAN",
-
                 },
                 Recruitment = new Recruitment()
                 {
@@ -130,7 +118,12 @@ namespace Tests.CandidateTests
             List<string> stageslist = new();
             stageslist.Add("EVALUATION");
 
-            CandidateFilteringDTO candidateFiltringDTO = new CandidateFilteringDTO(statuslist, stageslist);
+            CandidateFilteringDTO candidateFiltringDTO = new CandidateFilteringDTO
+            {
+                RecruitmentId = null,
+                Status = statuslist,
+                Stages = stageslist
+            };
             int expectedCount = 2;
 
             // Act

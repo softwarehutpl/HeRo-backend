@@ -126,10 +126,10 @@ namespace Services.Services
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
 
-                if (recruitment == null) 
+                if (recruitment == null)
                 {
                     errorMessage = ErrorMessageHelper.NoRecruitment;
-                    return false; 
+                    return false;
                 }
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
@@ -155,10 +155,10 @@ namespace Services.Services
             {
                 Recruitment recruitment = _recruitmentRepo.GetById(dto.Id);
 
-                if (recruitment == null) 
+                if (recruitment == null)
                 {
                     errorMessage = ErrorMessageHelper.NoRecruitment;
-                    return false; 
+                    return false;
                 }
 
                 recruitment.LastUpdatedDate = dto.LastUpdatedDate;
@@ -245,7 +245,7 @@ namespace Services.Services
                 EndingDate = x.EndingDate,
                 Description = x.Description,
                 Localization = x.Localization,
-                RecruiterId = x.RecruiterId,
+                Creator = $"{x.CreatedBy.Name} {x.CreatedBy.Surname}",
                 RecruitmentPosition = x.RecruitmentPosition,
                 Seniority = x.Seniority,
                 CandidateCount = x.Candidates.Count(),
