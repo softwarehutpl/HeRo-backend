@@ -1,4 +1,3 @@
-using AutoMapper;
 using Common.Enums;
 using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Recruitment;
@@ -12,11 +11,8 @@ namespace Data.Repositories
     [ScopedRegistrationWithInterface]
     public class RecruitmentRepository : BaseRepository<Recruitment>, IRecruitmentRepository
     {
-        private readonly IMapper _mapper;
-
-        public RecruitmentRepository(DataContext context, IMapper mapper) : base(context)
+        public RecruitmentRepository(DataContext context) : base(context)
         {
-            _mapper = mapper;
         }
 
         public int GetRecruiterId(int id)

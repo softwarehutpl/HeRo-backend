@@ -1,5 +1,6 @@
 ﻿using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Recruitment;
+using Data.DTOs.Report;
 using Data.Entities;
 
 namespace Data.IRepositories

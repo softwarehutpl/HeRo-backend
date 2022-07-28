@@ -1,9 +1,5 @@
-using Microsoft.EntityFrameworkCore;
 using Data.Entities;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using Microsoft.AspNetCore.Identity;
-using Data.Repositories;
-using Data.DTOs.RecruitmentSkill;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data
 {
