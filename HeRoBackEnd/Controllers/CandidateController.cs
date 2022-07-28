@@ -242,15 +242,18 @@ namespace HeRoBackEnd.Controllers
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            using (Stream stream = candidate.CV.OpenReadStream())
+            if(candidate.CV!=null)
             {
-                byte[] content = new byte[stream.Length];
-                stream.Read(content, 0, content.Length);
-                dto.CV = content;
+                using (Stream stream = candidate.CV.OpenReadStream())
+                {
+                    byte[] content = new byte[stream.Length];
+                    stream.Read(content, 0, content.Length);
+                    dto.CV = content;
 
-                stream.Close();
+                    stream.Close();
+                }
             }
-
+            
             bool result = _candidateService.UpdateCandidate(dto, out _errorMessage);
             string message;
 
