@@ -18,7 +18,7 @@ FROM (SELECT *
 	    FROM Recruitment
 	    WHERE Recruitment.EndingDate > @now
 	    AND Recruitment.EndedDate is null
-        AND Recruitment.DeletedById is null) as recru,
+        AND Recruitment.DeletedDate is null) as recru,
 RecruitmentSkill, Skill
 WHERE recru.Id = RecruitmentSkill.RecruitmentId
 AND RecruitmentSkill.SkillId = Skill.Id

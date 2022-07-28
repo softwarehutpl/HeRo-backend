@@ -18,7 +18,7 @@ FROM (SELECT *
 	  FROM Recruitment
 	  WHERE Recruitment.EndingDate > @now
 	  AND Recruitment.EndedDate is null
-      AND Recruitment.DeletedById is null) as recru, Candidate
+      AND Recruitment.DeletedDate is null) as recru, Candidate
 WHERE recru.Id = Candidate.RecruitmentId
 GROUP BY recru.Id
 ORDER BY COUNT(recru.Id) DESC

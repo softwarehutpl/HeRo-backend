@@ -21,7 +21,7 @@ FROM (SELECT *
 	    FROM Recruitment
 	    WHERE Recruitment.EndingDate > @now
 	    AND Recruitment.EndedDate is null
-        AND Recruitment.DeletedById is null
+        AND Recruitment.DeletedDate is null
 	    AND Recruitment.Id IN (select value FROM string_split(@recruitmentsId,','))) as recru,
 Candidate
 WHERE Candidate.RecruitmentId = recru.Id
