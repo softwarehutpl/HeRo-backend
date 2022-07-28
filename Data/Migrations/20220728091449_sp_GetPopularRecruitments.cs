@@ -15,10 +15,10 @@ CREATE PROCEDURE dbo.sp_GetPopularRecruitments
 AS
 SELECT TOP 5 Recruitment.Id as RecruitmentId, Recruitment.Name as RecruitmentName, COUNT(Recruitment.Id) as NumberOfCandidate
 FROM Recruitment JOIN Candidate
-ON Recruitment.EndingDate > @now
+ON Recruitment.Id = Candidate.RecruitmentId
+WHERE Recruitment.EndingDate > @now
     AND Recruitment.EndedDate is null
     AND Recruitment.DeletedDate is null
-    AND Recruitment.Id = Candidate.RecruitmentId
 GROUP BY Recruitment.Id, Recruitment.Name
 ORDER BY COUNT(Recruitment.Id) DESC
 GO";

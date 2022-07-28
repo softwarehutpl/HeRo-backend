@@ -18,15 +18,15 @@ CREATE PROCEDURE dbo.sp_CountNewCandidates
 AS
 SELECT CAST(Candidate.ApplicationDate AS DATE) as Date, Recruitment.Id as RecruitmentId, Recruitment.Name as RecruitmentName, COUNT(Candidate.Id) as NumberOfCandidate
 FROM Recruitment JOIN Candidate
-ON Recruitment.EndingDate > @now
+ON Recruitment.Id = Candidate.RecruitmentId
+WHERE Recruitment.EndingDate > @now
 	AND Recruitment.EndedDate is null
     AND Recruitment.DeletedDate is null
-	AND Recruitment.Id = Candidate.RecruitmentId
 	AND Recruitment.Id IN (select value FROM string_split(@recruitmentsId,','))
 	AND Candidate.ApplicationDate >= @fromDate
 	AND Candidate.ApplicationDate <= @toDate
 GROUP BY CAST(Candidate.ApplicationDate AS DATE), Recruitment.Id, Recruitment.Name
-ORDER BY CAST(Candidate.ApplicationDate AS DATE)
+ORDER BY Date
 GO";
 
             migrationBuilder.Sql(sql);

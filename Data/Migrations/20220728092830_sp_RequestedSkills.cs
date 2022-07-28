@@ -15,12 +15,12 @@ CREATE PROCEDURE dbo.sp_RequestedSkills
 AS
 SELECT TOP 5 RecruitmentSkill.SkillId as SkillId, Skill.Name as SkillName, COUNT(*) as Quantity
 FROM Recruitment JOIN RecruitmentSkill
-ON Recruitment.EndingDate > @now
+ON Recruitment.Id = RecruitmentSkill.RecruitmentId
+JOIN Skill
+ON RecruitmentSkill.SkillId = Skill.Id
+WHERE Recruitment.EndingDate > @now
 	AND Recruitment.EndedDate is null
     AND Recruitment.DeletedDate is null
-	AND Recruitment.Id = RecruitmentSkill.RecruitmentId
-JOIN SKILL
-ON RecruitmentSkill.SkillId = Skill.Id
 GROUP BY RecruitmentSkill.SkillId, Skill.Name
 ORDER BY COUNT(*) DESC
 GO";
