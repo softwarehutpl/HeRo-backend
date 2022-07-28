@@ -11,12 +11,17 @@ namespace Data.Migrations
             var sql = @"DROP PROCEDURE IF EXISTS dbo.sp_GetPopularRecruitments
 GO
 CREATE PROCEDURE dbo.sp_GetPopularRecruitments
+@now datetime
 AS
-SELECT TOP 5 Recruitment.Id as RecruitmentId, MIN(Recruitment.Name) as RecruitmentName, COUNT(Recruitment.Id) as NumberOfCandidate
-FROM Recruitment, Candidate
-WHERE Recruitment.Id = Candidate.RecruitmentId
-GROUP BY Recruitment.Id
-ORDER BY COUNT(Recruitment.Id) DESC
+SELECT TOP 5 recru.Id as RecruitmentId, MIN(recru.Name) as RecruitmentName, COUNT(recru.Id) as NumberOfCandidate
+FROM (SELECT *
+	  FROM Recruitment
+	  WHERE Recruitment.EndingDate > @now
+	  AND Recruitment.EndedDate is null
+      AND Recruitment.DeletedById is null) as recru, Candidate
+WHERE recru.Id = Candidate.RecruitmentId
+GROUP BY recru.Id
+ORDER BY COUNT(recru.Id) DESC
 GO";
 
             migrationBuilder.Sql(sql);
