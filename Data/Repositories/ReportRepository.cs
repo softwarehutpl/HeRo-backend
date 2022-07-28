@@ -1,41 +1,112 @@
-﻿using Common.ServiceRegistrationAttributes;
+﻿using Common.Helpers;
+using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Report;
-using Data.Entities.Report;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+using System.Data;
+using System.Data.Common;
 
 namespace Data.Repositories
 {
     [ScopedRegistration]
-    public class ReportRepository : BaseRepository<PopularRecruitment>
+    public class ReportRepository
     {
-        public ReportRepository(DataContext context) : base(context)
+        public IConfiguration Configuration { get; }
+
+        private readonly SqlConnection dbConnection;
+
+        public ReportRepository(IConfiguration configuration)
         {
+            Configuration = configuration;
+            string myCompanyDBcs = Configuration.GetConnectionString("DefaultConnection");
+            dbConnection = new SqlConnection(myCompanyDBcs);
         }
 
-        public IQueryable<PopularRecruitment> GetPopularRecruitments()
+        public IQueryable<ReportRequestedSkillDTO> GetRequestedSkills()
         {
-            var result = DataContext.PopularRecruitments.FromSqlInterpolated($"sp_GetPopularRecruitments");
+            DbCommand command = new SqlCommand("sp_RequestedSkills", dbConnection);
+            command.CommandType = CommandType.StoredProcedure;
 
-            return result;
-        }
-
-        public IQueryable<RequestedSkill> GetRequestedSkills()
-        {
             DateTime now = DateTime.UtcNow;
-            var result = DataContext.RequestedSkills.FromSqlInterpolated($"sp_RequestedSkills {now}");
+            SqlParameter nowTime_SqlParam = new SqlParameter("@now", SqlDbType.DateTime2);
+            nowTime_SqlParam.Value = now;
+            command.Parameters.Add(nowTime_SqlParam);
 
-            return result;
+            try
+            {
+                command.Connection.Open();
+
+                DbDataReader? reader = command.ExecuteReader();
+
+                return SearchHelper.GetRequestedSkills(reader);
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
 
-        public IQueryable<DailyRecruitment> CountNewCandidates(ReportCountDTO reportDTO)
+        public IQueryable<ReportDailyRecruitmentDTO> CountNewCandidates(ReportCountDTO reportDTO)
         {
-            DateTime now = DateTime.UtcNow;
-            string ids = String.Join(",", reportDTO.Ids.ToArray());
-            var result = DataContext
-                .NewCandidates
-                .FromSqlInterpolated($"sp_CountNewCandidates {ids}, {now}, {reportDTO.FromDate}, {reportDTO.ToDate}");
+            DbCommand command = new SqlCommand("sp_CountNewCandidates", dbConnection);
+            command.CommandType = CommandType.StoredProcedure;
 
-            return result;
+            SqlParameter ids_SqlParamz = new SqlParameter("@recruitmentsId", SqlDbType.VarChar);
+            string tempIds = String.Join(",", reportDTO.Ids.ToArray());
+            ids_SqlParamz.Value = tempIds;
+            command.Parameters.Add(ids_SqlParamz);
+
+            SqlParameter nowTime_SqlParam = new SqlParameter("@now", SqlDbType.DateTime2);
+            DateTime now = DateTime.UtcNow;
+            nowTime_SqlParam.Value = now;
+            command.Parameters.Add(nowTime_SqlParam);
+
+            SqlParameter fromDate_SqlParam = new SqlParameter("@fromDate", SqlDbType.DateTime2);
+            fromDate_SqlParam.Value = reportDTO.FromDate;
+            command.Parameters.Add(fromDate_SqlParam);
+
+            SqlParameter toDate_SqlParam = new SqlParameter("@toDate", SqlDbType.DateTime2);
+            toDate_SqlParam.Value = reportDTO.ToDate;
+            command.Parameters.Add(toDate_SqlParam);
+
+            try
+            {
+                command.Connection.Open();
+
+                DbDataReader? reader = command.ExecuteReader();
+
+                return SearchHelper.CountNewCandidates(reader);
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
+            throw new NotImplementedException();
+        }
+
+        public IQueryable<ReportRecruitmentDTO> GetPopularRecruitments()
+        {
+            DbCommand command = new SqlCommand("sp_GetPopularRecruitments", dbConnection);
+            command.CommandType = CommandType.StoredProcedure;
+
+            SqlParameter nowTime_SqlParam = new SqlParameter("@now", SqlDbType.DateTime2);
+            DateTime now = DateTime.UtcNow;
+            nowTime_SqlParam.Value = now;
+            command.Parameters.Add(nowTime_SqlParam);
+
+            try
+            {
+                command.Connection.Open();
+
+                DbDataReader? reader = command.ExecuteReader();
+
+                return SearchHelper.GetPopularRecruitments(reader);
+            }
+            finally
+            {
+                command.Connection.Close();
+            }
         }
     }
 }

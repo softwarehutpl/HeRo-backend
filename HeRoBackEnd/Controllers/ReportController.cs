@@ -34,7 +34,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Report/CountNewCandidates")]
         [RequireUserRole("RECRUITER", "TECHNICIAN")]
-        [ProducesResponseType(typeof(ReportDailyRecruitmentsDTO), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<ReportDailyRecruitmentsDTO>), StatusCodes.Status200OK)]
         public IActionResult CountNewCandidates(ReportCountViewModel reportViewModel)
         {
             LogUserAction("ReportController", "CountNewCandidates", JsonSerializer.Serialize(reportViewModel), _userActionService);
@@ -57,7 +57,7 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [Route("Report/GetPopularRecruitments")]
         [RequireUserRole("RECRUITER", "TECHNICIAN")]
-        [ProducesResponseType(typeof(IEnumerable<ReportRecruitmentDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IQueryable<ReportRecruitmentDTO>), StatusCodes.Status200OK)]
         public IActionResult GetPopularRecruitments()
         {
             LogUserAction("ReportController", "GetPopularRecruitments", "", _userActionService);
@@ -74,7 +74,7 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [Route("Report/GetRequestedSkills")]
         [RequireUserRole("RECRUITER", "TECHNICIAN")]
-        [ProducesResponseType(typeof(IEnumerable<ReportRequestedSkillDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IQueryable<ReportRequestedSkillDTO>), StatusCodes.Status200OK)]
         public IActionResult GetRequestedSkills()
         {
             LogUserAction("ReportController", "GetPopularRecruitments", "", _userActionService);

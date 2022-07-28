@@ -49,14 +49,14 @@ namespace Services.Services
             return reportDailies;
         }
 
-        public IEnumerable<ReportRecruitmentDTO> GetPopularRecruitments()
+        public IQueryable<ReportRecruitmentDTO> GetPopularRecruitments()
         {
             IQueryable<ReportRecruitmentDTO> popularRecruitments = _reportRepository.GetPopularRecruitments();
 
             return popularRecruitments;
         }
 
-        public IEnumerable<ReportRequestedSkillDTO> GetRequestedSkills()
+        public IQueryable<ReportRequestedSkillDTO> GetRequestedSkills()
         {
             IQueryable<ReportRequestedSkillDTO> requestedSkills = _reportRepository.GetRequestedSkills();
 
