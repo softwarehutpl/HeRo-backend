@@ -1,5 +1,4 @@
 using Data.Entities;
-using Data.Entities.Report;
 using Microsoft.EntityFrameworkCore;
 
 namespace Data
@@ -18,12 +17,6 @@ namespace Data
         public DbSet<Skill> Skills { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserAction> UserActions { get; set; }
-
-        // from stored procedures
-
-        public DbSet<PopularRecruitment> PopularRecruitments { get; set; }
-        public DbSet<RequestedSkill> RequestedSkills { get; set; }
-        public DbSet<DailyRecruitment> NewCandidates { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

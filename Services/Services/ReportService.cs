@@ -1,7 +1,7 @@
 ﻿using Common.ServiceRegistrationAttributes;
 using Data.DTOs.Report;
-using Data.Entities.Report;
 using Data.Repositories;
+using Microsoft.Extensions.Configuration;
 
 namespace Services.Services
 {
@@ -9,26 +9,27 @@ namespace Services.Services
     public class ReportService
     {
         private ReportRepository _reportRepository;
+        private IConfiguration Configuration { get; }
 
         public ReportService(ReportRepository reportRepository)
         {
             _reportRepository = reportRepository;
         }
 
-        public List<ReportDailyNewCandidatesDTO> CountNewCandidates(ReportCountDTO reportDTO)
+        public List<ReportDailyRecruitmentsDTO> CountNewCandidates(ReportCountDTO reportDTO)
         {
-            IQueryable<DailyRecruitment> newCandidates = _reportRepository.CountNewCandidates(reportDTO);
+            IQueryable<ReportDailyRecruitmentDTO> newCandidates = _reportRepository.CountNewCandidates(reportDTO);
 
-            List<ReportDailyNewCandidatesDTO> reportDailies = new List<ReportDailyNewCandidatesDTO>();
+            List<ReportDailyRecruitmentsDTO> reportDailies = new List<ReportDailyRecruitmentsDTO>();
 
-            IEnumerable<IGrouping<DateTime, DailyRecruitment>>? days = newCandidates.ToList().GroupBy(c => c.Date);
+            IEnumerable<IGrouping<DateTime, ReportDailyRecruitmentDTO>>? days = newCandidates.ToList().GroupBy(c => c.Date);
 
             foreach (var day in days)
             {
-                List<RaportRecruitmentDTO> raportRecruitments = new List<RaportRecruitmentDTO>();
+                List<ReportRecruitmentDTO> raportRecruitments = new List<ReportRecruitmentDTO>();
                 foreach (var recruitment in day)
                 {
-                    RaportRecruitmentDTO raportRecruitment = new RaportRecruitmentDTO
+                    ReportRecruitmentDTO raportRecruitment = new ReportRecruitmentDTO
                     {
                         RecruitmentId = recruitment.RecruitmentId,
                         RecruitmentName = recruitment.RecruitmentName,
@@ -38,7 +39,7 @@ namespace Services.Services
                     raportRecruitments.Add(raportRecruitment);
                 }
 
-                reportDailies.Add(new ReportDailyNewCandidatesDTO
+                reportDailies.Add(new ReportDailyRecruitmentsDTO
                 {
                     Date = day.Key,
                     raportPopularRecruitmentDTOs = raportRecruitments
@@ -48,16 +49,16 @@ namespace Services.Services
             return reportDailies;
         }
 
-        public IEnumerable<PopularRecruitment> GetPopularRecruitments()
+        public IEnumerable<ReportRecruitmentDTO> GetPopularRecruitments()
         {
-            IQueryable<PopularRecruitment> popularRecruitments = _reportRepository.GetPopularRecruitments();
+            IQueryable<ReportRecruitmentDTO> popularRecruitments = _reportRepository.GetPopularRecruitments();
 
             return popularRecruitments;
         }
 
-        public IEnumerable<RequestedSkill> GetRequestedSkills()
+        public IEnumerable<ReportRequestedSkillDTO> GetRequestedSkills()
         {
-            IQueryable<RequestedSkill> requestedSkills = _reportRepository.GetRequestedSkills();
+            IQueryable<ReportRequestedSkillDTO> requestedSkills = _reportRepository.GetRequestedSkills();
 
             return requestedSkills;
         }

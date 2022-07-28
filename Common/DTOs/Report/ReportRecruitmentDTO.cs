@@ -1,11 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
-
-namespace Data.Entities.Report
+﻿namespace Data.DTOs.Report
 {
-    [Keyless]
-    public class DailyRecruitment
+    public class ReportRecruitmentDTO
     {
-        public DateTime Date { get; set; }
         public int RecruitmentId { get; set; }
         public string RecruitmentName { get; set; }
         public int NumberOfCandidate { get; set; }
