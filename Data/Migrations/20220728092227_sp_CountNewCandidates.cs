@@ -16,18 +16,16 @@ CREATE PROCEDURE dbo.sp_CountNewCandidates
 @fromDate dateTime2,
 @toDate dateTime2
 AS
-SELECT CAST(Candidate.ApplicationDate AS DATE) as Date, recru.Id as RecruitmentId, MIN(recru.Name) as RecruitmentName, COUNT(Candidate.Id) as NumberOfCandidate
-FROM (SELECT *
-	    FROM Recruitment
-	    WHERE Recruitment.EndingDate > @now
-	    AND Recruitment.EndedDate is null
-        AND Recruitment.DeletedDate is null
-	    AND Recruitment.Id IN (select value FROM string_split(@recruitmentsId,','))) as recru,
-Candidate
-WHERE Candidate.RecruitmentId = recru.Id
-AND Candidate.ApplicationDate >= @fromDate
-AND Candidate.ApplicationDate <= @toDate
-GROUP BY CAST(Candidate.ApplicationDate AS DATE), recru.Id
+SELECT CAST(Candidate.ApplicationDate AS DATE) as Date, Recruitment.Id as RecruitmentId, Recruitment.Name as RecruitmentName, COUNT(Candidate.Id) as NumberOfCandidate
+FROM Recruitment JOIN Candidate
+ON Recruitment.EndingDate > @now
+	AND Recruitment.EndedDate is null
+    AND Recruitment.DeletedDate is null
+	AND Recruitment.Id = Candidate.RecruitmentId
+	AND Recruitment.Id IN (select value FROM string_split(@recruitmentsId,','))
+	AND Candidate.ApplicationDate >= @fromDate
+	AND Candidate.ApplicationDate <= @toDate
+GROUP BY CAST(Candidate.ApplicationDate AS DATE), Recruitment.Id, Recruitment.Name
 ORDER BY CAST(Candidate.ApplicationDate AS DATE)
 GO";
 
