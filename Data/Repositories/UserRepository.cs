@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using Common.ServiceRegistrationAttributes;
+﻿using Common.ServiceRegistrationAttributes;
+using Data.DTOs.User;
 using Data.Entities;
 using Data.IRepositories;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 
 namespace Data.Repositories
 {

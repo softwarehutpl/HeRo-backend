@@ -1,4 +1,5 @@
 ﻿using Common.ServiceRegistrationAttributes;
+using Data.DTOs.User;
 using Data.Entities;
 
 namespace Data.IRepositories

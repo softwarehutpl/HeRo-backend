@@ -1,45 +1,85 @@
-﻿using System.Net.Mail;
-using System.Net;
-using Newtonsoft.Json;
-using Microsoft.Extensions.Configuration;
-using Common.ConfigClasses;
+﻿using MailKit.Net.Smtp;
 using Common.ServiceRegistrationAttributes;
+using MimeKit;
+using MimeKit.Text;
+using MailKit.Net.Imap;
+using MailKit;
 
 namespace Common.Helpers
 {
     [ScopedRegistration]
-    public class EmailHelper 
+    public class EmailHelper
     {
-         
-        private EmailConfiguration _config;
-
-        public EmailHelper(EmailConfiguration config)
+        public MimeMessage CreateEmail(string to, string subject, string body)
         {
-            _config = config;
-        }
-
-        public MailMessage CreateEmail(string email, string subject, string body)
-        {
-
-            MailMessage mailMessage = new();
-            mailMessage.From = new MailAddress(_config.CompanyEmail);
-            mailMessage.To.Add(email);
+            MimeMessage mailMessage = new();
+            mailMessage.To.Add(MailboxAddress.Parse(to));
             mailMessage.Subject = subject;
-            mailMessage.Body = body;
+            mailMessage.Body = new TextPart(TextFormat.Plain) { Text = body };
 
             return mailMessage;
         }
-        public void SendEmail(MailMessage mailMessage)
-        {
-            using ( SmtpClient smtp = new(_config.Smpt, _config.Port))
-            {
-                smtp.UseDefaultCredentials = false;
-                smtp.Credentials = new NetworkCredential(_config.CompanyEmail, _config.CompanyEmailPassword);
-                smtp.EnableSsl = true;
 
-                smtp.Send(mailMessage);
+        public void SendPredefinedEmail(MimeMessage mailMessage,
+                                        string login,
+                                        string password,
+                                        string sender,
+                                        string host,
+                                        int port)
+        {
+            mailMessage.From.Add(new MailboxAddress(sender, login));
+
+            using (SmtpClient smtp = new())
+            {
+                try
+                {
+                    smtp.Connect(host, port, true);
+                    smtp.Authenticate(login, password);
+                    smtp.Send(mailMessage);
+                }
+                catch (Exception ex)
+                {
+                    throw;
+                }
+                finally
+                {
+                    smtp.Disconnect(true);
+                }
             }
         }
 
+        public List<MimeMessage> GetAllMessagesList(string host,
+                                                    int port,
+                                                    string login,
+                                                    string password,
+                                                    List<string> IdList)
+        {
+            using (var client = new ImapClient())
+            {
+                client.Connect(host, port, true);
+                client.Authenticate(login, password);
+
+                var folder = client.GetFolder(SpecialFolder.All);
+
+                folder.Open(FolderAccess.ReadOnly);
+
+                List<MimeMessage> emailList = new();
+
+                foreach (var item in folder)
+                {
+                    if (!IdList.Contains(item.MessageId))
+                    {
+                        emailList.Add(item);
+                        Console.WriteLine("zapisano");
+
+                        if (emailList.Count == 50) return emailList;
+                    }
+                }
+
+                client.Disconnect(true);
+
+                return emailList;
+            }
+        }
     }
 }

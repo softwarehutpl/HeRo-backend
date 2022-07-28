@@ -15,18 +15,21 @@ namespace Services.Services
     [ScopedRegistration]
     public class UserService
     {
-        private IUserRepository _userRepository;
-        private ILogger<UserService> _logger;
+        private readonly EmailHelper _emailHelper;
+        private readonly IUserRepository _userRepository;
+        private readonly ILogger<UserService> _logger;
 
-        public UserService(ILogger<UserService> logger, IUserRepository userRepository)
+        public UserService(ILogger<UserService> logger, IUserRepository userRepository, EmailHelper emailHelper)
         {
             _userRepository = userRepository;
             _logger = logger;
+            _emailHelper = emailHelper;
         }
 
         public Guid SetUserRecoveryGuid(string email)
         {
             var user = _userRepository.GetUserByEmail(email);
+
             user.PasswordRecoveryGuid = Guid.NewGuid();
 
             try
@@ -133,7 +136,8 @@ namespace Services.Services
 
         public bool Update(UserEditDTO userEdit, out string error)
         {
-            User user = _userRepository.GetById(userEdit.Id);
+            User? user = _userRepository.GetById(userEdit.Id);
+
             if (user == null)
             {
                 error = ErrorMessageHelper.NoUser;

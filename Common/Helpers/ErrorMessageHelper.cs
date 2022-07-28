@@ -61,7 +61,15 @@ namespace Common.Helpers
         public const string ErrorUpdatingUser = "Error while updating the user";
         public const string ForbiddenSymbol = "Name and Surname must only contain letters";
 
+
+        //Email
+        public const string EmailFailed = "Email delivery failed";
+        public const string MailNotFound = "Mail not found";
+        public const string EmailDataBaseEmpty = "Mail database is empty";
+        public const string AccountInDatabase = "Account already in Database";
+
         //Language
         public const string NoLanguage = "No language specified";
+
     }
 }
