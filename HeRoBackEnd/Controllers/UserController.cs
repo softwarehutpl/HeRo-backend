@@ -38,12 +38,14 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Get(int userId)
         {
-            LogUserAction($"UserController.Get({userId})", _userActionService);
+            LogUserAction("UserController", "Get", userId.ToString(), _userActionService);
             UserDTO user = _userService.Get(userId);
 
             if (user == null)
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NotFound));
+                string message = Translate(ErrorMessageHelper.NotFound);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             return Ok(user);
@@ -73,7 +75,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(UserListing), StatusCodes.Status200OK)]
         public IActionResult GetList(UserListFilterViewModel userListFilterViewModel)
         {
-            LogUserAction($"UserController.GetList({JsonSerializer.Serialize(userListFilterViewModel)})", _userActionService);
+            LogUserAction("UserController", "GetList", JsonSerializer.Serialize(userListFilterViewModel), _userActionService);
 
             UserFiltringDTO userFiltringDTO = new UserFiltringDTO(userListFilterViewModel.Email, userListFilterViewModel.UserStatus, userListFilterViewModel.RoleName);
 
@@ -83,15 +85,23 @@ namespace HeRoBackEnd.Controllers
         }
 
         /// <summary>
-        /// Returns 5 recruiters which email contain a string passed as an argument
+        /// Returns 5 recruiters which fullName contain a string passed as an argument
         /// </summary>
         [HttpPost]
         [Route("User/GetRecruiters")]
-        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
         [ProducesResponseType(typeof(IEnumerable<RecruterDTO>), StatusCodes.Status200OK)]
         public IActionResult GetRecruiters(string? fullName)
         {
-            LogUserAction($"UserController.GetRecruiters({fullName})", _userActionService);
+            if (fullName == null)
+            {
+                LogUserAction("UserController", "GetRecruiters", "", _userActionService);
+            }
+            else
+            {
+                LogUserAction("UserController", "GetRecruiters", fullName, _userActionService);
+            }
+
             var result = _userService.GetRecruiters(fullName);
 
             return Ok(result);
@@ -112,7 +122,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Edit(int userId, EditUserViewModel editUser)
         {
-            LogUserAction($"UserController.Edit({userId}, {editUser})", _userActionService);
+            LogUserAction("UserController", "Edit", $"{userId}, {editUser}", _userActionService);
             UserEditDTO editUserDTO =
                 new UserEditDTO(
                     userId,
@@ -122,13 +132,18 @@ namespace HeRoBackEnd.Controllers
                     editUser.RoleName);
 
             bool result = _userService.Update(editUserDTO, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return NotFound(new ResponseViewModel(ErrorMessageHelper.NoUser));
+                message = Translate(ErrorMessageHelper.NoUser);
+
+                return NotFound(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.UserEditSuccess));
+            message = Translate(MessageHelper.UserEditSuccess);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -147,16 +162,22 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         public IActionResult Delete(int userId)
         {
-            LogUserAction($"UserController.Delete({userId})", _userActionService);
+            LogUserAction("UserController", "Delete", userId.ToString(), _userActionService);
             int loginUserId = GetUserId();
 
             bool result = _userService.Delete(userId, loginUserId, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return NotFound(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return NotFound(new ResponseViewModel(message));
             }
-            return Ok(new ResponseViewModel(MessageHelper.UserDeleteSuccess));
+
+            message = Translate(MessageHelper.UserDeleteSuccess);
+
+            return Ok(new ResponseViewModel(message));
         }
     }
 }

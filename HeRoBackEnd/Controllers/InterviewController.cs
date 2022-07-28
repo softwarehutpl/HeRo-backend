@@ -37,12 +37,14 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int interviewId)
         {
-            LogUserAction($"InterviewController.Get({interviewId})", _userActionService);
+            LogUserAction("InterviewController", "Get", interviewId.ToString(), _userActionService);
             InterviewDTO interview = _interviewService.Get(interviewId);
 
             if (interview == null)
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.NoInterview));
+                string message = Translate(ErrorMessageHelper.NoInterview);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             return new JsonResult(interview);
@@ -77,7 +79,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(InterviewListing), StatusCodes.Status200OK)]
         public IActionResult GetList(InterviewFiltringViewModel interview)
         {
-            LogUserAction($"InterviewController.GetList({JsonSerializer.Serialize(interview)})", _userActionService);
+            LogUserAction("InterviewController", "GetList", JsonSerializer.Serialize(interview), _userActionService);
             InterviewFiltringDTO interviewFiltringDTO =
                 new InterviewFiltringDTO
                 {
@@ -104,7 +106,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         public IActionResult Create(InterviewCreateViewModel interview)
         {
-            LogUserAction($"InterviewController.Create({JsonSerializer.Serialize(interview)})", _userActionService);
+            LogUserAction("InterviewController", "Create", JsonSerializer.Serialize(interview), _userActionService);
             InterviewCreateDTO interviewCreate =
                 new InterviewCreateDTO(
                     interview.Date,
@@ -115,12 +117,18 @@ namespace HeRoBackEnd.Controllers
             int userCreatedId = GetUserId();
 
             bool result = _interviewService.Create(interviewCreate, userCreatedId);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.ErrorCreatingInterview));
+                message = Translate(ErrorMessageHelper.ErrorCreatingInterview);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewCreatedSuccessfully));
+            message = Translate(MessageHelper.InterviewCreatedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -136,7 +144,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit(int interviewId, InterviewEditViewModel interview)
         {
-            LogUserAction($"InterviewController.Edit({interviewId}, {JsonSerializer.Serialize(interview)})", _userActionService);
+            LogUserAction("InterviewController", "Edit", $"{interviewId}, {JsonSerializer.Serialize(interview)}", _userActionService);
             InterviewEditDTO interviewEdit =
                 new InterviewEditDTO(
                     interviewId,
@@ -146,13 +154,18 @@ namespace HeRoBackEnd.Controllers
 
             int userEditId = GetUserId();
             bool result = _interviewService.Update(interviewEdit, userEditId, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewEditedSuccessfully));
+            message = Translate(MessageHelper.InterviewEditedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -168,17 +181,22 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int interviewId)
         {
-            LogUserAction($"InterviewController.Delete({interviewId})", _userActionService);
+            LogUserAction("InterviewController", "Delete", interviewId.ToString(), _userActionService);
             int loginUserId = GetUserId();
 
             bool result = _interviewService.Delete(interviewId, loginUserId, out _errorMessage);
+            string message;
 
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewDeletedSuccessfully));
+            message = Translate(MessageHelper.InterviewDeletedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
     }
 }

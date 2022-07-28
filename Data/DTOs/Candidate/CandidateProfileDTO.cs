@@ -15,18 +15,11 @@ namespace Data.DTOs.Candidate
         public DateTime? AvailableFrom { get; set; }
         public int? ExpectedMonthlySalary { get; set; }
         public string? OtherExpectations { get; set; }
-        public string CvPath { get; set; }
-
-        public CandidateProfileDTO(int id, string fullName, string email, string phoneNumber, DateTime? availableFrom, int? expectedMonthlySalary, string? otherExpectations, string cvPath)
-        {
-            Id = id;
-            FullName = fullName;
-            Email = email;
-            PhoneNumber = phoneNumber;
-            AvailableFrom = availableFrom;
-            ExpectedMonthlySalary = expectedMonthlySalary;
-            OtherExpectations = otherExpectations;
-            CvPath = cvPath;
-        }
+        public string InterviewName { get; set; }
+        public int? InterviewOpinionScore { get; set; }
+        public string? InterviewOpinionText { get; set; }
+        public string HRName { get; set; }
+        public int? HROpinionScore { get; set; }
+        public string? HROpinionText { get; set; }
     }
 }

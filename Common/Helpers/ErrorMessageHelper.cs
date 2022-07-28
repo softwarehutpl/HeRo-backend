@@ -14,11 +14,7 @@ namespace Common.Helpers
         public const string ConfirmationFailed = "Confirmation failed";
         public const string UserAndGuidDifferentOwner = "User and Guid don't have the same owner";
         public const string WrongCredentials = "Wrong credentials!";
-
-        public static string AccountDoesntExist(string email)
-        {
-            return $"Account:{email} doesn't exist";
-        }
+        public const string AccountDoesntExist = "Account doesn't exist";
 
         //Candidate
         public const string InvalidCandidateParameters = "Error creating candidate (one or more invalid parameters)";
@@ -65,11 +61,15 @@ namespace Common.Helpers
         public const string ErrorUpdatingUser = "Error while updating the user";
         public const string ForbiddenSymbol = "Name and Surname must only contain letters";
 
+
         //Email
         public const string EmailFailed = "Email delivery failed";
-
         public const string MailNotFound = "Mail not found";
         public const string EmailDataBaseEmpty = "Mail database is empty";
         public const string AccountInDatabase = "Account already in Database";
+
+        //Language
+        public const string NoLanguage = "No language specified";
+
     }
 }

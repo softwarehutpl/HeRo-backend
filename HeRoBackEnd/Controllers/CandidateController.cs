@@ -42,15 +42,41 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Get(int candidateId)
         {
-            LogUserAction($"CandidateController.Get({candidateId})", _userActionService);
+            LogUserAction("CandidateController", "Get", candidateId.ToString(), _userActionService);
+
             CandidateProfileDTO? candDTO = _candidateService.GetCandidateProfileById(candidateId, out _errorMessage);
 
             if (candDTO == null)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                string message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             return new JsonResult(candDTO);
+        }
+        /// <summary>
+        /// Redirects user to the CV file
+        /// </summary>
+        /// <param name="candidateId">Id of the candidate whose CV you want to see</param>
+        /// <returns>IActionResult</returns>
+        [HttpGet]
+        [Route("Candidate/GetCV/{candidateId}")]
+        [RequireUserRole("RECRUITER")]
+        public IActionResult GetCV(int candidateId)
+        {
+            MemoryStream CVstream = _candidateService.GetCandidateCV(candidateId);
+
+            if (CVstream == null)
+            {
+                string message = Translate(ErrorMessageHelper.ErrorGettingCandidate);
+
+                return BadRequest(new ResponseViewModel(message));
+            }
+
+            OkObjectResult result = new OkObjectResult(CVstream);
+
+            return result;
         }
 
         /// <summary>
@@ -60,7 +86,7 @@ namespace HeRoBackEnd.Controllers
         /// <returns>Json result object representing a list of Candidates</returns>
         /// <remarks>
         /// <h2>Nullable:</h2>
-        ///    "statuses", "stages", "sortOrder" <br /><br />
+        ///    "recruitmentId", "statuses", "stages", "sortOrder" <br />
         /// <h2>Filtring:</h2>
         ///    <h3>Possible statuses:</h3> "NEW" , "IN_PROCESSING", "DROPPED_OUT", "HIRED" <br />
         ///    <h3>Possible stages:</h3> "EVALUATION", "INTERVIEW", "PHONE_INTERVIEW", "TECH_INTERVIEW", "OFFER" <br />
@@ -73,15 +99,19 @@ namespace HeRoBackEnd.Controllers
         /// <response code="200">List of Candidates</response>
         [HttpPost]
         [Route("Candidate/GetList")]
-        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
         [ProducesResponseType(typeof(CandidateListing), StatusCodes.Status200OK)]
         public IActionResult GetList(CandidateListFilterViewModel candidate)
         {
-            LogUserAction($"CandidateController.GetList({JsonSerializer.Serialize(candidate)})", _userActionService);
+            LogUserAction("CandidateController", "GetList", JsonSerializer.Serialize(candidate), _userActionService);
+
             CandidateFilteringDTO candidateFilteringDTO
-                = new CandidateFilteringDTO(
-                    candidate.Status,
-                    candidate.Stage);
+                = new CandidateFilteringDTO
+                {
+                    RecruitmentId = candidate.RecruitmentId,
+                    Status = candidate.Status,
+                    Stages = candidate.Stage
+                };
 
             var result = _candidateService
                 .GetCandidates(
@@ -106,7 +136,7 @@ namespace HeRoBackEnd.Controllers
         ///       "availableFrom": "2022-07-23T10:37:01.988Z",
         ///       "expectedMonthlySalary": 5000,
         ///       "otherExpectations": "otherExpectationsString",
-        ///       "cvPath": "CVPathString",
+        ///       "CV": CV.pdf,
         ///       "recruitmentId": 1
         ///     }
         ///
@@ -126,48 +156,56 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("Candidate/Create")]
         [AllowAnonymous]
+        [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Create(CandidateCreateViewModel newCandidate)
+        public IActionResult Create([FromForm]CandidateCreateViewModel newCandidate)
         {
-            LogUserAction($"CandidateController.Create({JsonSerializer.Serialize(newCandidate)})", _userActionService);
-            CreateCandidateDTO dto = _mapper.Map<CreateCandidateDTO>(newCandidate);
+            LogUserAction("CandidateController", "Create", JsonSerializer.Serialize(newCandidate), _userActionService);
 
+            CreateCandidateDTO dto = new CreateCandidateDTO();
+            dto.Name = newCandidate.Name;
+            dto.LastName = newCandidate.LastName;
+            dto.PhoneNumber= newCandidate.PhoneNumber;
+            dto.Email = newCandidate.Email;
+            dto.AvailableFrom = newCandidate.AvailableFrom;
+            dto.ExpectedMonthlySalary = newCandidate.ExpectedMonthlySalary;
+            dto.OtherExpectations=newCandidate.OtherExpectations;
+            dto.RecruitmentId = newCandidate.RecruitmentId;
+
+            using (Stream stream = newCandidate.CV.OpenReadStream())
+            {
+                byte[] content = new byte[stream.Length];
+                stream.Read(content, 0, content.Length);
+                dto.CV = content;
+
+                stream.Close();
+            }
             dto.Status = CandidateStatuses.NEW.ToString();
             dto.ApplicationDate = DateTime.Now;
             bool result = _candidateService.CreateCandidate(dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
             else
             {
-                return Ok(new ResponseViewModel(MessageHelper.CandidateCreatedSuccessfully));
+                message = Translate(MessageHelper.CandidateCreatedSuccessfully);
+
+                return Ok(new ResponseViewModel(message));
             }
         }
 
         /// <summary>
         /// Updates information about a candidate
         /// </summary>
-        /// <param name="candidateId">Id of the candidate</param>
         /// <param name="candidate">Object of the CandidateEditViewModel class containing fields used to update informations about the candidate</param>
         /// <returns>IActionResult</returns>
         /// <remarks>
-        /// Example request:
-        ///
-        ///     {
-        ///       "name": "Grzegorz",
-        ///       "lastName": "Brzęczyszczykiewicz",
-        ///       "email": "grzesiu@example.com",
-        ///       "phoneNumber": "123123123",
-        ///       "availableFrom": "2022-07-23T10:37:01.988Z",
-        ///       "expectedMonthlySalary": 5000,
-        ///       "otherExpectations": "otherExpectationsString",
-        ///       "cvPath": "CVPathString",
-        ///       "status": "IN_PROCESSING",
-        ///       "stage": "PHONE_INTERVIEW"
-        ///     }
-        ///
         /// <h2>Format:</h2>
         ///    <h3>Date:</h3>
         ///    yyyy-MM-dd <br />
@@ -175,30 +213,57 @@ namespace HeRoBackEnd.Controllers
         ///    yyyy-MM-ddTHH:mm:ss <br />
         ///    yyyy-MM-ddTHH:mm:ss.fff <br /><br />
         /// <h2>Nullable:</h2>
-        ///    "expectedMonthlySalary", "otherExpectations"" <br /><br />
+        ///    Everything without "candidateId" and "CV" <br />
         /// </remarks>
         /// <response code="200">string "Candidate updated successfully"</response>
         /// <response code="400">string "User with given Id doesn't exist"<br />
         /// string "Error updating candidate"</response>
         [HttpPost]
-        [Route("Candidate/Edit/{candidateId}")]
+        [Route("Candidate/Edit")]
         [RequireUserRole("RECRUITER")]
+        [Consumes("multipart/form-data")]
         [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult Edit(int candidateId, CandidateEditViewModel candidate)
+        public IActionResult Edit([FromForm] CandidateEditViewModel candidate)
         {
-            LogUserAction($"CandidateController.Edit({candidateId}, {JsonSerializer.Serialize(candidate)})", _userActionService);
-            UpdateCandidateDTO dto = _mapper.Map<UpdateCandidateDTO>(candidate);
+            LogUserAction("CandidateController", "Edit", $"{JsonSerializer.Serialize(candidate)}", _userActionService);
+
+            UpdateCandidateDTO dto = new UpdateCandidateDTO();
+            dto.CandidateId=candidate.CandidateId;
+            dto.Name=candidate.Name;
+            dto.LastName=candidate.LastName;
+            dto.Status=candidate.Status;
+            dto.Stage=candidate.Stage;
+            dto.Email=candidate.Email;
+            dto.PhoneNumber=candidate.PhoneNumber;
+            dto.AvailableFrom=candidate.AvailableFrom;
+            dto.ExpectedMonthlySalary=candidate.ExpectedMonthlySalary;
+            dto.OtherExpectations=candidate.OtherExpectations;
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
-            bool result = _candidateService.UpdateCandidate(candidateId, dto, out _errorMessage);
-            if (result == false)
+            using (Stream stream = candidate.CV.OpenReadStream())
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                byte[] content = new byte[stream.Length];
+                stream.Read(content, 0, content.Length);
+                dto.CV = content;
+
+                stream.Close();
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.CandidateUpdatedSuccessfully));
+            bool result = _candidateService.UpdateCandidate(dto, out _errorMessage);
+            string message;
+
+            if (result == false)
+            {
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
+            }
+
+            message = Translate(MessageHelper.CandidateUpdatedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -216,7 +281,8 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Delete(int candidateId)
         {
-            LogUserAction($"CandidateController.Delete({candidateId})", _userActionService);
+            LogUserAction("CandidateController", "Delete", candidateId.ToString(), _userActionService);
+
             DeleteCandidateDTO dto = new DeleteCandidateDTO(candidateId);
 
             int id = GetUserId();
@@ -226,11 +292,18 @@ namespace HeRoBackEnd.Controllers
             dto.DeletedDate = DateTime.Now;
 
             bool result = _candidateService.DeleteCandidate(dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
-            return Ok(new ResponseViewModel(MessageHelper.CandidateDeletedSuccessfully));
+
+            message = Translate(MessageHelper.CandidateDeletedSuccessfully);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -258,16 +331,23 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AddHRNote(int candidateId, CandidateAddHRNoteViewModel AddHrNote)
         {
-            LogUserAction($"CandidateController.AddHRNote({candidateId}, {JsonSerializer.Serialize(AddHrNote)})", _userActionService);
+            LogUserAction("CandidateController", "AddHRNote", $"{candidateId}, {JsonSerializer.Serialize(AddHrNote)}", _userActionService);
+
             CandidateAddHRNoteDTO dto = _mapper.Map<CandidateAddHRNoteDTO>(AddHrNote);
             dto.RecruiterId = GetUserId();
             bool result = _candidateService.AddHRNote(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.InterviewNoteAdded));
+            message = Translate(MessageHelper.InterviewNoteAdded);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -295,15 +375,23 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AddTechInterviewNote(int candidateId, CandidateAddTechNoteViewModel AddTechNote)
         {
-            LogUserAction($"CandidateController.AddTechInterviewNote({candidateId}, {JsonSerializer.Serialize(AddTechNote)})", _userActionService);
+            LogUserAction("CandidateController", "AddTechInterviewNote", $"{candidateId}, {JsonSerializer.Serialize(AddTechNote)}", _userActionService);
+
             CandidateAddTechNoteDTO dto = _mapper.Map<CandidateAddTechNoteDTO>(AddTechNote);
             dto.TechId = GetUserId();
             bool result = _candidateService.AddTechNote(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
-            return Ok(new ResponseViewModel(MessageHelper.TechInterviewNoteAdded));
+
+            message = Translate(MessageHelper.TechInterviewNoteAdded);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -332,105 +420,35 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult AssignTechAndRecruiter(int candidateId, CandidateAssigneesViewModel assignees)
         {
-            LogUserAction($"CandidateController.AssignTechAndRecruiter({candidateId}, {JsonSerializer.Serialize(assignees)})", _userActionService);
+            LogUserAction("CandidateController", "AssignTechAndRecruiter", $"{candidateId}, {JsonSerializer.Serialize(assignees)}", _userActionService);
+
             CandidateAssigneesDTO dto = _mapper.Map<CandidateAssigneesDTO>(assignees);
             dto.LastUpdatedDate = DateTime.Now;
             dto.LastUpdatedBy = GetUserId();
 
             bool result = _candidateService.AllocateRecruiterAndTech(candidateId, dto, out _errorMessage);
+            string message;
+
             if (result == false)
             {
-                return BadRequest(new ResponseViewModel(_errorMessage));
+                message = Translate(_errorMessage);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
-            return Ok(new ResponseViewModel(MessageHelper.EmployeesAssigned));
+            message = Translate(MessageHelper.EmployeesAssigned);
+
+            return Ok(new ResponseViewModel(message));
         }
-
-        /// <summary>
-        /// Assigns dates of interviews for the candidate.
-        /// </summary>
-        /// <param name="candidateId">Id of the candidate</param>
-        /// <param name="interviewDateViewModel">Object of CandidateAllocateInterviewDateViewModel class used to set candidate interview date to given date</param>
-        /// <returns>IActionResult</returns>
-        ///  <remarks>
-        /// Example request (set candidate interview date to date):
-        ///
-        ///     {
-        ///        "date": "2022-09-23T12:35:00.217Z"
-        ///     }
-        /// </remarks>
-        /// <response code="200">string "Interview date set correctly"</response>
-        /// <response code="400">string "User with given ID doesn't exist"<br />
-        /// string "Error setting interview date"</response>
-        [HttpPost]
-        [Route("Candidate/SetInterviewDate/{candidateId}")]
-        [RequireUserRole("RECRUITER")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult SetInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
-        {
-            LogUserAction($"CandidateController.SetInterviewData({candidateId}, {JsonSerializer.Serialize(interviewDateViewModel)})", _userActionService);
-            CandidateAllocateInterviewDateDTO dto = _mapper.Map<CandidateAllocateInterviewDateDTO>(interviewDateViewModel);
-            dto.LastUpdatedDate = DateTime.Now;
-            dto.LastUpdatedBy = GetUserId();
-
-            bool result = _candidateService.AllocateRecruitmentInterview(candidateId, dto, out _errorMessage);
-            if (result == false)
-            {
-                return BadRequest(new ResponseViewModel(_errorMessage));
-            }
-
-            return Ok(new ResponseViewModel(MessageHelper.InterviewDateSet));
-        }
-
-        /// <summary>
-        /// Assigns dates of tech interviews for the candidate.
-        /// </summary>
-        /// <param name="candidateId">Id of the candidate</param>
-        /// <param name="interviewDateViewModel">Object of CandidateAllocateInterviewDateViewModel class used to set candidate tech interview date to given date</param>
-        /// <returns>IActionResult</returns>
-        ///  <remarks>
-        /// Example request (set candidate tech interview date to date):
-        ///
-        ///     {
-        ///        "date": "2022-09-23T12:35:00.217Z"
-        ///     }
-        /// </remarks>
-        /// <response code="200">string "Tech interview date set correctly"</response>
-        /// <response code="400">string "Error setting tech interview date"</response>
-        [HttpPost]
-        [Route("Candidate/SetTechInterviewDate/{candidateId}")]
-        [RequireUserRole("RECRUITER")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public IActionResult SetTechInterviewDate(int candidateId, CandidateAllocateInterviewDateViewModel interviewDateViewModel)
-        {
-            LogUserAction($"CandidateController.SetTechInterviewDate({candidateId}, {JsonSerializer.Serialize(interviewDateViewModel)})", _userActionService);
-            CandidateAllocateInterviewDateDTO dto = _mapper.Map<CandidateAllocateInterviewDateDTO>(interviewDateViewModel);
-            dto.LastUpdatedDate = DateTime.Now;
-            dto.LastUpdatedBy = GetUserId();
-
-            bool result = _candidateService.AllocateTechInterview(candidateId, dto, out _errorMessage);
-            if (result == false)
-            {
-                return BadRequest(new ResponseViewModel(_errorMessage));
-            }
-
-            return Ok(new ResponseViewModel(MessageHelper.TechInterviewDateSet));
-        }
-
-        /// <summary>
-        /// Shows list of existing stages of recruitment.
-        /// </summary>
-        /// <returns>JSON list of existing stages of recruitment</returns>
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [Route("Candidate/GetStageList")]
-        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
         public IActionResult GetStageList()
         {
-            LogUserAction($"CandidateController.GetStageList()", _userActionService);
+            LogUserAction("CandidateController", "GetStageList", "", _userActionService);
+
             var listOfStages = Enum.GetValues(typeof(StageNames)).Cast<StageNames>().Select(v => v.ToString());
 
             return new JsonResult(listOfStages);
@@ -443,10 +461,11 @@ namespace HeRoBackEnd.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<string>), StatusCodes.Status200OK)]
         [Route("Candidate/GetStatusList")]
-        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN", "ANONYMOUS")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
         public IActionResult GetStatusList()
         {
-            LogUserAction($"CandidateController.GetStatusList()", _userActionService);
+            LogUserAction("CandidateController", "GetStatusList()", "", _userActionService);
+
             var listOfStatus = Enum.GetValues(typeof(CandidateStatuses)).Cast<CandidateStatuses>().Select(v => v.ToString());
 
             return new JsonResult(listOfStatus);

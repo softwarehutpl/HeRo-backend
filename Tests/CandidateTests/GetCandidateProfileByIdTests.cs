@@ -53,7 +53,7 @@ namespace Tests.CandidateTests
             {
                 Id =id,
             };
-            candRepoMock.Setup(x => x.GetById(id)).Returns(candidate);
+            candRepoMock.Setup(x => x.GetCandidate(id)).Returns(candidate);
 
             CandidateProfileDTO? result = candidateService.GetCandidateProfileById(id, out errorMessage);
             CandidateProfileDTO? expected = null;

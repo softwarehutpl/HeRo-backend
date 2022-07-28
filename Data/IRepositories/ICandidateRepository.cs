@@ -6,5 +6,6 @@ namespace Data.IRepositories
     [ScopedRegistrationWithInterface]
     public interface ICandidateRepository : IBaseRepository<Candidate>
     {
+        Candidate GetCandidate(int id);
     }
 }

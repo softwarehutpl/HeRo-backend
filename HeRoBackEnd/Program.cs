@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using NLog.Web;
 using Services.Services;
+using Hangfire;
 
 var logger = NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 logger.Debug("Initializing web application");
@@ -28,6 +29,15 @@ try
     // Add services to the container.
     builder.Services.AddControllersWithViews();
 
+    builder.Services.AddDistributedMemoryCache();
+
+    builder.Services.AddSession(options =>
+    {
+        options.IdleTimeout = new TimeSpan(14, 0, 0, 0);
+        options.Cookie.HttpOnly = true;
+        options.Cookie.IsEssential = true;
+    });
+
     string connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 
     builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(connectionString));
@@ -47,6 +57,14 @@ try
         };
         options.Cookie.HttpOnly = false;
     });
+
+    //Hangfire
+    builder.Services.AddHangfire(x => x
+        .UseRecommendedSerializerSettings()
+        .UseSqlServerStorage(connectionString)
+        );
+    builder.Services.AddHangfireServer();
+
 
     builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
     {
@@ -112,8 +130,11 @@ try
 
     app.UseHttpsRedirection();
     app.UseStaticFiles();
-
+    app.UseHangfireDashboard();
+    app.UseHangfireServer();
     app.UseRouting();
+
+    app.UseSession();
 
     app.UseCors("corspolicy");
 

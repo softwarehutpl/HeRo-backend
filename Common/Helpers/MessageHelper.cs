@@ -17,7 +17,6 @@ namespace Common.Helpers
 
         //Email
         public const string RegistrationSubject = "Registration";
-
         public const string SMTPAccountAdded = "SMTP Account Added";
         public const string IMAPAccountAdded = "IMAP Account Added";
 
@@ -69,5 +68,8 @@ namespace Common.Helpers
         public static string UserEditSuccess = "Editing was successful";
 
         public static string UserDeleteSuccess = "User deleted successfully";
+
+        //Language
+        public const string LanguageChangeSuccess = "Language changed successfully";
     }
 }

@@ -43,7 +43,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> SignIn(SignInViewModel user)
         {
-            LogUserAction($"AuthController.SignIn({JsonSerializer.Serialize(user.Email)})", _userActionService);
+            LogUserAction("AuthController", "SignIn", JsonSerializer.Serialize(user.Email), _userActionService);
             ClaimsIdentity? claimsIdentity = await _authServices.ValidateAndCreateClaim(user.Password, user.Email);
 
             if (claimsIdentity != null)
@@ -52,7 +52,10 @@ namespace HeRoBackEnd.Controllers
 
                 return Ok(new ResponseViewModel(user.Email));
             }
-            return BadRequest(new ResponseViewModel(ErrorMessageHelper.WrongCredentials));
+
+            string message = Translate(ErrorMessageHelper.WrongCredentials);
+
+            return BadRequest(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -65,6 +68,7 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(void), StatusCodes.Status200OK)]
         public async Task<IActionResult> LogOut()
         {
+            LogUserAction("AuthController", "LogOut", "", _userActionService);
             await HttpContext.SignOutAsync("Cookies");
 
             return Ok();
@@ -84,15 +88,23 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)
         {
-            LogUserAction($"AuthController.CreateNewUser({JsonSerializer.Serialize(newUser.Email)})", _userActionService);
+            LogUserAction("AuthController", "CreateNewUser", JsonSerializer.Serialize(newUser), _userActionService);
+            
             bool check = _userService.CheckIfUserExist(newUser.Email);
+            string message;
 
             if (check)
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.UserExists));
+            {
+                message = Translate(ErrorMessageHelper.UserExists);
+
+                return BadRequest(new ResponseViewModel(message));
+            }
 
             if (!Regex.IsMatch(newUser.Name, @"^[a-zA-Z]+$") || !Regex.IsMatch(newUser.Surname, @"^[a-zA-Z]+$"))
             {
-                return BadRequest(new ResponseViewModel(ErrorMessageHelper.ForbiddenSymbol));
+                message = Translate(ErrorMessageHelper.ForbiddenSymbol);
+
+                return BadRequest(new ResponseViewModel(message));
             }
 
             Guid confirmationGuid = await _userService.CreateUser(newUser.Name, newUser.Surname, newUser.Password, newUser.Email);
@@ -100,7 +112,9 @@ namespace HeRoBackEnd.Controllers
             string url = this.Url.Action("ConfirmRegistration", "Auth", new { guid = confirmationGuid }, protocol: "https");
             _emailService.SendConfirmationEmail(newUser.Email, url);
 
-            return Ok(new ResponseViewModel(MessageHelper.UserCreated));
+            message = Translate(MessageHelper.UserCreated);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -116,14 +130,20 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> ConfirmAccount(ConfirmUserViewModel user)
         {
             bool check = _authServices.ConfirmUser(user.ConfirmationGuid, user.Email);
+            string message;
 
             if (check)
             {
                 await _userService.ChangeUserPassword(user.Email, user.Password);
-                return Ok(new ResponseViewModel(MessageHelper.AccountConfirmed));
+
+                message = Translate(MessageHelper.AccountConfirmed);
+
+                return Ok(new ResponseViewModel(message));
             }
 
-            return BadRequest(new ResponseViewModel(ErrorMessageHelper.ConfirmationFailed));
+            message = Translate(ErrorMessageHelper.ConfirmationFailed);
+
+            return BadRequest(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -140,9 +160,13 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> PasswordRecoveryMail(string email)
         {
             bool changedPassword = _userService.CheckIfUserExist(email);
+            string message;
+
             if (!changedPassword)
             {
-                return BadRequest(ErrorMessageHelper.AccountDoesntExist(email));
+                message = Translate(ErrorMessageHelper.AccountDoesntExist);
+
+                return BadRequest(message);
             }
             var recoveryGuid = _userService.SetUserRecoveryGuid(email);
 
@@ -150,7 +174,9 @@ namespace HeRoBackEnd.Controllers
 
             _emailService.SendPasswordRecoveryEmail(email, fullUrl);
 
-            return Ok(new ResponseViewModel(MessageHelper.RecoveryEmailSent));
+            message = Translate(MessageHelper.RecoveryEmailSent);
+
+            return Ok(new ResponseViewModel(message));
         }
 
         /// <summary>
@@ -166,16 +192,22 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> RecoverPassword(UserPasswordRecoveryViewModel user)
         {
-            LogUserAction($"AuthController.RecoverPassword({JsonSerializer.Serialize(user)})", _userActionService);
+            LogUserAction("AuthController", "RecoverPassword", JsonSerializer.Serialize(user.Email), _userActionService);
             bool userGuid = await _authServices.CheckPasswordRecoveryGuid(user.Guid, user.Email);
+            string message;
+
             if (!userGuid)
             {
-                return BadRequest(ErrorMessageHelper.UserAndGuidDifferentOwner);
+                message = Translate(ErrorMessageHelper.UserAndGuidDifferentOwner);
+
+                return BadRequest(message);
             }
 
             await _userService.ChangeUserPassword(user.Email, user.Password);
 
-            return Ok(new ResponseViewModel(MessageHelper.PasswordChanged));
+            message = Translate(MessageHelper.PasswordChanged);
+
+            return Ok(new ResponseViewModel(message));
         }
     }
 }
