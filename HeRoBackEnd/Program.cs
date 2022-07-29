@@ -65,7 +65,6 @@ try
         );
     builder.Services.AddHangfireServer();
 
-
     builder.Services.AddCors(options => options.AddPolicy("corspolicy", build =>
     {
         build
@@ -133,6 +132,8 @@ try
     app.UseHangfireDashboard();
     app.UseHangfireServer();
     app.UseRouting();
+
+    RecurringJob.AddOrUpdate<EmailService>(x => x.SaveAllEmailsToDataBase(), Cron.Hourly);
 
     app.UseSession();
 

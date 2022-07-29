@@ -125,7 +125,7 @@ namespace HeRoBackEnd.Controllers
         //<response code="400">"</response>
         //<response code="200"></response>
         [HttpPost]
-        [Route("Email/GetSingleMail")]
+        [Route("Email/GetAllMails")]
         [RequireUserRole("Admin")]
         [ProducesResponseType(typeof(List<EmailListDataDTO>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ResponseViewModel), StatusCodes.Status400BadRequest)]

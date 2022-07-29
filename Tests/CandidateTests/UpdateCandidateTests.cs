@@ -13,7 +13,6 @@ namespace Tests.CandidateTests
 {
     public class UpdateCandidateTests : BaseCandidateTests
     {
-        
         [Fact]
         public void EntersGetByIdOnce()
         {
@@ -42,7 +41,7 @@ namespace Tests.CandidateTests
 
             candidateService.UpdateCandidate(dto, out errorMessage);
 
-            candRepoMock.Verify(v=>v.GetById(id), Times.AtLeastOnce);
+            candRepoMock.Verify(v => v.GetById(id), Times.AtLeastOnce);
         }
 
         [Fact]
@@ -91,6 +90,7 @@ namespace Tests.CandidateTests
 
             var dto = new UpdateCandidateDTO()
             {
+                CandidateId = id,
                 Email = "email@gmail.com",
                 PhoneNumber = "321321321"
             };
@@ -99,6 +99,5 @@ namespace Tests.CandidateTests
 
             Assert.False(candidateService.UpdateCandidate(dto, out errorMessage));
         }
-
     }
 }

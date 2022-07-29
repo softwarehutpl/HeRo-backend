@@ -89,7 +89,7 @@ namespace HeRoBackEnd.Controllers
         public async Task<IActionResult> CreateNewUser(NewUserViewModel newUser)
         {
             LogUserAction("AuthController", "CreateNewUser", JsonSerializer.Serialize(newUser), _userActionService);
-            
+
             bool check = _userService.CheckIfUserExist(newUser.Email);
             string message;
 

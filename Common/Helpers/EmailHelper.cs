@@ -70,7 +70,6 @@ namespace Common.Helpers
                     if (!IdList.Contains(item.MessageId))
                     {
                         emailList.Add(item);
-                        Console.WriteLine("zapisano");
 
                         if (emailList.Count == 50) return emailList;
                     }

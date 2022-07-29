@@ -166,7 +166,7 @@ namespace Services.Services
                             From = item.From.ToString(),
                             InReplyTo = item.InReplyTo,
                             Body = item.TextBody,
-                            HtmlBody = item.HtmlBody.ToString()
+                            HtmlBody = item.HtmlBody
                         });
 
                         if (emailList.Count == 50) return emailList;

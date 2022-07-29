@@ -3,7 +3,6 @@ using Common.Helpers;
 using Data.DTOs.User;
 using HeRoBackEnd.ViewModels;
 using HeRoBackEnd.ViewModels.User;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Services.Listing;
 using Services.Services;
