@@ -90,7 +90,7 @@ namespace HeRoBackEnd.Controllers
         [HttpPost]
         [Route("User/GetRecruiters")]
         [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
-        [ProducesResponseType(typeof(IEnumerable<RecruterDTO>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(IEnumerable<UserShortDTO>), StatusCodes.Status200OK)]
         public IActionResult GetRecruiters(string? fullName)
         {
             if (fullName == null)
@@ -102,7 +102,30 @@ namespace HeRoBackEnd.Controllers
                 LogUserAction("UserController", "GetRecruiters", fullName, _userActionService);
             }
 
-            var result = _userService.GetRecruiters(fullName);
+            var result = _userService.GetUserWithRoleName(fullName, "RECRUITER");
+
+            return Ok(result);
+        }
+
+        /// <summary>
+        /// Returns 5 technicians which fullName contain a string passed as an argument
+        /// </summary>
+        [HttpPost]
+        [Route("User/GetTechnicians")]
+        [RequireUserRole("HR_MANAGER", "RECRUITER", "TECHNICIAN")]
+        [ProducesResponseType(typeof(IEnumerable<UserShortDTO>), StatusCodes.Status200OK)]
+        public IActionResult GetTechnicians(string? fullName)
+        {
+            if (fullName == null)
+            {
+                LogUserAction("UserController", "GetTechnicians", "", _userActionService);
+            }
+            else
+            {
+                LogUserAction("UserController", "GetTechnicians", fullName, _userActionService);
+            }
+
+            var result = _userService.GetUserWithRoleName(fullName, "TECHNICIAN");
 
             return Ok(result);
         }

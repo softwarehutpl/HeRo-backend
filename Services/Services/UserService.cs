@@ -100,12 +100,12 @@ namespace Services.Services
             return userListing;
         }
 
-        public IEnumerable<RecruterDTO> GetRecruiters(string? fullName)
+        public IEnumerable<UserShortDTO> GetUserWithRoleName(string? fullName, string roleName)
         {
             IQueryable<User> users = _userRepository.GetAll();
 
             users = users.Where(u => !u.DeletedDate.HasValue);
-            users = users.Where(u => u.RoleName.Equals("RECRUITER"));
+            users = users.Where(u => u.RoleName.Equals(roleName));
 
             if (String.IsNullOrEmpty(fullName))
             {
@@ -123,9 +123,9 @@ namespace Services.Services
                     .Take(5);
             }
 
-            IEnumerable<RecruterDTO> values = users
+            IEnumerable<UserShortDTO> values = users
                 .Select(u =>
-                new RecruterDTO
+                new UserShortDTO
                 {
                     Id = u.Id,
                     FullName = $"{u.Name} {u.Surname}"
