@@ -226,6 +226,11 @@ namespace HeRoBackEnd.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public IActionResult Edit([FromForm] CandidateEditViewModel candidate)
         {
+            if(candidate.Stage==".")
+            {
+                candidate.Stage = "";
+            }
+
             LogUserAction("CandidateController", "Edit", $"{JsonSerializer.Serialize(candidate)}", _userActionService);
 
             UpdateCandidateDTO dto = new UpdateCandidateDTO();
